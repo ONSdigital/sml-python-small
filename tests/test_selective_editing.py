@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 
 # noinspection PyProtectedMember
-from sml-python-small.methods.selective_editing import selective_editing
+from methods.selective_editing import selective_editing
 
 pd.options.mode.chained_assignment = None
 pd.set_option('display.max_columns', 30)

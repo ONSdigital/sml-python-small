@@ -8,7 +8,5 @@ dist/
 .DS_Store
 venv/
 *~
-/tests/fixtures/date_adjustment/*.new
-/tests/fixtures/date_adjustment/*.old
 /tests/fixtures/date_adjustment/testing_output.csv
 /tests/testing_output.csv
