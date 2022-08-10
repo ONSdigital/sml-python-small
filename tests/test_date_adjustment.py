@@ -1,5 +1,4 @@
 import calendar as cal
-
 from unittest import TestCase
 
 import numpy as np

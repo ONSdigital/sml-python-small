@@ -1,6 +1,5 @@
-import calendar
 import sys
-
+from calendar import monthrange
 from datetime import timedelta
 from typing import List, Union
 
@@ -737,7 +736,7 @@ def midpoint_subfunction(df_stage_two: pd.DataFrame,
                 if row[use_calendar_days_col] == 'Y':
                     # Flowchart #10b
                     first_day = 1
-                    last_day = calendar.monthrange(
+                    last_day = monthrange(
                         midpoint_date.year,
                         midpoint_date.month
                     )[1]
