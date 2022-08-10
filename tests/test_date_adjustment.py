@@ -1,21 +1,16 @@
+import calendar as cal
+
 from unittest import TestCase
 
-import calendar as cal
 import numpy as np
 import pandas as pd
 
 # noinspection PyProtectedMember
-from sml_small.date_adjustment import (date_adjustment,
-                                       generate_average_weekly_questions,
-                                       missing_value_subfunction,
-                                       primary_wrangler_subfunction,
-                                       midpoint_subfunction,
-                                       secondary_wrangler_subfunction,
-                                       date_adjustment_subfunction,
-                                       average_weekly_subfunction,
-                                       _convert_question_string_to_list,
-                                       _generate_error_code_list,
-                                       _set_dtypes)
+from sml_small.date_adjustment import (_convert_question_string_to_list, _generate_error_code_list, _set_dtypes,
+                                       average_weekly_subfunction, date_adjustment, date_adjustment_subfunction,
+                                       generate_average_weekly_questions, midpoint_subfunction,
+                                       missing_value_subfunction, primary_wrangler_subfunction,
+                                       secondary_wrangler_subfunction)
 
 pd.options.mode.chained_assignment = None
 pd.set_option('display.max_columns', 30)
@@ -114,9 +109,9 @@ trading_weights = load_csv(f"{fxt}/da_trading_weights_data.csv")
 #    constant, you can amend data in the tests without needing new test data.
 # ====================================================================================
 
-# -------------------------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------
 # TESTS: DATE ADJUSTMENT MAIN METHOD
-# -------------------------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------
 
 # noinspection PyTypeChecker
 class TestDateAdjustment(TestCase):
@@ -584,7 +579,7 @@ class TestDateAdjustment(TestCase):
         test_dataframe = test_dataframe.loc[test_dataframe[average_weekly_col] == 'N']
         test_dataframe = test_dataframe.loc[test_dataframe[equal_weighted_col] == 'N']
         with self.assertRaises(ValueError):
-            _ret_val = date_adjustment(
+            date_adjustment(
                 test_dataframe, trading_weights, target_columns,
                 contributor_returned_start_date_col, contributor_returned_end_date_col,
                 expected_start_date_col, expected_end_date_col, domain_col,
@@ -599,7 +594,7 @@ class TestDateAdjustment(TestCase):
         test_dataframe = test_dataframe.loc[test_dataframe[average_weekly_col] == 'N']
         test_dataframe = test_dataframe.loc[test_dataframe[set_to_mid_point_col] == 'Y']
         with self.assertRaises(ValueError):
-            _ret_val = date_adjustment(
+            date_adjustment(
                 test_dataframe, trading_weights, target_columns,
                 contributor_returned_start_date_col, contributor_returned_end_date_col,
                 expected_start_date_col, expected_end_date_col, domain_col,
@@ -629,9 +624,9 @@ class TestDateAdjustment(TestCase):
             assert code in error_list, err_msg
 
 
-# -------------------------------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------
 # TESTS: GENERATE AVERAGE WEEKLY QUESTION LIST SUB-FUNCTION
-# -------------------------------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------
 
 class TestGenerateAverageWeeklyQuestions(TestCase):
 
@@ -702,9 +697,9 @@ class TestGenerateAverageWeeklyQuestions(TestCase):
             raise AssertionError(msg)
 
 
-# -------------------------------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------
 # TESTS: MISSING VALUE SUB-FUNCTION
-# -------------------------------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------
 
 class MissingValueSubfunction(TestCase):
 
@@ -799,9 +794,9 @@ class MissingValueSubfunction(TestCase):
             raise AssertionError(msg)
 
 
-# -------------------------------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------
 # TESTS: PRIMARY WRANGLER SUB-FUNCTION
-# -------------------------------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------
 
 class TestPrimaryWranglerSubfunction(TestCase):
 
@@ -1141,9 +1136,9 @@ class TestPrimaryWranglerSubfunction(TestCase):
             raise AssertionError(filter_err)
 
 
-# -------------------------------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------
 # SECTION: MIDPOINT SUB-FUNCTION
-# ------------------------------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------
 
 class TestMidpointSubfunction(TestCase):
 
@@ -1453,9 +1448,9 @@ class TestMidpointSubfunction(TestCase):
     #       start and end dates are missing.
 
 
-# -------------------------------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------
 # SECTION: SECONDARY WRANGLER SUB-FUNCTION
-# -------------------------------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------
 
 class TestSecondaryWranglerSubfunction(TestCase):
 
@@ -1785,9 +1780,9 @@ class TestSecondaryWranglerSubfunction(TestCase):
     #       start and end dates are missing.
 
 
-# -------------------------------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------
 # SECTION: DATE ADJUSTMENT SUB-FUNCTION
-# -------------------------------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------
 
 class TestDateAdjustmentSubfunction(TestCase):
 
@@ -1903,9 +1898,9 @@ class TestDateAdjustmentSubfunction(TestCase):
             raise AssertionError(filter_err)
 
 
-# -------------------------------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------
 # SECTION: AVERAGE WEEKLY SUB-FUNCTION
-# -------------------------------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------
 
 class TestAverageWeeklySubfunction(TestCase):
 
@@ -2011,9 +2006,9 @@ class TestAverageWeeklySubfunction(TestCase):
     # None at the moment
 
 
-# -------------------------------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------
 # UAT ISSUES
-# -------------------------------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------
 
 class UserAcceptanceTesting(TestCase):
 

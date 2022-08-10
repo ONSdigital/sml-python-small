@@ -1,8 +1,8 @@
 
+from typing import List
+
 import numpy as np
 import pandas as pd
-
-from typing import List
 
 
 def selective_editing(input_dataframe: pd.DataFrame,
