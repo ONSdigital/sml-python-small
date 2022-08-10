@@ -47,34 +47,38 @@ def date_adjustment(input_dataframe: pd.DataFrame,
 ----
     **Parameters**
 
-    :param input_dataframe: The dataframe containing the data to be processed plus processing options.
-    :param trading_weights: The trading day weight reference data required for processing.
-    :param target_columns: The names of the columns in input_dataframe to be date_adjusted.
-    :param contributor_returned_start_date_col: Name of the column holding the contributors returned period start date.
-    :param contributor_returned_end_date_col: Name of the column holding the contributors returned period end date.
-    :param expected_start_date_col: Name of the column holding the expected period start date in input_dataframe.
-    :param expected_end_date_col: Name of the column holding the expected period end date in input_dataframe.
-    :param domain_col: Name of the column holding the Domain in input_dataframe.
-    :param short_period_parameter_col: Name of the column holding the "short period parameter" in input_dataframe.
-    :param long_period_parameter_col: Name of the column holding the "long period parameter" in input_dataframe.
-    :param set_to_mid_point_col: Name of the column holding the "Set to mid-point" option in input_dataframe.
-    :param use_calendar_days_col: Name of the column holding the "use calendar days" option in input_dataframe.
-    :param equal_weighted_col: Name of the column holding the "Set to equal weighted" option in input_dataframe.
-    :param average_weekly_col: Name of the column holding the "average_weekly" in input_dataframe.
-    :param da_error_flag_col: Name of the column that the user wishes the error flag column to be called in the output.
-    :param trading_date_col: Name of the column holding the dates in trading_weights.
-    :param trading_weights_col: Name of the column holding the weights in the trading_weights DataFrame.
-    :param trading_domain_col: Name of the column holding the domain in the trading_weights DataFrame.
-    :param trading_period_start_col: Name of the column holding the trading period start date in the trading_weights DataFrame.
-    :param trading_period_end_col: Name of the column holding the trading period end date in the trading_weights DataFrame.
-    :param ignore_multi_aw_param_error: Used in testing only. Leave blank so it defaults to False.
+    :param  input_dataframe: The dataframe containing the data to be processed plus processing options.
+    :param  trading_weights: The trading day weight reference data required for processing.
+    :param  target_columns: The names of the columns in input_dataframe to be date_adjusted.
+    :param  contributor_returned_start_date_col: Name of the column holding the contributors returned period start date.
+    :param  contributor_returned_end_date_col: Name of the column holding the contributors returned period end date.
+    :param  expected_start_date_col: Name of the column holding the expected period start date in input_dataframe.
+    :param  expected_end_date_col: Name of the column holding the expected period end date in input_dataframe.
+    :param  domain_col: Name of the column holding the Domain in input_dataframe.
+    :param  short_period_parameter_col: Name of the column holding the "short period parameter" in input_dataframe.
+    :param  long_period_parameter_col: Name of the column holding the "long period parameter" in input_dataframe.
+    :param  set_to_mid_point_col: Name of the column holding the "Set to mid-point" option in input_dataframe.
+    :param  use_calendar_days_col: Name of the column holding the "use calendar days" option in input_dataframe.
+    :param  equal_weighted_col: Name of the column holding the "Set to equal weighted" option in input_dataframe.
+    :param  average_weekly_col: Name of the column holding the "average_weekly" in input_dataframe.
+    :param  da_error_flag_col: Name of the column that the user wishes the error flag column to be called in the output.
+    :param  trading_date_col: Name of the column holding the dates in trading_weights.
+    :param  trading_weights_col: Name of the column holding the weights in the trading_weights DataFrame.
+    :param  trading_domain_col: Name of the column holding the domain in the trading_weights DataFrame.
+    :param  trading_period_start_col: Name of the column holding the trading period start date in the trading_weights
+            DataFrame.
+    :param  trading_period_end_col: Name of the column holding the trading period end date in the trading_weights
+            DataFrame.
+    :param  ignore_multi_aw_param_error: Used in testing only. Leave blank so it defaults to False.
 
     :raises TypeError: If the input dataframe is not a DataFrame.
     :raises TypeError: If the trading weights reference data is not a DataFrame.
     :raises TypeError: If the target columns parameter is not a List.
-    :raises KeyError: If required columns referenced in the parameters cannot be found in the input dataframe or the trading weights dataframe as appropriate.
+    :raises KeyError: If required columns referenced in the parameters cannot be found in the input dataframe or the
+            trading weights dataframe as appropriate.
     :raises KeyError: If columns referenced in target_columns parameter cannot be found in the input dataframe.
-    :raises ValueError: If mixed values found in the input dataframe for equal_weighted_col, set_to_mid_point_col or average_weekly_col.
+    :raises ValueError: If mixed values found in the input dataframe for equal_weighted_col, set_to_mid_point_col or
+            average_weekly_col.
 
     :returns: The input data with the method output appended as extra columns as necessary
 
@@ -101,7 +105,7 @@ def date_adjustment(input_dataframe: pd.DataFrame,
         * E11: The sum of trading day weights over contributors returned period is zero.
         * E12: A required record for calculating midpoint date is missing from the
                 trading weights table.
-        * E13: A required record for setting APS and APE by midpoint is missing from or 
+        * E13: A required record for setting APS and APE by midpoint is missing from or
                 duplicated in the trading  weights table.
         * E14: Expected period start date is missing or an invalid date.
         * E15: Expected period end date is missing or an invalid date.
@@ -479,7 +483,8 @@ def primary_wrangler_subfunction(df_stage_one: pd.DataFrame,
     :raises TypeError: If the input dataframe is not a DataFrame.
     :raises TypeError: If the trading weights reference data is not a DataFrame.
     :raises TypeError: If the target columns parameter is not a List.
-    :raises KeyError: If required columns referenced in the parameters cannot be found in the input dataframe or the trading weights dataframe as appropriate.
+    :raises KeyError: If required columns referenced in the parameters cannot be found in the input dataframe or the
+            trading weights dataframe as appropriate.
     :raises KeyError: If columns referenced in target_columns parameter cannot be found in the input dataframe.
 
     :return: A dataframe holding data and structure ready to be passed into the midpoint method sub-function.
@@ -622,23 +627,25 @@ def midpoint_subfunction(df_stage_two: pd.DataFrame,
     """
     Applies the midpoint method to the input data.
 
-    :param df_stage_two: The dataframe containing the data as processed to this point.
-    :param trading_weights: The trading day weight reference data required for processing.
-    :param target_columns: The names of the columns in the input dataframe to be date_adjusted.
-    :param domain_col: Name of the column holding the Domain in input_dataframe.
-    :param set_to_mid_point_col: Name of the column holding the set to midpoint parameter.
-    :param use_calendar_days_col: Name of the column holding the "use calendar days" option in input_dataframe.
-    :param equal_weighted_col: Name of the column holding the "Set to equal weighted" option in input_dataframe.
-    :param contributor_returned_start_date_col: Name of the column holding the contributors returned period start date.
-    :param contributor_returned_end_date_col: Name of the column holding the contributors returned period end date.
-    :param expected_start_date_col: Name of the column holding the expected period start date in input_dataframe.
-    :param expected_end_date_col: Name of the column holding the expected period end date in input_dataframe.
-    :param da_error_flag_col: Name of the column that the user wishes the error flag column to be called in the output.
-    :param trading_date_col: Name of the column holding the dates in trading_weights.
-    :param trading_weights_col: Name of the column holding the weights in the trading_weights DataFrame.
-    :param trading_domain_col: Name of the column holding the domain in the trading_weights DataFrame.
-    :param trading_period_start_col: Name of the column holding the trading period start date in the trading_weights DataFrame.
-    :param trading_period_end_col: Name of the column holding the trading period end date in the trading_weights DataFrame.
+    :param  df_stage_two: The dataframe containing the data as processed to this point.
+    :param  trading_weights: The trading day weight reference data required for processing.
+    :param  target_columns: The names of the columns in the input dataframe to be date_adjusted.
+    :param  domain_col: Name of the column holding the Domain in input_dataframe.
+    :param  set_to_mid_point_col: Name of the column holding the set to midpoint parameter.
+    :param  use_calendar_days_col: Name of the column holding the "use calendar days" option in input_dataframe.
+    :param  equal_weighted_col: Name of the column holding the "Set to equal weighted" option in input_dataframe.
+    :param  contributor_returned_start_date_col: Name of the column holding the contributors returned period start date.
+    :param  contributor_returned_end_date_col: Name of the column holding the contributors returned period end date.
+    :param  expected_start_date_col: Name of the column holding the expected period start date in input_dataframe.
+    :param  expected_end_date_col: Name of the column holding the expected period end date in input_dataframe.
+    :param  da_error_flag_col: Name of the column that the user wishes the error flag column to be called in the output.
+    :param  trading_date_col: Name of the column holding the dates in trading_weights.
+    :param  trading_weights_col: Name of the column holding the weights in the trading_weights DataFrame.
+    :param  trading_domain_col: Name of the column holding the domain in the trading_weights DataFrame.
+    :param  trading_period_start_col: Name of the column holding the trading period start date in the trading_weights
+            DataFrame.
+    :param  trading_period_end_col: Name of the column holding the trading period end date in the trading_weights
+            DataFrame.
 
     :raises TypeError: If the input dataframe is not a DataFrame.
     :raises TypeError: If the target columns parameter is not a List.
@@ -825,8 +832,11 @@ def secondary_wrangler_subfunction(df_stage_three: pd.DataFrame,
     :param trading_weights_col: Name of the column holding the weights in trading_weights.
     :param trading_domain_col: Name of the column holding the domain in trading_weights.
 
-    :raises TypeError: If the input dataframe is not a DataFrame; If the trading weights reference data is not a DataFrame; If the target columns parameter is not a List.
-    :raises KeyError: If required columns referenced in the parameters cannot be found in the input dataframe or the trading weights dataframe as appropriate; If columns referenced in target_columns parameter cannot be found in the input dataframe.
+    :raises TypeError: If the input dataframe is not a DataFrame; If the trading weights reference data is not a
+            DataFrame; If the target columns parameter is not a List.
+    :raises KeyError: If required columns referenced in the parameters cannot be found in the input dataframe or the
+            trading weights dataframe as appropriate; If columns referenced in target_columns parameter cannot be
+            found in the input dataframe.
 
     :return: A dataframe holding data and structure ready to be passed into the midpoint method sub-function.
 
@@ -851,7 +861,7 @@ def secondary_wrangler_subfunction(df_stage_three: pd.DataFrame,
 
     working_df_1 = df_stage_three.copy()
 
-    # Rule 3.3, flow chart 12a: If midpoint not YT, set N to APE - APN, 
+    # Rule 3.3, flow chart 12a: If midpoint not YT, set N to APE - APN,
     #   else 12b: set N to trimmed APE - APN.
     def mid_point_not_equal_yt(row):
         if row[set_to_mid_point_col] != 'YT':
@@ -873,7 +883,7 @@ def secondary_wrangler_subfunction(df_stage_three: pd.DataFrame,
             # APE = latest period <= APE with non-zero weight
             non_zero_before_ape = trading_weights[
                 (trading_weights[trading_weights_col] > 0) &
-                (trading_weights[trading_date_col] <= 
+                (trading_weights[trading_date_col] <=
                     row['actual_period_end_date']) &
                 (trading_weights[trading_domain_col] == row[domain_col])
                 ].sort_values(by=trading_date_col, ascending=True)
@@ -980,7 +990,8 @@ def date_adjustment_subfunction(df_stage_four: pd.DataFrame,
     :param da_error_flag_col: Name of the column that the user wishes the error flag column to be called in the output.
 
     :raises TypeError: If the input dataframe is not a DataFrame; If the target columns parameter is not a List.
-    :raises KeyError: If required columns referenced in the parameters cannot be found in the input dataframe; If columns referenced in target_columns parameter cannot be found in the input dataframe.
+    :raises KeyError: If required columns referenced in the parameters cannot be found in the input dataframe; If
+            columns referenced in target_columns parameter cannot be found in the input dataframe.
 
     :return: A dataframe holding data with the date adjustment method applied.
 
@@ -1033,12 +1044,15 @@ def average_weekly_subfunction(df_stage_five: pd.DataFrame,
     """
     Applies the average weekly method to the input data.
 
-    :param df_stage_five: The dataframe containing the data as processed to this point.
-    :param average_weekly_questions_list: The names of the columns in the input dataframe to be processed by the average weekly method.
-    :param da_error_flag_col: Name of the column that the user wishes the error flag column to be called in the output.
+    :param  df_stage_five: The dataframe containing the data as processed to this point.
+    :param  average_weekly_questions_list: The names of the columns in the input dataframe to be processed by the
+            average weekly method.
+    :param  da_error_flag_col: Name of the column that the user wishes the error flag column to be called in the output.
 
-    :raises TypeError: If the input dataframe is not a DataFrame; If the average weekly questions list parameter is not a List.
-    :raises KeyError: If required columns referenced in the parameters cannot be found in the input dataframe; If columns referenced in average_weekly_questions_list parameter cannot be found in the input dataframe.
+    :raises TypeError: If the input dataframe is not a DataFrame; If the average weekly questions list parameter is
+            not a List.
+    :raises KeyError: If required columns referenced in the parameters cannot be found in the input dataframe; If
+            columns referenced in average_weekly_questions_list parameter cannot be found in the input dataframe.
 
     :return: A dataframe holding data with the average weekly method applied.
 

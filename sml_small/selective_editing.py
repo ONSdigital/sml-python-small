@@ -22,7 +22,8 @@ def selective_editing(input_dataframe: pd.DataFrame,
     :param threshold_col: String - Column that holds the threshold for the contributor.
     :param question_list: List of strings - Column that holds the question names that are to be scored.
     :param combination_method: String - The combination method to be used, defaults to 'maximum'
-    :param minkowski_distance: The minkowski distance to be used when calculating final score with the minkowski combination method; Defaults to 0.
+    :param minkowski_distance: The minkowski distance to be used when calculating final score with the minkowski
+    combination method; Defaults to 0.
     :param show_sums: 0/1 switch to provide additional data on score calculation for bau support, defaults to 0 (off).
 
     :return: DataFrame
@@ -97,7 +98,7 @@ def selective_editing(input_dataframe: pd.DataFrame,
         raise TypeError(msg)
 
     if not question_list:
-        msg = f'Param "question_list" should not be empty.'
+        msg = 'Param "question_list" should not be empty.'
         raise ValueError(msg)
 
     for question_name in question_list:
@@ -196,7 +197,8 @@ def _process_single_question(question_dataframe: pd.DataFrame,
     :param threshold_col: String - Column that holds the threshold for the contributor.
     :param reference_col: String - Column that holds the contributor reference.
     :param combination_method: String - The combination method to be used.
-    :param minkowski_distance: The minkowski distance to be used when calculating final score with the minkowski combination method.
+    :param minkowski_distance: The minkowski distance to be used when calculating final score with the minkowski
+    combination method.
 
     :return: DataFrame
     """

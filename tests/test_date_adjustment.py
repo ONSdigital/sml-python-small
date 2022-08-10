@@ -1725,7 +1725,7 @@ class TestSecondaryWranglerSubfunction(TestCase):
             if row[da_error_flag_col] == 'E06':
                 actually_tested = 1
                 assert (row[war_col] == 0), \
-                    f"The n weight should be zeroed if any contributing " + \
+                    f"The n weight should be zeroed if any contributing " \
                     f"weight records are missing. {row['enterprise_reference_number']} " \
                     f"war_col = {row[war_col]}"
         if not actually_tested:
