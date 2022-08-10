@@ -1,14 +1,11 @@
 # SML-PYTHON-SMALL
 
-This library contains pandas statistical methods *only suitable* for use on
-*small* datasets.
+##### Statistical Methods Library for Python Pandas methods used in the **S**tatistical **P**roduction **P**latform (SPP).
+
+This library contains pandas statistical methods that are *only suitable* for 
+use on *small* datasets which can safely be processed in-memory.
 
 For documentation, please refer to the method-specific documentation in the 
 docs directory.
 
-## Note
 
-Although these methods were originally mirrored from elsewhere, in the event
-that new development occurs, this repository will be used. In addition, this
-repository only contains the currently supported SML-PYTHON-SMALL methods (although the
-others are preserved in the history).
