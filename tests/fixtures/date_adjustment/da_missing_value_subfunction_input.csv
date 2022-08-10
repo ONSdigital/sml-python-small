@@ -1,0 +1,5 @@
+enterprise_reference_number,expected_period_start_date,expected_period_end_date,variable_to_be_date_adjusted_Q20,variable_to_be_date_adjusted_Q21,variable_to_be_date_adjusted_Q22,variable_to_be_date_adjusted_Q23,variable_to_be_date_adjusted_Q24,variable_to_be_date_adjusted_Q25,variable_to_be_date_adjusted_Q26,variable_to_be_date_adjusted_Q27,contributors_returned_period_start_date,contributors_returned_period_end_date,domain_SIC_code,set_to_mid_point,set_to_equal_weighted,use_calendar_days,short_period_parameter,long_period_parameter,average_weekly
+49900001,20191201,20191228,1143,274,493,376,,,,,20191201,20191231,1,N,N,N,27,35,A
+49900002,20191201,20191228,887,245,153,489,.,.,.,.,20191131,20191228,1,N,N,N,27,35,A
+49900003,20191201,20191228,394,177,.,104,113,,.,,20191202,20191220,1,N,N,N,27,35,A
+49900004,20191201,20191228,1700,122,392,425,263,117,189,192,20191201,20191228,1,N,N,N,27,35,A
