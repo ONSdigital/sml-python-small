@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Optional
+from typing import Optional, List
 
 
 # Input dataset holding all 'linked questions' with their response values
@@ -19,7 +19,7 @@ class Thousands_config:
     aux_value: Optional[float]  # Calculated response for the 'previous' period
     threshold_upper: float  # Upper bound of 'error value' threshold
     threshold_lower: float  # Lower bound of 'error value' threshold
-    linked_questions: list[Response]  # All questions and responses associated with primary question
+    linked_questions: List[Response]  # All questions and responses associated with primary question
 
 
 @dataclass(frozen=True)
@@ -31,7 +31,7 @@ class Thousands_output:
 
 
 # Process through the config and run the pounds thousands method
-def run(configs: list[Thousands_config]) -> list[Thousands_output]:
+def run(configs: List[Thousands_config]) -> List[Thousands_output]:
 
     output = []
     for config in configs:
