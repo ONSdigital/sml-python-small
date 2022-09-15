@@ -1,6 +1,5 @@
 from csv import DictReader
-from pounds_thousands import run, Response, Thousands_config
-from pprint import pprint
+from pounds_thousands import run, Target_variable
 
 
 # Load some local csvs into memory and then run the pounds thousands method
@@ -18,27 +17,15 @@ def invoke_process_with_local_csv():
 
 # Use some csvs strings already defined in memory and then run the pounds thousands method
 def invoke_process_with_inmemory_csv_example():
+    config_csv = """principle_identifier,principle_variable,predicted,auxiliary,upper_limit,lower_limit
+100,50000000,60000,30000,1350,350"""
 
-    config_csv = """primary_question,current_value,previous_value,predicted,aux,threshold_upper,threshold_lower
-100,50000000,60000,30000,15000,1350,350
-200,60000000,,60000,15000,1350,350
-300,70000000,,,70000,1350,350
-400,80000000,,,5500,1350,350
-500,,60000,30000,15000,1350,350
-600,0,80000,50000,15100,1350,350
-700,12345,,,,1350,250
-,,,,,0,0"""
-
-    linked_questions_csv = """primary_question,question,response
-100,101,500
-100,102,1000
-100,103,1500
-100,104,
-500,510,6000
-500,520,1200
-600,650,1234
-700,7a,456
-700,7b,789"""
+    linked_questions_csv = """identifier,value
+101,500
+102,1000
+103,1500
+104,
+"""
 
     return invoke(config_csv, linked_questions_csv)
 
@@ -49,46 +36,54 @@ def invoke_process_with_inmemory_csv_example():
 # Does not have any explicit exception/error handling
 def invoke(config_csv: str, linked_question_csv: str):
 
-    # Format:  primary_question, current_value, previous_value, predicted, aux, threshold_upper, threshold_lower
-    config = []
+    # Format:  principle_identifier,principle_variable,predicted,auxiliary,upper_limit,lower_limit
     config_reader = DictReader(config_csv.splitlines())
+    config = []
     for config_row in config_reader:
+        print(f"Config row: {config_row}")
+        config = config_row  # We assume we are dealing with only 1 principle variable
 
-        # print(f"Config row: {config_row}")
+    # Format:  identifier, value
+    linked_question_reader = DictReader(linked_question_csv.splitlines())
+    linked_questions = []
+    for linked_row in linked_question_reader:
+        # print(f"Linked row: {linked_row}")
+        linked_questions.append(Target_variable(identifier=linked_row["identifier"], value=None if not linked_row["value"] else float(linked_row["value"])))
 
-        # Format:  primary_question, question, response
-        linked_questions = []
-        linked_question_reader = DictReader(linked_question_csv.splitlines())
-        for linked_row in linked_question_reader:
-            # print(f"Linked row: {linked_row}")
-            if linked_row["primary_question"] == config_row["primary_question"]:
-                linked_questions.append(
-                    Response(question=linked_row["question"], response=None if not linked_row["response"] else float(linked_row["response"]))
-                )
-
-        config.append(
-            Thousands_config(
-                primary_question=config_row["primary_question"],
-                current_value=None if not config_row["current_value"] else float(config_row["current_value"]),
-                previous_value=None if not config_row["previous_value"] else float(config_row["previous_value"]),
-                predicted_value=None if not config_row["predicted"] else float(config_row["predicted"]),
-                aux_value=None if not config_row["aux"] else float(config_row["aux"]),
-                threshold_upper=float(config_row["threshold_upper"]),
-                threshold_lower=float(config_row["threshold_lower"]),
-                linked_questions=linked_questions,
-            )
-        )
-
-    # print(config)
-    return run(config)
+    return run(
+        principle_identifier=config["principle_identifier"],
+        principle_variable=None if not config["principle_variable"] else float(config["principle_variable"]),
+        predicted=None if not config["predicted"] else float(config["predicted"]),
+        auxiliary=None if not config["auxiliary"] else float(config["auxiliary"]),
+        upper_limit=float(config["upper_limit"]),
+        lower_limit=float(config["lower_limit"]),
+        target_variables=linked_questions,
+    )
 
 
 if __name__ == "__main__":
 
     print("\nTesting using local csv:")
     output = invoke_process_with_local_csv()
-    pprint(output)
+    print(f"Output: {output}")
 
     print("\nRunning using in-memory csv:")
     output = invoke_process_with_inmemory_csv_example()
-    pprint(output)
+    print(f"Output: {output}")
+
+    print("\nRunning directly without using csv")
+    output = run(
+        principle_identifier="q100",
+        principle_variable=50000000,
+        predicted=60000,
+        auxiliary=30000,
+        upper_limit=1350,
+        lower_limit=350,
+        target_variables=[
+            Target_variable(identifier="q101", value=500),
+            Target_variable(identifier="q102", value=1000),
+            Target_variable(identifier="q103", value=1500),
+            Target_variable(identifier="q104", value=None),
+        ],
+    )
+    print(f"Output: {output}")

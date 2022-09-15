@@ -1,3 +1,2 @@
-primary_question,current_value,previous_value,predicted,aux,threshold_upper,threshold_lower
-200,130000000,100000,150000,125000,1350,250
-300,60000,200000,160000,165000,1250,350
+principle_identifier,principle_variable,predicted,auxiliary,upper_limit,lower_limit
+100,50000000,60000,30000,1350,350

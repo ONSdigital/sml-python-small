@@ -1,4 +1,5 @@
-primary_question,question,response
-200,201,10000
-200,202,25000
-200,203,15000
+identifier,value
+101,500
+102,1000
+103,1500
+104,
