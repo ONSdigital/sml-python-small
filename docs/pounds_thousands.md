@@ -55,7 +55,10 @@ Where $comparisonValue \ne 0$ we use:
 If the ratio is within the limits we determine that a pounds thousands error has been detected.
 
 When a pounds thousands error has been detected we apply the following correction to the principleValue and all linked values:
-$$ adjustedValue = {value \over 1000} $$
+
+<p align="center">
+<img src="https://latex.codecogs.com/svg.image?{\color{Orange}\frac{adjustedValue}{1000}" />
+</p>
 
 If and linked variable values are 'missing' then they will not be adjusted and will be placed in the output dataset 'as-is'
 
