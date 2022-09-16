@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Optional, List
+from typing import List, Optional
 
 
 # Dataset holding all 'linked questions' with their response/adjusted values

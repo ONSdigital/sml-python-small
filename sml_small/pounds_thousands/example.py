@@ -1,5 +1,6 @@
 from csv import DictReader
-from pounds_thousands import run, Target_variable
+
+from pounds_thousands import Target_variable, run
 
 
 # Load some local csvs into memory and then run the pounds thousands method

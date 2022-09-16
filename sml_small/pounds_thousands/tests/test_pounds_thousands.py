@@ -1,5 +1,5 @@
 import pytest
-from pounds_thousands import run, Thousands_output, Target_variable
+from pounds_thousands import Target_variable, Thousands_output, run
 
 testdata = [
     pytest.param(
