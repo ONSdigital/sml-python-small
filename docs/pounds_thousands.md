@@ -57,7 +57,7 @@ If the ratio is within the limits we determine that a pounds thousands error has
 When a pounds thousands error has been detected we apply the following correction to the principleValue and all linked values:
 
 <p align="center">
-<img src="https://latex.codecogs.com/svg.image?{\color{Orange}\frac{adjustedValue}{1000}" />
+<img src="https://latex.codecogs.com/svg.image?{\color{Orange}adjustedValue&space;=&space;\frac{value}{1000}" />
 </p>
 
 If and linked variable values are 'missing' then they will not be adjusted and will be placed in the output dataset 'as-is'
