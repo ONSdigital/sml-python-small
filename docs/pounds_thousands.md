@@ -47,7 +47,10 @@ A ratio is determined by the ratio of the latest given value and the last good p
 The given $principleValue$ is compared against an upper and lower limit.
 
 Where $comparisonValue \ne 0$ we use:
-$$ lowerLimit < {principleValue \over comparisonValue} < upperLimit $$
+
+<p align="center">
+<img src="https://latex.codecogs.com/svg.image?{\color{Orange}lowerLimit&space;<&space;\frac{principleValue}{comparisonValue}&space;<&space;upperLimit}" />
+</p>
 
 If the ratio is within the limits we determine that a pounds thousands error has been detected.
 
@@ -95,3 +98,5 @@ Can be found:
 
 * [Code](../sml_small/pounds_thousands/example.py)
 * [Description](../sml_small/pounds_thousands/readme.md)
+
+h<sub>&theta;</sub>(x) = &theta;<sub>o</sub> x + &theta;<sub>1</sub>x
