@@ -26,10 +26,14 @@ def run(
     principle_variable: float,  # Original response value provided for the 'current' period
     predicted: Optional[float],  # Value used for 'previous' response (Returned/Imputed/Constructed)
     auxiliary: Optional[float],  # Calculated response for the 'previous' period
-    upper_limit: float,  # Upper bound of 'error value' threshold
-    lower_limit: float,  # Lower bound of 'error value' threshold
+    upper_limit: float,  # Upper bound of 'error ratio' threshold
+    lower_limit: float,  # Lower bound of 'error ratio' threshold
     target_variables: List[Target_variable],
 ) -> Thousands_output:
+    """
+    Calculates a pounds thousands error ratio and if the ration is between the bounds of the given limits will adjust
+    the given principle variable and any linked variables by a factor of 1000.
+    """
 
     try:
         predictive_value = determine_predictive_value(predicted, auxiliary)

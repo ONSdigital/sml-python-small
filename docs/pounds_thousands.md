@@ -22,16 +22,16 @@ The method is to be provided at least one of the two values: predicted (response
 
 * **principle_identifier**: *(String)* - *Optional* - Unique identifer e.g. a question code - q500
 * **principle_variable**: *(Float)* - Numeric value we are verifying
-* **predicted**: *(Float)* - *Optional* - Numeric value used for 'previous valid' responses (i.e. Returned/Imputed/Constructed)
-* **auxiliary**: *(Float)* - *Optional* - Alternative numeric value used when a predicted value is not available
+* **predicted**: *(Float)* - *Optional* - Numeric value used for comparison. A previous 'valid' value (i.e. Returned/Imputed/Constructed)
+* **auxiliary**: *(Float)* - *Optional* - Alternative numeric` value used when a predicted value is not available
 * **upper_limit**: *(Float)* - Upper bound of 'error value' threshold
 * **lower_limit**: *(Float)* - Lower bound of 'error value' threshold
 * **target_variables**: *(List of Variables)* - *Optional* - List of linked question and values to potentially be adjusted
 
 *target_variables* consists of the following structure:
 
-* **identifier**: *String* Unique identifer e.g. a question code - q050
-* **value**: *Float* *Optional* # Numeric value that may be adjusted.
+* **identifier**: *(String)* - Unique identifer e.g. a question code - q050
+* **value**: *(Float)* - *Optional* - Numeric value that may be adjusted.
 
 Note:
 
@@ -60,7 +60,19 @@ When a pounds thousands error has been detected we apply the following correctio
 <img src="https://latex.codecogs.com/svg.image?{\color{Orange}adjustedValue&space;=&space;\frac{value}{1000}" />
 </p>
 
-If and linked variable values are 'missing' then they will not be adjusted and will be placed in the output dataset 'as-is'
+If any linked variable values are 'missing' then they will not be adjusted and will be placed in the output dataset 'as-is'
+If a pounds thousands error has *not* been detected then the principle variable and any linked variables will not be adjusted and placed in the output dataset 'as-is'
+
+Error Detection
+---------------
+
+The method explicitly checks for the following error states:
+
+* Predicted and auxiliary are both missing or are both 0
+* Principle variable is missing (note, a principle variable of 0 is not an error)
+* The upper and lower limits are both 0
+
+The method will catch unexpected errors and will set the TPC marker = 'E' and will populate the accompanying error attribute.
 
 Outputs
 -------
@@ -68,8 +80,9 @@ Outputs
 * **principle_identifier**: *(String)* - Unique identifer. Will contain same as was input to method.
 * **principle_final_value**: *(Float)* - Output value that may or may not have been adjusted
 * **target_variables**: *(List of Variables)* - List of linked question and values that may have been adjusted
+* **ratio**: *(Float)* - Calculated ratio of the principle value. Used for testing against the given limits.
 * **tpc_marker**: *(String)* - C = Correction applied | N = No correction applied | E = Process failure
-* **error**: *(String)* # Error information populated as required. Will be empty on succesful runs
+* **error**: *(String)* - Error information populated when the TPC marker = E. Will be empty/blank on succesful runs
 
 Data example
 -------------
@@ -97,9 +110,11 @@ NB. This is a mixture of input and output data and is illustrative of behaviour 
 Examples of usage
 -----------------
 
-Can be found:
+* [Description/Readme](../sml_small/pounds_thousands/readme.md)
+* [Code Example](../sml_small/pounds_thousands/example.py)
 
-* [Code](../sml_small/pounds_thousands/example.py)
-* [Description](../sml_small/pounds_thousands/readme.md)
+Implementation
+--------------
 
-h<sub>&theta;</sub>(x) = &theta;<sub>o</sub> x + &theta;<sub>1</sub>x
+* [Method implementation](../sml_small/pounds_thousands/pounds_thousands.py)
+* [Method Unit Tests](../sml_small/pounds_thousands/test_pounds_thousands.py)
