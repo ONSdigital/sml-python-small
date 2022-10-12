@@ -10,9 +10,9 @@ def invoke_process_with_local_csv():
         config_csv = file.read()
 
     with open("tests/linked_questions.csv") as file:
-        linked_questions_csv = file.read()
+        target_questions_csv = file.read()
 
-    return invoke(config_csv, linked_questions_csv)
+    return invoke(config_csv, target_questions_csv)
 
 
 # Use some csvs strings already defined in memory and then run the pounds thousands method
@@ -20,14 +20,14 @@ def invoke_process_with_inmemory_csv_example():
     config_csv = """principal_identifier,principal_variable,predictive,auxiliary,upper_limit,lower_limit
 100,50000000,60000,30000,1350,350"""
 
-    linked_questions_csv = """identifier,value
+    target_questions_csv = """identifier,value
 101,500
 102,1000
 103,1500
 104,
 """
 
-    return invoke(config_csv, linked_questions_csv)
+    return invoke(config_csv, target_questions_csv)
 
 
 # Can be called directly with csvs already loaded into strings or by using the above invoke to load local csvs

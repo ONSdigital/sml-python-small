@@ -15,7 +15,7 @@ class Target_variable:
 class Thousands_output:
     principal_identifier: Optional[str]  # Unique identifer e.g. a question code - q500
     principal_original_value: float  # Original provided value
-    principal_final_value: float  # Output value that may or may not be adjusted
+    principal_adjusted_value: Optional[float]  # Output value that may or may not be adjusted
     target_variables: List[Target_variable]  # Output linked values that may or may not be adjusted
     tpc_ratio: Optional[float]  # Ratio of the principal variable against good/predictive/aux response
     tpc_marker: str  # C = Correction applied | N = No correction applied | E = Process failure
@@ -52,7 +52,7 @@ def run(
         output = Thousands_output(
             principal_identifier=principal_identifier,
             principal_original_value=principal_variable,
-            principal_final_value=principal_adjusted_value,
+            principal_adjusted_value=principal_adjusted_value,
             target_variables=target_variables_final,
             tpc_ratio=error_ratio,
             tpc_marker=determine_tpc_marker(do_adjustment),
@@ -62,7 +62,7 @@ def run(
         output = Thousands_output(
             principal_identifier=principal_identifier,
             principal_original_value=principal_variable,
-            principal_final_value=principal_variable,
+            principal_adjusted_value=None,
             target_variables=target_variables,
             tpc_ratio=None,
             tpc_marker="E",

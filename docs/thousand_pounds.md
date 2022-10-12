@@ -94,7 +94,8 @@ Outputs
 -------
 
 * **principal_identifier**: *(String)* - Unique identifer. Will contain same as was input to method.
-* **principal_final_value**: *(Float)* - Output value that may or may not have been adjusted
+* **principal_original_value**: *(Float)* - Original provided value
+* **principal_adjusted_value**: *(Float)* - Output value that may or may not have been adjusted
 * **target_variables**: *(List of Variables)* - List of linked questions, original values and adjusted values (if appropriate)
 * **tpc_ratio**: *(Float)* - Calculated ratio of the principal value. Used for testing against the given limits.
 * **tpc_marker**: *(String)* - C = Correction applied | N = No correction applied | E = Process failure
@@ -103,7 +104,7 @@ Outputs
 Data example
 -------------
 
-|principal_identifier|principal_variable|predictive|aux|threshold_upper|threshold_lower|tpc_marker|tpc_ratio|principal_final_value|linked_question|linked_value|linked_final_value
+|principal_identifier|principal_variable|predictive|aux|threshold_upper|threshold_lower|tpc_marker|tpc_ratio|principal_adjusted_value|target_variable|target_original_value|target_adjusted_value
 |---|---|---|---|---|---|---|---|---|---|---|---|
 [A] Valid config with linked questions|50000000|60000|15000|1350|350|C|1000.0|50000.0|q101|500|0.5
 [A] Valid config with linked questions|-|-|-|-|-|-|-|-|q102|1000|1

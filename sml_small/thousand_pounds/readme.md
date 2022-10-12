@@ -7,7 +7,7 @@ An example of running the method directly and using csv data (in-memory and from
 Example input data: (2 csv files)
 
 ```
-principal_identifier,principal_variable,predicted,auxiliary,upper_limit,lower_limit
+principal_identifier,principal_variable,predictive,auxiliary,upper_limit,lower_limit
 12340000001-201409-q100,50000000,60000,30000,1350,350
 
 identifier,value
@@ -18,7 +18,7 @@ q104,
 ```
 
 i.e.
-|principal_identifier|principal_variable|predicted|auxiliary|upper_limit|lower_limit|
+|principal_identifier|principal_variable|predictive|auxiliary|upper_limit|lower_limit|
 |---|---|---|---|---|---|
 12340000001-201409-q100|50000000|60000|30000|1350|350
 
@@ -37,7 +37,7 @@ The method has the following interface:
 def run(
     principal_identifier: Optional[str],  # Unique identifer e.g. a question code/ruref/period/id/combination of all of thse
     principal_variable: float,  # Original response value provided for the 'current' period
-    predicted: Optional[float],  # Value used for 'previous' response (Returned/Imputed/Constructed)
+    predictive: Optional[float],  # Value used for 'previous' response (Returned/Imputed/Constructed)
     auxiliary: Optional[float],  # Calculated response for the 'previous' period
     upper_limit: float,  # Upper bound of 'error value' threshold
     lower_limit: float,  # Lower bound of 'error value' threshold
@@ -51,7 +51,7 @@ e.g.
 output = run(
     principal_identifier = "12340000001-201409-q100",
     principal_variable = 50000000,
-    predicted = 60000,
+    predictive = 60000,
     auxiliary = 30000,
     upper_limit = 1350,
     lower_limit = 350,
@@ -69,7 +69,7 @@ output = run(
 Thousands_output(
     principal_identifier='12340000001-201409-q100',
     principal_original_value=50000000,
-    principal_final_value=50000.0,
+    principal_adjusted_value=50000.0,
     target_variables=[
         Target_variable(identifier='101', original_value=500, adjusted_value=0.5),
         Target_variable(identifier='102', original_value=1000, adjusted_value=1.0),
@@ -83,7 +83,7 @@ Thousands_output(
 
 Alternatively presented: (mixing input and output data for comparisons)
 
-|principal_identifier|principal_variable|predictive|aux|threshold_upper|threshold_lower|TPC_marker|ratio|principal_final_value|linked_question|linked_value|linked_final_value
+|principal_identifier|principal_variable|predictive|aux|threshold_upper|threshold_lower|TPC_marker|ratio|principal_adjusted_value|target_variable|target_original_value|target_adjusted_value
 |---|---|---|---|---|---|---|---|---|---|---|---|
 12340000001-201409-q100|50000000|60000|15000|1350|350|C|1000.0|50000.0|q101|500|0.5
 12340000001-201409-q100|-|-|-|-|-|-|-|-|q102|1000|1
