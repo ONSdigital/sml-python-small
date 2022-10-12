@@ -17,7 +17,7 @@ def invoke_process_with_local_csv():
 
 # Use some csvs strings already defined in memory and then run the pounds thousands method
 def invoke_process_with_inmemory_csv_example():
-    config_csv = """principal_identifier,principal_variable,predicted,auxiliary,upper_limit,lower_limit
+    config_csv = """principal_identifier,principal_variable,predictive,auxiliary,upper_limit,lower_limit
 100,50000000,60000,30000,1350,350"""
 
     linked_questions_csv = """identifier,value
@@ -55,7 +55,7 @@ def invoke(config_csv: str, linked_question_csv: str):
     return run(
         principal_identifier=config["principal_identifier"],
         principal_variable=None if not config["principal_variable"] else float(config["principal_variable"]),
-        predicted=None if not config["predicted"] else float(config["predicted"]),
+        predictive=None if not config["predicted"] else float(config["predicted"]),
         auxiliary=None if not config["auxiliary"] else float(config["auxiliary"]),
         upper_limit=float(config["upper_limit"]),
         lower_limit=float(config["lower_limit"]),
@@ -77,7 +77,7 @@ if __name__ == "__main__":
     output = run(
         principal_identifier="q100",
         principal_variable=50000000,
-        predicted=60000,
+        predictive=60000,
         auxiliary=30000,
         upper_limit=1350,
         lower_limit=350,

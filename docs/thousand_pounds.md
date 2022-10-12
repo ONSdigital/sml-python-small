@@ -8,7 +8,7 @@ Overall method
 
 This process determines whether a given value is too large by a factor of ~1000. If so, the value is corrected to be smaller, and any accompanying values are also adjusted accordingly.
 
-The method is to be run for a single instance of a principal question (with 0..n linked questions) at a time. If there are multiple principal questions or multiple references to be processed then the method should be called multiple times, once for each principle question (+ linked) dataset.
+The method is to be run for a single instance of a principal question (with 0..n linked questions) at a time. If there are multiple principal questions or multiple references to be processed then the method should be called multiple times, once for each principal question (+ linked) dataset.
 
 * Dataclasses are used to provide structure where required
 * All dataclass datasets are immutable upon creation
@@ -25,20 +25,20 @@ The method requires at least one of the following as the previous period predict
 1. Returned, cleaned response,
 2. Imputed or constructed value
 
-The calling process is responsible for determining whether a returned, clean response is suitable for use in the method and to set the 'predicted' variable accordingly, giving the following effective priority order:
+The calling process is responsible for determining whether a returned, clean response is suitable for use in the method and to set the 'predictive' variable accordingly, giving the following effective priority order:
 
 1. Returned, cleaned response
 2. Imputed or constructed value
 3. Auxiliary variable, e.g. registered annual turnover
 
-The calling/wrangling process is also responsible for auditing the metadata about the values used in this method (e.g. the source of the predicted value, tpc_ratio, etc).
+The calling/wrangling process is also responsible for auditing the metadata about the values used in this method (e.g. the source of the predictive value, tpc_ratio, etc).
 
 Note: ensure that predictor and auxiliary variables are of the same denomination as the current period variables.
 
-* **principal_identifier**: *(String)* - Unique identifer e.g. "q500" (question identifier), or "12345678901-202209" (reference & period)
+* **principal_identifier**: *(String)* - Unique identifier e.g. "q500" (question identifier), or "12345678901-202209" (conrtibutor reference & period)
 * **principal_variable**: *(Float)* - Numeric value that the method is working on
-* **predicted**: *(Float)* - *Optional* - Numeric value used for comparison. A previous 'valid' value (i.e. Returned/Imputed/Constructed)
-* **auxiliary**: *(Float)* - *Optional* - Alternative numeric` value used when a predicted value is not available and required by the user
+* **predictive**: *(Float)* - *Optional* - Numeric value used for comparison. A previous 'valid' value (i.e. Returned/Imputed/Constructed)
+* **auxiliary**: *(Float)* - *Optional* - Alternative numeric` value used when a predictive value is not available and required by the user
 * **upper_limit**: *(Float)* - Upper bound of 'error value' threshold
 * **lower_limit**: *(Float)* - Lower bound of 'error value' threshold
 * **target_variables**: *(List of Variables)* - *Optional* - List of linked question and values to potentially be adjusted
@@ -50,14 +50,14 @@ Note: ensure that predictor and auxiliary variables are of the same denomination
 
 Note:
 
-* Although *predicted* and *auxiliary* are both optional, at least one has to be provided for the calculation, else a method error is produced
-* The principal_identifier is unused directly by the method and is passed-through as-is into the output dataset. This attribute is provided to allow a user context to be provided as required. For example, it could contain an RU-Reference, an IDBR period and a question code ('19900001234-202207-q500'), a unique system generated ID ('cfacf706-36a5-4acb-935f-67e7b07c0470'), just the principal question code ('q150'), etc. It is a text/string field and no parsing or validation is undertaken by the method.
+* Although *predictive* and *auxiliary* are both optional, at least one has to be provided for the calculation, else a method error is produced
+* The principal_identifier is unused directly by the method and is passed-through as-is into the output dataset. This attribute is provided to allow a user context to be provided as required. For example, it could contain a contributor reference, an IDBR period and a question code ('19900001234-202207-q500'), a unique system generated ID ('cfacf706-36a5-4acb-935f-67e7b07c0470'), just the principal question code ('q150'), etc. It is a text/string field and no parsing or validation is undertaken by the method.
 * If no target_variables are provided only the principal_variable may be adjusted
 
 Calculation
 -----------
 
-A ratio is determined by the ratio of the latest returned principal value and the corresponding previous period value. The $comparisonValue$ is determined by either the predicted variable (if provided) or the the auxiliary (if the predicted is not available and an appropriate auxiliary variable exists).
+A ratio is determined by the ratio of the latest returned principal value and the corresponding previous period value. The $comparisonValue$ is determined by either the predictive variable (if provided) or the the auxiliary (if the predictive is not available and an appropriate auxiliary variable exists).
 
 The resulting ratio is compared against an upper and lower limit.
 
@@ -84,7 +84,7 @@ Error Detection
 
 The method explicitly checks for the following error states:
 
-* Predicted and auxiliary are both missing or are both 0
+* Predictive and auxiliary are both missing or are both 0
 * Principal variable is missing (note, a principal variable of 0 is not an error)
 * At least one of the upper or lower limits are missing or 0
 
@@ -95,25 +95,25 @@ Outputs
 
 * **principal_identifier**: *(String)* - Unique identifer. Will contain same as was input to method.
 * **principal_final_value**: *(Float)* - Output value that may or may not have been adjusted
-* **target_variables**: *(List of Variables)* - List of linked question and values that may have been adjusted
-* **ratio**: *(Float)* - Calculated ratio of the principal value. Used for testing against the given limits.
+* **target_variables**: *(List of Variables)* - List of linked questions, original values and adjusted values (if appropriate)
+* **tpc_ratio**: *(Float)* - Calculated ratio of the principal value. Used for testing against the given limits.
 * **tpc_marker**: *(String)* - C = Correction applied | N = No correction applied | E = Process failure
-* **error**: *(String)* - Error information populated when the TPC marker = E. Will be empty/blank on succesful runs
+* **error_description**: *(String)* - Error information populated when the TPC marker = E. Will be empty/blank on succesful runs
 
 Data example
 -------------
 
-|principal_identifier|principal_variable|predicted|aux|threshold_upper|threshold_lower|TPC_marker|ratio|principal_final_value|linked_question|linked_value|linked_final_value
+|principal_identifier|principal_variable|predictive|aux|threshold_upper|threshold_lower|tpc_marker|tpc_ratio|principal_final_value|linked_question|linked_value|linked_final_value
 |---|---|---|---|---|---|---|---|---|---|---|---|
 [A] Valid config with linked questions|50000000|60000|15000|1350|350|C|1000.0|50000.0|q101|500|0.5
 [A] Valid config with linked questions|-|-|-|-|-|-|-|-|q102|1000|1
 [A] Valid config with linked questions|-|-|-|-|-|-|-|-|q103|1500|1.5
 [A] Valid config with linked questions|-|-|-|-|-|-|-|-|q104||
 [B] Missing auxiliary|60000000|60000||1350|350|C|400.0|60000.0|||
-[C] Missing predicted|269980||200|1350|350|C|1349.9|269.98|||
-[D] Missing predicted and auxiliary|7000|||1350|350|E||7000|||
-[E] Predicted and auxiliary are 0|8000|0|0|1350|350|E||8000|q451|500|500
-[E] Predicted and auxiliary are 0|-|-|-|-|-|-|-|-|q452|1000|1000
+[C] Missing predictive|269980||200|1350|350|C|1349.9|269.98|||
+[D] Missing predictive and auxiliary|7000|||1350|350|E||7000|||
+[E] Predictive and auxiliary are 0|8000|0|0|1350|350|E||8000|q451|500|500
+[E] Predictive and auxiliary are 0|-|-|-|-|-|-|-|-|q452|1000|1000
 [F] Missing principle variable||10|20|1350|350|E|||q501|1234|1234
 [F] Missing principle variable|-|-|-|-|-|-|-|-|q502|2345|2345
 [G] Principle variable is 0|0|10|20|1350|350|N|0|0|q601|500|500

@@ -68,21 +68,22 @@ output = run(
 ```python
 Thousands_output(
     principal_identifier='12340000001-201409-q100',
+    principal_original_value=50000000,
     principal_final_value=50000.0,
     target_variables=[
         Target_variable(identifier='101', original_value=500, adjusted_value=0.5),
         Target_variable(identifier='102', original_value=1000, adjusted_value=1.0),
         Target_variable(identifier='103', original_value=1500, adjusted_value=1.5),
         Target_variable(identifier='104', original_value=None, adjusted_value=None)],
-    ratio=833.3333333333334,
+    tpc_ratio=833.3333333333334,
     tpc_marker='C',
-    error=''
+    error_description=''
 )
 ```
 
 Alternatively presented: (mixing input and output data for comparisons)
 
-|principal_identifier|principal_variable|predicted|aux|threshold_upper|threshold_lower|TPC_marker|ratio|principal_final_value|linked_question|linked_value|linked_final_value
+|principal_identifier|principal_variable|predictive|aux|threshold_upper|threshold_lower|TPC_marker|ratio|principal_final_value|linked_question|linked_value|linked_final_value
 |---|---|---|---|---|---|---|---|---|---|---|---|
 12340000001-201409-q100|50000000|60000|15000|1350|350|C|1000.0|50000.0|q101|500|0.5
 12340000001-201409-q100|-|-|-|-|-|-|-|-|q102|1000|1

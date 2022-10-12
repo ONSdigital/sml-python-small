@@ -14,18 +14,19 @@ class Target_variable:
 @dataclass(frozen=True)
 class Thousands_output:
     principal_identifier: Optional[str]  # Unique identifer e.g. a question code - q500
+    principal_original_value: float  # Original provided value
     principal_final_value: float  # Output value that may or may not be adjusted
     target_variables: List[Target_variable]  # Output linked values that may or may not be adjusted
-    tpc_ratio: Optional[float]  # Ratio of the principal variable against good/predicted/aux response
+    tpc_ratio: Optional[float]  # Ratio of the principal variable against good/predictive/aux response
     tpc_marker: str  # C = Correction applied | N = No correction applied | E = Process failure
-    error: str = ""  # Error information populated as required
+    error_description: str = ""  # Error information populated as required
 
 
 # Process through the config and run the pounds thousands method
 def run(
     principal_identifier: Optional[str],  # Unique identifer e.g. a question code - q500
     principal_variable: float,  # Original response value provided for the 'current' period
-    predicted: Optional[float],  # Value used for 'previous' response (Returned/Imputed/Constructed)
+    predictive: Optional[float],  # Value used for 'previous' response (Returned/Imputed/Constructed)
     auxiliary: Optional[float],  # Calculated response for the 'previous' period
     upper_limit: float,  # Upper bound of 'error ratio' threshold
     lower_limit: float,  # Lower bound of 'error ratio' threshold
@@ -37,7 +38,7 @@ def run(
     """
 
     try:
-        predictive_value = determine_predictive_value(predicted, auxiliary)
+        predictive_value = determine_predictive_value(predictive, auxiliary)
 
         error_ratio = calculate_error_ratio(principal_variable, predictive_value)
         do_adjustment = is_within_threshold(error_ratio, lower_limit, upper_limit)
@@ -50,6 +51,7 @@ def run(
 
         output = Thousands_output(
             principal_identifier=principal_identifier,
+            principal_original_value=principal_variable,
             principal_final_value=principal_adjusted_value,
             target_variables=target_variables_final,
             tpc_ratio=error_ratio,
@@ -59,11 +61,12 @@ def run(
     except Exception as error:  # Catch any underlying errors and return a coherent output dataset
         output = Thousands_output(
             principal_identifier=principal_identifier,
+            principal_original_value=principal_variable,
             principal_final_value=principal_variable,
             target_variables=target_variables,
-            tpc_marker="E",
             tpc_ratio=None,
-            error=f"{error}",
+            tpc_marker="E",
+            error_description=f"{error}",
         )
 
     return output
@@ -75,12 +78,12 @@ def determine_tpc_marker(do_adjustment: bool) -> str:
     return "N"
 
 
-def determine_predictive_value(predicted: Optional[float], auxiliary: Optional[float]) -> float:
-    if predicted:
-        return predicted
+def determine_predictive_value(predictive: Optional[float], auxiliary: Optional[float]) -> float:
+    if predictive:
+        return predictive
     if auxiliary:
         return auxiliary
-    raise ValueError("Both predicted and auxiliary values are missing/zero")
+    raise ValueError("Both predictive and auxiliary values are missing/zero")
 
 
 def calculate_error_ratio(principal_variable: float, predictive_value: float) -> float:
