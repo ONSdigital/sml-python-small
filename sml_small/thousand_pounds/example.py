@@ -1,6 +1,7 @@
 from csv import DictReader
 from thousand_pounds import Target_variable, run
-
+import json
+import dataclasses
 
 # Load some local csvs into memory and then run the pounds thousands method
 def invoke_process_with_local_csv():
@@ -55,7 +56,7 @@ def invoke(config_csv: str, linked_question_csv: str):
     return run(
         principal_identifier=config["principal_identifier"],
         principal_variable=None if not config["principal_variable"] else float(config["principal_variable"]),
-        predictive=None if not config["predicted"] else float(config["predicted"]),
+        predictive=None if not config["predictive"] else float(config["predictive"]),
         auxiliary=None if not config["auxiliary"] else float(config["auxiliary"]),
         upper_limit=float(config["upper_limit"]),
         lower_limit=float(config["lower_limit"]),
@@ -88,4 +89,22 @@ if __name__ == "__main__":
             Target_variable(identifier="q104", original_value=None),
         ],
     )
-    print(f"Output: {output}")
+    print(f"\nOutput: {output}")
+    print(f"\nOutput json: {json.dumps(dataclasses.asdict(output),indent=4)}")
+
+    header = "principal_identifier,principal_original_value,principal_adjusted_value,tpc_ratio,tpc_marker,error_description"
+    row = f"{output.principal_identifier},{output.principal_original_value},{output.principal_adjusted_value},{output.tpc_ratio},{output.tpc_marker},{output.error_description}"
+
+    for linkedq in output.target_variables:
+        header += f",{linkedq.identifier}_original_value,{linkedq.identifier}_adjusted_value"
+        row += f",{linkedq.original_value},{linkedq.adjusted_value}"
+
+    print("\nOutput csv:")
+    print(f"{header}")
+    print(f"{row}")
+
+    # now we will open a file for writing
+    with open("output.csv", "w") as file:
+        file.write(header)
+        file.write("\n")
+        file.write(row)
