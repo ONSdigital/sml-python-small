@@ -2,12 +2,12 @@ from dataclasses import dataclass
 from typing import List, Optional
 
 
-# Dataset holding all 'linked questions' with their response/adjusted values
+# Dataset holding all 'linked questions' with their initial response and final/adjusted values
 @dataclass(frozen=True)
 class Target_variable:
     identifier: str  # Unique identifer e.g. a question code - q050
     original_value: Optional[float]
-    adjusted_value: Optional[float] = None
+    final_value: Optional[float] = None
 
 
 # Structure of the output dataset
@@ -15,7 +15,7 @@ class Target_variable:
 class Thousands_output:
     principal_identifier: Optional[str]  # Unique identifer e.g. a question code - q500
     principal_original_value: float  # Original provided value
-    principal_adjusted_value: Optional[float]  # Output value that may or may not be adjusted
+    principal_final_value: Optional[float]  # Output value that may or may not be adjusted
     target_variables: List[Target_variable]  # Output linked values that may or may not be adjusted
     tpc_ratio: Optional[float]  # Ratio of the principal variable against good/predictive/aux response
     tpc_marker: str  # C = Correction applied | N = No correction applied | E = Process failure
@@ -37,33 +37,43 @@ def run(
     the given principal variable and any linked variables by a factor of 1000.
     """
 
+    error_ratio = None
+    do_adjustment = False
     try:
         predictive_value = determine_predictive_value(predictive, auxiliary)
+        if predictive_value:  # Allow the case where given predictive = 0 and aux is missing to be a valid case
+            error_ratio = calculate_error_ratio(principal_variable, predictive_value)
+            do_adjustment = is_within_threshold(error_ratio, lower_limit, upper_limit)
 
-        error_ratio = calculate_error_ratio(principal_variable, predictive_value)
-        do_adjustment = is_within_threshold(error_ratio, lower_limit, upper_limit)
         principal_adjusted_value = adjust_value(principal_variable) if do_adjustment else principal_variable
-
         target_variables_final = []
         for question in target_variables:
             final_value = adjust_value(question.original_value) if do_adjustment else question.original_value
-            target_variables_final.append(Target_variable(identifier=question.identifier, original_value=question.original_value, adjusted_value=final_value))
+            target_variables_final.append(Target_variable(identifier=question.identifier, original_value=question.original_value, final_value=final_value))
 
         output = Thousands_output(
             principal_identifier=principal_identifier,
             principal_original_value=principal_variable,
-            principal_adjusted_value=principal_adjusted_value,
+            principal_final_value=principal_adjusted_value,
             target_variables=target_variables_final,
             tpc_ratio=error_ratio,
             tpc_marker=determine_tpc_marker(do_adjustment),
         )
 
     except Exception as error:  # Catch any underlying errors and return a coherent output dataset
+
+        # Ensure we populate the output target variables with the same output values as originally given
+        target_variables_final = []
+        for question in target_variables:
+            target_variables_final.append(
+                Target_variable(identifier=question.identifier, original_value=question.original_value, final_value=question.original_value)
+            )
+
         output = Thousands_output(
             principal_identifier=principal_identifier,
             principal_original_value=principal_variable,
-            principal_adjusted_value=None,
-            target_variables=target_variables,
+            principal_final_value=principal_variable,  # Always return the final output as the same as the input
+            target_variables=target_variables_final,
             tpc_ratio=None,
             tpc_marker="E",
             error_description=f"{error}",
@@ -73,25 +83,28 @@ def run(
 
 
 def determine_tpc_marker(do_adjustment: bool) -> str:
-    if do_adjustment:
-        return "C"
-    return "N"
+    return "C" if do_adjustment else "N"
 
 
 def determine_predictive_value(predictive: Optional[float], auxiliary: Optional[float]) -> float:
     if predictive:
-        return predictive
+        validate_number("predictive", predictive)
+        return float(predictive)
     if auxiliary:
-        return auxiliary
-    raise ValueError("Both predictive and auxiliary values are missing/zero")
+        validate_number("auxiliary", auxiliary)
+        return float(auxiliary)
+    if predictive == 0:  # Allow us to handle case when predictive = 0 and Aux is missing which is not an error
+        return 0
+    raise ValueError("Both predictive and auxiliary values are missing")
 
 
 def calculate_error_ratio(principal_variable: float, predictive_value: float) -> float:
     if principal_variable is None:
         raise ValueError("principal_variable is missing")
+    validate_number("principal_variable", principal_variable)
     if not predictive_value:
-        raise ValueError("predictive_value is zero/missing")
-    return principal_variable / predictive_value
+        raise ValueError("predictive_value is 0/missing")
+    return float(principal_variable) / float(predictive_value)  # predictive is already validated
 
 
 # Calculate the error value and determine whether the adjustment should be made
@@ -99,6 +112,8 @@ def is_within_threshold(error_ratio: float, lower_limit: float, upper_limit: flo
 
     if not lower_limit or not upper_limit:
         raise ValueError("At least one of the lower or upper limits are 0 or missing")
+    validate_number("lower_limit", lower_limit)
+    validate_number("upper_limit", upper_limit)
 
     if (error_ratio > lower_limit) and (error_ratio < upper_limit):
         return True
@@ -107,6 +122,19 @@ def is_within_threshold(error_ratio: float, lower_limit: float, upper_limit: flo
 
 # Perform the calculation to adjust the response value
 def adjust_value(value: Optional[float]) -> Optional[float]:
-    if value is None:
-        return None  # Do not adjust missing/null responses
-    return value / 1000
+    if value is not None:
+        return float(value) / 1000  # Do not adjust missing/null responses
+
+
+def validate_number(description: str, input) -> None:
+    if not isNumber(input):
+        raise ValueError(f"Attribute '{description}' is not a valid number")
+
+
+# Validate that the provided attribute is a number
+def isNumber(input) -> bool:
+    try:
+        float(input)
+    except Exception:
+        return False
+    return True

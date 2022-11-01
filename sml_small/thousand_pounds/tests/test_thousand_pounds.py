@@ -50,8 +50,8 @@ testdata = [
         1350,
         350,
         [],
-        Thousands_output("q400", 80000000, 80000000.0, [], None, "E", "Both predictive and auxiliary values are missing/zero"),
-        id="Given config(missing predictive and auxiliery) - default outputs and error indicated",
+        Thousands_output("q400", 80000000, 80000000.0, [], None, "E", "Both predictive and auxiliary values are missing"),
+        id="Given config(missing predictive and auxiliary) - default outputs and error indicated",
     ),
     pytest.param(
         "q450",
@@ -65,12 +65,31 @@ testdata = [
             "q450",
             8000,
             8000,
-            [Target_variable("q451", 500), Target_variable("q452", 1000)],
+            [Target_variable("q451", 500, 500), Target_variable("q452", 1000, 1000)],
             None,
-            "E",
-            "Both predictive and auxiliary values are missing/zero",
+            "N",
+            "",
         ),
-        id="Given config(predictive and auxiliery are 0) - default outputs and error indicated",
+        id="Given config(predictive and auxiliary are 0) - No error, not adjusted",
+    ),
+    pytest.param(
+        "q450",
+        8000,  # principal value/variable
+        0,  # predictive
+        None,  # auxiliary
+        1350,
+        350,
+        [Target_variable("q451", 500), Target_variable("q452", 1000)],
+        Thousands_output(
+            "q450",
+            8000,
+            8000,
+            [Target_variable("q451", 500, 500), Target_variable("q452", 1000, 1000)],
+            None,
+            "N",
+            "",
+        ),
+        id="Given config(predictive 0 and auxiliary is None) - No error, not adjusted",
     ),
     pytest.param(
         "q500",
@@ -80,7 +99,9 @@ testdata = [
         1350,
         350,
         [Target_variable("q501", 500), Target_variable("q502", 1000)],
-        Thousands_output("q500", None, None, [Target_variable("q501", 500), Target_variable("q502", 1000)], None, "E", "principal_variable is missing"),
+        Thousands_output(
+            "q500", None, None, [Target_variable("q501", 500, 500), Target_variable("q502", 1000, 1000)], None, "E", "principal_variable is missing"
+        ),
         id="Given config(missing principal variable) - default outputs and error indicated",
     ),
     pytest.param(
@@ -118,7 +139,7 @@ testdata = [
     ),
     pytest.param(
         "",
-        0,
+        0,  # principal
         -1,  # predictive
         -1,  # auxiliary
         0,  # upper limit
@@ -129,7 +150,7 @@ testdata = [
     ),
     pytest.param(
         "",
-        0,
+        0,  # principal
         -1,  # predictive
         -1,  # auxiliary
         1,  # upper limit
@@ -140,14 +161,47 @@ testdata = [
     ),
     pytest.param(
         "Ham",
-        "Cheese",
-        "Toast",  # predictive
-        "Jam",  # auxiliary
-        "Rhubarb",  # upper limit
-        "Custard",  # lower limit
+        "Cheese",  # principal
+        1,  # predictive
+        2,  # auxiliary
+        3,  # upper limit
+        4,  # lower limit
         [],
-        Thousands_output("Ham", "Cheese", "Cheese", [], None, "E", "unsupported operand type(s) for /: 'str' and 'str'"),
-        id="Lower limit is 0 - default outputs and error indicated",
+        Thousands_output("Ham", "Cheese", "Cheese", [], None, "E", "Attribute 'principal_variable' is not a valid number"),
+        id="Invalid format for principal variable",
+    ),
+    pytest.param(
+        "Dummy",
+        0,  # principal
+        "12 34 56",  # predictive
+        "2",  # auxiliary
+        "3",  # upper limit
+        "4",  # lower limit
+        [],
+        Thousands_output("Dummy", 0, 0, [], None, "E", "Attribute 'predictive' is not a valid number"),
+        id="Invalid format for predictive variable",
+    ),
+    pytest.param(
+        "Dummy",
+        10,  # principal
+        "123456",  # predictive
+        "",  # auxiliary
+        "33 56 767",  # upper limit
+        "4",  # lower limit
+        [],
+        Thousands_output("Dummy", 10, 10, [], None, "E", "Attribute 'upper_limit' is not a valid number"),
+        id="Invalid format for upper_limit variable",
+    ),
+    pytest.param(
+        "Dummy",
+        10,  # principal
+        "123456",  # predictive
+        "",  # auxiliary
+        "1234",  # upper limit
+        "98123x21",  # lower limit
+        [],
+        Thousands_output("Dummy", 10, 10, [], None, "E", "Attribute 'lower_limit' is not a valid number"),
+        id="Invalid format for lower_limit variable",
     ),
 ]
 

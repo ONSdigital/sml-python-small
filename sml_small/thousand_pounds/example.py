@@ -64,17 +64,7 @@ def invoke(config_csv: str, linked_question_csv: str):
     )
 
 
-if __name__ == "__main__":
-
-    print("\nTesting using local csv:")
-    output = invoke_process_with_local_csv()
-    print(f"Output: {output}")
-
-    print("\nRunning using in-memory csv:")
-    output = invoke_process_with_inmemory_csv_example()
-    print(f"Output: {output}")
-
-    print("\nRunning directly without using csv")
+def invoke_directly_writing_output_to_csv_example():
     output = run(
         principal_identifier="q100",
         principal_variable=50000000,
@@ -93,18 +83,92 @@ if __name__ == "__main__":
     print(f"\nOutput json: {json.dumps(dataclasses.asdict(output),indent=4)}")
 
     header = "principal_identifier,principal_original_value,principal_adjusted_value,tpc_ratio,tpc_marker,error_description"
-    row = f"{output.principal_identifier},{output.principal_original_value},{output.principal_adjusted_value},{output.tpc_ratio},{output.tpc_marker},{output.error_description}"
+    row = f"{output.principal_identifier},{output.principal_original_value},{output.principal_final_value},{output.tpc_ratio},{output.tpc_marker},{output.error_description}"
 
     for linkedq in output.target_variables:
         header += f",{linkedq.identifier}_original_value,{linkedq.identifier}_adjusted_value"
-        row += f",{linkedq.original_value},{linkedq.adjusted_value}"
+        row += f",{linkedq.original_value},{linkedq.final_value}"
 
     print("\nOutput csv:")
     print(f"{header}")
     print(f"{row}")
 
     # now we will open a file for writing
-    with open("output.csv", "w") as file:
+    with open("output1.csv", "w") as file:
         file.write(header)
         file.write("\n")
         file.write(row)
+
+
+def invoke_process_with_inmemory_single_csv_example():
+
+    config_csv = """principal_identifier,principal_variable,predictive,auxiliary,upper_limit,lower_limit,q101,q102,q103,q104
+123A-202203,50000000,60000,30000,1350,250,500,1000,1500,
+124A-202204,50000,600,300,1350,250,200,5000,3500,300
+125A-202204,0,0,12 0,1350,250,200,5000,3500,300
+126A-202205,,,,1350,250,100,1000,1500,100
+127A-202205,,1,2,1350,250,100,1000,1500,100"""
+
+    config_reader = DictReader(config_csv.splitlines())
+    configs = []
+    question_list = []
+    for config_row in config_reader:
+        question_list = {key: v for key, v in config_row.items() if "q" in key}
+        linked_questions = []
+        for question in question_list:
+            linked_questions.append(
+                Target_variable(identifier=question, original_value=None if not question_list[question] else float(question_list[question]))
+            )
+        config_row["target_variables"] = linked_questions
+        configs.append(config_row)
+
+    print(f"configs: {configs}")
+
+    output_question_header = ""
+    for question in question_list:
+        output_question_header += f",{question}_original_value,{question}_final_value"
+    output_header = f"principal_identifier,principal_original_value,principal_final_value,tpc_ratio,tpc_marker,error_description{output_question_header}"
+    output_row = ""
+    for config in configs:
+
+        output = run(
+            principal_identifier=config["principal_identifier"],
+            principal_variable=config["principal_variable"],
+            predictive=config["predictive"],
+            auxiliary=config["auxiliary"],
+            upper_limit=float(config["upper_limit"]),
+            lower_limit=float(config["lower_limit"]),
+            target_variables=config["target_variables"],
+        )
+
+        output_row += f"{output.principal_identifier},{output.principal_original_value},{output.principal_final_value},{output.tpc_ratio},{output.tpc_marker},{output.error_description}"
+        for question in output.target_variables:
+            output_row += f",{question.original_value},{question.final_value}"
+        output_row += "\n"
+
+    print("\nSingle_output csv:")
+    print(f"{output_header}")
+    print(f"{output_row}")
+
+    # now we will open a file for writing
+    with open("single_output.csv", "w") as file:
+        file.write(output_header)
+        file.write("\n")
+        file.write(output_row)
+
+
+if __name__ == "__main__":
+
+    print("\nTesting using local csv:")
+    output = invoke_process_with_local_csv()
+    print(f"Output: {output}")
+
+    print("\nRunning using in-memory csv:")
+    output = invoke_process_with_inmemory_csv_example()
+    print(f"Output: {output}")
+
+    print("\nRunning directly without using csv")
+    invoke_directly_writing_output_to_csv_example()
+
+    print("\nRunning directly using single csv format")
+    invoke_process_with_inmemory_single_csv_example()
