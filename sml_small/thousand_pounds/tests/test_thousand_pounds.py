@@ -9,12 +9,12 @@ testdata = [
         15000,  # auxiliary
         1350,  # upper limit
         350,  # lower limit
-        [Target_variable("q101", 500), Target_variable("q102", 1000), Target_variable("q103", 1500), Target_variable("q104", None)],
+        [Target_variable("q101", 500), Target_variable("q102", 1000), Target_variable("q103", 12345), Target_variable("q104", 0)],
         Thousands_output(
             "q100",
             50000000,
             50000.0,
-            [Target_variable("q101", 500, 0.5), Target_variable("q102", 1000, 1), Target_variable("q103", 1500, 1.5), Target_variable("q104", None, None)],
+            [Target_variable("q101", 500, 0.5), Target_variable("q102", 1000, 1), Target_variable("q103", 12345, 12.35), Target_variable("q104", 0, 0)],
             1000.0,
             "C",
         ),
@@ -167,7 +167,7 @@ testdata = [
         3,  # upper limit
         4,  # lower limit
         [],
-        Thousands_output("Ham", "Cheese", "Cheese", [], None, "E", "Attribute 'principal_variable' is not a valid number"),
+        Thousands_output("Ham", "Cheese", "Cheese", [], None, "E", "Attribute 'principal_variable' is missing or not a valid number"),
         id="Invalid format for principal variable",
     ),
     pytest.param(
@@ -178,7 +178,7 @@ testdata = [
         "3",  # upper limit
         "4",  # lower limit
         [],
-        Thousands_output("Dummy", 0, 0, [], None, "E", "Attribute 'predictive' is not a valid number"),
+        Thousands_output("Dummy", 0, 0, [], None, "E", "Attribute 'predictive' is missing or not a valid number"),
         id="Invalid format for predictive variable",
     ),
     pytest.param(
@@ -189,7 +189,7 @@ testdata = [
         "33 56 767",  # upper limit
         "4",  # lower limit
         [],
-        Thousands_output("Dummy", 10, 10, [], None, "E", "Attribute 'upper_limit' is not a valid number"),
+        Thousands_output("Dummy", 10, 10, [], None, "E", "Attribute 'upper_limit' is missing or not a valid number"),
         id="Invalid format for upper_limit variable",
     ),
     pytest.param(
@@ -200,8 +200,19 @@ testdata = [
         "1234",  # upper limit
         "98123x21",  # lower limit
         [],
-        Thousands_output("Dummy", 10, 10, [], None, "E", "Attribute 'lower_limit' is not a valid number"),
+        Thousands_output("Dummy", 10, 10, [], None, "E", "Attribute 'lower_limit' is missing or not a valid number"),
         id="Invalid format for lower_limit variable",
+    ),
+    pytest.param(
+        "Dummy",
+        10,  # principal
+        56,  # predictive
+        23,  # auxiliary
+        350,  # upper limit
+        351,  # lower limit
+        [],
+        Thousands_output("Dummy", 10, 10, [], None, "E", "Lower limit is larger than the upper limit"),
+        id="Lower limit is larger than the upper limit",
     ),
 ]
 

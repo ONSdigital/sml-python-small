@@ -46,12 +46,9 @@ def run(
             do_adjustment = is_within_threshold(error_ratio, lower_limit, upper_limit)
 
         principal_adjusted_value = adjust_value(principal_variable) if do_adjustment else principal_variable
-        target_variables_final = []
-        for question in target_variables:
-            final_value = adjust_value(question.original_value) if do_adjustment else question.original_value
-            target_variables_final.append(Target_variable(identifier=question.identifier, original_value=question.original_value, final_value=final_value))
+        target_variables_final = adjust_target_variables(do_adjustment, target_variables)
 
-        output = Thousands_output(
+        return Thousands_output(
             principal_identifier=principal_identifier,
             principal_original_value=principal_variable,
             principal_final_value=principal_adjusted_value,
@@ -69,7 +66,7 @@ def run(
                 Target_variable(identifier=question.identifier, original_value=question.original_value, final_value=question.original_value)
             )
 
-        output = Thousands_output(
+        return Thousands_output(
             principal_identifier=principal_identifier,
             principal_original_value=principal_variable,
             principal_final_value=principal_variable,  # Always return the final output as the same as the input
@@ -78,8 +75,6 @@ def run(
             tpc_marker="E",
             error_description=f"{error}",
         )
-
-    return output
 
 
 def determine_tpc_marker(do_adjustment: bool) -> str:
@@ -115,7 +110,10 @@ def is_within_threshold(error_ratio: float, lower_limit: float, upper_limit: flo
     validate_number("lower_limit", lower_limit)
     validate_number("upper_limit", upper_limit)
 
-    if (error_ratio > lower_limit) and (error_ratio < upper_limit):
+    if float(lower_limit) > float(upper_limit):
+        raise ValueError(f"Lower limit is larger than the upper limit ({lower_limit}:{upper_limit})")
+
+    if float(error_ratio) > float(lower_limit) and float(error_ratio) < float(upper_limit):
         return True
     return False  # Outside the bounds of the threshold, do not adjust
 
@@ -126,9 +124,10 @@ def adjust_value(value: Optional[float]) -> Optional[float]:
         return float(value) / 1000  # Do not adjust missing/null responses
 
 
-def validate_number(description: str, input) -> None:
+def validate_number(description: str, input) -> bool:
     if not isNumber(input):
-        raise ValueError(f"Attribute '{description}' is not a valid number")
+        raise ValueError(f"Attribute '{description}' is missing or not a valid number")
+    return True
 
 
 # Validate that the provided attribute is a number
@@ -138,3 +137,14 @@ def isNumber(input) -> bool:
     except Exception:
         return False
     return True
+
+
+def adjust_target_variables(do_adjustment: bool, target_variables: List[Target_variable]) -> List[Target_variable]:
+    adjusted_target_variables = []
+    for question in target_variables:
+        if do_adjustment and validate_number(question.identifier, question.original_value):
+            final_value = round(adjust_value(question.original_value), 2)
+        else:
+            final_value = question.original_value
+        adjusted_target_variables.append(Target_variable(identifier=question.identifier, original_value=question.original_value, final_value=final_value))
+    return adjusted_target_variables

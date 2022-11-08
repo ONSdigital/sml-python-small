@@ -107,7 +107,12 @@ def invoke_process_with_inmemory_single_csv_example():
 124A-202204,50000,600,300,1350,250,200,5000,3500,300
 125A-202204,0,0,12 0,1350,250,200,5000,3500,300
 126A-202205,,,,1350,250,100,1000,1500,100
-127A-202205,,1,2,1350,250,100,1000,1500,100"""
+127A-202205,,1,2,1350,250,100,1000,1500,100
+127B-202206,5000,10,2,1350,250,100,1000,abc,100
+127C-202207,5000,10,2,13 50,250,100,1000,4,100
+128A-202207,5000,10,2,1350,2 50,100,1000,2,100
+128B-202208,5000,10,2,,250,100,1000,6,100
+128C-202208,5000,10,2,100,,100,1000,7,100"""
 
     config_reader = DictReader(config_csv.splitlines())
     configs = []
@@ -116,9 +121,7 @@ def invoke_process_with_inmemory_single_csv_example():
         question_list = {key: v for key, v in config_row.items() if "q" in key}
         linked_questions = []
         for question in question_list:
-            linked_questions.append(
-                Target_variable(identifier=question, original_value=None if not question_list[question] else float(question_list[question]))
-            )
+            linked_questions.append(Target_variable(identifier=question, original_value=question_list[question]))
         config_row["target_variables"] = linked_questions
         configs.append(config_row)
 
@@ -136,8 +139,8 @@ def invoke_process_with_inmemory_single_csv_example():
             principal_variable=config["principal_variable"],
             predictive=config["predictive"],
             auxiliary=config["auxiliary"],
-            upper_limit=float(config["upper_limit"]),
-            lower_limit=float(config["lower_limit"]),
+            upper_limit=config["upper_limit"],
+            lower_limit=config["lower_limit"],
             target_variables=config["target_variables"],
         )
 
