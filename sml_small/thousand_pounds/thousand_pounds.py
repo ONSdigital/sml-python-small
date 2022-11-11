@@ -142,7 +142,7 @@ def isNumber(input) -> bool:
 def adjust_target_variables(do_adjustment: bool, target_variables: List[Target_variable]) -> List[Target_variable]:
     adjusted_target_variables = []
     for question in target_variables:
-        if do_adjustment and validate_number(question.identifier, question.original_value):
+        if validate_number(question.identifier, question.original_value) and do_adjustment:
             final_value = round(adjust_value(question.original_value), 2)
         else:
             final_value = question.original_value
