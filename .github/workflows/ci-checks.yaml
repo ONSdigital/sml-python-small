@@ -44,7 +44,7 @@ jobs:
       - name: Install dependencies
         run: poetry install
       - name: test
-        run: cd tests && poetry run python -m unittest--tap-stream --cov-report=html
+        run: cd tests && poetry run python -m unittest --cov-report=html
       - name: upload-coverage-report
         uses: actions/upload-artifact@v2
         with:
