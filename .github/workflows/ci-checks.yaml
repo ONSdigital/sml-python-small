@@ -44,9 +44,10 @@ jobs:
       - name: Install dependencies
         run: poetry install
       - name: test
-        run: cd tests && poetry run python -m unittest
+        run: |
+          cd tests && poetry run python -m unittest
+          python -m xmlrunner
       - name: Test Results
-        run: python -m xmlrunner
         uses: EnricoMi/publish-unit-test-result-action@v2
         if: always()
         with:
