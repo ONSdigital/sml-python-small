@@ -43,7 +43,7 @@ jobs:
           poetry-version: 1.3.2
       - name: Install dependencies
         run: poetry install
-      - name: test
+      - name: test-results
         run: |
             cd tests && poetry run python -m unittest
             poetry run python -m xmlrunner
