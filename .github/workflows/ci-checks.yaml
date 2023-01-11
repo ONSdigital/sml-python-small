@@ -46,7 +46,7 @@ jobs:
       - name: test
         run: |
             cd tests && poetry run python -m unittest
-            poetry python -m xmlrunner
+            poetry run python -m xmlrunner
       - name: Test Results
         uses: EnricoMi/publish-unit-test-result-action@v2
         if: always()
