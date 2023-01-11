@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="test_date_adjustment.UserAcceptanceTesting-20230111105813" tests="6" file="test_date_adjustment.py" time="0.401" timestamp="2023-01-11T10:58:24" failures="0" errors="0" skipped="0">
-	<testcase classname="test_date_adjustment.UserAcceptanceTesting" name="test_uat_fix_1" time="0.029" timestamp="2023-01-11T10:58:23" file="test_date_adjustment.py" line="2015"/>
-	<testcase classname="test_date_adjustment.UserAcceptanceTesting" name="test_uat_fix_2" time="0.050" timestamp="2023-01-11T10:58:23" file="test_date_adjustment.py" line="2055"/>
-	<testcase classname="test_date_adjustment.UserAcceptanceTesting" name="test_uat_fix_3" time="0.129" timestamp="2023-01-11T10:58:23" file="test_date_adjustment.py" line="2085"/>
-	<testcase classname="test_date_adjustment.UserAcceptanceTesting" name="test_uat_fix_4" time="0.108" timestamp="2023-01-11T10:58:23" file="test_date_adjustment.py" line="2129"/>
-	<testcase classname="test_date_adjustment.UserAcceptanceTesting" name="test_uat_fix_5" time="0.062" timestamp="2023-01-11T10:58:24" file="test_date_adjustment.py" line="2162"/>
-	<testcase classname="test_date_adjustment.UserAcceptanceTesting" name="test_uat_fix_6" time="0.023" timestamp="2023-01-11T10:58:24" file="test_date_adjustment.py" line="2222"/>
-</testsuite>
