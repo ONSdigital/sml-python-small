@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="test_date_adjustment.TestDateAdjustment-20230111105813" tests="26" file="test_date_adjustment.py" time="7.283" timestamp="2023-01-11T10:58:20" failures="0" errors="0" skipped="0">
+	<testcase classname="test_date_adjustment.TestDateAdjustment" name="test_all_error_codes_generated_as_expected" time="0.469" timestamp="2023-01-11T10:58:13" file="test_date_adjustment.py" line="605"/>
+	<testcase classname="test_date_adjustment.TestDateAdjustment" name="test_aw_columns_are_correct" time="0.475" timestamp="2023-01-11T10:58:14" file="test_date_adjustment.py" line="294"/>
+	<testcase classname="test_date_adjustment.TestDateAdjustment" name="test_aw_q27_not_present" time="0.520" timestamp="2023-01-11T10:58:14" file="test_date_adjustment.py" line="321"/>
+	<testcase classname="test_date_adjustment.TestDateAdjustment" name="test_bad_average_weekly_param_fast_fail" time="0.014" timestamp="2023-01-11T10:58:14" file="test_date_adjustment.py" line="548"/>
+	<testcase classname="test_date_adjustment.TestDateAdjustment" name="test_basic_mid_point_use_gives_actual_equals_expected" time="0.531" timestamp="2023-01-11T10:58:15" file="test_date_adjustment.py" line="357"/>
+	<testcase classname="test_date_adjustment.TestDateAdjustment" name="test_da_columns_are_correct" time="0.516" timestamp="2023-01-11T10:58:16" file="test_date_adjustment.py" line="253"/>
+	<testcase classname="test_date_adjustment.TestDateAdjustment" name="test_da_q27_not_present" time="0.506" timestamp="2023-01-11T10:58:16" file="test_date_adjustment.py" line="280"/>
+	<testcase classname="test_date_adjustment.TestDateAdjustment" name="test_double_period_marker_set_on_warning" time="0.561" timestamp="2023-01-11T10:58:17" file="test_date_adjustment.py" line="526"/>
+	<testcase classname="test_date_adjustment.TestDateAdjustment" name="test_equal_weighted_y_correct" time="0.545" timestamp="2023-01-11T10:58:17" file="test_date_adjustment.py" line="459"/>
+	<testcase classname="test_date_adjustment.TestDateAdjustment" name="test_input_provided" time="0.000" timestamp="2023-01-11T10:58:17" file="test_date_adjustment.py" line="120"/>
+	<testcase classname="test_date_adjustment.TestDateAdjustment" name="test_long_period_marker_set_on_warning" time="0.473" timestamp="2023-01-11T10:58:18" file="test_date_adjustment.py" line="482"/>
+	<testcase classname="test_date_adjustment.TestDateAdjustment" name="test_mid_point_bypass_actual_dates" time="0.511" timestamp="2023-01-11T10:58:18" file="test_date_adjustment.py" line="335"/>
+	<testcase classname="test_date_adjustment.TestDateAdjustment" name="test_mid_point_change_actual_use_calendar_month_dates" time="0.515" timestamp="2023-01-11T10:58:19" file="test_date_adjustment.py" line="384"/>
+	<testcase classname="test_date_adjustment.TestDateAdjustment" name="test_mid_point_change_actual_use_trading_period_dates" time="0.508" timestamp="2023-01-11T10:58:19" file="test_date_adjustment.py" line="425"/>
+	<testcase classname="test_date_adjustment.TestDateAdjustment" name="test_multi_aw_param_fast_fail" time="0.012" timestamp="2023-01-11T10:58:19" file="test_date_adjustment.py" line="562"/>
+	<testcase classname="test_date_adjustment.TestDateAdjustment" name="test_multi_equal_weight_param_fast_fail" time="0.014" timestamp="2023-01-11T10:58:19" file="test_date_adjustment.py" line="590"/>
+	<testcase classname="test_date_adjustment.TestDateAdjustment" name="test_multi_midpoint_param_fast_fail" time="0.014" timestamp="2023-01-11T10:58:19" file="test_date_adjustment.py" line="575"/>
+	<testcase classname="test_date_adjustment.TestDateAdjustment" name="test_return_is_dataframe" time="0.484" timestamp="2023-01-11T10:58:20" file="test_date_adjustment.py" line="235"/>
+	<testcase classname="test_date_adjustment.TestDateAdjustment" name="test_short_period_marker_set_on_warning" time="0.544" timestamp="2023-01-11T10:58:20" file="test_date_adjustment.py" line="504"/>
+	<testcase classname="test_date_adjustment.TestDateAdjustment" name="test_validate_input_dataframe_type" time="0.001" timestamp="2023-01-11T10:58:20" file="test_date_adjustment.py" line="125"/>
+	<testcase classname="test_date_adjustment.TestDateAdjustment" name="test_validate_required_cols_in_input_dataframe" time="0.012" timestamp="2023-01-11T10:58:20" file="test_date_adjustment.py" line="169"/>
+	<testcase classname="test_date_adjustment.TestDateAdjustment" name="test_validate_required_cols_in_trading_weight" time="0.019" timestamp="2023-01-11T10:58:20" file="test_date_adjustment.py" line="216"/>
+	<testcase classname="test_date_adjustment.TestDateAdjustment" name="test_validate_reserved_column_names_in_input_dataframe" time="0.013" timestamp="2023-01-11T10:58:20" file="test_date_adjustment.py" line="184"/>
+	<testcase classname="test_date_adjustment.TestDateAdjustment" name="test_validate_target_columns_in_input_dataframe" time="0.012" timestamp="2023-01-11T10:58:20" file="test_date_adjustment.py" line="200"/>
+	<testcase classname="test_date_adjustment.TestDateAdjustment" name="test_validate_target_columns_type" time="0.007" timestamp="2023-01-11T10:58:20" file="test_date_adjustment.py" line="153"/>
+	<testcase classname="test_date_adjustment.TestDateAdjustment" name="test_validate_trading_weights_type" time="0.007" timestamp="2023-01-11T10:58:20" file="test_date_adjustment.py" line="137"/>
+</testsuite>

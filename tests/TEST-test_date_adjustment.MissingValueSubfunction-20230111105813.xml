@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="test_date_adjustment.MissingValueSubfunction-20230111105813" tests="8" file="test_date_adjustment.py" time="0.078" timestamp="2023-01-11T10:58:13" failures="0" errors="0" skipped="0">
+	<testcase classname="test_date_adjustment.MissingValueSubfunction" name="test_error_flag_column_exist" time="0.017" timestamp="2023-01-11T10:58:13" file="test_date_adjustment.py" line="750"/>
+	<testcase classname="test_date_adjustment.MissingValueSubfunction" name="test_error_flag_set_correctly_where_appropriate" time="0.014" timestamp="2023-01-11T10:58:13" file="test_date_adjustment.py" line="769"/>
+	<testcase classname="test_date_adjustment.MissingValueSubfunction" name="test_failure_on_no_input" time="0.000" timestamp="2023-01-11T10:58:13" file="test_date_adjustment.py" line="708"/>
+	<testcase classname="test_date_adjustment.MissingValueSubfunction" name="test_nothing_filtered" time="0.013" timestamp="2023-01-11T10:58:13" file="test_date_adjustment.py" line="758"/>
+	<testcase classname="test_date_adjustment.MissingValueSubfunction" name="test_output_is_dataframe" time="0.013" timestamp="2023-01-11T10:58:13" file="test_date_adjustment.py" line="740"/>
+	<testcase classname="test_date_adjustment.MissingValueSubfunction" name="test_validate_input_dataframe_type" time="0.000" timestamp="2023-01-11T10:58:13" file="test_date_adjustment.py" line="713"/>
+	<testcase classname="test_date_adjustment.MissingValueSubfunction" name="test_validate_required_cols_in_input_dataframe" time="0.011" timestamp="2023-01-11T10:58:13" file="test_date_adjustment.py" line="730"/>
+	<testcase classname="test_date_adjustment.MissingValueSubfunction" name="test_validate_target_columns_type" time="0.009" timestamp="2023-01-11T10:58:13" file="test_date_adjustment.py" line="721"/>
+</testsuite>

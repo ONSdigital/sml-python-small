@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="test_date_adjustment.TestAverageWeeklySubfunction-20230111105813" tests="9" file="test_date_adjustment.py" time="0.297" timestamp="2023-01-11T10:58:13" failures="0" errors="0" skipped="0">
+	<testcase classname="test_date_adjustment.TestAverageWeeklySubfunction" name="test_aw_data_content_is_correct" time="0.063" timestamp="2023-01-11T10:58:13" file="test_date_adjustment.py" line="1984"/>
+	<testcase classname="test_date_adjustment.TestAverageWeeklySubfunction" name="test_input_provided" time="0.000" timestamp="2023-01-11T10:58:13" file="test_date_adjustment.py" line="1908"/>
+	<testcase classname="test_date_adjustment.TestAverageWeeklySubfunction" name="test_no_aw_cols_when_no_question_list" time="0.022" timestamp="2023-01-11T10:58:13" file="test_date_adjustment.py" line="1948"/>
+	<testcase classname="test_date_adjustment.TestAverageWeeklySubfunction" name="test_output_contains_all_expected_cols" time="0.062" timestamp="2023-01-11T10:58:13" file="test_date_adjustment.py" line="1956"/>
+	<testcase classname="test_date_adjustment.TestAverageWeeklySubfunction" name="test_output_contains_no_unexpected_cols" time="0.057" timestamp="2023-01-11T10:58:13" file="test_date_adjustment.py" line="1969"/>
+	<testcase classname="test_date_adjustment.TestAverageWeeklySubfunction" name="test_required_cols_missing_from_input" time="0.019" timestamp="2023-01-11T10:58:13" file="test_date_adjustment.py" line="1930"/>
+	<testcase classname="test_date_adjustment.TestAverageWeeklySubfunction" name="test_return_is_dataframe" time="0.057" timestamp="2023-01-11T10:58:13" file="test_date_adjustment.py" line="1939"/>
+	<testcase classname="test_date_adjustment.TestAverageWeeklySubfunction" name="test_validate_first_input_is_dataframe" time="0.000" timestamp="2023-01-11T10:58:13" file="test_date_adjustment.py" line="1913"/>
+	<testcase classname="test_date_adjustment.TestAverageWeeklySubfunction" name="test_validate_second_input_is_list" time="0.017" timestamp="2023-01-11T10:58:13" file="test_date_adjustment.py" line="1921"/>
+</testsuite>

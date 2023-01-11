@@ -379,17 +379,6 @@ files = [
 lxml = "*"
 
 [[package]]
-name = "xmlrunner"
-version = "1.7.7"
-description = "PyUnit-based test runner with JUnit like XML reporting."
-category = "main"
-optional = false
-python-versions = "*"
-files = [
-    {file = "xmlrunner-1.7.7.tar.gz", hash = "sha256:5a6113d049eca7646111ee657266966e5bbfb0b5ceb2e83ee0772e16d7110f39"},
-]
-
-[[package]]
 name = "zipp"
 version = "3.11.0"
 description = "Backport of pathlib-compatible object wrapper for zip files"
@@ -408,4 +397,4 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.7.1"
-content-hash = "0edb9303b5e2c705fd5ee919a78bb735f920a4fbcf86ff7bf822a8a98f6b18a8"
+content-hash = "811f0de5f25b9f980ea3f9abfb7f800770910c55b4eaac0dd3d3f1c4501996b2"

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="test_date_adjustment.TestMidpointSubfunction-20230111105813" tests="13" file="test_date_adjustment.py" time="0.775" timestamp="2023-01-11T10:58:21" failures="0" errors="0" skipped="0">
+	<testcase classname="test_date_adjustment.TestMidpointSubfunction" name="test_E12_on_empty_non_zero_after_crps_dataframe" time="0.098" timestamp="2023-01-11T10:58:21" file="test_date_adjustment.py" line="1361"/>
+	<testcase classname="test_date_adjustment.TestMidpointSubfunction" name="test_E12_on_empty_non_zero_before_crpe_dataframe" time="0.081" timestamp="2023-01-11T10:58:21" file="test_date_adjustment.py" line="1390"/>
+	<testcase classname="test_date_adjustment.TestMidpointSubfunction" name="test_E13" time="0.071" timestamp="2023-01-11T10:58:21" file="test_date_adjustment.py" line="1419"/>
+	<testcase classname="test_date_adjustment.TestMidpointSubfunction" name="test_equal_weight_overrides_trimming" time="0.067" timestamp="2023-01-11T10:58:21" file="test_date_adjustment.py" line="1233"/>
+	<testcase classname="test_date_adjustment.TestMidpointSubfunction" name="test_input_is_a_dataframe" time="0.000" timestamp="2023-01-11T10:58:21" file="test_date_adjustment.py" line="1151"/>
+	<testcase classname="test_date_adjustment.TestMidpointSubfunction" name="test_input_provided" time="0.000" timestamp="2023-01-11T10:58:21" file="test_date_adjustment.py" line="1146"/>
+	<testcase classname="test_date_adjustment.TestMidpointSubfunction" name="test_output_is_dataframe" time="0.067" timestamp="2023-01-11T10:58:21" file="test_date_adjustment.py" line="1181"/>
+	<testcase classname="test_date_adjustment.TestMidpointSubfunction" name="test_output_mid_point_actual_equals_expected" time="0.071" timestamp="2023-01-11T10:58:21" file="test_date_adjustment.py" line="1254"/>
+	<testcase classname="test_date_adjustment.TestMidpointSubfunction" name="test_output_mid_point_changed_dates_calendar_days" time="0.072" timestamp="2023-01-11T10:58:21" file="test_date_adjustment.py" line="1281"/>
+	<testcase classname="test_date_adjustment.TestMidpointSubfunction" name="test_output_mid_point_changed_dates_trading_period" time="0.080" timestamp="2023-01-11T10:58:21" file="test_date_adjustment.py" line="1321"/>
+	<testcase classname="test_date_adjustment.TestMidpointSubfunction" name="test_output_mid_point_equal_n_route" time="0.076" timestamp="2023-01-11T10:58:21" file="test_date_adjustment.py" line="1212"/>
+	<testcase classname="test_date_adjustment.TestMidpointSubfunction" name="test_required_cols_missing_from_input" time="0.015" timestamp="2023-01-11T10:58:21" file="test_date_adjustment.py" line="1165"/>
+	<testcase classname="test_date_adjustment.TestMidpointSubfunction" name="test_required_output_cols_present_in_output" time="0.076" timestamp="2023-01-11T10:58:21" file="test_date_adjustment.py" line="1196"/>
+</testsuite>
