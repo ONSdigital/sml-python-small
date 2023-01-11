@@ -44,7 +44,13 @@ jobs:
       - name: Install dependencies
         run: poetry install
       - name: test
-        run: cd tests && poetry run python -m unittest -v
+        run: cd tests && poetry run python -m unittest
+      - name: Test Results
+        run: python -m xmlrunner
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          junit_files: tests/*.xml
   flake8:
     runs-on: ubuntu-latest
     strategy:
