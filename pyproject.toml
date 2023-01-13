@@ -9,19 +9,22 @@ python = "^3.7.1"
 pandas = "^1.3.5"
 
 [tool.poetry.dev-dependencies]
-flake8 = "^5.0.4"
-isort = "^5.10.1"
 pytest = "^7.2.0"
+black = "^22.12"
+isort = "^5.11.4"
+flake8 = "^5.0.4"
 coverage = "^7.0"
 pytest-cov = "^4.0.0"
 chispa = "*"
 pytest-dependency = "^0.5.1"
 pytest-tap = "^3.3"
+[tool.isort]
+profile = "black"
 
 [tool.pytest.ini_options]
-junit_test_suite_name = "sml-python-small"
+junit_test_suite_name = "statistical_methods_library"
 addopts = "--exitfirst --tap-stream --cov=statistical_methods_library --cov-fail-under=95"
-[build-system]
 
+[build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
