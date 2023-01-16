@@ -49,20 +49,21 @@ jobs:
       - name: Install dependencies
         run: poetry install
       - name: test
-        run: cd tests && poetry run pytest --html=test_report/report.html  
-      # - name: Upload Test report
-      #   uses: dorny/test-reporter@v1
-      #   if: success() || failure()
-      #   with:
-      #     name: test-results
-      #     path: junit.xml
-      #     reporter: java-junit
-      #     fail-on-error: false
+        run: cd tests && poetry run pytest --cov-report=html --html=test_report/report.html  
+      - name: Upload Test report
+        uses: dorny/test-reporter@v1
+        if: success() || failure()
+        with:
+          name: test-results
+          name: coverage-report
+          path: "test_report/report.html"
+          if-no-files-found: warn
+          fail-on-error: false
       - name: upload-coverage-report
         uses: actions/upload-artifact@v2
         with:
           name: coverage-report
-          path: "test_report/"
+          path: "htmlcov/"
           if-no-files-found: warn
   flake8:
     runs-on: ubuntu-latest
