@@ -48,18 +48,23 @@ jobs:
           cd tests && poetry run pytest --cov-report html --cov
           poetry run pytest --html=test_report/report.html
           pwd
-      - name: Upload Test report
-        uses: actions/upload-artifact@v2
+      - name: HTML Preview
+        id: html_preview
+        uses: pavi2410/html-preview-action@v2
         with:
-          name: test-results
-          path: tests/test_report/
-          if-no-files-found: warn
-      - name: upload-coverage-report
-        uses: actions/upload-artifact@v2
-        with:
-          name: coverage-report
-          path: tests/htmlcov/
-          if-no-files-found: warn
+          html_file: tests/test_report/index.html
+      # - name: Upload Test report
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: test-results
+      #     path: tests/test_report/
+      #     if-no-files-found: warn
+      # - name: upload-coverage-report
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: coverage-report
+      #     path: tests/htmlcov/
+      #     if-no-files-found: warn
 
   flake8:
     runs-on: ubuntu-latest
