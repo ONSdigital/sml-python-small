@@ -49,7 +49,7 @@ jobs:
       - name: Install dependencies
         run: poetry install
       - name: test
-        run: poetry run pytest --tap-stream --junitxml=junit.xml
+        run: cd tests && poetry run pytest --tap-stream --junitxml=junit.xml
       - name: Upload Test report
         uses: dorny/test-reporter@v1
         if: success() || failure()
