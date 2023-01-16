@@ -30,7 +30,6 @@ jobs:
       max-parallel: 4
       matrix:
         python-version: [3.7]
-        java-version: ["8"]
       fail-fast: false
     steps:
       - uses: actions/checkout@v2
@@ -38,32 +37,30 @@ jobs:
         uses: actions/setup-python@v1
         with:
           python-version: ${{ matrix.python-version }}
-      - uses: actions/setup-java@v2
-        with:
-          distribution: "adopt"
-          java-version: ${{ matrix.java-version }}
       - name: Run image
         uses: abatilo/actions-poetry@v2.0.0
         with:
-          poetry-version: 1.3.2
+          poetry-version: 1.1.11
       - name: Install dependencies
         run: poetry install
       - name: test
-        run: cd tests && poetry run pytest --cov-report=html --html=test_report/report.html  
+        run: |
+          cd tests && poetry run pytest --cov-report html --cov
+          cd tests && poetry run pytest --html=test_report/report.html
       - name: Upload Test report
         uses: dorny/test-reporter@v1
         if: success() || failure()
         with:
           name: test-results
-          path: "test_report/report.html"
+          path: test_report/report.html
           if-no-files-found: warn
-          fail-on-error: false
       - name: upload-coverage-report
         uses: actions/upload-artifact@v2
         with:
           name: coverage-report
-          path: "htmlcov/"
-          if-no-files-found: warn
+          path: htmlcov/
+          if-no-files-found: warn  
+
   flake8:
     runs-on: ubuntu-latest
     strategy:
