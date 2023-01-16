@@ -57,8 +57,8 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: coverage-report
-          path: htmlcov/
-          if-no-files-found: warn  
+          path: htmlcov/index.html
+          if-no-files-found: warn
 
   flake8:
     runs-on: ubuntu-latest
