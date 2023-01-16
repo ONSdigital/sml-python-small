@@ -52,6 +52,7 @@ jobs:
         if: always()
         with:
           junit_files: tests/*.xml
+          
   flake8:
     runs-on: ubuntu-latest
     strategy:
