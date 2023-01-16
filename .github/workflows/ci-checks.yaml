@@ -55,7 +55,6 @@ jobs:
         if: success() || failure()
         with:
           name: test-results
-          name: coverage-report
           path: "test_report/report.html"
           if-no-files-found: warn
           fail-on-error: false
