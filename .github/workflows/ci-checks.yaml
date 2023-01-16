@@ -53,6 +53,7 @@ jobs:
         uses: pavi2410/html-preview-action@v2
         with:
           html_file: tests/test_report/index.html
+        run: steps.html_preview.outputs.url
       # - name: Upload Test report
       #   uses: actions/upload-artifact@v2
       #   with:
