@@ -49,12 +49,14 @@ jobs:
           poetry run pytest --html=test_report/report.html
       - name: Upload Test report
         uses: actions/upload-artifact@v2
+        run: pwd
         with:
           name: test-results
           path: test_report/
           if-no-files-found: warn
       - name: upload-coverage-report
         uses: actions/upload-artifact@v2
+        run: pwd
         with:
           name: coverage-report
           path: htmlcov/
