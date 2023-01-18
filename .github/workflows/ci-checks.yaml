@@ -55,14 +55,14 @@ jobs:
         if: success() || failure()
         with:
           name: test-results
-          path: junit.xml
+          path: tests/junit.xml
           reporter: java-junit
           fail-on-error: false
       - name: upload-coverage-report
         uses: actions/upload-artifact@v2
         with:
           name: coverage-report
-          path: /tests/htmlcov/
+          path: tests/htmlcov/
           if-no-files-found: warn
   flake8:
     runs-on: ubuntu-latest
