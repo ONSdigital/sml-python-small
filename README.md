@@ -7,13 +7,3 @@ use on *small* datasets which can safely be processed in-memory.
 
 For documentation, please refer to the method-specific documentation in the 
 docs directory.
-
-## Unit tests
-
-To run the unit tests run the following commands:
-
-```
-poetry install
-cd tests/
-pytest
-```
