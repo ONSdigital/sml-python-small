@@ -19,7 +19,7 @@ jobs:
       - name: Run image
         uses: abatilo/actions-poetry@v2.0.0
         with:
-          poetry-version: 1.1.11
+          poetry-version: 1.1.6
       - name: Install dependencies
         run: poetry install
       - name: build
@@ -80,7 +80,7 @@ jobs:
       - name: Run image
         uses: abatilo/actions-poetry@v2.1.4
         with:
-          poetry-version: 1.1.12
+          poetry-version: 1.1.6
       - name: setup netrc
         run: |-
           echo "machine github.com login ${GITHUB_PAT} password x-oauth-basic" > ~/.netrc
@@ -107,7 +107,7 @@ jobs:
       - name: Run image
         uses: abatilo/actions-poetry@v2.1.4
         with:
-          poetry-version: 1.1.12
+          poetry-version: 1.1.6
       - name: setup netrc
         run: |-
           echo "machine github.com login ${GITHUB_PAT} password x-oauth-basic" > ~/.netrc
