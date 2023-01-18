@@ -55,7 +55,7 @@ jobs:
         if: success() || failure()
         with:
           name: test-results
-          path: tests/junit.xml/
+          path: tests/junit.xml
           reporter: java-junit
           fail-on-error: false
       - name: upload-coverage-report
