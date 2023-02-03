@@ -62,6 +62,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          echo "$secrets.GITHUB_TOKEN"
           name: coverage-report
           path: tests/htmlcov/
           if-no-files-found: warn
