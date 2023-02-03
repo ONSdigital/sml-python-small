@@ -6,7 +6,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
-      max-parallel: 3
+      max-parallel: 4
       matrix:
         python-version: [3.7]
         java-version: ["8"]
@@ -28,7 +28,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     strategy:
-      max-parallel: 3
+      max-parallel: 4
       matrix:
         python-version: [3.7]
         java-version: ["8"]
@@ -68,7 +68,7 @@ jobs:
   flake8:
     runs-on: ubuntu-latest
     strategy:
-      max-parallel: 3
+      max-parallel: 4
       matrix:
         python-version: [3.9]
         java-version: ["8"]
@@ -96,7 +96,7 @@ jobs:
   isort:
     runs-on: ubuntu-latest
     strategy:
-      max-parallel: 3
+      max-parallel: 4
       matrix:
         python-version: [3.9]
         java-version: ["8"]
