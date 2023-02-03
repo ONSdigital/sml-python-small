@@ -9,7 +9,6 @@ jobs:
       max-parallel: 4
       matrix:
         python-version: [3.7]
-        java-version: ["8"]
       fail-fast: false
     steps:
       - uses: actions/checkout@v2
@@ -31,7 +30,6 @@ jobs:
       max-parallel: 4
       matrix:
         python-version: [3.7]
-        java-version: ["8"]
       fail-fast: false
     steps:
       - uses: actions/checkout@v2
@@ -71,7 +69,6 @@ jobs:
       max-parallel: 4
       matrix:
         python-version: [3.7]
-        java-version: ["8"]
       fail-fast: false
     steps:
       - uses: actions/checkout@v3
@@ -99,7 +96,6 @@ jobs:
       max-parallel: 4
       matrix:
         python-version: [3.7]
-        java-version: ["8"]
       fail-fast: false
     steps:
       - uses: actions/checkout@v3
