@@ -1,3 +1,6 @@
+'''
+For Copyright information, please see LICENCE.
+'''
 
 from typing import List
 
