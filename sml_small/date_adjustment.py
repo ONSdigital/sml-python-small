@@ -1,3 +1,7 @@
+"""
+For Copyright information, please see LICENCE.
+"""
+
 import sys
 from calendar import monthrange
 from datetime import timedelta
