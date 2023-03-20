@@ -19,7 +19,7 @@ pytest-tap = "^3.3"
 
 [tool.pytest.ini_options]
 junit_test_suite_name = "sml_small"
-addopts = "--exitfirst --tap-stream --cov=sml_small --cov-fail-under=90"
+addopts = "--exitfirst --cov=sml_small --cov-fail-under=90"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
