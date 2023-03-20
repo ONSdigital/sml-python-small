@@ -24,3 +24,4 @@ addopts = "--exitfirst --tap-stream --cov=sml_small --cov-fail-under=90"
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
