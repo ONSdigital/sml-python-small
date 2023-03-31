@@ -502,7 +502,7 @@ def primary_wrangler_subfunction(df_stage_one: pd.DataFrame,
     _basic_input_validation(this_place,
                             input_dataframe=df_stage_one,
                             trading_weights=trading_weights,
-                            target_columns=target_columns)
+                            target_columns=target_columns) tests
 
     # Validate required columns are in input dataframe
     required_columns = [contributor_returned_start_date_col, contributor_returned_end_date_col, da_error_flag_col,
