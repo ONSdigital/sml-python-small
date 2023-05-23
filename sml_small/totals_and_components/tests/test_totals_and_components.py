@@ -1,9 +1,12 @@
-import pytest
 import random
-from sml_small.totals_and_components.totals_and_components import totals_and_components,Component_list
+
+import pytest  # noqa
+
+from sml_small.totals_and_components.totals_and_components import Component_list, totals_and_components
+
 
 def test_totals_and_components(capfd):
-    test_components:Component_list = []
+    test_components: Component_list = []
 
     for _ in range(12):
         random_float = random.uniform(0, 12)
@@ -23,10 +26,10 @@ def test_totals_and_components(capfd):
                                     )
     print(results)
 
-    # On test error capture the printed output and remove any leading or trailing whitespace 
+    # On test error capture the printed output and remove any leading or trailing whitespace
     # Run with pytest -s to get output even for passing tests
     captured = capfd.readouterr()
     printed_output = captured.out.strip()
-    print(printed_output)  
+    print(printed_output)
 
-    assert(results.tcc_marker=="T")
+    assert results.tcc_marker == "T"
