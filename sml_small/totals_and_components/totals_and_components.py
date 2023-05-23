@@ -54,6 +54,70 @@ def print_input_table(**kwargs):
         print(f"{var_name:<15}|   {var_value}")
 
 
+def validate_input(
+        identifier: Optional[str],
+        period: Optional[str],
+        total: float,
+        components: List[Component_list],
+        amend_total: bool,
+        predictive: Optional[float],
+        predictive_period: Optional[str],
+        auxiliary: Optional[float],
+        absolute_difference_threshold: Optional[float],
+        percentage_difference_threshold: Optional[float]
+        ) -> bool:
+    raise NotImplementedError(f"{validate_input.__name__}() not implemented yet")
+
+
+def check_predictive_value(predictive: Optional[float], auxiliary: Optional[float]) -> bool:
+    raise NotImplementedError(f"{check_predictive_value.__name__}() not implemented yet")
+
+
+def check_zero_errors(predictive: float, components_sum: float) -> bool:
+    raise NotImplementedError(f"{check_zero_errors.__name__}() not implemented yet")
+
+
+def check_sum_components_predictive(predictive: float, components_sum: float) -> bool:
+    raise NotImplementedError(f"{check_sum_components_predictive.__name__}() not implemented yet")
+
+
+def determine_error_detection(absolute_difference_threshold: Optional[float],
+                              percentage_difference_threshold: Optional[float],
+                              absolute_difference: float,
+                              components_sum: float
+                              ) -> bool:
+    raise NotImplementedError(f"{determine_error_detection.__name__}() not implemented yet")
+
+
+def check_absolute_difference_threshold(absolute_difference_threshold: float, absolute_difference: float) -> bool:
+    raise NotImplementedError(f"{check_absolute_difference_threshold.__name__}() not implemented yet")
+
+
+def check_percentage_difference_threshold(percentage_difference_threshold: float, components_sum: float) -> bool:
+    raise NotImplementedError(f"{check_percentage_difference_threshold.__name__}() not implemented yet")
+
+
+def error_correction(amend_total: bool,
+                     components_sum: float,
+                     original_components: List[Component_list],
+                     predictive: float
+                     ) -> bool:
+    raise NotImplementedError(f"{error_correction.__name__}() not implemented yet")
+
+
+def correct_total(components_sum: float,
+                  original_components: List[Component_list]
+                  ) -> bool:
+    raise NotImplementedError(f"{correct_total.__name__}() not implemented yet")
+
+
+def correct_components(components_sum: float,
+                       original_components: List[Component_list],
+                       predictive: float
+                       ) -> bool:
+    raise NotImplementedError(f"{correct_components.__name__}() not implemented yet")
+
+
 def sum_components(components: Component_list) -> float:
     total_sum = 0.0
 
