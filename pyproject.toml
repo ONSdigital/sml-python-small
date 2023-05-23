@@ -17,6 +17,9 @@ pytest-cov = "^4.0.0"
 pytest-dependency = "^0.5.1"
 pytest-tap = "^3.3"
 
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.3.1"
+
 [tool.pytest.ini_options]
 junit_test_suite_name = "sml_small"
 addopts = "--exitfirst --cov=sml_small --cov-fail-under=90"
