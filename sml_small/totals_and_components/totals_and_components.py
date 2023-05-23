@@ -32,7 +32,7 @@ class Totals_and_Components_Output:
     tcc_marker: str  # Indicates what correction (if any) was necessary. T (totals corrected), C (components corrected),
     # N (no correction required), M (manual correction required), S (method stopped due to lack of data or zero values)
 
-    def print_table(self):
+    def print_output_table(self):
         print("Totals and Components Output:")
         print("-----------------------------")
         print(f"Identifier: {self.identifier}")
@@ -46,6 +46,15 @@ class Totals_and_Components_Output:
             print(f"  Original Value: {component.original_value}")
             print(f"  Final Value: {component.final_value}")
         print(f"TCC Marker: {self.tcc_marker}")
+
+
+def print_input_table(**kwargs):
+    # Print table of variable names and values
+    print("Input Table Function")
+    print("Variable Name   |   Value")
+    print("----------------|---------")
+    for var_name, var_value in kwargs.items():
+        print(f"{var_name:<15}|   {var_value}")
 
 
 def sum_components(components: Component_list) -> float:
@@ -124,6 +133,21 @@ def totals_and_components(
 
     """
 
+    print("Running totals_and_components")
+
+    print_input_table(
+        identifier=identifier,
+        period=period,
+        total=total,
+        components=components,
+        amend_total=amend_total,
+        predictive=predictive,
+        predictive_period=predictive_period,
+        auxiliary=auxiliary,
+        absolute_difference_threshold=absolute_difference_threshold,
+        percentage_difference_threshold=percentage_difference_threshold
+    )
+
     output: Totals_and_Components_Output = Totals_and_Components_Output(
                                                 identifier=None,
                                                 period=None,
@@ -134,13 +158,6 @@ def totals_and_components(
                                                 final_components=[],
                                                 tcc_marker=""
                                             )
-
-    print("Running totals_and_components")
-    # Print table of variable names and values
-    print("Variable Name   |   Value")
-    print("----------------|---------")
-    for var_name, var_value in locals().items():
-        print(f"{var_name:<15}|   {var_value}")
 
     output.identifier = identifier
     output.period = period
@@ -160,6 +177,6 @@ def totals_and_components(
     output.final_components = components
     output.tcc_marker = "T"
 
-    output.print_table()
+    output.print_output_table()
 
     return output
