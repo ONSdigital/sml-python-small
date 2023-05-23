@@ -13,11 +13,8 @@ class Component_list:
     original_value: Optional[float]
     final_value: Optional[float] = None
 
-# If I change this to True I then get an error where it doesn't allow identifier to be set to a value??
-# I think I need to instantiate with the final values rather than create and then update
 
-
-@dataclass(frozen=False)
+@dataclass(frozen=True)
 class Totals_and_Components_Output:
     identifier: Optional[str]  # unique identifier, e.g Business Reporting Unit SG-should this be optiional?
     period: Optional[str]  # not used in initial PoC always assume current period
@@ -148,34 +145,20 @@ def totals_and_components(
         percentage_difference_threshold=percentage_difference_threshold
     )
 
-    output: Totals_and_Components_Output = Totals_and_Components_Output(
-                                                identifier=None,
-                                                period=None,
-                                                absolute_difference=0.0,
-                                                low_percent_threshold=None,
-                                                high_percent_threshold=None,
-                                                final_total=0.0,
-                                                final_components=[],
-                                                tcc_marker=""
-                                            )
-
-    output.identifier = identifier
-    output.period = period
-
     component_total = sum_components(components=components)
-    output.absolute_difference = abs(component_total - predictive)
 
     thresholds = calculate_percent_threshold(component_total, percentage_difference_threshold)
-    output.low_percent_theshold = thresholds[Index.LOW_THRESHOLD.value]
-    output.high_percent_threshold = thresholds[Index.HIGH_THRESHOLD.value]
 
-    output.final_total = predictive
-
-    #  components_copy = Component_list(original_value=components.original_value, final_value=components.final_value)
-    #  output.final_components = components_copy
-
-    output.final_components = components
-    output.tcc_marker = "T"
+    output: Totals_and_Components_Output = Totals_and_Components_Output(
+                                                identifier=identifier,
+                                                period=period,
+                                                absolute_difference=abs(component_total - predictive),
+                                                low_percent_threshold=thresholds[Index.LOW_THRESHOLD.value],
+                                                high_percent_threshold=thresholds[Index.HIGH_THRESHOLD.value],
+                                                final_total=predictive,
+                                                final_components=components,
+                                                tcc_marker="T"
+                                            )
 
     output.print_output_table()
 
