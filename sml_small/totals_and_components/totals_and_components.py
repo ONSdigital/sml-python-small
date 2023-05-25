@@ -93,7 +93,10 @@ def check_absolute_difference_threshold(absolute_difference_threshold: float, ab
     raise NotImplementedError(f"{check_absolute_difference_threshold.__name__}() not implemented yet")
 
 
-def check_percentage_difference_threshold(percentage_difference_threshold: float, components_sum: float) -> bool:
+def check_percentage_difference_threshold(percentage_difference_threshold: float,
+                                          components_sum: float,
+                                          predictive: float
+                                          ) -> bool:
     raise NotImplementedError(f"{check_percentage_difference_threshold.__name__}() not implemented yet")
 
 
@@ -193,8 +196,6 @@ def totals_and_components(
         [As we add exceptions we should note them here]
 
     """
-
-    print("Running totals_and_components")
 
     print_input_table(
         identifier=identifier,

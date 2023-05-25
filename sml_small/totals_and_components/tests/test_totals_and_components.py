@@ -11,188 +11,350 @@ from sml_small.totals_and_components.totals_and_components import (Component_lis
                                                                    sum_components, totals_and_components,
                                                                    validate_input)
 
-
-def test_validate_input():
-    try:
-        test_components: Component_list = []
-
-        for _ in range(12):
-            random_float = random.uniform(0, 12)
-            component = Component_list(original_value=random_float, final_value=None)
-            test_components.append(component)
-
-        validate_input(identifier="A",
-                       period="202312",
-                       total=100.0,
-                       components=test_components,
-                       amend_total=True,
-                       predictive=100.0,
-                       predictive_period="202312",
-                       auxiliary=None,
-                       absolute_difference_threshold=20,
-                       percentage_difference_threshold=0.1,
-                       )
-
-    except Exception as e:
-        pytest.fail(f"Expected no exception, but got {type(e).__name__}: {str(e)}")
+EXCEPTION_FAIL_MESSAGE = "{test_id} : Expected no exception, but got {exception_type}: {exception_msg}"
 
 
-def test_check_predictive_value():
-    try:
-        check_predictive_value(predictive=100.0, auxiliary=None)
-
-    except Exception as e:
-        pytest.fail(f"Expected no exception, but got {type(e).__name__}: {str(e)}")
-
-
-def test_check_zero_errors():
-    try:
-        test_components: Component_list = []
-
-        for _ in range(12):
-            random_float = random.uniform(0, 12)
-            component = Component_list(original_value=random_float, final_value=None)
-            test_components.append(component)
-
-        components_sum = sum_components(test_components)
-
-        check_zero_errors(predictive=100.0, components_sum=components_sum)
-
-    except Exception as e:
-        pytest.fail(f"Expected no exception, but got {type(e).__name__}: {str(e)}")
-
-
-def test_check_sum_components_predictive():
-    try:
-        test_components: Component_list = []
-
-        for _ in range(12):
-            random_float = random.uniform(0, 12)
-            component = Component_list(original_value=random_float, final_value=None)
-            test_components.append(component)
-
-        components_sum = sum_components(test_components)
-
-        check_sum_components_predictive(predictive=components_sum, components_sum=components_sum)
-
-    except Exception as e:
-        pytest.fail(f"Expected no exception, but got {type(e).__name__}: {str(e)}")
-
-
-def test_determine_error_detection():
-    try:
-        test_components: Component_list = []
-
-        for _ in range(12):
-            random_float = random.uniform(0, 12)
-            component = Component_list(original_value=random_float, final_value=None)
-            test_components.append(component)
-
-        components_sum = sum_components(test_components)
-
-        determine_error_detection(absolute_difference_threshold=0,
-                                  percentage_difference_threshold=0.1,
-                                  absolute_difference=10,
-                                  components_sum=components_sum)
-
-    except Exception as e:
-        pytest.fail(f"Expected no exception, but got {type(e).__name__}: {str(e)}")
-
-
-def test_check_absolute_difference_threshold():
-    try:
-        check_absolute_difference_threshold(absolute_difference_threshold=9,
-                                            absolute_difference=10)
-
-    except Exception as e:
-        pytest.fail(f"Expected no exception, but got {type(e).__name__}: {str(e)}")
-
-
-def test_check_percentage_difference_threshold():
-    try:
-        check_percentage_difference_threshold(percentage_difference_threshold=0.1,
-                                              components_sum=100.0)
-
-    except Exception as e:
-        pytest.fail(f"Expected no exception, but got {type(e).__name__}: {str(e)}")
+class TestValidateInput:
+    @pytest.mark.parametrize(
+        "identifier, period, total, components, amend_total, predictive, "
+        "predictive_period, auxiliary, absolute_difference_threshold, "
+        "percentage_difference_threshold, expected_result, test_id",
+        [
+            (
+                "A",
+                "202312",
+                100.0,
+                [],
+                True,
+                100.0,
+                "202312",
+                None,
+                20,
+                0.1,
+                True,
+                "Test 1: Empty component list",
+            ),
+            (
+                "A",
+                "202312",
+                None,
+                [],
+                True,
+                100.0,
+                "202312",
+                None,
+                20,
+                0.1,
+                True,
+                "Test 2: Invalid Total",
+            ),
+            # Add more test cases here
+        ],
+    )
+    def test_validate_input(
+        self,
+        identifier,
+        period,
+        total,
+        components,
+        amend_total,
+        predictive,
+        predictive_period,
+        auxiliary,
+        absolute_difference_threshold,
+        percentage_difference_threshold,
+        expected_result,
+        test_id
+    ):
+        try:
+            result = validate_input(
+                identifier=identifier,
+                period=period,
+                total=total,
+                components=components,
+                amend_total=amend_total,
+                predictive=predictive,
+                predictive_period=predictive_period,
+                auxiliary=auxiliary,
+                absolute_difference_threshold=absolute_difference_threshold,
+                percentage_difference_threshold=percentage_difference_threshold,
+            )
+            assert result == expected_result
+        except Exception as e:
+            pytest.fail(EXCEPTION_FAIL_MESSAGE.format(test_id=test_id, exception_type=type(e).__name__,
+                                                      exception_msg=str(e)))
 
 
-def test_error_correction():
-    try:
-        test_components: Component_list = []
-
-        for _ in range(10):
-            component = Component_list(original_value=10.0, final_value=None)
-            test_components.append(component)
-
-        error_correction(amend_total=True,
-                         components_sum=100.0,
-                         original_components=test_components,
-                         predictive=82.0
-                         )
-
-    except Exception as e:
-        pytest.fail(f"Expected no exception, but got {type(e).__name__}: {str(e)}")
-
-
-def test_correct_total():
-    try:
-        test_components: Component_list = []
-
-        for _ in range(10):
-            component = Component_list(original_value=10.0, final_value=None)
-            test_components.append(component)
-
-        correct_total(components_sum=100.0,
-                      original_components=test_components
-                      )
-
-    except Exception as e:
-        pytest.fail(f"Expected no exception, but got {type(e).__name__}: {str(e)}")
+class TestCheckPredictiveValue:
+    @pytest.mark.parametrize(
+        "predictive, auxiliary, expected_result, test_id",
+        [
+            (100.0, None, True, "Test 1: Predictive Only"),
+            # Add more test cases here
+        ],
+    )
+    def test_check_predictive_value(self, predictive, auxiliary, expected_result, test_id):
+        try:
+            result = check_predictive_value(predictive=predictive, auxiliary=auxiliary)
+            assert result == expected_result, f"Test {test_id} failed: Unexpected result"
+        except Exception as e:
+            pytest.fail(EXCEPTION_FAIL_MESSAGE.format(test_id=test_id, exception_type=type(e).__name__,
+                                                      exception_msg=str(e)))
 
 
-def test_correct_components():
-    try:
-        test_components: Component_list = []
+class TestCheckZeroErrors:
+    @pytest.mark.parametrize(
+        "test_components, predictive, expected_result, test_id",
+        [
+            ([], 100.0, True, "Test 1: 12 RandomComponents, predictive positive"),
+            ([Component_list(original_value=0, final_value=None), Component_list(original_value=0, final_value=None)],
+             150.0, False, "Test 2: Components 0, predictive positive")
+        ],
+    )
+    def test_check_zero_errors(self, test_components, predictive, expected_result, test_id):
+        if "RandomComponents" in test_id:
+            for _ in range(12):
+                random_float = random.uniform(0, 12)
+                component = Component_list(original_value=random_float, final_value=None)
+                test_components.append(component)
 
-        for _ in range(10):
-            component = Component_list(original_value=9.0, final_value=None)
-            test_components.append(component)
+        try:
+            components_sum = sum_components(test_components)
+            check_zero_errors(predictive=predictive, components_sum=components_sum)
 
-        correct_components(components_sum=90.0,
-                           original_components=test_components,
-                           predictive=100.0
-                           )
-
-    except Exception as e:
-        pytest.fail(f"Expected no exception, but got {type(e).__name__}: {str(e)}")
+        except Exception as e:
+            pytest.fail(EXCEPTION_FAIL_MESSAGE.format(test_id=test_id, exception_type=type(e).__name__,
+                                                      exception_msg=str(e)))
 
 
-def test_totals_and_components(capfd):
-    test_components: Component_list = []
+class TestCheckSumComponentsPredictive:
+    @pytest.mark.parametrize(
+        "test_components, predictive, expected_result, test_id",
+        [
+            (
+                [
+                    Component_list(original_value=3.5, final_value=None),
+                    Component_list(original_value=6.5, final_value=None),
+                    Component_list(original_value=8.0, final_value=None),
+                    Component_list(original_value=2.0, final_value=None),
+                    Component_list(original_value=4.5, final_value=None),
+                    Component_list(original_value=5.5, final_value=None),
+                    Component_list(original_value=2.8, final_value=None),
+                    Component_list(original_value=7.2, final_value=None),
+                    Component_list(original_value=1.0, final_value=None),
+                    Component_list(original_value=9.0, final_value=None),
+                    Component_list(original_value=0.3, final_value=None),
+                    Component_list(original_value=9.7, final_value=None),
+                ],
+                60.0,
+                True,
+                "Test 1: Component Sum Matches Predictive",
+            ),
+            (
+                [
+                    Component_list(original_value=3.2, final_value=None),
+                    Component_list(original_value=5.1, final_value=None),
+                    Component_list(original_value=2.4, final_value=None),
+                    Component_list(original_value=1.5, final_value=None),
+                    Component_list(original_value=0.8, final_value=None),
+                    Component_list(original_value=4.6, final_value=None),
+                    Component_list(original_value=2.7, final_value=None),
+                    Component_list(original_value=3.9, final_value=None),
+                    Component_list(original_value=1.2, final_value=None),
+                    Component_list(original_value=0.5, final_value=None),
+                    Component_list(original_value=4.3, final_value=None),
+                    Component_list(original_value=2.0, final_value=None),
+                ],
+                100.0,
+                False,
+                "Test 2: Component Sum Does NOT Match Predictive",
+            ),
+        ],
+    )
+    def test_check_sum_components_predictive(
+        self, test_components, predictive, expected_result, test_id
+    ):
+        try:
 
-    for _ in range(12):
-        random_float = random.uniform(0, 12)
-        component = Component_list(original_value=random_float, final_value=None)
-        test_components.append(component)
+            components_sum = sum_components(test_components)
+            check_sum_components_predictive(
+                predictive=predictive, components_sum=components_sum
+            )
+            assert expected_result
 
-    results = totals_and_components(identifier="A",
-                                    period="202312",
-                                    total=100.0,
-                                    components=test_components,
-                                    amend_total=True,
-                                    predictive=100.0,
-                                    predictive_period="202312",
-                                    auxiliary=None,
-                                    absolute_difference_threshold=20,
-                                    percentage_difference_threshold=0.1,
-                                    )
-    print(results)
+        except Exception as e:
+            pytest.fail(EXCEPTION_FAIL_MESSAGE.format(test_id=test_id, exception_type=type(e).__name__,
+                                                      exception_msg=str(e)))
 
-    # On test error capture the printed output and remove any leading or trailing whitespace
-    # Run with pytest -s to get output even for passing tests
-    captured = capfd.readouterr()
-    printed_output = captured.out.strip()
-    print(printed_output)
 
-    assert results.tcc_marker == "T"
+class TestDetermineErrorDetection:
+    @pytest.mark.parametrize(
+        "absolute_difference_threshold, percentage_difference_threshold, absolute_difference, components_sum,"
+        "expected_result, test_id",
+        [
+            (20, None, 10, 100, True, "Test 1: Absolute Difference Only - Satisfied"),
+            (5, None, 10, 100, False, "Test 2: Absolute Difference Only - NOT Satisfied"),
+        ]
+    )
+    def test_determine_error_detection(
+        self,
+        absolute_difference_threshold,
+        percentage_difference_threshold,
+        absolute_difference,
+        components_sum,
+        expected_result,
+        test_id,
+    ):
+        try:
+            result = determine_error_detection(
+                absolute_difference_threshold=absolute_difference_threshold,
+                percentage_difference_threshold=percentage_difference_threshold,
+                absolute_difference=absolute_difference,
+                components_sum=components_sum,
+            )
+
+            assert result == expected_result, f"Test failed: {test_id}"
+        except Exception as e:
+            pytest.fail(EXCEPTION_FAIL_MESSAGE.format(test_id=test_id, exception_type=type(e).__name__,
+                                                      exception_msg=str(e)))
+
+
+class TestCheckAbsoluteDifferenceThreshold:
+    @pytest.mark.parametrize(
+        "absolute_difference_threshold, absolute_difference, expected_result, test_id",
+        [
+            (9, 10, True, "Case 1: Absolute difference is greater than threshold"),
+            (10, 10, True, "Case 2: Absolute difference equals threshold"),
+            (11, 10, False, "Case 3: Absolute difference is less than threshhold"),
+        ]
+    )
+    def test_check_absolute_difference_threshold(
+        self,
+        absolute_difference_threshold,
+        absolute_difference,
+        expected_result,
+        test_id
+    ):
+        try:
+            result = check_absolute_difference_threshold(
+                absolute_difference_threshold=absolute_difference_threshold,
+                absolute_difference=absolute_difference
+            )
+
+            assert result == expected_result, f"Test failed: {test_id}"
+        except Exception as e:
+            pytest.fail(EXCEPTION_FAIL_MESSAGE.format(test_id=test_id, exception_type=type(e).__name__,
+                                                      exception_msg=str(e)))
+
+
+class TestCheckPercentageDifferenceThreshold:
+    @pytest.mark.parametrize(
+        "percentage_difference_threshold, components_sum, predictive, expected_result, test_id",
+        [
+            (0.1, 100.0, 110.0, True, "Test 1: Predictive total equals upper threshold"),
+            (0.1, 100.0, 120.0, False, "Test 2: Predictive total is greater than upper threshold"),
+            (0.2, 100.0, 110.0, True,
+             "Test 3: Predictive total is less than upper threshold and greater than lower threshold"),
+            (0.2, 100.0, 79.5, False, "Test 4: Predictive total is less than lower threshold"),
+        ],
+    )
+    def test_check_percentage_difference_threshold(
+        self, percentage_difference_threshold, components_sum, predictive, expected_result, test_id
+    ):
+        try:
+            result = check_percentage_difference_threshold(
+                percentage_difference_threshold, components_sum, predictive
+            )
+            assert result == expected_result, f"{test_id} - Unexpected result"
+
+        except Exception as e:
+            pytest.fail(EXCEPTION_FAIL_MESSAGE.format(test_id=test_id, exception_type=type(e).__name__,
+                                                      exception_msg=str(e)))
+
+
+class TestErrorCorrection:
+    @pytest.mark.parametrize(
+        "amend_total, components_sum, original_components, predictive, expected_result, test_id",
+        [
+            (True, 100.0, [Component_list(10.0, None)] * 10, 82.0, True, "Test 1: Amend total"),
+            (False, 100.0, [Component_list(10.0, None)] * 10, 82.0, False, "Test 2: Amend components"),
+        ],
+    )
+    def test_error_correction(
+        self, amend_total, components_sum, original_components, predictive, expected_result, test_id
+    ):
+        try:
+            result = error_correction(amend_total, components_sum, original_components, predictive)
+            assert result == expected_result, f"{test_id} - Unexpected result"
+
+        except Exception as e:
+            pytest.fail(EXCEPTION_FAIL_MESSAGE.format(test_id=test_id, exception_type=type(e).__name__,
+                                                      exception_msg=str(e)))
+
+
+class TestCorrectTotal:
+    @pytest.mark.parametrize(
+            "components_sum, original_components, expected_result, test_id",
+            [
+                (100.0, [Component_list(10.0, None)] * 10, 100.0, "Test 1: Final total is sum of received components"),
+            ],
+    )
+    def test_correct_total(self, components_sum, original_components, expected_result, test_id):
+        try:
+            correct_total(components_sum=components_sum, original_components=original_components)
+            assert components_sum == expected_result, f"Test {test_id} failed: Unexpected result"
+        except Exception as e:
+            pytest.fail(EXCEPTION_FAIL_MESSAGE.format(test_id=test_id, exception_type=type(e).__name__,
+                                                      exception_msg=str(e)))
+
+
+class TestCorrectComponents:
+    @pytest.mark.parametrize(
+            "components_sum, original_components, predictive, expected_result, test_id",
+            [
+                (90.0, [Component_list(9.0, None)] * 10, 100.0, 100.0, "Test 1: Component sum matches total"),
+            ])
+    def test_correct_components(self, components_sum, original_components, predictive, expected_result, test_id):
+        try:
+            result = correct_components(components_sum=components_sum,
+                                        original_components=original_components,
+                                        predictive=predictive)
+
+            assert result == expected_result, f"Test {test_id} failed: Unexpected result"
+        except Exception as e:
+            pytest.fail(EXCEPTION_FAIL_MESSAGE.format(test_id=test_id, exception_type=type(e).__name__,
+                                                      exception_msg=str(e)))
+
+
+class TestTotalsAndComponents:
+    @pytest.mark.parametrize(
+            "identifier, period, total, components, amend_total, predictive, predictive_period, auxiliary,"
+            "absolute_difference_threshold, percentage_difference_threshold, expected_result, test_id",
+            [
+                ("A", "202312", 100.0, [Component_list(random.uniform(0, 12), None) for _ in range(12)], True, 100.0,
+                 "202312", None, 20, 0.1, "T", "Test 1: TCC Marker T"),
+            ])
+    def test_totals_and_components(self, capfd, identifier, period, total, components, amend_total, predictive,
+                                   predictive_period, auxiliary, absolute_difference_threshold,
+                                   percentage_difference_threshold, expected_result, test_id):
+        try:
+            results = totals_and_components(identifier=identifier,
+                                            period=period,
+                                            total=total,
+                                            components=components,
+                                            amend_total=amend_total,
+                                            predictive=predictive,
+                                            predictive_period=predictive_period,
+                                            auxiliary=auxiliary,
+                                            absolute_difference_threshold=absolute_difference_threshold,
+                                            percentage_difference_threshold=percentage_difference_threshold)
+
+            # Capture the printed output and remove any leading or trailing whitespace
+            captured = capfd.readouterr()
+            printed_output = captured.out.strip()
+            print(printed_output)
+
+            assert results.tcc_marker == expected_result, f"Test {test_id} failed: Unexpected result"
+        except Exception as e:
+            pytest.fail(EXCEPTION_FAIL_MESSAGE.format(test_id=test_id, exception_type=type(e).__name__,
+                                                      exception_msg=str(e)))
