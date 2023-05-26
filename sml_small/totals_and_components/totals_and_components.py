@@ -15,6 +15,7 @@ class TccMarker(Enum):
     COMPONENTS_CORRECTED = 'C'
     NO_CORRECTION = 'N'
 
+
 @dataclass(frozen=True)
 class Component_list:
     original_value: Optional[float]
