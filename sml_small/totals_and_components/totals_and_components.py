@@ -113,9 +113,9 @@ def validate_input(
            validate_number("percentage_difference_threshold", percentage_difference_threshold)
            return float(percentage_difference_threshold)
 
-def validate_number(tag, value) -> bool:
+def validate_number(tag: str, value) -> bool:
     """
-    validate_number validate list items or single value is a number
+    validate_number _summary_
 
     :param tag: _description_
     :type tag: _type_
@@ -125,12 +125,15 @@ def validate_number(tag, value) -> bool:
     :raises ValueError: _description_
     :return: _description_
     :rtype: bool
-    """    
+    """  
+    print(value)
     if type(value) == list:
-        for value in list:
-            if not isValueTypeNumber(value):
+        for x in value:
+            if len(value) == 0:
+               raise ValueError(f"The list named {tag} is not")
+            if isValueTypeNumber(x):
                raise ValueError(f"List {tag} not a number")
-    if not isValueTypeNumber(value):
+    elif isValueTypeNumber(value):
        raise ValueError(f"{tag} Not a number")
     return True
 
@@ -146,7 +149,7 @@ def isValueTypeNumber(value) -> bool:
     try:
         float(value)
     except Exception:
-            return False
+           return False
     return True
 
 def check_predictive_value(
