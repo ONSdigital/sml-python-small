@@ -53,7 +53,6 @@ def print_input_table(**kwargs):
     for var_name, var_value in kwargs.items():
         print(f"{var_name:<15}|   {var_value}")
 
-
 def validate_input(
         identifier: Optional[str],
         period: Optional[str],
@@ -66,8 +65,89 @@ def validate_input(
         absolute_difference_threshold: Optional[float],
         percentage_difference_threshold: Optional[float]
         ) -> bool:
-    raise NotImplementedError(f"{validate_input.__name__}() not implemented yet")
+        """
+        validate_input validating values are numbers and not none (if applicable)
 
+        :param identifier: _description_
+        :type identifier: Optional[str]
+        :param period: _description_
+        :type period: Optional[str]
+        :param total: _description_
+        :type total: float
+        :param components: _description_
+        :type components: List[Component_list]
+        :param amend_total: _description_
+        :type amend_total: bool
+        :param predictive: _description_
+        :type predictive: Optional[float]
+        :param predictive_period: _description_
+        :type predictive_period: Optional[str]
+        :param auxiliary: _description_
+        :type auxiliary: Optional[float]
+        :param absolute_difference_threshold: _description_
+        :type absolute_difference_threshold: Optional[float]
+        :param percentage_difference_threshold: _description_
+        :type percentage_difference_threshold: Optional[float]
+        :raises ValueError: _description_
+        :return: _description_
+        :rtype: bool
+        """        
+        if total: 
+           validate_number("total", total)
+           return float(total)
+        if components: 
+           validate_number("component", components)
+           return float(components)
+        if predictive: 
+           validate_number("predictive", predictive)
+           return float(predictive)
+        if auxiliary: 
+           validate_number("auxiliary", auxiliary)
+           return float(auxiliary)
+        if absolute_difference_threshold and percentage_difference_threshold is None:
+           raise ValueError("One or both of absolute/percentage difference thresholds must be specified")
+        if absolute_difference_threshold: 
+           validate_number("absolute_difference_threshold", absolute_difference_threshold)
+           return float(absolute_difference_threshold)
+        if percentage_difference_threshold: 
+           validate_number("percentage_difference_threshold", percentage_difference_threshold)
+           return float(percentage_difference_threshold)
+
+def validate_number(tag, value) -> bool:
+    """
+    validate_number validate list items or single value is a number
+
+    :param tag: _description_
+    :type tag: _type_
+    :param value: _description_
+    :type value: _type_
+    :raises ValueError: _description_
+    :raises ValueError: _description_
+    :return: _description_
+    :rtype: bool
+    """    
+    if type(value) == list:
+        for value in list:
+            if not isValueTypeNumber(value):
+               raise ValueError(f"List {tag} not a number")
+    if not isValueTypeNumber(value):
+       raise ValueError(f"{tag} Not a number")
+    return True
+
+def isValueTypeNumber(value) -> bool:
+    """
+    isValueTypeNumber validate input is a number extension
+
+    :param value: _description_
+    :type value: _type_
+    :return: _description_
+    :rtype: bool
+    """    
+    try:
+        float(value)
+    except Exception:
+            return False
+    return True
 
 def check_predictive_value(predictive: Optional[float], auxiliary: Optional[float]) -> bool:
     raise NotImplementedError(f"{check_predictive_value.__name__}() not implemented yet")
