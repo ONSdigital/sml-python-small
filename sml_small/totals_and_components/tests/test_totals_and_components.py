@@ -89,13 +89,16 @@ class TestCheckPredictiveValue:
     @pytest.mark.parametrize(
         "predictive, auxiliary, expected_result, test_id",
         [
-            (100.0, None, True, "Test 1: Predictive Only"),
-            # Add more test cases here
+            (100.0, None, (100.0, None), "Test 1: Predictive Only"),
+            (None, 50.0, (50.0, None), "Test 2: Auxiliary Only"),
+            (None, None, (None, 'S'), "Test 3: No Inputs"),
+            (150.0, 50.0, (150.0, None), "Test 4: All Inputs")
         ],
     )
     def test_check_predictive_value(self, predictive, auxiliary, expected_result, test_id):
         try:
             result = check_predictive_value(predictive=predictive, auxiliary=auxiliary)
+            print(result)
             assert result == expected_result, f"Test {test_id} failed: Unexpected result"
         except Exception as e:
             pytest.fail(EXCEPTION_FAIL_MESSAGE.format(test_id=test_id, exception_type=type(e).__name__,

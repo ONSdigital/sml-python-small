@@ -69,8 +69,28 @@ def validate_input(
     raise NotImplementedError(f"{validate_input.__name__}() not implemented yet")
 
 
-def check_predictive_value(predictive: Optional[float], auxiliary: Optional[float]) -> bool:
-    raise NotImplementedError(f"{check_predictive_value.__name__}() not implemented yet")
+def check_predictive_value(predictive: Optional[float], auxiliary: Optional[float]) -> tuple[float | None, str | None]:
+    """
+    Checks if predictive and auxiliary values are input, when predictive is None and auxiliary is input set
+    predictive to auxiliary, when both are None, set tcc_marker to S and stop calculation
+
+    :param predictive: The predictive value, typically the total for the current period.
+    :type predictive: float, optional
+    :param auxiliary: The value to be used in the absence of a predictive value.
+    :type auxiliary: float, optional
+    ...
+    :return predictive: updated predictive value
+    :rtype: predictive, None | float
+    :return tcc_marker: Returned tcc_marker if all values are None
+    :rtype tcc_marker: None | str
+    """
+    tcc_marker = None
+    if predictive is None:
+        if auxiliary is None:
+            tcc_marker = 'S'
+        else:
+            predictive = auxiliary
+    return predictive, tcc_marker
 
 
 def check_zero_errors(predictive: float, components_sum: float) -> bool:
@@ -209,6 +229,7 @@ def totals_and_components(
         absolute_difference_threshold=absolute_difference_threshold,
         percentage_difference_threshold=percentage_difference_threshold
     )
+    predictive, tcc_marker = check_predictive_value(predictive, auxiliary)
 
     component_total = sum_components(components=components)
 
