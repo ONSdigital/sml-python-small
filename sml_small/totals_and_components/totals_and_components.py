@@ -69,10 +69,13 @@ def validate_input(
     raise NotImplementedError(f"{validate_input.__name__}() not implemented yet")
 
 
-def check_predictive_value(predictive: Optional[float], auxiliary: Optional[float]) -> tuple[float | None, str | None]:
+def check_predictive_value(
+        predictive: Optional[float],
+        auxiliary: Optional[float]
+        ) -> tuple[float | None, str | None]:
     """
     Checks if predictive and auxiliary values are input, when predictive is None and auxiliary is input set
-    predictive to auxiliary, when both are None, set tcc_marker to S and stop calculation
+    predictive to auxiliary, when both are None, set Tcc_Marker to S and stop calculation
 
     :param predictive: The predictive value, typically the total for the current period.
     :type predictive: float, optional
@@ -80,9 +83,9 @@ def check_predictive_value(predictive: Optional[float], auxiliary: Optional[floa
     :type auxiliary: float, optional
     ...
     :return predictive: updated predictive value
-    :rtype: predictive, None | float
-    :return tcc_marker: Returned tcc_marker if all values are None
-    :rtype tcc_marker: None | str
+    :rtype predictive: None | float
+    :return Tcc_Marker: Returned Tcc_Marker if all values are None
+    :rtype Tcc_Marker: None | str
     """
     tcc_marker = None
     if predictive is None:
@@ -208,7 +211,7 @@ def totals_and_components(
             - final_components (List[Component_list]): The output components, which may have been corrected to match
                                                         the received predictive value. If corrected, the components are
                                                         scaled proportionally
-            - tcc_marker (str): Indicates what correction (if any) was necessary. Possible values: T (totals corrected),
+            - Tcc_Marker (str): Indicates what correction (if any) was necessary. Possible values: T (totals corrected),
                                  C (components corrected), N (no correction required), M (manual correction required),
                                  S (method stopped due to lack of data or zero values).
 

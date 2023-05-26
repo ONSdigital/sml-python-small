@@ -92,7 +92,8 @@ class TestCheckPredictiveValue:
             (100.0, None, (100.0, None), "Test 1: Predictive Only"),
             (None, 50.0, (50.0, None), "Test 2: Auxiliary Only"),
             (None, None, (None, 'S'), "Test 3: No Inputs"),
-            (150.0, 50.0, (150.0, None), "Test 4: All Inputs")
+            (150.0, 50.0, (150.0, None), "Test 4: All Inputs"),
+            (0, 0, (0, None), "Test 5: All 0")
         ],
     )
     def test_check_predictive_value(self, predictive, auxiliary, expected_result, test_id):
