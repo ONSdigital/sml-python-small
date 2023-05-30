@@ -64,7 +64,7 @@ def validate_input(
         auxiliary: Optional[float],
         absolute_difference_threshold: Optional[float],
         percentage_difference_threshold: Optional[float]
-        ) -> bool:
+        ) -> tuple[float | None, float | None, float | None, float | None, float | None, float | None, float | None]:
         """
         validate_input validating values are numbers and not none (if applicable)
 
@@ -94,24 +94,28 @@ def validate_input(
         """        
         if total: 
            validate_number("total", total)
-           return float(total)
-        if components: 
-           validate_number("component", components)
-           return float(components)
+           float(total)
+        if components == []:
+            raise ValueError(f"The components is not populated")
+        if components:
+            for x in components:
+               validate_number(f"component={x}", x)
+               float(x)
         if predictive: 
            validate_number("predictive", predictive)
-           return float(predictive)
+           float(predictive)
         if auxiliary: 
            validate_number("auxiliary", auxiliary)
-           return float(auxiliary)
-        if absolute_difference_threshold and percentage_difference_threshold is None:
+           float(auxiliary)
+        if absolute_difference_threshold is None and percentage_difference_threshold is None:
            raise ValueError("One or both of absolute/percentage difference thresholds must be specified")
         if absolute_difference_threshold: 
-           validate_number("absolute_difference_threshold", absolute_difference_threshold)
-           return float(absolute_difference_threshold)
+           validate_number("absolute difference threshold", absolute_difference_threshold)
+           float(absolute_difference_threshold)
         if percentage_difference_threshold: 
-           validate_number("percentage_difference_threshold", percentage_difference_threshold)
-           return float(percentage_difference_threshold)
+           validate_number("percentage difference threshold", percentage_difference_threshold)
+           float(percentage_difference_threshold)
+        return total, components, predictive, auxiliary, absolute_difference_threshold, percentage_difference_threshold
 
 def validate_number(tag: str, value) -> bool:
     """
@@ -126,14 +130,7 @@ def validate_number(tag: str, value) -> bool:
     :return: _description_
     :rtype: bool
     """  
-    print(value)
-    if type(value) == list:
-        for x in value:
-            if len(value) == 0:
-               raise ValueError(f"The list named {tag} is not")
-            if isValueTypeNumber(x):
-               raise ValueError(f"List {tag} not a number")
-    elif isValueTypeNumber(value):
+    if not isValueTypeNumber(value):
        raise ValueError(f"{tag} Not a number")
     return True
 
