@@ -113,7 +113,7 @@ class TestValidateInputThrowsValueError:
                 103.0,
                 20,
                 0.1,
-                "The components is not populated",
+                "The components are not populated",
                 "Test 1: Empty component list",
             ),
             (
@@ -127,7 +127,7 @@ class TestValidateInputThrowsValueError:
                 103.0,
                 20,
                 0.1,
-                "component=None Not a number",
+                "component=None is missing or not a number",
                 "Test 2: None in component list",
             ),
             (
@@ -141,7 +141,7 @@ class TestValidateInputThrowsValueError:
                 104.0,
                 20,
                 0.1,
-                "total Not a number",
+                "total is missing or not a number",
                 "Test 3: Invalid Total",
             ),
             (
@@ -155,7 +155,7 @@ class TestValidateInputThrowsValueError:
                 102.0,
                 20,
                 0.1,
-                "predictive Not a number",
+                "predictive is missing or not a number",
                 "Test 4: Invalid predictive test",
             ),
             (
@@ -169,7 +169,7 @@ class TestValidateInputThrowsValueError:
                 "String",
                 20,
                 0.1,
-                "auxiliary Not a number",
+                "auxiliary is missing or not a number",
                 "Test 5: Invalid auxiliary",
             ),
             (
@@ -183,7 +183,7 @@ class TestValidateInputThrowsValueError:
                 104.0,
                 {20},
                 0.1,
-                "absolute difference threshold Not a number",
+                "absolute difference threshold is missing or not a number",
                 "Test 6: Invalid absolute difference threshold",
             ),
             (
@@ -197,7 +197,7 @@ class TestValidateInputThrowsValueError:
                 104.0,
                 20,
                 {2},
-                "percentage difference threshold Not a number",
+                "percentage difference threshold is missing or not a number",
                 "Test 7: Invalid percentage difference threshold",
             ),
             (

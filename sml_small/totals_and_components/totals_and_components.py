@@ -66,38 +66,39 @@ def validate_input(
         percentage_difference_threshold: Optional[float]
         ) -> tuple[float | None, float | None, float | None, float | None, float | None, float | None, float | None]:
         """
-        validate_input _summary_
+        validate_input is to ensure that the dataset input record has all the values 
+        we need in the correct format. To do this we check to see if the data exists and is a number. If the data does not exist and is not a number we throw ValueError's as appropriate.
+    
 
-        :param identifier: _description_
+        :param identifier: Any e.g., Business Reporting Unit
         :type identifier: Optional[str]
-        :param period: _description_
+        :param period: String in "YYYYMM" format
         :type period: Optional[str]
-        :param total: _description_
+        :param total: Target period total, numeric – nulls allowed
         :type total: float
         :param components: _description_
         :type components: List[Component_list]
-        :param amend_total: _description_
+        :param amend_total: This decided whether Total Variable should be automatically corrected, Boolean. FALSE = correct components, TRUE = correct total
         :type amend_total: bool
-        :param predictive: _description_
+        :param predictive:A value used as a predictor for a contributor's target variable.
         :type predictive: Optional[float]
-        :param predictive_period: _description_
+        :param predictive_period: The period containing predictive records; defined relative to the target period.
         :type predictive_period: Optional[str]
-        :param auxiliary: _description_
+        :param auxiliary: The variable used as a predictor for a contributor’s target variable, where the predictive value is not available (e.g., where the contributor was not sampled in the predictive period).
         :type auxiliary: Optional[float]
-        :param absolute_difference_threshold: _description_
+        :param absolute_difference_threshold: Is the predefined threshold for the absolute difference
         :type absolute_difference_threshold: Optional[float]
-        :param percentage_difference_threshold: _description_
+        :param percentage_difference_threshold: Is the predefined percentage threshold represented as a decimal
         :type percentage_difference_threshold: Optional[float]
-        :raises ValueError: _description_
-        :raises ValueError: _description_
-        :return: _description_
+        :raises ValueError: ValueErrors are returned when data is missing or in the incorrect type/format.
+        :return: The tuple is a returned list of values converted to floats (if possible).
         :rtype: tuple[float | None, float | None, float | None, float | None, float | None, float | None, float | None]
         """             
         if total: 
            validate_number("total", total)
            float(total)
         if components == []:
-            raise ValueError(f"The components is not populated")
+            raise ValueError("The components are not populated")
         if components:
             for x in components:
                validate_number(f"component={x}", x)
@@ -120,28 +121,29 @@ def validate_input(
 
 def validate_number(tag: str, value) -> bool:
     """
-    validate_number _summary_
+    validate_number will take a parsed tag and value and check ot see if the value is a number.
+    If this is not the case it returns a ValueError.
 
-    :param tag: _description_
+    :param tag: The tag is a way of identifying the value and type entered and is used if a ValueError is returned.
     :type tag: str
-    :param value: _description_
-    :type value: _type_
-    :raises ValueError: _description_
-    :return: _description_
-    :rtype: bool
+    :param value: value is what is parsed to the function it can be many different types.
+    :type value: float | optional
+    :raises ValueError: ValueError is a means to raise error alerts.
+    :return: This return a True boolean value if the value obtained is a number.
+    :rtype: boolean
     """  
-    if not isValueTypeNumber(value):
-       raise ValueError(f"{tag} Not a number")
+    if not isNumber(value):
+       raise ValueError(f"{tag} is missing or not a number")
     return True
 
-def isValueTypeNumber(value) -> bool:
+def isNumber(value) -> bool:
     """
-    isValueTypeNumber _summary_
+    isNumber is a function which attempts to convert a entered type into a float.
+    If will return a boolean dependent on whether it can or can't be converted.
 
-    :param value: _description_
-    :type value: _type_
-    :return: _description_
-    :rtype: bool
+    :param value: value is the parsed parameter which is to be converted to a float(if possible).
+    :type value: float | optional
+    :rtype: boolean to indicate if value is a number or not.
     """      
     try:
         float(value)
@@ -312,6 +314,9 @@ def totals_and_components(
         absolute_difference_threshold=absolute_difference_threshold,
         percentage_difference_threshold=percentage_difference_threshold
     )
+
+    total, components, predictive, auxiliary, absolute_difference_threshold, percentage_difference_threshold = validate_input(total, components, predictive, auxiliary, absolute_difference_threshold, percentage_difference_threshold)
+
     predictive, tcc_marker = check_predictive_value(predictive, auxiliary)
 
     component_total = sum_components(components=components)
