@@ -232,7 +232,7 @@ class TestValidateInputThrowsValueError:
         test_id
     ):
         with pytest.raises(ValueError, match=f"{expected_result}"):
-            result = validate_input(
+            validate_input(
                 identifier=identifier,
                 period=period,
                 total=total,
@@ -244,7 +244,6 @@ class TestValidateInputThrowsValueError:
                 absolute_difference_threshold=absolute_difference_threshold,
                 percentage_difference_threshold=percentage_difference_threshold,
             )
-            print(result)
 
 class TestCheckPredictiveValue:
     @pytest.mark.parametrize(

@@ -66,7 +66,7 @@ def validate_input(
         percentage_difference_threshold: Optional[float]
         ) -> tuple[float | None, float | None, float | None, float | None, float | None, float | None, float | None]:
         """
-        validate_input validating values are numbers and not none (if applicable)
+        validate_input _summary_
 
         :param identifier: _description_
         :type identifier: Optional[str]
@@ -89,9 +89,10 @@ def validate_input(
         :param percentage_difference_threshold: _description_
         :type percentage_difference_threshold: Optional[float]
         :raises ValueError: _description_
+        :raises ValueError: _description_
         :return: _description_
-        :rtype: bool
-        """        
+        :rtype: tuple[float | None, float | None, float | None, float | None, float | None, float | None, float | None]
+        """             
         if total: 
            validate_number("total", total)
            float(total)
@@ -122,10 +123,9 @@ def validate_number(tag: str, value) -> bool:
     validate_number _summary_
 
     :param tag: _description_
-    :type tag: _type_
+    :type tag: str
     :param value: _description_
     :type value: _type_
-    :raises ValueError: _description_
     :raises ValueError: _description_
     :return: _description_
     :rtype: bool
@@ -136,13 +136,13 @@ def validate_number(tag: str, value) -> bool:
 
 def isValueTypeNumber(value) -> bool:
     """
-    isValueTypeNumber validate input is a number extension
+    isValueTypeNumber _summary_
 
     :param value: _description_
     :type value: _type_
     :return: _description_
     :rtype: bool
-    """    
+    """      
     try:
         float(value)
     except Exception:
