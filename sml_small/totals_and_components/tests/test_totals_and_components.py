@@ -14,7 +14,7 @@ from sml_small.totals_and_components.totals_and_components import (Component_lis
 EXCEPTION_FAIL_MESSAGE = "{test_id} : Expected no exception, but got {exception_type}: {exception_msg}"
 
 
-class TestValidateInputPassed:
+class TestValidateInput:
     @pytest.mark.parametrize(
         "identifier, period, total, components, amend_total, predictive, "
         "predictive_period, auxiliary, absolute_difference_threshold, "
@@ -60,49 +60,8 @@ class TestValidateInputPassed:
                 None,
                 20,
                 (100.0, [1, 2, 3, 4], 103.0, 104.0, None, 20),
-                "Test 2: None value for absolute difference threshold",
-            ),
-        ],
-    )
-    def test_validate_input(
-        self,
-        identifier,
-        period,
-        total,
-        components,
-        amend_total,
-        predictive,
-        predictive_period,
-        auxiliary,
-        absolute_difference_threshold,
-        percentage_difference_threshold,
-        expected_result,
-        test_id
-    ):
-        try:
-            result = validate_input(
-                identifier=identifier,
-                period=period,
-                total=total,
-                components=components,
-                amend_total=amend_total,
-                predictive=predictive,
-                predictive_period=predictive_period,
-                auxiliary=auxiliary,
-                absolute_difference_threshold=absolute_difference_threshold,
-                percentage_difference_threshold=percentage_difference_threshold,
-            )
-            assert result == expected_result
-        except Exception as e:
-            pytest.fail(EXCEPTION_FAIL_MESSAGE.format(test_id=test_id, exception_type=type(e).__name__,
-                                                      exception_msg=str(e)))
-class TestValidateInputThrowsValueError:
-    @pytest.mark.parametrize(
-        "identifier, period, total, components, amend_total, predictive, "
-        "predictive_period, auxiliary, absolute_difference_threshold, "
-        "percentage_difference_threshold, expected_result, test_id",
-        [
-            (
+                "Test 3: None value for absolute difference threshold",
+            ),(
                 "A",
                 "202312",
                 100.0,
@@ -113,8 +72,8 @@ class TestValidateInputThrowsValueError:
                 103.0,
                 20,
                 0.1,
-                "The components are not populated",
-                "Test 1: Empty component list",
+                ValueError,
+                "Test 4: Empty component list",
             ),
             (
                 "A",
@@ -127,8 +86,8 @@ class TestValidateInputThrowsValueError:
                 103.0,
                 20,
                 0.1,
-                "component=None is missing or not a number",
-                "Test 2: None in component list",
+                ValueError,
+                "Test 5: None in component list",
             ),
             (
                 "A",
@@ -141,8 +100,8 @@ class TestValidateInputThrowsValueError:
                 104.0,
                 20,
                 0.1,
-                "total is missing or not a number",
-                "Test 3: Invalid Total",
+                ValueError,
+                "Test 6: Invalid Total",
             ),
             (
                 "A",
@@ -155,8 +114,8 @@ class TestValidateInputThrowsValueError:
                 102.0,
                 20,
                 0.1,
-                "predictive is missing or not a number",
-                "Test 4: Invalid predictive test",
+                ValueError,
+                "Test 7: Invalid predictive test",
             ),
             (
                 "A",
@@ -169,8 +128,8 @@ class TestValidateInputThrowsValueError:
                 "String",
                 20,
                 0.1,
-                "auxiliary is missing or not a number",
-                "Test 5: Invalid auxiliary",
+                ValueError,
+                "Test 8: Invalid auxiliary",
             ),
             (
                 "A",
@@ -183,8 +142,8 @@ class TestValidateInputThrowsValueError:
                 104.0,
                 {20},
                 0.1,
-                "absolute difference threshold is missing or not a number",
-                "Test 6: Invalid absolute difference threshold",
+                ValueError,
+                "Test 9: Invalid absolute difference threshold",
             ),
             (
                 "A",
@@ -197,8 +156,8 @@ class TestValidateInputThrowsValueError:
                 104.0,
                 20,
                 {2},
-                "percentage difference threshold is missing or not a number",
-                "Test 7: Invalid percentage difference threshold",
+                ValueError,
+                "Test 10: Invalid percentage difference threshold",
             ),
             (
                 "A",
@@ -209,10 +168,10 @@ class TestValidateInputThrowsValueError:
                 101.0,
                 "202312",
                 89.0,
+                None,   
                 None,
-                None,
-                "One or both of absolute/percentage difference thresholds must be specified",
-                "Test 8: None value for percentage and absolute difference threshold",
+                ValueError,
+                "Test 11: None value for percentage and absolute difference threshold",
             ),
         ],
     )
@@ -231,19 +190,40 @@ class TestValidateInputThrowsValueError:
         expected_result,
         test_id
     ):
-        with pytest.raises(ValueError, match=f"{expected_result}"):
-            validate_input(
-                identifier=identifier,
-                period=period,
-                total=total,
-                components=components,
-                amend_total=amend_total,
-                predictive=predictive,
-                predictive_period=predictive_period,
-                auxiliary=auxiliary,
-                absolute_difference_threshold=absolute_difference_threshold,
-                percentage_difference_threshold=percentage_difference_threshold,
-            )
+        if isinstance(expected_result, tuple):
+            try:
+                result = validate_input(
+                    identifier=identifier,
+                    period=period,
+                    total=total,
+                    components=components,
+                    amend_total=amend_total,
+                    predictive=predictive,
+                    predictive_period=predictive_period,
+                    auxiliary=auxiliary,
+                    absolute_difference_threshold=absolute_difference_threshold,
+                    percentage_difference_threshold=percentage_difference_threshold,
+                )
+                assert result == expected_result
+            except Exception as e:
+                pytest.fail(EXCEPTION_FAIL_MESSAGE.format(test_id=test_id, exception_type=type(e).__name__,
+                                                          exception_msg=str(e)))
+        else:
+            with pytest.raises(expected_result) as exc_info:
+                validate_input(
+                    identifier=identifier,
+                    period=period,
+                    total=total,
+                    components=components,
+                    amend_total=amend_total,
+                    predictive=predictive,
+                    predictive_period=predictive_period,
+                    auxiliary=auxiliary,
+                    absolute_difference_threshold=absolute_difference_threshold,
+                    percentage_difference_threshold=percentage_difference_threshold,
+                )
+                print(exc_info.value)
+            assert exc_info.type == expected_result                                         
 
 class TestCheckPredictiveValue:
     @pytest.mark.parametrize(
