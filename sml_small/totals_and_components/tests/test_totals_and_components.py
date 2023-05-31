@@ -239,8 +239,7 @@ class TestCheckPredictiveValue:
     def test_check_predictive_value(self, predictive, auxiliary, expected_result, test_id):
         try:
             result = check_predictive_value(predictive=predictive, auxiliary=auxiliary)
-            print(result)
-            assert result == expected_result, f"Test {test_id} failed: Unexpected result"
+            assert result == expected_result, f"Test {test_id} failed: Unexpected result. Result == {result}"
         except Exception as e:
             pytest.fail(EXCEPTION_FAIL_MESSAGE.format(test_id=test_id, exception_type=type(e).__name__,
                                                       exception_msg=str(e)))
@@ -250,9 +249,11 @@ class TestCheckZeroErrors:
     @pytest.mark.parametrize(
         "test_components, predictive, expected_result, test_id",
         [
-            ([], 100.0, True, "Test 1: 12 RandomComponents, predictive positive"),
+            ([], 100.0, None, "Test 1: 12 RandomComponents, predictive positive"),
             ([Component_list(original_value=0, final_value=None), Component_list(original_value=0, final_value=None)],
-             150.0, False, "Test 2: Components 0, predictive positive")
+             150.0, 'S', "Test 2: Components 0, predictive positive"),
+            ([Component_list(original_value=5, final_value=None), Component_list(original_value=32, final_value=None)],
+             0, None, "Test 3: Predictive 0, predictive positive")
         ],
     )
     def test_check_zero_errors(self, test_components, predictive, expected_result, test_id):
@@ -264,8 +265,8 @@ class TestCheckZeroErrors:
 
         try:
             components_sum = sum_components(test_components)
-            check_zero_errors(predictive=predictive, components_sum=components_sum)
-
+            marker = check_zero_errors(predictive=predictive, components_sum=components_sum)
+            assert marker == expected_result, f"Test {test_id} failed: Unexpected result. Result == {marker}"
         except Exception as e:
             pytest.fail(EXCEPTION_FAIL_MESSAGE.format(test_id=test_id, exception_type=type(e).__name__,
                                                       exception_msg=str(e)))
