@@ -152,7 +152,7 @@ class TestCheckSumComponentsPredictive:
                     Component_list(original_value=9.7, final_value=None),
                 ],
                 60.0,
-                True,
+                "N",
                 "Test 1: Component Sum Matches Predictive",
             ),
             (
@@ -171,8 +171,8 @@ class TestCheckSumComponentsPredictive:
                     Component_list(original_value=2.0, final_value=None),
                 ],
                 100.0,
-                False,
-                "Test 2: Component Sum Does NOT Match Predictive",
+                67.8, # This is the returned stored absolute_difference value
+                "Test 2: Component Sum Does NOT Match Predictive and returns absolute_difference",
             ),
         ],
     )
@@ -180,13 +180,11 @@ class TestCheckSumComponentsPredictive:
         self, test_components, predictive, expected_result, test_id
     ):
         try:
-
             components_sum = sum_components(test_components)
-            check_sum_components_predictive(
+            marker = check_sum_components_predictive(
                 predictive=predictive, components_sum=components_sum
             )
-            assert expected_result
-
+            assert marker == expected_result
         except Exception as e:
             pytest.fail(EXCEPTION_FAIL_MESSAGE.format(test_id=test_id, exception_type=type(e).__name__,
                                                       exception_msg=str(e)))
