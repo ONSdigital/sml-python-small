@@ -72,7 +72,7 @@ def validate_input(
         auxiliary: Optional[float],
         absolute_difference_threshold: Optional[float],
         percentage_difference_threshold: Optional[float]
-        ) -> bool:
+        ) -> tuple[float | None, float | None, float | None, float | None, float | None, float | None, float | None]:
         """
         validate_input is to ensure that the dataset input record has all the values 
         we need in the correct format. To do this we check to see if the data exists and is a number. If the data does not exist and is not a number we throw ValueError's as appropriate.
@@ -101,7 +101,7 @@ def validate_input(
         :raises ValueError: ValueErrors are returned when data is missing or in the incorrect type/format.
         :return: The tuple is a returned list of values converted to floats (if possible).
         :rtype: tuple[float | None, float | None, float | None, float | None, float | None, float | None, float | None]
-        """             
+        """           
         if total: 
            validate_number("total", total)
            float(total)
@@ -125,7 +125,7 @@ def validate_input(
         if percentage_difference_threshold: 
            validate_number("percentage difference threshold", percentage_difference_threshold)
            float(percentage_difference_threshold)
-        return True
+        return total, components, predictive, auxiliary, absolute_difference_threshold, percentage_difference_threshold
 
 def validate_number(tag: str, value) -> bool:
     """
@@ -352,12 +352,12 @@ def totals_and_components(
 
     input_parameters = validate_input(total, components, predictive, auxiliary, absolute_difference_threshold, percentage_difference_threshold)
 
-    predictive, tcc_marker = check_predictive_value(predictive, auxiliary)
+    input_parameters.predictive, tcc_marker = check_predictive_value(input_parameters.predictive, input_parameters.auxiliary)
 
     if tcc_marker != TccMarker.STOP.value:
-        component_total = sum_components(components=components)
-        tcc_marker = check_zero_errors(predictive, component_total)
-        absolute_difference = check_sum_components_predictive(predictive, component_total)
+        component_total = sum_components(components=input_parameters.components)
+        tcc_marker = check_zero_errors(input_parameters.predictive, input_parameters.component_total)
+        absolute_difference = check_sum_components_predictive(input_parameters.predictive, input_parameters.component_total)
         if absolute_difference == 0:
             tcc_marker = TccMarker.NO_CORRECTION.value
         else:
@@ -365,7 +365,7 @@ def totals_and_components(
     else:
         pass
         
-    thresholds = calculate_percent_threshold(component_total, percentage_difference_threshold)
+    thresholds = calculate_percent_threshold(component_total, input_parameters.percentage_difference_threshold)
 
     output: Totals_and_Components_Output = Totals_and_Components_Output(
                                                 identifier=identifier,

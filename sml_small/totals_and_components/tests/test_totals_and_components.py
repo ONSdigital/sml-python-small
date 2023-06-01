@@ -31,7 +31,7 @@ class TestValidateInput:
                 300.0,
                 20,
                 0.1,
-                True,
+                (100, [1, 2, 3, 4], 102.0, 300.0, 20, 0.1),
                 "Test 1: Correct values test",
             ),
             (
@@ -45,7 +45,7 @@ class TestValidateInput:
                 104.0,
                 105.0,
                 None,
-                True,
+                (100.0, [1, 2, 3, 4], 103.0, 104.0, 105.0, None),
                 "Test 2: None value for percentage difference threshold",
             ),
             (
@@ -59,7 +59,7 @@ class TestValidateInput:
                 104.0,
                 None,
                 20,
-                True,
+                (100.0, [1, 2, 3, 4], 103.0, 104.0, None, 20),
                 "Test 3: None value for absolute difference threshold",
             ),(
                 "A",
@@ -190,7 +190,7 @@ class TestValidateInput:
         expected_result,
         test_id
     ):
-        if isinstance(expected_result, bool):
+        if isinstance(expected_result, tuple):
             try:
                 result = validate_input(
                     identifier=identifier,
