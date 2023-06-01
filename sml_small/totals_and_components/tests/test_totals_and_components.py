@@ -21,50 +21,50 @@ class TestValidateInput:
         "percentage_difference_threshold, expected_result, test_id",
         [
             (
-                "A",
-                "202312",
-                100.0,
-                [],
-                True,
-                100.0,
-                "202312",
-                None,
-                20,
-                0.1,
-                True,
-                "Test 1: Empty component list",
+                    "A",
+                    "202312",
+                    100.0,
+                    [],
+                    True,
+                    100.0,
+                    "202312",
+                    None,
+                    20,
+                    0.1,
+                    True,
+                    "Test 1: Empty component list",
             ),
             (
-                "A",
-                "202312",
-                None,
-                [],
-                True,
-                100.0,
-                "202312",
-                None,
-                20,
-                0.1,
-                True,
-                "Test 2: Invalid Total",
+                    "A",
+                    "202312",
+                    None,
+                    [],
+                    True,
+                    100.0,
+                    "202312",
+                    None,
+                    20,
+                    0.1,
+                    True,
+                    "Test 2: Invalid Total",
             ),
             # Add more test cases here
         ],
     )
     def test_validate_input(
-        self,
-        identifier,
-        period,
-        total,
-        components,
-        amend_total,
-        predictive,
-        predictive_period,
-        auxiliary,
-        absolute_difference_threshold,
-        percentage_difference_threshold,
-        expected_result,
-        test_id
+            self,
+            identifier,
+            period,
+            total,
+            components,
+            amend_total,
+            predictive,
+            predictive_period,
+            auxiliary,
+            absolute_difference_threshold,
+            percentage_difference_threshold,
+            expected_result,
+            test_id
     ):
         try:
             result = validate_input(
@@ -137,47 +137,47 @@ class TestCheckSumComponentsPredictive:
         "test_components, predictive, expected_result, test_id",
         [
             (
-                [
-                    Component_list(original_value=3.5, final_value=None),
-                    Component_list(original_value=6.5, final_value=None),
-                    Component_list(original_value=8.0, final_value=None),
-                    Component_list(original_value=2.0, final_value=None),
-                    Component_list(original_value=4.5, final_value=None),
-                    Component_list(original_value=5.5, final_value=None),
-                    Component_list(original_value=2.8, final_value=None),
-                    Component_list(original_value=7.2, final_value=None),
-                    Component_list(original_value=1.0, final_value=None),
-                    Component_list(original_value=9.0, final_value=None),
-                    Component_list(original_value=0.3, final_value=None),
-                    Component_list(original_value=9.7, final_value=None),
-                ],
-                60.0,
-                True,
-                "Test 1: Component Sum Matches Predictive",
+                    [
+                        Component_list(original_value=3.5, final_value=None),
+                        Component_list(original_value=6.5, final_value=None),
+                        Component_list(original_value=8.0, final_value=None),
+                        Component_list(original_value=2.0, final_value=None),
+                        Component_list(original_value=4.5, final_value=None),
+                        Component_list(original_value=5.5, final_value=None),
+                        Component_list(original_value=2.8, final_value=None),
+                        Component_list(original_value=7.2, final_value=None),
+                        Component_list(original_value=1.0, final_value=None),
+                        Component_list(original_value=9.0, final_value=None),
+                        Component_list(original_value=0.3, final_value=None),
+                        Component_list(original_value=9.7, final_value=None),
+                    ],
+                    60.0,
+                    True,
+                    "Test 1: Component Sum Matches Predictive",
             ),
             (
-                [
-                    Component_list(original_value=3.2, final_value=None),
-                    Component_list(original_value=5.1, final_value=None),
-                    Component_list(original_value=2.4, final_value=None),
-                    Component_list(original_value=1.5, final_value=None),
-                    Component_list(original_value=0.8, final_value=None),
-                    Component_list(original_value=4.6, final_value=None),
-                    Component_list(original_value=2.7, final_value=None),
-                    Component_list(original_value=3.9, final_value=None),
-                    Component_list(original_value=1.2, final_value=None),
-                    Component_list(original_value=0.5, final_value=None),
-                    Component_list(original_value=4.3, final_value=None),
-                    Component_list(original_value=2.0, final_value=None),
-                ],
-                100.0,
-                False,
-                "Test 2: Component Sum Does NOT Match Predictive",
+                    [
+                        Component_list(original_value=3.2, final_value=None),
+                        Component_list(original_value=5.1, final_value=None),
+                        Component_list(original_value=2.4, final_value=None),
+                        Component_list(original_value=1.5, final_value=None),
+                        Component_list(original_value=0.8, final_value=None),
+                        Component_list(original_value=4.6, final_value=None),
+                        Component_list(original_value=2.7, final_value=None),
+                        Component_list(original_value=3.9, final_value=None),
+                        Component_list(original_value=1.2, final_value=None),
+                        Component_list(original_value=0.5, final_value=None),
+                        Component_list(original_value=4.3, final_value=None),
+                        Component_list(original_value=2.0, final_value=None),
+                    ],
+                    100.0,
+                    False,
+                    "Test 2: Component Sum Does NOT Match Predictive",
             ),
         ],
     )
     def test_check_sum_components_predictive(
-        self, test_components, predictive, expected_result, test_id
+            self, test_components, predictive, expected_result, test_id
     ):
         try:
 
@@ -194,28 +194,36 @@ class TestCheckSumComponentsPredictive:
 
 class TestDetermineErrorDetection:
     @pytest.mark.parametrize(
-        "absolute_difference_threshold, percentage_difference_threshold, absolute_difference, components_sum,"
+        "absolute_difference_threshold, percentage_difference_threshold, absolute_difference, predictive, thresholds,"
         "expected_result, test_id",
         [
-            (20, None, 10, 100, True, "Test 1: Absolute Difference Only - Satisfied"),
-            (5, None, 10, 100, False, "Test 2: Absolute Difference Only - NOT Satisfied"),
+            (20, None, 10, None, (None, None), 'P', "Test 1: Absolute Difference Only - Satisfied"),
+            (5, None, 10, None, (None, None), 'M', "Test 2: Absolute Difference Only - NOT Satisfied"),
+            (None, 10, None, 15, (10, 20), 'P', "Test 3: Percentage Difference Only - Satisfied"),
+            (None, 10, None, 15, (16, 20), 'M', "Test 4: Percentage Difference Only - NOT Satisfied (lower)"),
+            (None, 10, None, 15, (10, 13), 'M', "Test 5: Percentage Difference Only - NOT Satisfied (upper)"),
+            (20, 10, 10, 15, (16, 20), 'P', "Test 6: Both Input - Absolute Difference Satisfied"),
+            (5, 10, 10, 15, (10, 20), 'P', "Test 7: Both Input - Percentage Difference Satisfied"),
+            (5, 10, 10, 15, (16, 20), 'M', "Test 8: Both Input - Neither Satisfied")
         ]
     )
     def test_determine_error_detection(
-        self,
-        absolute_difference_threshold,
-        percentage_difference_threshold,
-        absolute_difference,
-        components_sum,
-        expected_result,
-        test_id,
+            self,
+            absolute_difference_threshold,
+            percentage_difference_threshold,
+            absolute_difference,
+            predictive,
+            thresholds,
+            expected_result,
+            test_id,
     ):
         try:
             result = determine_error_detection(
                 absolute_difference_threshold=absolute_difference_threshold,
                 percentage_difference_threshold=percentage_difference_threshold,
                 absolute_difference=absolute_difference,
-                components_sum=components_sum,
+                predictive=predictive,
+                thresholds=thresholds
             )
 
             assert result == expected_result, f"Test failed: {test_id}"
@@ -228,17 +236,17 @@ class TestCheckAbsoluteDifferenceThreshold:
     @pytest.mark.parametrize(
         "absolute_difference_threshold, absolute_difference, expected_result, test_id",
         [
-            (9, 10, True, "Case 1: Absolute difference is greater than threshold"),
+            (9, 10, False, "Case 1: Absolute difference is greater than threshold"),
             (10, 10, True, "Case 2: Absolute difference equals threshold"),
-            (11, 10, False, "Case 3: Absolute difference is less than threshhold"),
+            (11, 10, True, "Case 3: Absolute difference is less than threshhold"),
         ]
     )
     def test_check_absolute_difference_threshold(
-        self,
-        absolute_difference_threshold,
-        absolute_difference,
-        expected_result,
-        test_id
+            self,
+            absolute_difference_threshold,
+            absolute_difference,
+            expected_result,
+            test_id
     ):
         try:
             result = check_absolute_difference_threshold(
@@ -254,21 +262,21 @@ class TestCheckAbsoluteDifferenceThreshold:
 
 class TestCheckPercentageDifferenceThreshold:
     @pytest.mark.parametrize(
-        "percentage_difference_threshold, components_sum, predictive, expected_result, test_id",
+        "predictive, thresholds, expected_result, test_id",
         [
-            (0.1, 100.0, 110.0, True, "Test 1: Predictive total equals upper threshold"),
-            (0.1, 100.0, 120.0, False, "Test 2: Predictive total is greater than upper threshold"),
-            (0.2, 100.0, 110.0, True,
+            (110.0, (100.0, 110.0), True, "Test 1: Predictive total equals upper threshold"),
+            (120.0, (100.0, 110.0), False, "Test 2: Predictive total is greater than upper threshold"),
+            (110.0, (105.0, 115.0), True,
              "Test 3: Predictive total is less than upper threshold and greater than lower threshold"),
-            (0.2, 100.0, 79.5, False, "Test 4: Predictive total is less than lower threshold"),
+            (79.5, (105.0, 115.0), False, "Test 4: Predictive total is less than lower threshold"),
         ],
     )
     def test_check_percentage_difference_threshold(
-        self, percentage_difference_threshold, components_sum, predictive, expected_result, test_id
+            self, predictive, thresholds, expected_result, test_id
     ):
         try:
             result = check_percentage_difference_threshold(
-                percentage_difference_threshold, components_sum, predictive
+                predictive, thresholds
             )
             assert result == expected_result, f"{test_id} - Unexpected result"
 
@@ -286,7 +294,7 @@ class TestErrorCorrection:
         ],
     )
     def test_error_correction(
-        self, amend_total, components_sum, original_components, predictive, expected_result, test_id
+            self, amend_total, components_sum, original_components, predictive, expected_result, test_id
     ):
         try:
             result = error_correction(amend_total, components_sum, original_components, predictive)
@@ -299,10 +307,10 @@ class TestErrorCorrection:
 
 class TestCorrectTotal:
     @pytest.mark.parametrize(
-            "components_sum, original_components, expected_result, test_id",
-            [
-                (100.0, [Component_list(10.0, None)] * 10, 100.0, "Test 1: Final total is sum of received components"),
-            ],
+        "components_sum, original_components, expected_result, test_id",
+        [
+            (100.0, [Component_list(10.0, None)] * 10, 100.0, "Test 1: Final total is sum of received components"),
+        ],
     )
     def test_correct_total(self, components_sum, original_components, expected_result, test_id):
         try:
@@ -315,10 +323,10 @@ class TestCorrectTotal:
 
 class TestCorrectComponents:
     @pytest.mark.parametrize(
-            "components_sum, original_components, predictive, expected_result, test_id",
-            [
-                (90.0, [Component_list(9.0, None)] * 10, 100.0, 100.0, "Test 1: Component sum matches total"),
-            ])
+        "components_sum, original_components, predictive, expected_result, test_id",
+        [
+            (90.0, [Component_list(9.0, None)] * 10, 100.0, 100.0, "Test 1: Component sum matches total"),
+        ])
     def test_correct_components(self, components_sum, original_components, predictive, expected_result, test_id):
         try:
             result = correct_components(components_sum=components_sum,
@@ -333,12 +341,12 @@ class TestCorrectComponents:
 
 class TestTotalsAndComponents:
     @pytest.mark.parametrize(
-            "identifier, period, total, components, amend_total, predictive, predictive_period, auxiliary,"
-            "absolute_difference_threshold, percentage_difference_threshold, expected_result, test_id",
-            [
-                ("A", "202312", 100.0, [Component_list(random.uniform(0, 12), None) for _ in range(12)], True, 100.0,
-                 "202312", None, 20, 0.1, "T", "Test 1: TCC Marker T"),
-            ])
+        "identifier, period, total, components, amend_total, predictive, predictive_period, auxiliary,"
+        "absolute_difference_threshold, percentage_difference_threshold, expected_result, test_id",
+        [
+            ("A", "202312", 100.0, [Component_list(random.uniform(0, 12), None) for _ in range(12)], True, 100.0,
+             "202312", None, 20, 0.1, "T", "Test 1: TCC Marker T"),
+        ])
     def test_totals_and_components(self, capfd, identifier, period, total, components, amend_total, predictive,
                                    predictive_period, auxiliary, absolute_difference_threshold,
                                    percentage_difference_threshold, expected_result, test_id):
