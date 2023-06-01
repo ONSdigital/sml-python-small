@@ -123,24 +123,17 @@ def check_zero_errors(predictive: float, components_sum: float) -> None | str:
     return tcc_marker
 
 
-def check_sum_components_predictive(predictive: float, components_sum: float) -> float | str:
+def check_sum_components_predictive(predictive: float, components_sum: float) -> float:
     """
     check_sum_components_predictive has a very simple role. It will calculate the the absolute difference value 
-    of the predictive minus the components sum and check if they are equal. If this is true, a no correction tcc marker is returned.
-    If it is false, we return the absolute difference value for later use.
+    of the predictive minus the components sum and return the result.
 
     :param predictive: This is the predictive value used in the absolute difference calculation.
     :type predictive: float
-    :param components_sum: The component sum is a float and is the sum of all the individual components.
-    :type components_sum: float
-    :return: We will either be returning a number for the absolute difference value or tcc marker which is a string. 
+    :return: We will be returning a number for the absolute difference. 
     :rtype: float | str
     """    
     absolute_difference = abs(predictive-components_sum)
-    tcc_marker = None
-    if predictive == components_sum:
-        tcc_marker = TccMarker.NO_CORRECTION.value
-        return tcc_marker
     return absolute_difference
 
 
@@ -258,7 +251,7 @@ def totals_and_components(
               scaled proportionally
             - Tcc_Marker (str): Indicates what correction (if any) was necessary. Possible values: T (totals corrected),
                C (components corrected), N (no correction required), M (manual correction required),
-               S (method stopped due to lack of data or zero values).
+               S (method stopped due to lack of data or zero values), NO_CORRECTION (NO_CORRECTION is made).
     :rtype Totals_and_Components_Output: Object[Totals_and_Components_Output]
     """
 
@@ -279,18 +272,9 @@ def totals_and_components(
     if tcc_marker != TccMarker.STOP.value:
         component_total = sum_components(components=components)
         tcc_marker = check_zero_errors(predictive, component_total)
-        if tcc_marker != TccMarker.STOP.value:
-            pass
-        else:
-            pass
-    else:
-        pass
-    
-    if tcc_marker != TccMarker.NO_CORRECTION.value:
-        components_sum = sum_components(components=components)
-        check_sum_components_predictive(predictive, components_sum)
-        if tcc_marker != TccMarker.NO_CORRECTION.value:
-            pass
+        absolute_difference = check_sum_components_predictive(predictive, component_total)
+        if absolute_difference == 0:
+            tcc_marker = TccMarker.NO_CORRECTION.value
         else:
             pass
     else:

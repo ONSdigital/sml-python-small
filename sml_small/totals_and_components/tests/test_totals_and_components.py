@@ -152,7 +152,7 @@ class TestCheckSumComponentsPredictive:
                     Component_list(original_value=9.7, final_value=None),
                 ],
                 60.0,
-                "N",
+                0,
                 "Test 1: Component Sum Matches Predictive",
             ),
             (
