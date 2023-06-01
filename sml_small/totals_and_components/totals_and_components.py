@@ -72,7 +72,7 @@ def validate_input(
         auxiliary: Optional[float],
         absolute_difference_threshold: Optional[float],
         percentage_difference_threshold: Optional[float]
-        ) -> tuple[float | None, float | None, float | None, float | None, float | None, float | None, float | None]:
+        ) -> bool:
         """
         validate_input is to ensure that the dataset input record has all the values 
         we need in the correct format. To do this we check to see if the data exists and is a number. If the data does not exist and is not a number we throw ValueError's as appropriate.
@@ -84,7 +84,7 @@ def validate_input(
         :type period: Optional[str]
         :param total: Target period total, numeric – nulls allowed
         :type total: float
-        :param components: _description_
+        :param components: Corresponding list of Total variable's components, numeric – nulls allowed
         :type components: List[Component_list]
         :param amend_total: This decided whether Total Variable should be automatically corrected, Boolean. FALSE = correct components, TRUE = correct total
         :type amend_total: bool
@@ -125,7 +125,7 @@ def validate_input(
         if percentage_difference_threshold: 
            validate_number("percentage difference threshold", percentage_difference_threshold)
            float(percentage_difference_threshold)
-        return total, components, predictive, auxiliary, absolute_difference_threshold, percentage_difference_threshold
+        return True
 
 def validate_number(tag: str, value) -> bool:
     """
@@ -340,7 +340,7 @@ def totals_and_components(
         percentage_difference_threshold=percentage_difference_threshold
     )
 
-    total, components, predictive, auxiliary, absolute_difference_threshold, percentage_difference_threshold = validate_input(total, components, predictive, auxiliary, absolute_difference_threshold, percentage_difference_threshold)
+    input_parameters = validate_input(total, components, predictive, auxiliary, absolute_difference_threshold, percentage_difference_threshold)
 
     predictive, tcc_marker = check_predictive_value(predictive, auxiliary)
     if tcc_marker != TccMarker.STOP.value:
