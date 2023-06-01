@@ -321,10 +321,10 @@ class TestCheckSumComponentsPredictive:
     ):
         try:
             components_sum = sum_components(test_components)
-            marker = check_sum_components_predictive(
+            absolute_difference = check_sum_components_predictive(
                 predictive=predictive, components_sum=components_sum
             )
-            assert marker == expected_result
+            assert absolute_difference == expected_result
         except Exception as e:
             pytest.fail(EXCEPTION_FAIL_MESSAGE.format(test_id=test_id, exception_type=type(e).__name__,
                                                       exception_msg=str(e)))

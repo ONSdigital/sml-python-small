@@ -304,6 +304,8 @@ def totals_and_components(
    :type components: List[Component_list]
    :param amend_total:Specifies whether the total or components should be corrected when an error is detected.
    :type amend_total:bool
+   :param input_parameters: This is the tuple with the corrected values from validate_input().
+   :type input_parameters: tuple
    :param predictive: The predictive value, typically the total for the current period.
    :type predictive: Optional[float]
    :param predictive_period: Not used in initial PoC. Assumes current period.
