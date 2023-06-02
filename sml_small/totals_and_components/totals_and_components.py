@@ -90,8 +90,9 @@ def check_predictive_value(
     predictive: Optional[float], auxiliary: Optional[float]
 ) -> tuple[float | None, str | None]:
     """
-    Checks if predictive and auxiliary values are input, when predictive is None and auxiliary is input set
-    predictive to auxiliary, when both are None, set Tcc_Marker to S and stop calculation
+    Checks if predictive and auxiliary values are input, when predictive is None and auxiliary
+    is input set predictive to auxiliary, when both are None, set Tcc_Marker to S
+    and stop calculation
 
     :param predictive: The predictive value, typically the total for the current period.
     :type predictive: float, optional
@@ -108,14 +109,15 @@ def check_predictive_value(
         if auxiliary is None:
             tcc_marker = TccMarker.STOP.value
         else:
+            tcc_marker = TccMarker.METHOD_PROCEED.value
             predictive = auxiliary
     return predictive, tcc_marker
 
 
 def check_zero_errors(predictive: float, components_sum: float) -> None | str:
     """
-    Checks if when the predictive total is > 0, that the components sum is also > 0, adds a tcc_marker of 'S'
-    when not true
+    Checks if when the predictive total is > 0, that the components sum is also > 0,
+    adds a tcc_marker of 'S' when not true
 
     :param predictive: The predictive value, typically the total for the current period.
     :type predictive: float
@@ -128,6 +130,8 @@ def check_zero_errors(predictive: float, components_sum: float) -> None | str:
     tcc_marker = None
     if predictive > 0 and components_sum == 0:
         tcc_marker = TccMarker.STOP.value
+    else:
+        tcc_marker = TccMarker.METHOD_PROCEED.value
     return tcc_marker
 
 
@@ -144,6 +148,32 @@ def determine_error_detection(
     predictive: float,
     thresholds: tuple,
 ) -> str:
+    """
+    Determines and calls the relevant error detection methods to be applied to the input
+
+    :param absolute_difference_threshold: Value used to check if the difference
+                                          between the predictive total and sum
+                                          of components requires an automatic update.
+    :type absolute_difference_threshold: None | float
+    :param percentage_difference_threshold: If the predictive total is within the
+                                            specified percentage of the sum of the
+                                            components, the method will
+                                            automatically correct.
+    :type percentage_difference_threshold: None | float
+    :param absolute_difference: The absolute value showing the difference between
+                                the input components and the predictive total.
+    :type absolute_difference: Float
+    :param predictive: The predictive value, typically the total for the current
+                       period.
+    :type predictive: float
+    :param thresholds: Contains the High and Low percentage thresholds previously
+                       calculated from the percentage_difference_threshold and
+                       input components
+    :type thresholds: Tuple(None | float, None | float)
+    ...
+    :return Tcc_Marker: Returned Tcc_Marker (either stop or continue)
+    :rtype Tcc_Marker: str
+    """
     error_detection_satisfiable = False
     if absolute_difference_threshold is not None:
         error_detection_satisfiable = check_absolute_difference_threshold(
@@ -166,6 +196,21 @@ def determine_error_detection(
 def check_absolute_difference_threshold(
     absolute_difference_threshold: float, absolute_difference: float
 ) -> bool:
+    """
+    Function to check the absolute_difference against the absolute_difference_threshold
+    to establish if the relationship between them is satisfiable
+
+    :param absolute_difference_threshold: Value used to check if the difference
+                                          between the predictive total and sum of
+                                          components requires an automatic update.
+    :type absolute_difference_threshold: float
+    :param absolute_difference: The absolute value showing the difference between
+                                the input components and the predictive total.
+    :type absolute_difference: float
+    ...
+    :return satisfied: a marker indicating if the threshold is satisfied
+    :rtype satisfied: bool
+    """
     satisfied = False
     if absolute_difference <= absolute_difference_threshold:
         satisfied = True
@@ -173,6 +218,20 @@ def check_absolute_difference_threshold(
 
 
 def check_percentage_difference_threshold(predictive: float, thresholds: tuple) -> bool:
+    """
+    Function to check the predictive value against the percentage thresholds to establish
+    if the relationship between them is satisfiable
+
+    :param predictive: The predictive value, typically the total for the current period.
+    :type predictive: float
+    :param thresholds: Contains the High and Low percentage thresholds previously
+                       calculated from the percentage_difference_threshold and
+                       input components
+    :type thresholds: Tuple(float, float)
+    ...
+    :return satisfied: a marker indicating if the threshold is satisfied
+    :rtype satisfied: bool
+    """
     satisfied = False
     if (
         thresholds[Index.LOW_THRESHOLD.value]
@@ -204,7 +263,7 @@ def correct_components(
     raise NotImplementedError(f"{correct_components.__name__}() not implemented yet")
 
 
-def sum_components(components: Component_list) -> float:
+def sum_components(components: list[Component_list]) -> float:
     total_sum = 0.0
 
     for component in components:
@@ -216,10 +275,10 @@ def sum_components(components: Component_list) -> float:
 
 
 def calculate_percent_threshold(
-    sum_components: float, percentage_threshold: float
+    sum_of_components: float, percentage_threshold: float
 ) -> Tuple[float, float]:
-    low_percent_threshold = sum_components - (sum_components / percentage_threshold)
-    high_percent_threshold = sum_components + (sum_components / percentage_threshold)
+    low_percent_threshold = sum_of_components - (sum_of_components / percentage_threshold)
+    high_percent_threshold = sum_of_components + (sum_of_components / percentage_threshold)
 
     return low_percent_threshold, high_percent_threshold
 
@@ -251,7 +310,8 @@ def totals_and_components(
     :type total: float
     :param components: List of components that should equal the total or predictive value.
     :type components: List[Component_list]
-    :param amend_total:Specifies whether the total or components should be corrected when an error is detected.
+    :param amend_total: Specifies whether the total or components should be corrected when an error is
+                        detected.
     :type amend_total:bool
     :param predictive: The predictive value, typically the total for the current period.
     :type predictive: Optional[float]
@@ -259,8 +319,9 @@ def totals_and_components(
     :type predictive_period: Optional[str]
     :param auxiliary: The value to be used in the absence of a predictive value.
     :type auxiliary: Optional[float]
-    :param absolute_difference_threshold: Value used to check if the difference between the predictive
-                                          total and sum of components requires an automatic update.
+    :param absolute_difference_threshold: Value used to check if the difference between
+                                          the predictive total and sum of components
+                                          requires an automatic update.
     :type absolute_difference_threshold: Optional[float]
     :param percentage_difference_threshold: If the predictive total is within the specified percentage
                                             of the sum of the components, the method will automatically
@@ -300,24 +361,35 @@ def totals_and_components(
         percentage_difference_threshold=percentage_difference_threshold,
     )
     predictive, tcc_marker = check_predictive_value(predictive, auxiliary)
-    if tcc_marker != TccMarker.STOP.value:
+    if tcc_marker == TccMarker.METHOD_PROCEED.value:
         component_total = sum_components(components=components)
+        absolute_difference = component_total - predictive
         tcc_marker = check_zero_errors(predictive, component_total)
-        if tcc_marker != TccMarker.STOP.value:
-            pass
+        if tcc_marker == TccMarker.METHOD_PROCEED.value:
+            thresholds = calculate_percent_threshold(
+                component_total, percentage_difference_threshold
+            )
+            tcc_marker = determine_error_detection(absolute_difference_threshold,
+                                                   percentage_difference_threshold,
+                                                   absolute_difference,
+                                                   predictive,
+                                                   thresholds)
+            if tcc_marker == TccMarker.METHOD_PROCEED.value:
+                pass
+            else:
+                # Manual correction, output
+                pass
         else:
+            # calc stopped, output
             pass
     else:
+        # calc stopped output
         pass
-
-    thresholds = calculate_percent_threshold(
-        component_total, percentage_difference_threshold
-    )
 
     output: Totals_and_Components_Output = Totals_and_Components_Output(
         identifier=identifier,
         period=period,
-        absolute_difference=abs(component_total - predictive),
+        absolute_difference=absolute_difference,
         low_percent_threshold=thresholds[Index.LOW_THRESHOLD.value],
         high_percent_threshold=thresholds[Index.HIGH_THRESHOLD.value],
         final_total=predictive,

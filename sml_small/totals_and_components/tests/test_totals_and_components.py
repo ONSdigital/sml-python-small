@@ -238,7 +238,7 @@ class TestCheckAbsoluteDifferenceThreshold:
         [
             (9, 10, False, "Case 1: Absolute difference is greater than threshold"),
             (10, 10, True, "Case 2: Absolute difference equals threshold"),
-            (11, 10, True, "Case 3: Absolute difference is less than threshhold"),
+            (11, 10, True, "Case 3: Absolute difference is less than threshold"),
         ]
     )
     def test_check_absolute_difference_threshold(
