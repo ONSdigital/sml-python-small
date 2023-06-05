@@ -73,7 +73,6 @@ def print_input_table(**kwargs):
     for var_name, var_value in kwargs.items():
         print(f"{var_name:<15}|   {var_value}")
 
-
 def validate_input(
     identifier: Optional[str],
     period: Optional[str],
@@ -85,9 +84,92 @@ def validate_input(
     auxiliary: Optional[float],
     absolute_difference_threshold: Optional[float],
     percentage_difference_threshold: Optional[float],
-) -> bool:
-    raise NotImplementedError(f"{validate_input.__name__}() not implemented yet")
+) -> tuple[float | None, float | None, float | None, float | None, float | None, float | None, float | None]:
+        """
+        validate_input is to ensure that the dataset input record has all the values
+        we need in the correct format. To do this we check to see if the data exists and is a number. If the data does not exist and is not a number we throw ValueError's as appropriate.
 
+
+        :param identifier: Any e.g., Business Reporting Unit
+        :type identifier: Optional[str]
+        :param period: String in "YYYYMM" format
+        :type period: Optional[str]
+        :param total: Target period total, numeric – nulls allowed
+        :type total: float
+        :param components: Corresponding list of Total variable's components, numeric – nulls allowed
+        :type components: List[Component_list]
+        :param amend_total: This decided whether Total Variable should be automatically corrected, Boolean. FALSE = correct components, TRUE = correct total
+        :type amend_total: bool
+        :param predictive:A value used as a predictor for a contributor's target variable.
+        :type predictive: Optional[float]
+        :param predictive_period: The period containing predictive records; defined relative to the target period.
+        :type predictive_period: Optional[str]
+        :param auxiliary: The variable used as a predictor for a contributor’s target variable, where the predictive value is not available (e.g., where the contributor was not sampled in the predictive period).
+        :type auxiliary: Optional[float]
+        :param absolute_difference_threshold: Is the predefined threshold for the absolute difference
+        :type absolute_difference_threshold: Optional[float]
+        :param percentage_difference_threshold: Is the predefined percentage threshold represented as a decimal
+        :type percentage_difference_threshold: Optional[float]
+        :raises ValueError: ValueErrors are returned when data is missing or in the incorrect type/format.
+        :return: The tuple is a returned list of values converted to floats (if possible).
+        :rtype: tuple[float | None, float | None, float | None, float | None, float | None, float | None, float | None]
+        """
+        if total:
+           validate_number("total", total)
+           float(total)
+        if components == []:
+            raise ValueError("The components are not populated")
+        if components:
+            for x in components:
+               validate_number(f"component={x}", x)
+               float(x)
+        if predictive:
+           validate_number("predictive", predictive)
+           float(predictive)
+        if auxiliary:
+           validate_number("auxiliary", auxiliary)
+           float(auxiliary)
+        if absolute_difference_threshold is None and percentage_difference_threshold is None:
+           raise ValueError("One or both of absolute/percentage difference thresholds must be specified")
+        if absolute_difference_threshold:
+           validate_number("absolute difference threshold", absolute_difference_threshold)
+           float(absolute_difference_threshold)
+        if percentage_difference_threshold:
+           validate_number("percentage difference threshold", percentage_difference_threshold)
+           float(percentage_difference_threshold)
+        return total, components, predictive, auxiliary, absolute_difference_threshold, percentage_difference_threshold
+
+def validate_number(tag: str, value) -> bool:
+    """
+    validate_number will take a parsed tag and value and check ot see if the value is a number.
+    If this is not the case it returns a ValueError.
+
+    :param tag: The tag is a way of identifying the value and type entered and is used if a ValueError is returned.
+    :type tag: str
+    :param value: value is what is parsed to the function it can be many different types.
+    :type value: float | optional
+    :raises ValueError: ValueError is a means to raise error alerts.
+    :return: This return a True boolean value if the value obtained is a number.
+    :rtype: boolean
+    """
+    if not isNumber(value):
+       raise ValueError(f"{tag} is missing or not a number")
+    return True
+
+def isNumber(value) -> bool:
+    """
+    isNumber is a function which attempts to convert a entered type into a float.
+    If will return a boolean dependent on whether it can or can't be converted.
+
+    :param value: value is the parsed parameter which is to be converted to a float(if possible).
+    :type value: float | optional
+    :rtype: boolean to indicate if value is a number or not.
+    """
+    try:
+        float(value)
+    except Exception:
+           return False
+    return True
 
 def check_predictive_value(
     predictive: Optional[float], auxiliary: Optional[float]
@@ -138,10 +220,18 @@ def check_zero_errors(predictive: float, components_sum: float) -> None | str:
     return tcc_marker
 
 
-def check_sum_components_predictive(predictive: float, components_sum: float) -> bool:
-    raise NotImplementedError(
-        f"{check_sum_components_predictive.__name__}() not implemented yet"
-    )
+def check_sum_components_predictive(predictive: float, components_sum: float) -> float:
+    """
+    check_sum_components_predictive has a very simple role. It will calculate the the absolute difference value
+    of the predictive minus the components sum and return the result.
+
+    :param predictive: This is the predictive value used in the absolute difference calculation.
+    :type predictive: float
+    :return: We will be returning a number for the absolute difference.
+    :rtype: float | str
+    """
+    absolute_difference = abs(predictive-components_sum)
+    return absolute_difference
 
 
 def determine_error_detection(
@@ -411,7 +501,9 @@ def totals_and_components(
     :param amend_total: Specifies whether the total or components should be corrected when
                         an error is detected.
     :type amend_total:bool
-    :param predictive: The predictive value, typically the total for the current period.
+    :param input_parameters: This is the tuple with the corrected values from validate_input().
+   :type input_parameters: tuple
+   :param predictive: The predictive value, typically the total for the current period.
     :type predictive: Optional[float]
     :param predictive_period: Not used in initial PoC. Assumes current period.
     :type predictive_period: Optional[str]
@@ -452,7 +544,7 @@ def totals_and_components(
                 C (components corrected),
                 N (no correction required),
                 M (manual correction required),
-                S (method stopped due to lack of data or zero values).
+                S (method stopped due to lack of data or zero values), NO_CORRECTION (NO_CORRECTION is made).
      :rtype Totals_and_Components_Output: Object[Totals_and_Components_Output]
     """
 

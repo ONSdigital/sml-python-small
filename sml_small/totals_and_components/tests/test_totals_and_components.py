@@ -23,32 +23,153 @@ class TestValidateInput:
             (
                     "A",
                     "202312",
-                    100.0,
-                    [],
-                    True,
-                    100.0,
+                    100,
+                [1, 2, 3, 4],
+                101.0,
+                    102.0,
+                "202312",
+                300.0,
+                20,
+                0.1,
+                (100, [1, 2, 3, 4], 102.0, 300.0, 20, 0.1),
+                "Test 1: Correct values test",
+            ),
+            (
+                "A",
                     "202312",
-                    None,
+                    100.0,
+                    [1, 2, 3, 4],
+                102.0,
+                103.0,"202312",
+                    104.0,
+                105.0,
+                None,
+                (100.0, [1, 2, 3, 4], 103.0, 104.0, 105.0, None),
+                "Test 2: None value for percentage difference threshold",
+            ),
+            (
+                "A",
+                "202312",
+                100.0,
+                [1, 2, 3, 4],
+                102.0,
+                103.0,
+                "202312",
+                104.0,None,
                     20,
-                    0.1,
-                    True,
-                    "Test 1: Empty component list",
+                    (100.0, [1, 2, 3, 4], 103.0, 104.0, None, 20),
+                    "Test 3: None value for absolute difference threshold",
+                    ),(
+                "A",
+                "202312",
+                100.0,
+                [],
+                101.0,
+                102.0,
+                "202312",
+                103.0,
+                20,
+                0.1,
+                ValueError,
+                "Test 4: Empty component list",
             ),
             (
                     "A",
                     "202312",
-                    None,
-                    [],
-                    True,
                     100.0,
-                    "202312",
-                    None,
-                    20,
-                    0.1,
-                    True,
-                    "Test 2: Invalid Total",
+                [None,2 ,3, 4],
+                101.0,
+                102.0,
+                "202312",
+                103.0,
+                20,
+                0.1,
+                ValueError,
+                "Test 5: None in component list",
             ),
-            # Add more test cases here
+            (
+                "A",
+                "202312",
+                "String",
+                    [1, 2, 3, 4],
+                    102.0,
+                103.0,
+                "202312",
+                104.0,
+                20,
+                0.1,
+                ValueError,
+                "Test 6: Invalid Total",
+            ),
+            (
+                "A",
+                "202312",
+                    100.0,
+                    [1, 2, 3, 4],
+                101.0,
+                "String","202312",
+                    102.0,
+                20,
+                0.1,
+                ValueError,
+                "Test 7: Invalid predictive test",
+            ),
+            (
+                "A",
+                "202312",
+                100.0,
+                [1, 2, 3, 4],
+                101.0,
+                102.0,
+                "202312",
+                "String",
+                20,
+                0.1,
+                ValueError,
+                "Test 8: Invalid auxiliary",
+            ),
+            (
+                "A",
+                "202312",
+                100.0,
+                [1, 2, 3, 4],
+                102.0,
+                103.0,
+                "202312",
+                104.0,
+                    {20},
+                    0.1,
+                    ValueError,
+                    "Test 9: Invalid absolute difference threshold",
+            ),
+            (
+                "A",
+                "202312",
+                100.0,
+                [1, 2, 3, 4],
+                102.0,
+                103.0,
+                "202312",
+                104.0,
+                20,
+                {2},
+                ValueError,
+                "Test 10: Invalid percentage difference threshold",
+            ),
+            (
+                "A",
+                "202312",
+                100.0,
+                [1, 2, 3, 4],
+                102.0,
+                101.0,
+                "202312",
+                89.0,
+                None,
+                None,
+                ValueError,
+                "Test 11: None value for percentage and absolute difference threshold",
+            ),
         ],
     )
     def test_validate_input(
@@ -66,24 +187,40 @@ class TestValidateInput:
             expected_result,
             test_id
     ):
-        try:
-            result = validate_input(
-                identifier=identifier,
-                period=period,
-                total=total,
-                components=components,
-                amend_total=amend_total,
-                predictive=predictive,
-                predictive_period=predictive_period,
-                auxiliary=auxiliary,
-                absolute_difference_threshold=absolute_difference_threshold,
-                percentage_difference_threshold=percentage_difference_threshold,
-            )
-            assert result == expected_result
-        except Exception as e:
-            pytest.fail(EXCEPTION_FAIL_MESSAGE.format(test_id=test_id, exception_type=type(e).__name__,
-                                                      exception_msg=str(e)))
-
+        if isinstance(expected_result, tuple):
+            try:
+                result = validate_input(
+                    identifier=identifier,
+                    period=period,
+                    total=total,
+                    components=components,
+                    amend_total=amend_total,
+                    predictive=predictive,
+                    predictive_period=predictive_period,
+                    auxiliary=auxiliary,
+                    absolute_difference_threshold=absolute_difference_threshold,
+                    percentage_difference_threshold=percentage_difference_threshold,
+                )
+                assert result == expected_result
+            except Exception as e:
+                pytest.fail(EXCEPTION_FAIL_MESSAGE.format(test_id=test_id, exception_type=type(e).__name__,
+                                                          exception_msg=str(e)))
+        else:
+            with pytest.raises(expected_result) as exc_info:
+                validate_input(
+                    identifier=identifier,
+                    period=period,
+                    total=total,
+                    components=components,
+                    amend_total=amend_total,
+                    predictive=predictive,
+                    predictive_period=predictive_period,
+                    auxiliary=auxiliary,
+                    absolute_difference_threshold=absolute_difference_threshold,
+                    percentage_difference_threshold=percentage_difference_threshold,
+                )
+                print(exc_info.value)
+            assert exc_info.type == expected_result
 
 class TestCheckPredictiveValue:
     @pytest.mark.parametrize(
@@ -152,7 +289,7 @@ class TestCheckSumComponentsPredictive:
                         Component_list(original_value=9.7, final_value=None),
                     ],
                     60.0,
-                    True,
+                    0,
                     "Test 1: Component Sum Matches Predictive",
             ),
             (
@@ -171,8 +308,8 @@ class TestCheckSumComponentsPredictive:
                         Component_list(original_value=2.0, final_value=None),
                     ],
                     100.0,
-                    False,
-                    "Test 2: Component Sum Does NOT Match Predictive",
+                    67.8, # This is the returned stored absolute_difference value
+                    "Test 2: Component Sum Does NOT Match Predictiveand returns absolute_difference",
             ),
         ],
     )
@@ -180,13 +317,11 @@ class TestCheckSumComponentsPredictive:
             self, test_components, predictive, expected_result, test_id
     ):
         try:
-
             components_sum = sum_components(test_components)
-            check_sum_components_predictive(
+            absolute_difference = check_sum_components_predictive(
                 predictive=predictive, components_sum=components_sum
             )
-            assert expected_result
-
+            assert absolute_difference == expected_result
         except Exception as e:
             pytest.fail(EXCEPTION_FAIL_MESSAGE.format(test_id=test_id, exception_type=type(e).__name__,
                                                       exception_msg=str(e)))
