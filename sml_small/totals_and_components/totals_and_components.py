@@ -7,6 +7,13 @@ class Index(Enum):
     LOW_THRESHOLD = 0
     HIGH_THRESHOLD = 1
 
+class Input_Parameters(Enum):   
+    TOTAL = 0,
+    COMPONENTS = 1,
+    PREDICTIVE = 2,
+    AUXILIARY = 3,
+    ABSOLUTE_DIFFERENCE_THRESHOLD = 4,
+    PERCENTAGE_DIFFERENCE_THRESHOLD = 5,
 
 class TccMarker(Enum):
     STOP = "S"
@@ -85,6 +92,7 @@ def validate_input(
     absolute_difference_threshold: Optional[float],
     percentage_difference_threshold: Optional[float]
     ) -> tuple[float | None, float | None, float | None, float | None, float | None, float | None, float | None]:
+    
     """
     validate_input is to ensure that the dataset input record has all the values 
     we need in the correct format. To do this we check to see if the data exists and is a number. If the data does not exist and is not a number we throw ValueError's as appropriate.
@@ -205,7 +213,7 @@ def check_predictive_value(
     :return Tcc_Marker: Returned Tcc_Marker if all values are None
     :rtype Tcc_Marker: None | str
     """
-    tcc_marker = None
+    tcc_marker = TccMarker.METHOD_PROCEED.value
     if predictive is None:
         if auxiliary is None:
             tcc_marker = TccMarker.STOP.value
@@ -228,7 +236,6 @@ def check_zero_errors(predictive: float, components_sum: float) -> None | str:
     :return Tcc_Marker: Returned Tcc_Marker if zero error is triggered
     :rtype Tcc_Marker: None | str
     """
-    tcc_marker = None
     if predictive > 0 and components_sum == 0:
         tcc_marker = TccMarker.STOP.value
     else:
@@ -493,7 +500,7 @@ def calculate_percent_threshold(
 def totals_and_components(
     identifier: Optional[
         str
-    ],  # unique identifier, e.g Business Reporting Unit SG-should this be optiional?
+    ],  # unique identifier, e.g Business Reporting Unit SG-should this be optional?
     period: Optional[str],
     total: float,
     components: List[Component_list],
@@ -568,26 +575,27 @@ def totals_and_components(
         percentage_difference_threshold=percentage_difference_threshold,
     )
 
-    input_parameters = validate_input(total, components, predictive, auxiliary, absolute_difference_threshold, percentage_difference_threshold)
+    input_parameters = validate_input(identifier, period, total, components, amend_total, predictive, predictive_period, auxiliary, absolute_difference_threshold, percentage_difference_threshold)
 
-    input_parameters.predictive, tcc_marker = check_predictive_value(input_parameters.predictive, input_parameters.auxiliary)
+    input_parameters[Input_Parameters.PREDICTIVE.value], tcc_marker = check_predictive_value(input_parameters[Input_Parameters.PREDICTIVE.value], input_parameters[Input_Parameters.AUXILIARY.value])
 
-    predictive, tcc_marker = check_predictive_value(predictive, auxiliary)
     if tcc_marker == TccMarker.METHOD_PROCEED.value:
-        component_total = sum_components(components=components)
-        absolute_difference = component_total - predictive
-        tcc_marker = check_zero_errors(predictive, component_total)
+        component_total = sum_components(components=input_parameters[Input_Parameters.COMPONENTS.value])
+        tcc_marker = check_zero_errors(input_parameters[Input_Parameters.PREDICTIVE.value], component_total)
+        absolute_difference = check_sum_components_predictive(input_parameters[Input_Parameters.PREDICTIVE.value], component_total)
+        if absolute_difference == 0:	     
+            tcc_marker = TccMarker.NO_CORRECTION.value
         if tcc_marker == TccMarker.METHOD_PROCEED.value:
             thresholds = calculate_percent_threshold(
-                component_total, percentage_difference_threshold
+                component_total, input_parameters[Input_Parameters.PERCENTAGE_DIFFERENCE_THRESHOLD.value]
             )
-            tcc_marker = determine_error_detection(absolute_difference_threshold,
-                                                   percentage_difference_threshold,
+            tcc_marker = determine_error_detection(input_parameters[Input_Parameters.ABSOLUTE_DIFFERENCE_THRESHOLD.value],
+                                                   input_parameters[Input_Parameters.PERCENTAGE_DIFFERENCE_THRESHOLD.value],
                                                    absolute_difference,
-                                                   predictive,
+                                                   input_parameters[Input_Parameters.PREDICTIVE.value],
                                                    thresholds)
             if tcc_marker == TccMarker.METHOD_PROCEED.value:
-                error_correction_params = error_correction(amend_total=amend_total, components_sum=component_total, original_components=input_parameters.components, predictive=input_parameters.predictive)
+                error_correction_params = error_correction(amend_total=amend_total, components_sum=component_total, original_components=input_parameters[Input_Parameters.COMPONENTS.value], predictive=input_parameters[Input_Parameters.PREDICTIVE.value])
                 output: Totals_and_Components_Output = Totals_and_Components_Output(
                     identifier=identifier,
                     period=period,
@@ -600,32 +608,37 @@ def totals_and_components(
                 )
             
             else:
-                # Manual correction, output
-                pass
+                output: Totals_and_Components_Output = Totals_and_Components_Output(
+                identifier=identifier,
+                period=period,
+                absolute_difference=absolute_difference,
+                low_percent_threshold=thresholds[Index.LOW_THRESHOLD.value],
+                high_percent_threshold=thresholds[Index.HIGH_THRESHOLD.value],
+                final_total=input_parameters[Input_Parameters.PREDICTIVE.value],
+                final_components=input_parameters[Input_Parameters.COMPONENTS.value],
+                tcc_marker=TccMarker.MANUAL.value,
+                )
         else:
             output: Totals_and_Components_Output = Totals_and_Components_Output(
             identifier=identifier,
             period=period,
-            absolute_difference=input_parameters.absolute_difference.threshold,
+            absolute_difference=absolute_difference,
             low_percent_threshold=thresholds[Index.LOW_THRESHOLD.value],
             high_percent_threshold=thresholds[Index.HIGH_THRESHOLD.value],
-            final_total=input_parameters.predictive,
-            final_components=input_parameters.components,
-            tcc_marker="S",
+            final_total=input_parameters[Input_Parameters.PREDICTIVE.value],
+            final_components=input_parameters[Input_Parameters.COMPONENTS.value],
+            tcc_marker=tcc_marker,
         )
     else:
-        # calc stopped output
-        pass
-
-    output: Totals_and_Components_Output = Totals_and_Components_Output(
+        output: Totals_and_Components_Output = Totals_and_Components_Output(
         identifier=identifier,
         period=period,
-        absolute_difference=input_parameters.absolute_difference_threshold,
+        absolute_difference=absolute_difference,
         low_percent_threshold=thresholds[Index.LOW_THRESHOLD.value],
         high_percent_threshold=thresholds[Index.HIGH_THRESHOLD.value],
-        final_total=input_parameters.predictive,
-        final_components=input_parameters.components,
-        tcc_marker="S",
+        final_total=input_parameters[Input_Parameters.PREDICTIVE.value],
+        final_components=input_parameters[Input_Parameters.COMPONENTS.value],
+        tcc_marker=tcc_marker,
     )
 
     output.print_output_table()
