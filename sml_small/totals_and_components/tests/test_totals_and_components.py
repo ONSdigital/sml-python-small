@@ -425,7 +425,7 @@ class TestErrorCorrection:
         "amend_total, components_sum, original_components, predictive, expected_total, expected_components,\
         expected_tcc_marker, test_id",
         [
-            (True, 100.0, [Component_list(8.2, None)] * 10, 100.0, 100.0, [8.2] * 10, 'T',
+            (True, 100.0, [Component_list(10.0, None)] * 10, 100.0, 100.0, [10.0] * 10, 'T',
              "Test 1: Amend total"),
             (False, 82.0, [Component_list(8.2, None)] * 10, 100.0, 100.0, [10.0] * 10, 'C',
              "Test 2: Amend components"),
