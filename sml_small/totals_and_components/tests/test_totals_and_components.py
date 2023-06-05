@@ -503,21 +503,21 @@ class TestTotalsAndComponents:
         "identifier, period, total, components, amend_total, predictive, predictive_period, auxiliary,"
         "absolute_difference_threshold, percentage_difference_threshold, expected_result, test_id",
         [
-            ("A", "202312", 11, [0, 0, 0, 0], True, 11,
+            ("A", "202312", 11, [Component_list(0, None), Component_list(0, None), Component_list(0, None), Component_list(0, None)], True, 11,
              "202312", None, 11, None, "S", "Test 1: TCC Marker S (Predictive stage 2 - Stop output)"),
-            ("B", "202312", 1625, [632, 732, 99, 162], True, 1625,
+            ("B", "202312", 1625, [Component_list(632, None), Component_list(732, None), Component_list(99, None), Component_list(162, None)], True, 1625,
              "202312", None, 11, None, "N", "Test 2: TCC Marker N (Check sum and predictive value stage 4 - No correction)"),
-            ("C", "202312", 1964, [632, 732, 99, 162], True, 1964,
+            ("C", "202312", 1964, [Component_list(632, None), Component_list(732, None), Component_list(99, None), Component_list(162, None)], True, 1964,
              "202312", None, 25, 0.1, "M", "Test 3: TCC Marker M (Determine error detection method stage 5 - Manual output required )"),
-            ("D", "202312", 306, [240, 0, 30, 10], True, 306,
+            ("D", "202312", 306, [Component_list(240, None), Component_list(0, None), Component_list(30, None), Component_list(10, None)], True, 306,
              "202312", None, 26, 0.1, "T", "Test 4: TCC Marker T (Error correction stage 6 - Total corrected)"),
-            ("E", "202312", 90, [90, 0, 4, 6], False, 90,
+            ("E", "202312", 90, [Component_list(90, None), Component_list(0, None), Component_list(4, None), Component_list(6, None)], False, 90,
              "202312", None, None, 0.1, "C", "Test 5: TCC Marker C (Components correction stage 6 - Total corrected)"),
         ])
     def test_totals_and_components(self, capfd, identifier, period, total, components, amend_total, predictive,
                                    predictive_period, auxiliary, absolute_difference_threshold,
                                    percentage_difference_threshold, expected_result, test_id):
-        # try:
+        try:
             results = totals_and_components(identifier=identifier,
                                             period=period,
                                             total=total,
@@ -530,7 +530,11 @@ class TestTotalsAndComponents:
                                             percentage_difference_threshold=percentage_difference_threshold)
 
             # Capture the printed output and remove any leading or trailing whitespace
-           
+            captured = capfd.readouterr()
+            printed_output = captured.out.strip()
+            print(printed_output)
 
-            assert results.tcc_marker == expected_result
-       
+            assert results.tcc_marker == expected_result, f"Test {test_id} failed: Unexpected result"
+        except Exception as e:
+            pytest.fail(EXCEPTION_FAIL_MESSAGE.format(test_id=test_id, exception_type=type(e).__name__,
+                                                      exception_msg=str(e)))
