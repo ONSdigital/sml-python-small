@@ -18,8 +18,11 @@ class TccMarker(Enum):
 
 
 class Component_list:
-    original_value: Optional[float]
-    final_value: Optional[float] = None
+    def __init__(self, original_value: Optional[float], final_value: Optional[float] = None):
+        self.original_value = original_value
+        self.final_value = final_value
+
+
 
 
 @dataclass(frozen=True)
