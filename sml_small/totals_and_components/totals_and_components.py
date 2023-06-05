@@ -585,9 +585,11 @@ def totals_and_components(
         if absolute_difference == 0:	     
             tcc_marker = TccMarker.NO_CORRECTION.value
         if tcc_marker == TccMarker.METHOD_PROCEED.value:
-            thresholds = calculate_percent_threshold(
-                component_total, input_parameters[Input_Parameters.PERCENTAGE_DIFFERENCE_THRESHOLD.value]
-            )
+            thresholds = [0, 0]
+            if percentage_difference_threshold:
+                thresholds = calculate_percent_threshold(
+                    component_total, input_parameters[Input_Parameters.PERCENTAGE_DIFFERENCE_THRESHOLD.value]
+                )
             tcc_marker = determine_error_detection(input_parameters[Input_Parameters.ABSOLUTE_DIFFERENCE_THRESHOLD.value],
                                                    input_parameters[Input_Parameters.PERCENTAGE_DIFFERENCE_THRESHOLD.value],
                                                    absolute_difference,
