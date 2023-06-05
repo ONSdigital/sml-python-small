@@ -35,33 +35,31 @@ class TestValidateInput:
                 "Test 1: Correct values test",
             ),
             (
-                "A",
-                "202312",
-                100.0,
-                [1, 2, 3, 4],
-                102.0,
-                103.0,
-                "202312",
-                104.0,
-                105.0,
-                None,
-                (100.0, [1, 2, 3, 4], 103.0, 104.0, 105.0, None),
-                "Test 2: None value for percentage difference threshold",
+                    "A",
+                    "202312",
+                    100.0,
+                    [1, 2, 3, 4],
+                    102.0,
+                    103.0, "202312",
+                    104.0,
+                    105.0,
+                    None,
+                    (100.0, [1, 2, 3, 4], 103.0, 104.0, 105.0, None),
+                    "Test 2: None value for percentage difference threshold",
             ),
             (
-                "A",
-                "202312",
-                100.0,
-                [1, 2, 3, 4],
-                102.0,
-                103.0,
-                "202312",
-                104.0,
-                None,
-                20,
-                (100.0, [1, 2, 3, 4], 103.0, 104.0, None, 20),
-                "Test 3: None value for absolute difference threshold",
-            ),(
+                    "A",
+                    "202312",
+                    100.0,
+                    [1, 2, 3, 4],
+                    102.0,
+                    103.0,
+                    "202312",
+                    104.0, None,
+                    20,
+                    (100.0, [1, 2, 3, 4], 103.0, 104.0, None, 20),
+                    "Test 3: None value for absolute difference threshold",
+            ), (
                 "A",
                 "202312",
                 100.0,
@@ -74,7 +72,7 @@ class TestValidateInput:
                 0.1,
                 ValueError,
                 "Test 4: Empty component list",
-            ),
+        ),
             (
                 "A",
                 "202312",
@@ -159,6 +157,20 @@ class TestValidateInput:
                 ValueError,
                 "Test 10: Invalid percentage difference threshold",
             ),
+            (
+                "A",
+                "202312",
+                100.0,
+                [1, 2, 3, 4],
+                102.0,
+                101.0,
+                "202312",
+                89.0,
+                None,   
+                None,
+                ValueError,
+                "Test 11: None value for percentage and absolute difference threshold",
+            )
         ],
     )
     def test_validate_input(
@@ -209,7 +221,8 @@ class TestValidateInput:
                     percentage_difference_threshold=percentage_difference_threshold,
                 )
                 print(exc_info.value)
-            assert exc_info.type == expected_result                                         
+            assert exc_info.type == expected_result
+
 
 class TestCheckPredictiveValue:
     @pytest.mark.parametrize(
@@ -297,8 +310,8 @@ class TestCheckSumComponentsPredictive:
                     Component_list(original_value=2.0, final_value=None),
                 ],
                 100.0,
-                67.8,
-                "Test 2: Component Sum Does NOT Match Predictive",
+                67.8, # This is the returned stored absolute_difference value
+                "Test 2: Component Sum Does NOT Match Predictive and returns absolute_difference",
             ),
         ],
     )
@@ -411,18 +424,26 @@ class TestCheckPercentageDifferenceThreshold:
 
 class TestErrorCorrection:
     @pytest.mark.parametrize(
-        "amend_total, components_sum, original_components, predictive, expected_result, test_id",
+        "amend_total, components_sum, original_components, predictive, expected_total, expected_components,\
+        expected_tcc_marker, test_id",
         [
-            (True, 100.0, [Component_list(10.0, None)] * 10, 82.0, True, "Test 1: Amend total"),
-            (False, 100.0, [Component_list(10.0, None)] * 10, 82.0, False, "Test 2: Amend components"),
+            (True, 100.0, [Component_list(10.0, None)] * 10, 100.0, 100.0, [10.0] * 10, 'T',
+             "Test 1: Amend total"),
+            (False, 82.0, [Component_list(8.2, None)] * 10, 100.0, 100.0, [10.0] * 10, 'C',
+             "Test 2: Amend components"),
         ],
     )
     def test_error_correction(
-            self, amend_total, components_sum, original_components, predictive, expected_result, test_id
+            self, amend_total, components_sum, original_components, predictive, expected_total,
+            expected_components, expected_tcc_marker, test_id
     ):
         try:
             result = error_correction(amend_total, components_sum, original_components, predictive)
-            assert result == expected_result, f"{test_id} - Unexpected result"
+            assert result[0] == expected_total, f"{test_id} - Unexpected result, Incorrect Total"
+            for index, component in enumerate(result[1]):
+                assert component.final_value == expected_components[index], \
+                    f"{test_id} - Unexpected result, Incorrect Components"
+            assert result[2] == expected_tcc_marker, f"{test_id} - Unexpected result, Incorrect tcc_marker"
 
         except Exception as e:
             pytest.fail(EXCEPTION_FAIL_MESSAGE.format(test_id=test_id, exception_type=type(e).__name__,
@@ -434,12 +455,16 @@ class TestCorrectTotal:
         "components_sum, original_components, expected_result, test_id",
         [
             (100.0, [Component_list(10.0, None)] * 10, 100.0, "Test 1: Final total is sum of received components"),
+            (30.0, [Component_list(10.0, None)] * 10, 30.0, "Test 2: Final total is not sum of received components")
         ],
     )
     def test_correct_total(self, components_sum, original_components, expected_result, test_id):
         try:
-            correct_total(components_sum=components_sum, original_components=original_components)
-            assert components_sum == expected_result, f"Test {test_id} failed: Unexpected result"
+            output = correct_total(components_sum=components_sum, original_components=original_components)
+            assert output[0] == expected_result, f"Test {test_id} failed: Unexpected result"
+            for component in output[1]:
+                assert component.original_value == component.final_value, f"Test {test_id} failed: Final Component " \
+                                                                          f"outputs dont match"
         except Exception as e:
             pytest.fail(EXCEPTION_FAIL_MESSAGE.format(test_id=test_id, exception_type=type(e).__name__,
                                                       exception_msg=str(e)))
@@ -447,17 +472,27 @@ class TestCorrectTotal:
 
 class TestCorrectComponents:
     @pytest.mark.parametrize(
-        "components_sum, original_components, predictive, expected_result, test_id",
+        "components_sum, original_components, predictive, expected_total, expected_component, test_id",
         [
-            (90.0, [Component_list(9.0, None)] * 10, 100.0, 100.0, "Test 1: Component sum matches total"),
+            (90.0, [Component_list(9.0, None)] * 10, 100.0, 100.0, [10.0] * 10, "Test 1: Component = 90, "
+                                                                                "predictive = 100"),
+            (130.0, [Component_list(75.0, None), Component_list(25.0, None), Component_list(30.0, None)],
+             200.0, 200.0, [115.38, 38.46, 46.15], "Test 2: Component sum = 130, Total = 200"),
+            (100.0, [Component_list(10.0, None)] * 10, 0, 0, [0.0] * 10, "Test 3: Component = 100, "
+                                                                         "predictive = 0"),
         ])
-    def test_correct_components(self, components_sum, original_components, predictive, expected_result, test_id):
+    def test_correct_components(self, components_sum, original_components, predictive, expected_total,
+                                expected_component, test_id):
         try:
             result = correct_components(components_sum=components_sum,
                                         original_components=original_components,
                                         predictive=predictive)
 
-            assert result == expected_result, f"Test {test_id} failed: Unexpected result"
+            assert result[0] == expected_total, f"Test {test_id} failed: Unexpected result"
+            for index, component in enumerate(result[1]):
+                # Rounding to 2 decimal places for testing purposes
+                value = round(component.final_value, 2)
+                assert value == expected_component[index], f"Test {test_id} failed: Unexpected result"
         except Exception as e:
             pytest.fail(EXCEPTION_FAIL_MESSAGE.format(test_id=test_id, exception_type=type(e).__name__,
                                                       exception_msg=str(e)))
