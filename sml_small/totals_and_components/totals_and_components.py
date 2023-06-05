@@ -214,7 +214,7 @@ def check_predictive_value(
     :return Tcc_Marker: Returned Tcc_Marker if all values are None
     :rtype Tcc_Marker: None | str
     """
-    tcc_marker = None
+    tcc_marker = TccMarker.METHOD_PROCEED.value
     if predictive is None:
         if auxiliary is None:
             tcc_marker = TccMarker.STOP.value
@@ -237,7 +237,6 @@ def check_zero_errors(predictive: float, components_sum: float) -> None | str:
     :return Tcc_Marker: Returned Tcc_Marker if zero error is triggered
     :rtype Tcc_Marker: None | str
     """
-    tcc_marker = None
     if predictive > 0 and components_sum == 0:
         tcc_marker = TccMarker.STOP.value
     else:

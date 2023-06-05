@@ -227,11 +227,11 @@ class TestCheckPredictiveValue:
     @pytest.mark.parametrize(
         "predictive, auxiliary, expected_result, test_id",
         [
-            (100.0, None, (100.0, None), "Test 1: Predictive Only"),
-            (None, 50.0, (50.0, None), "Test 2: Auxiliary Only"),
+            (100.0, None, (100.0, 'P'), "Test 1: Predictive Only"),
+            (None, 50.0, (50.0, 'P'), "Test 2: Auxiliary Only"),
             (None, None, (None, 'S'), "Test 3: No Inputs"),
-            (150.0, 50.0, (150.0, None), "Test 4: All Inputs"),
-            (0, 0, (0, None), "Test 5: All 0")
+            (150.0, 50.0, (150.0, 'P'), "Test 4: All Inputs"),
+            (0, 0, (0, 'P'), "Test 5: All 0")
         ],
     )
     def test_check_predictive_value(self, predictive, auxiliary, expected_result, test_id):
@@ -247,11 +247,11 @@ class TestCheckZeroErrors:
     @pytest.mark.parametrize(
         "test_components, predictive, expected_result, test_id",
         [
-            ([], 100.0, None, "Test 1: 12 RandomComponents, predictive positive"),
+            ([], 100.0, 'P', "Test 1: 12 RandomComponents, predictive positive"),
             ([Component_list(original_value=0, final_value=None), Component_list(original_value=0, final_value=None)],
              150.0, 'S', "Test 2: Components 0, predictive positive"),
             ([Component_list(original_value=5, final_value=None), Component_list(original_value=32, final_value=None)],
-             0, None, "Test 3: Predictive 0, predictive positive")
+             0, 'P', "Test 3: Predictive 0, predictive positive")
         ],
     )
     def test_check_zero_errors(self, test_components, predictive, expected_result, test_id):
