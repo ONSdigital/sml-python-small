@@ -21,34 +21,144 @@ class TestValidateInput:
         "percentage_difference_threshold, expected_result, test_id",
         [
             (
-                    "A",
-                    "202312",
-                    100.0,
-                    [],
-                    True,
-                    100.0,
-                    "202312",
-                    None,
-                    20,
-                    0.1,
-                    True,
-                    "Test 1: Empty component list",
+                "A",
+                "202312",
+                100,
+                [1, 2, 3, 4],
+                101.0,
+                102.0,
+                "202312",
+                300.0,
+                20,
+                0.1,
+                (100, [1, 2, 3, 4], 102.0, 300.0, 20, 0.1),
+                "Test 1: Correct values test",
             ),
             (
-                    "A",
-                    "202312",
-                    None,
-                    [],
-                    True,
-                    100.0,
-                    "202312",
-                    None,
-                    20,
-                    0.1,
-                    True,
-                    "Test 2: Invalid Total",
+                "A",
+                "202312",
+                100.0,
+                [1, 2, 3, 4],
+                102.0,
+                103.0,
+                "202312",
+                104.0,
+                105.0,
+                None,
+                (100.0, [1, 2, 3, 4], 103.0, 104.0, 105.0, None),
+                "Test 2: None value for percentage difference threshold",
             ),
-            # Add more test cases here
+            (
+                "A",
+                "202312",
+                100.0,
+                [1, 2, 3, 4],
+                102.0,
+                103.0,
+                "202312",
+                104.0,
+                None,
+                20,
+                (100.0, [1, 2, 3, 4], 103.0, 104.0, None, 20),
+                "Test 3: None value for absolute difference threshold",
+            ),(
+                "A",
+                "202312",
+                100.0,
+                [],
+                101.0,
+                102.0,
+                "202312",
+                103.0,
+                20,
+                0.1,
+                ValueError,
+                "Test 4: Empty component list",
+            ),
+            (
+                "A",
+                "202312",
+                100.0,
+                [None,2 ,3, 4],
+                101.0,
+                102.0,
+                "202312",
+                103.0,
+                20,
+                0.1,
+                ValueError,
+                "Test 5: None in component list",
+            ),
+            (
+                "A",
+                "202312",
+                "String",
+                [1, 2, 3, 4],
+                102.0,
+                103.0,
+                "202312",
+                104.0,
+                20,
+                0.1,
+                ValueError,
+                "Test 6: Invalid Total",
+            ),
+            (
+                "A",
+                "202312",
+                100.0,
+                [1, 2, 3, 4],
+                101.0,
+                "String",
+                "202312",
+                102.0,
+                20,
+                0.1,
+                ValueError,
+                "Test 7: Invalid predictive test",
+            ),
+            (
+                "A",
+                "202312",
+                100.0,
+                [1, 2, 3, 4],
+                101.0,
+                102.0,
+                "202312",
+                "String",
+                20,
+                0.1,
+                ValueError,
+                "Test 8: Invalid auxiliary",
+            ),
+            (
+                "A",
+                "202312",
+                100.0,
+                [1, 2, 3, 4],
+                102.0,
+                103.0,
+                "202312",
+                104.0,
+                {20},
+                0.1,
+                ValueError,
+                "Test 9: Invalid absolute difference threshold",
+            ),
+            (
+                "A",
+                "202312",
+                100.0,
+                [1, 2, 3, 4],
+                102.0,
+                103.0,
+                "202312",
+                104.0,
+                20,
+                {2},
+                ValueError,
+                "Test 10: Invalid percentage difference threshold",
+            ),
         ],
     )
     def test_validate_input(
@@ -66,24 +176,40 @@ class TestValidateInput:
             expected_result,
             test_id
     ):
-        try:
-            result = validate_input(
-                identifier=identifier,
-                period=period,
-                total=total,
-                components=components,
-                amend_total=amend_total,
-                predictive=predictive,
-                predictive_period=predictive_period,
-                auxiliary=auxiliary,
-                absolute_difference_threshold=absolute_difference_threshold,
-                percentage_difference_threshold=percentage_difference_threshold,
-            )
-            assert result == expected_result
-        except Exception as e:
-            pytest.fail(EXCEPTION_FAIL_MESSAGE.format(test_id=test_id, exception_type=type(e).__name__,
-                                                      exception_msg=str(e)))
-
+        if isinstance(expected_result, tuple):
+            try:
+                result = validate_input(
+                    identifier=identifier,
+                    period=period,
+                    total=total,
+                    components=components,
+                    amend_total=amend_total,
+                    predictive=predictive,
+                    predictive_period=predictive_period,
+                    auxiliary=auxiliary,
+                    absolute_difference_threshold=absolute_difference_threshold,
+                    percentage_difference_threshold=percentage_difference_threshold,
+                )
+                assert result == expected_result
+            except Exception as e:
+                pytest.fail(EXCEPTION_FAIL_MESSAGE.format(test_id=test_id, exception_type=type(e).__name__,
+                                                          exception_msg=str(e)))
+        else:
+            with pytest.raises(expected_result) as exc_info:
+                validate_input(
+                    identifier=identifier,
+                    period=period,
+                    total=total,
+                    components=components,
+                    amend_total=amend_total,
+                    predictive=predictive,
+                    predictive_period=predictive_period,
+                    auxiliary=auxiliary,
+                    absolute_difference_threshold=absolute_difference_threshold,
+                    percentage_difference_threshold=percentage_difference_threshold,
+                )
+                print(exc_info.value)
+            assert exc_info.type == expected_result                                         
 
 class TestCheckPredictiveValue:
     @pytest.mark.parametrize(
@@ -137,42 +263,42 @@ class TestCheckSumComponentsPredictive:
         "test_components, predictive, expected_result, test_id",
         [
             (
-                    [
-                        Component_list(original_value=3.5, final_value=None),
-                        Component_list(original_value=6.5, final_value=None),
-                        Component_list(original_value=8.0, final_value=None),
-                        Component_list(original_value=2.0, final_value=None),
-                        Component_list(original_value=4.5, final_value=None),
-                        Component_list(original_value=5.5, final_value=None),
-                        Component_list(original_value=2.8, final_value=None),
-                        Component_list(original_value=7.2, final_value=None),
-                        Component_list(original_value=1.0, final_value=None),
-                        Component_list(original_value=9.0, final_value=None),
-                        Component_list(original_value=0.3, final_value=None),
-                        Component_list(original_value=9.7, final_value=None),
-                    ],
-                    60.0,
-                    True,
-                    "Test 1: Component Sum Matches Predictive",
+                [
+                    Component_list(original_value=3.5, final_value=None),
+                    Component_list(original_value=6.5, final_value=None),
+                    Component_list(original_value=8.0, final_value=None),
+                    Component_list(original_value=2.0, final_value=None),
+                    Component_list(original_value=4.5, final_value=None),
+                    Component_list(original_value=5.5, final_value=None),
+                    Component_list(original_value=2.8, final_value=None),
+                    Component_list(original_value=7.2, final_value=None),
+                    Component_list(original_value=1.0, final_value=None),
+                    Component_list(original_value=9.0, final_value=None),
+                    Component_list(original_value=0.3, final_value=None),
+                    Component_list(original_value=9.7, final_value=None),
+                ],
+                60.0,
+                0,
+                "Test 1: Component Sum Matches Predictive",
             ),
             (
-                    [
-                        Component_list(original_value=3.2, final_value=None),
-                        Component_list(original_value=5.1, final_value=None),
-                        Component_list(original_value=2.4, final_value=None),
-                        Component_list(original_value=1.5, final_value=None),
-                        Component_list(original_value=0.8, final_value=None),
-                        Component_list(original_value=4.6, final_value=None),
-                        Component_list(original_value=2.7, final_value=None),
-                        Component_list(original_value=3.9, final_value=None),
-                        Component_list(original_value=1.2, final_value=None),
-                        Component_list(original_value=0.5, final_value=None),
-                        Component_list(original_value=4.3, final_value=None),
-                        Component_list(original_value=2.0, final_value=None),
-                    ],
-                    100.0,
-                    False,
-                    "Test 2: Component Sum Does NOT Match Predictive",
+                [
+                    Component_list(original_value=3.2, final_value=None),
+                    Component_list(original_value=5.1, final_value=None),
+                    Component_list(original_value=2.4, final_value=None),
+                    Component_list(original_value=1.5, final_value=None),
+                    Component_list(original_value=0.8, final_value=None),
+                    Component_list(original_value=4.6, final_value=None),
+                    Component_list(original_value=2.7, final_value=None),
+                    Component_list(original_value=3.9, final_value=None),
+                    Component_list(original_value=1.2, final_value=None),
+                    Component_list(original_value=0.5, final_value=None),
+                    Component_list(original_value=4.3, final_value=None),
+                    Component_list(original_value=2.0, final_value=None),
+                ],
+                100.0,
+                67.8,
+                "Test 2: Component Sum Does NOT Match Predictive",
             ),
         ],
     )
@@ -180,13 +306,11 @@ class TestCheckSumComponentsPredictive:
             self, test_components, predictive, expected_result, test_id
     ):
         try:
-
             components_sum = sum_components(test_components)
-            check_sum_components_predictive(
+            absolute_difference = check_sum_components_predictive(
                 predictive=predictive, components_sum=components_sum
             )
-            assert expected_result
-
+            assert absolute_difference == expected_result
         except Exception as e:
             pytest.fail(EXCEPTION_FAIL_MESSAGE.format(test_id=test_id, exception_type=type(e).__name__,
                                                       exception_msg=str(e)))
@@ -344,8 +468,16 @@ class TestTotalsAndComponents:
         "identifier, period, total, components, amend_total, predictive, predictive_period, auxiliary,"
         "absolute_difference_threshold, percentage_difference_threshold, expected_result, test_id",
         [
-            ("A", "202312", 100.0, [Component_list(random.uniform(0, 12), None) for _ in range(12)], True, 100.0,
-             "202312", None, 20, 0.1, "T", "Test 1: TCC Marker T"),
+            ("A", "202312", 11, [0, 0, 0, 0], True, 11,
+             "202312", None, 11, None, "S", "Test 1: TCC Marker S (Predictive stage 2 - Stop output)"),
+            ("B", "202312", 1625, [632, 732, 99, 162], True, 1625,
+             "202312", None, 11, None, "N", "Test 3: TCC Marker N (Check sum and predictive value stage 4 - No correction)"),
+            ("C", "202312", 1964, [632, 732, 99, 162], True, 1964,
+             "202312", None, 25, 0.1, "M", "Test 4: TCC Marker M (Determine error detection method stage 5 - Manual output required )"),
+            ("D", "202312", 306, [240, 0, 30, 10], True, 306,
+             "202312", None, 26, 0.1, "T", "Test 5: TCC Marker T (Error correction stage 6 - Total corrected)"),
+            ("E", "202312", 90, [90, 0, 4, 6], False, 90,
+             "202312", None, None, 0.1, "C", "Test 6: TCC Marker C (Components correction stage 6 - Total corrected)"),
         ])
     def test_totals_and_components(self, capfd, identifier, period, total, components, amend_total, predictive,
                                    predictive_period, auxiliary, absolute_difference_threshold,
