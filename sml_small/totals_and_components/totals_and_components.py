@@ -127,8 +127,8 @@ def validate_input(
         raise ValueError("The components are not populated")
     if components:
         for x in components:
-            validate_number(f"component={x}", x)
-            float(x)
+            validate_number(f"component={x.original_value}", x.original_value)
+            float(x.original_value)
     if predictive:
         validate_number("predictive", predictive)
         float(predictive)
@@ -594,16 +594,20 @@ def totals_and_components(
                                                    predictive,
                                                    thresholds)
             if tcc_marker == TccMarker.METHOD_PROCEED.value:
-                error_correction_params = error_correction(amend_total=amend_total, components_sum=component_total, original_components=input_parameters[Input_Parameters.COMPONENTS.value], predictive=predictive)
+                error_correction_params = \
+                    error_correction(amend_total=amend_total, components_sum=component_total,
+                                     original_components=input_parameters[Input_Parameters.COMPONENTS.value],
+                                     predictive=predictive)
+
                 output: Totals_and_Components_Output = Totals_and_Components_Output(
                     identifier=identifier,
                     period=period,
                     absolute_difference=absolute_difference,
                     low_percent_threshold=thresholds[Index.LOW_THRESHOLD.value],
                     high_percent_threshold=thresholds[Index.HIGH_THRESHOLD.value],
-                    final_total=error_correction_params.final_total,
-                    final_components=error_correction_params.components,
-                    tcc_marker=error_correction_params.tcc_marker,
+                    final_total=error_correction_params[0],
+                    final_components=error_correction_params[1],
+                    tcc_marker=error_correction_params[2],
                 )
             
             else:
