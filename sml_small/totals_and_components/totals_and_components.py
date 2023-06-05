@@ -430,7 +430,8 @@ def correct_components(
 ) -> tuple[float, list[Component_list], str]:
     """
     Function to correct the components values
-    Calc components absed on original value passed in (clean up)
+    Calculates each component value based on the original value so
+    values are weighted instead of normalised
 
     :param components_sum: Sum of original values of components list
     :type components_sum: float
