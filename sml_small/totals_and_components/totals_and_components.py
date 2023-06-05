@@ -44,6 +44,7 @@ class Totals_and_Components_Output:
     # predictive value. If corrected the components are scaled proportionally
     # based on the input values
     tcc_marker: str  # Indicates what correction (if any) was necessary. T (totals corrected), C (components corrected),
+
     # N (no correction required), M (manual correction required), S (method stopped due to lack of data or zero values)
 
     def print_output_table(self):
@@ -72,22 +73,22 @@ def print_input_table(**kwargs):
 
 
 def validate_input(
-    identifier: Optional[str],
-    period: Optional[str],
-    total: float,
-    components: List[Component_list],
-    amend_total: bool,
-    predictive: Optional[float],
-    predictive_period: Optional[str],
-    auxiliary: Optional[float],
-    absolute_difference_threshold: Optional[float],
-    percentage_difference_threshold: Optional[float],
+        identifier: Optional[str],
+        period: Optional[str],
+        total: float,
+        components: List[Component_list],
+        amend_total: bool,
+        predictive: Optional[float],
+        predictive_period: Optional[str],
+        auxiliary: Optional[float],
+        absolute_difference_threshold: Optional[float],
+        percentage_difference_threshold: Optional[float],
 ) -> bool:
     raise NotImplementedError(f"{validate_input.__name__}() not implemented yet")
 
 
 def check_predictive_value(
-    predictive: Optional[float], auxiliary: Optional[float]
+        predictive: Optional[float], auxiliary: Optional[float]
 ) -> tuple[float | None, str | None]:
     """
     Checks if predictive and auxiliary values are input, when predictive is None and auxiliary
@@ -142,11 +143,11 @@ def check_sum_components_predictive(predictive: float, components_sum: float) ->
 
 
 def determine_error_detection(
-    absolute_difference_threshold: Optional[float],
-    percentage_difference_threshold: Optional[float],
-    absolute_difference: float,
-    predictive: float,
-    thresholds: tuple,
+        absolute_difference_threshold: Optional[float],
+        percentage_difference_threshold: Optional[float],
+        absolute_difference: float,
+        predictive: float,
+        thresholds: tuple,
 ) -> str:
     """
     Determines and calls the relevant error detection methods to be applied to the input
@@ -180,8 +181,8 @@ def determine_error_detection(
             absolute_difference_threshold, absolute_difference
         )
     if (
-        percentage_difference_threshold is not None
-        and error_detection_satisfiable is False
+            percentage_difference_threshold is not None
+            and error_detection_satisfiable is False
     ):
         error_detection_satisfiable = check_percentage_difference_threshold(
             predictive, thresholds
@@ -194,7 +195,7 @@ def determine_error_detection(
 
 
 def check_absolute_difference_threshold(
-    absolute_difference_threshold: float, absolute_difference: float
+        absolute_difference_threshold: float, absolute_difference: float
 ) -> bool:
     """
     Function to check the absolute_difference against the absolute_difference_threshold
@@ -234,49 +235,70 @@ def check_percentage_difference_threshold(predictive: float, thresholds: tuple) 
     """
     satisfied = False
     if (
-        thresholds[Index.LOW_THRESHOLD.value]
-        <= predictive
-        <= thresholds[Index.HIGH_THRESHOLD.value]
+            thresholds[Index.LOW_THRESHOLD.value]
+            <= predictive
+            <= thresholds[Index.HIGH_THRESHOLD.value]
     ):
         satisfied = True
     return satisfied
 
 
 def error_correction(
-    amend_total: bool,
-    components_sum: float,
-    original_components: List[Component_list],
-    predictive: float,
+        amend_total: bool,
+        components_sum: float,
+        original_components: List[Component_list],
+        predictive: float,
 ) -> bool:
     raise NotImplementedError(f"{error_correction.__name__}() not implemented yet")
 
 
 def correct_total(
-    components_sum: float, original_components: List[Component_list]
+        components_sum: float, original_components: List[Component_list]
 ) -> bool:
     raise NotImplementedError(f"{correct_total.__name__}() not implemented yet")
 
 
 def correct_components(
-    components_sum: float, original_components: List[Component_list], predictive: float
+        components_sum: float, original_components: List[Component_list], predictive: float
 ) -> bool:
     raise NotImplementedError(f"{correct_components.__name__}() not implemented yet")
 
 
 def sum_components(components: list[Component_list]) -> float:
+    """
+
+    :param components: List of components to be summed together.
+    :type components liat(components_list)
+    :return total_sum: Final total of summed components
+    :rtype total_sum: float
+    """
     total_sum = 0.0
 
     for component in components:
         total_sum += component.original_value
 
-    print(total_sum)
-
     return total_sum
 
 
 def calculate_percent_threshold(
-    sum_of_components: float, percentage_threshold: float
+        sum_of_components: float, percentage_threshold: float
 ) -> Tuple[float, float]:
+    """
+
+    :param sum_of_components: A sum of the original components list input to the method
+    :type sum_of_components: float
+    :param percentage_threshold: If the predictive total is within the specified percentage
+                                    of the sum of the components, the method will automatically
+                                    correct.
+    :type percentage_threshold: float
+    ...
+    :return low_percent_threshold: The lower threshold calculated from the sum of components
+                                    and percentage threshold
+    :rtype low_percent_threshold: float
+    :return high_percent_threshold: The upper threshold calculated from the sum of components
+                                     and percentage threshold
+    :rtype high_percent_threshold: float
+    """
     low_percent_threshold = sum_of_components - (sum_of_components / percentage_threshold)
     high_percent_threshold = sum_of_components + (sum_of_components / percentage_threshold)
 
@@ -284,20 +306,20 @@ def calculate_percent_threshold(
 
 
 def totals_and_components(
-    identifier: Optional[
-        str
-    ],  # unique identifier, e.g Business Reporting Unit SG-should this be optiional?
-    period: Optional[str],
-    total: float,
-    components: List[Component_list],
-    amend_total: bool,
-    predictive: Optional[float],
-    predictive_period: Optional[
-        str
-    ],  # not used in initial PoC always assume current period
-    auxiliary: Optional[float],
-    absolute_difference_threshold: Optional[float],
-    percentage_difference_threshold: Optional[float],
+        identifier: Optional[
+            str
+        ],  # unique identifier, e.g Business Reporting Unit SG-should this be optiional?
+        period: Optional[str],
+        total: float,
+        components: List[Component_list],
+        amend_total: bool,
+        predictive: Optional[float],
+        predictive_period: Optional[
+            str
+        ],  # not used in initial PoC always assume current period
+        auxiliary: Optional[float],
+        absolute_difference_threshold: Optional[float],
+        percentage_difference_threshold: Optional[float],
 ) -> Totals_and_Components_Output:
     """
      Calculates totals and components based on the given parameters.
@@ -366,9 +388,11 @@ def totals_and_components(
         absolute_difference = component_total - predictive
         tcc_marker = check_zero_errors(predictive, component_total)
         if tcc_marker == TccMarker.METHOD_PROCEED.value:
-            thresholds = calculate_percent_threshold(
-                component_total, percentage_difference_threshold
-            )
+            thresholds = None
+            if percentage_difference_threshold is not None:
+                thresholds = calculate_percent_threshold(
+                    component_total, percentage_difference_threshold
+                )
             tcc_marker = determine_error_detection(absolute_difference_threshold,
                                                    percentage_difference_threshold,
                                                    absolute_difference,
