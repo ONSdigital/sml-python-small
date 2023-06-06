@@ -15,6 +15,11 @@ class Input_Parameters(Enum):
     ABSOLUTE_DIFFERENCE_THRESHOLD = 4
     PERCENTAGE_DIFFERENCE_THRESHOLD = 5
 
+class Error_Correction(Enum):
+    TOTAL = 0
+    COMPONENTS = 1
+    TCC_MARKER = 2
+
 class TccMarker(Enum):
     STOP = "S"
     MANUAL = "M"
@@ -607,9 +612,9 @@ def totals_and_components(
                     absolute_difference=absolute_difference,
                     low_percent_threshold=thresholds[Index.LOW_THRESHOLD.value],
                     high_percent_threshold=thresholds[Index.HIGH_THRESHOLD.value],
-                    final_total=error_correction_params[0],
-                    final_components=error_correction_params[1],
-                    tcc_marker=error_correction_params[2],
+                    final_total=error_correction_params[Error_Correction.TOTAL.value],
+                    final_components=error_correction_params[Error_Correction.COMPONENTS.value],
+                    tcc_marker=error_correction_params[Error_Correction.TCC_MARKER.value],
                 )
             
             else:
@@ -628,8 +633,8 @@ def totals_and_components(
             identifier=identifier,
             period=period,
             absolute_difference=absolute_difference,
-            low_percent_threshold=thresholds[Index.LOW_THRESHOLD.value],
-            high_percent_threshold=thresholds[Index.HIGH_THRESHOLD.value],
+            low_percent_threshold=None,
+            high_percent_threshold=None,
             final_total=predictive,
             final_components=input_parameters[Input_Parameters.COMPONENTS.value],
             tcc_marker=tcc_marker,
@@ -638,9 +643,9 @@ def totals_and_components(
         output: Totals_and_Components_Output = Totals_and_Components_Output(
         identifier=identifier,
         period=period,
-        absolute_difference=absolute_difference,
-        low_percent_threshold=thresholds[Index.LOW_THRESHOLD.value],
-        high_percent_threshold=thresholds[Index.HIGH_THRESHOLD.value],
+        absolute_difference=None,
+        low_percent_threshold=None,
+        high_percent_threshold=None,
         final_total=predictive,
         final_components=input_parameters[Input_Parameters.COMPONENTS.value],
         tcc_marker=tcc_marker,
