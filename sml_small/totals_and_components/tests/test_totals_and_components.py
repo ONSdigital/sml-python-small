@@ -268,9 +268,6 @@ class TestValidateInput:
                     percentage_difference_threshold=percentage_difference_threshold,
                 )
                 assert result == expected_result
-
-
-
             except Exception as e:
                 pytest.fail(EXCEPTION_FAIL_MESSAGE.format(test_id=test_id, exception_type=type(e).__name__,
                                                           exception_msg=str(e)))
@@ -290,7 +287,6 @@ class TestValidateInput:
                 )
                 print(exc_info.value)
             assert exc_info.type == expected_result
-
 
 class TestCheckPredictiveValue:
     @pytest.mark.parametrize(
@@ -571,26 +567,29 @@ class TestTotalsAndComponents:
         "identifier, period, total, components, amend_total, predictive, predictive_period, auxiliary,"
         "absolute_difference_threshold, percentage_difference_threshold, expected_result, test_id",
         [
-            ("A", "202312", 11,
-             [Component_list(0, None), Component_list(0, None), Component_list(0, None), Component_list(0, None)], True,
-             11,
-             "202312", None, 11, None, "S", "Test 1: TCC Marker S (Predictive stage 2 - Stop output)"),
-            ("B", "202312", 1625, [Component_list(632, None), Component_list(732, None), Component_list(99, None),
+            ("A", "202312", 1625, [Component_list(632, None), Component_list(732, None), Component_list(99, None),
                                    Component_list(162, None)], True, 1625,
              "202312", None, 11, None, "N",
-             "Test 2: TCC Marker N (Check sum and predictive value stage 4 - No correction)"),
-            ("C", "202312", 1964, [Component_list(632, None), Component_list(732, None), Component_list(99, None),
-                                   Component_list(162, None)], True, 1964,
-             "202312", None, 1, None, "M",
-             "Test 3: TCC Marker M (Determine error detection method stage 5 - Manual output required )"),
-            ("D", "202312", 306,
-             [Component_list(240, None), Component_list(0, None), Component_list(30, None), Component_list(10, None)],
-             True, 306,
-             "202312", None, 26, 0.1, "T", "Test 4: TCC Marker T (Error correction stage 6 - Total corrected)"),
-            ("E", "202312", 90,
+             "TCC Marker N"),
+            ("B", "202312", 10817,
+            [Component_list(9201, None), Component_list(866, None), Component_list(632, None), Component_list(112, None)],
+            True, 10817, "202312", None, 11, None, "T", "TCC Marker T"),
+            ("C", "202312", 90,
              [Component_list(90, None), Component_list(0, None), Component_list(4, None), Component_list(6, None)],
              False, 90,
-             "202312", None, None, 0.1, "C", "Test 5: TCC Marker C (Components correction stage 6 - Total corrected)"),
+             "202312", None, None, 0.1, "C", "TCC Marker C"),
+            ("D", "202312", 1964, [Component_list(632, None), Component_list(732, None), Component_list(99, None),
+                                   Component_list(162, None)], True, 1964,
+             "202312", None, 1, None, "M",
+             "TCC Marker M "),
+            ("E", "202312", 306,
+             [Component_list(240, None), Component_list(0, None), Component_list(30, None), Component_list(10, None)],
+             True, 306,
+             "202312", None, 26, 0.1, "T", "TCC Marker T"),
+            ("F", "202312", 11,
+             [Component_list(0, None), Component_list(0, None), Component_list(0, None), Component_list(0, None)], True,
+             11,
+             "202312", None, 11, None, "S", "TCC Marker S"),
         ])
     def test_totals_and_components(self, capfd, identifier, period, total, components, amend_total, predictive,
                                    predictive_period, auxiliary, absolute_difference_threshold,
@@ -612,7 +611,7 @@ class TestTotalsAndComponents:
             printed_output = captured.out.strip()
             print(printed_output)
 
-            assert results == expected_result, f"Test {test_id} failed: Unexpected result"
+            assert results.tcc_marker == expected_result, f"Test {test_id} failed: Unexpected result"
         except Exception as e:
             pytest.fail(EXCEPTION_FAIL_MESSAGE.format(test_id=test_id, exception_type=type(e).__name__,
                                                       exception_msg=str(e)))
