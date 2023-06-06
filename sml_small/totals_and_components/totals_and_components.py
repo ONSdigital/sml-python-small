@@ -107,7 +107,7 @@ def validate_input(
         auxiliary: Optional[float],
         absolute_difference_threshold: Optional[float],
         percentage_difference_threshold: Optional[float]
-) -> tuple[float | None, list[Component_list], float | None, float | None, float | None, float | None, float | None]:
+) -> tuple[float | None, List[Component_list], float | None, float | None, float | None, float | None, float | None]:
     """
     validate_input is to ensure that the dataset input record has all the values 
     we need in the correct format. To do this we check to see if the data exists and is a number. If the data does not exist and is not a number we throw ValueError's as appropriate.
@@ -134,7 +134,7 @@ def validate_input(
     :type percentage_difference_threshold: Optional[float]
     :raises ValueError: ValueErrors are returned when data is missing or in the incorrect type/format.
     :return: The tuple is a returned list of values converted to floats (if possible).
-    :rtype: tuple[float | None, float | None, float | None, float | None, float | None, float | None, float | None]
+    :rtype: tuple[float | List[Component_list] | None, float | None, float | None, float | None, float | None, float | None]
     """
     if total:
         validate_number("total", total)
