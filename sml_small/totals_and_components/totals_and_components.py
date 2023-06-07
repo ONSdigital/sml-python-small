@@ -499,7 +499,7 @@ def sum_components(components: list[Component_list]) -> float:
 
 def calculate_percent_threshold(
     sum_of_components: float, percentage_threshold: float
-) -> Tuple[float, float]:
+) -> Tuple[float | None, float | None]:
     """
 
     :param sum_of_components: A sum of the original components list input to the method
@@ -516,13 +516,16 @@ def calculate_percent_threshold(
                                      and percentage threshold
     :rtype high_percent_threshold: float
     """
-    low_percent_threshold = (
-        abs(sum_of_components - (sum_of_components / percentage_threshold)) / 10
+    if percentage_threshold is None:
+       low_percent_threshold = None
+       high_percent_threshold = None
+    else: 
+        low_percent_threshold = (
+            abs(sum_of_components - (sum_of_components / percentage_threshold)) / 10
+        )
+        high_percent_threshold = (
+            abs(sum_of_components + (sum_of_components / percentage_threshold)) / 10
     )
-    high_percent_threshold = (
-        abs(sum_of_components + (sum_of_components / percentage_threshold)) / 10
-    )
-
     return low_percent_threshold, high_percent_threshold
 
 
@@ -637,17 +640,12 @@ def totals_and_components(
             if input_parameters[Input_Parameters.PREDICTIVE.value] == component_total:
                 tcc_marker = TccMarker.NO_CORRECTION.value
             if tcc_marker == TccMarker.METHOD_PROCEED.value:
-                if percentage_difference_threshold is None:
-                    thresholds = [None, None]
-                else:
-                    thresholds = [0, 0]
-                if percentage_difference_threshold:
-                    thresholds = calculate_percent_threshold(
-                        component_total,
-                        input_parameters[
-                            Input_Parameters.PERCENTAGE_DIFFERENCE_THRESHOLD.value
-                        ],
-                    )
+                thresholds = calculate_percent_threshold(
+                    component_total,
+                    input_parameters[
+                        Input_Parameters.PERCENTAGE_DIFFERENCE_THRESHOLD.value
+                    ],
+                )
                 tcc_marker, absolute_difference = determine_error_detection(
                     input_parameters[
                         Input_Parameters.ABSOLUTE_DIFFERENCE_THRESHOLD.value
