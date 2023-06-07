@@ -577,7 +577,7 @@ class TestTotalsAndComponents:
             ("C", "202312", 90,
              [Component_list(90, None), Component_list(0, None), Component_list(4, None), Component_list(6, None)],
              False, 90,
-             "202312", None, None, 0.1, (None, 90, 110, "C", 90, [Component_list(90, 81), Component_list(0, 0), Component_list(4, 3.6), Component_list(6, 5.3999999999999995)]), "TCC Marker C"),
+             "202312", None, None, 0.1, (None, 90, 110, "C", 90, [Component_list(90, 81), Component_list(0, 0), Component_list(4, 3.6), Component_list(6, 5.4)]), "TCC Marker C"),
             ("D", "202312", 1964, [Component_list(632, None), Component_list(732, None), Component_list(99, None),
                                    Component_list(162, None)], True, 1964,
              "202312", None, 1, 0.1, (339, 1462.5, 1787.5, "M", 1964, [Component_list(632, 632), Component_list(732, 732), Component_list(99, 99), Component_list(162, 162)]),
