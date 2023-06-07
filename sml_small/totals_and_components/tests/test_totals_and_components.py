@@ -398,14 +398,14 @@ class TestDetermineErrorDetection:
         "absolute_difference_threshold, percentage_difference_threshold, absolute_difference, predictive, thresholds,"
         "expected_result, test_id",
         [
-            (20, None, 10, None, (None, None), 'P', "Test 1: Absolute Difference Only - Satisfied"),
-            (5, None, 10, None, (None, None), 'M', "Test 2: Absolute Difference Only - NOT Satisfied"),
-            (None, 10, None, 15, (10, 20), 'P', "Test 3: Percentage Difference Only - Satisfied"),
-            (None, 10, None, 15, (16, 20), 'M', "Test 4: Percentage Difference Only - NOT Satisfied (lower)"),
-            (None, 10, None, 15, (10, 13), 'M', "Test 5: Percentage Difference Only - NOT Satisfied (upper)"),
-            (20, 10, 10, 15, (16, 20), 'P', "Test 6: Both Input - Absolute Difference Satisfied"),
-            (5, 10, 10, 15, (10, 20), 'P', "Test 7: Both Input - Percentage Difference Satisfied"),
-            (5, 10, 10, 15, (16, 20), 'M', "Test 8: Both Input - Neither Satisfied")
+            (20, None, 10, None, (None, None), ('P', 10), "Test 1: Absolute Difference Only - Satisfied"),
+            (5, None, 10, None, (None, None), ('M', 10), "Test 2: Absolute Difference Only - NOT Satisfied"),
+            (None, 10, None, 15, (10, 20), ('P', None), "Test 3: Percentage Difference Only - Satisfied"),
+            (None, 10, None, 15, (16, 20), ('M', None), "Test 4: Percentage Difference Only - NOT Satisfied (lower)"),
+            (None, 10, None, 15, (10, 13), ('M', None), "Test 5: Percentage Difference Only - NOT Satisfied (upper)"),
+            (20, 10, 10, 15, (16, 20), ('P', 10), "Test 6: Both Input - Absolute Difference Satisfied"),
+            (5, 10, 10, 15, (10, 20), ('P',10), "Test 7: Both Input - Percentage Difference Satisfied"),
+            (5, 10, 10, 15, (16, 20), ('M', 10), "Test 8: Both Input - Neither Satisfied")
         ]
     )
     def test_determine_error_detection(
@@ -569,27 +569,27 @@ class TestTotalsAndComponents:
         [
             ("A", "202312", 1625, [Component_list(632, None), Component_list(732, None), Component_list(99, None),
                                    Component_list(162, None)], True, 1625,
-             "202312", None, 11, None, "N",
+             "202312", None, 11, None, (0, None, None, "N", 1625, [Component_list(632, 632), Component_list(732, 732), Component_list(99, 99), Component_list(162, 162)]),
              "TCC Marker N"),
             ("B", "202312", 10817,
             [Component_list(9201, None), Component_list(866, None), Component_list(632, None), Component_list(112, None)],
-            True, 10817, "202312", None, 11, None, "T", "TCC Marker T"),
+            True, 10817, "202312", None, 11, None, (6, None, None, "T", 10811, [Component_list(9201, 9201), Component_list(866, 866), Component_list(632, 632), Component_list(112, 112)]), "TCC Marker T"),
             ("C", "202312", 90,
              [Component_list(90, None), Component_list(0, None), Component_list(4, None), Component_list(6, None)],
              False, 90,
-             "202312", None, None, 0.1, "C", "TCC Marker C"),
+             "202312", None, None, 0.1, (None, 90, 110, "C", 90, [Component_list(90, 81), Component_list(0, 0), Component_list(4, 3.6), Component_list(6, 5.4)]), "TCC Marker C"),
             ("D", "202312", 1964, [Component_list(632, None), Component_list(732, None), Component_list(99, None),
                                    Component_list(162, None)], True, 1964,
-             "202312", None, 1, None, "M",
+             "202312", None, 1, 0.1, (339, 1462.5, 1787.5, "M", 1964, [Component_list(632, 632), Component_list(732, 732), Component_list(99, 99), Component_list(162, 162)]),
              "TCC Marker M "),
             ("E", "202312", 306,
              [Component_list(240, None), Component_list(0, None), Component_list(30, None), Component_list(10, None)],
              True, 306,
-             "202312", None, 26, 0.1, "T", "TCC Marker T"),
+             "202312", None, 26, 0.1, (26, 252, 308, "T", 280, [Component_list(240, 240), Component_list(0, 0), Component_list(30, 30), Component_list(10, 10)]), "TCC Marker T"),
             ("F", "202312", 11,
              [Component_list(0, None), Component_list(0, None), Component_list(0, None), Component_list(0, None)], True,
              11,
-             "202312", None, 11, None, "S", "TCC Marker S"),
+             "202312", None, 11, None, (11, None, None, "S", 11, [Component_list(0, 0), Component_list(0, 0), Component_list(0, 0), Component_list(0, 0)]), "TCC Marker S"),
         ])
     def test_totals_and_components(self, capfd, identifier, period, total, components, amend_total, predictive,
                                    predictive_period, auxiliary, absolute_difference_threshold,
@@ -609,9 +609,10 @@ class TestTotalsAndComponents:
             # Capture the printed output and remove any leading or trailing whitespace
             captured = capfd.readouterr()
             printed_output = captured.out.strip()
-            print(printed_output)
+            print(results, printed_output)
+            final_results = (results.absolute_difference, results.low_percent_threshold, results.high_percent_threshold, results.tcc_marker, results.final_total, results.final_components)
 
-            assert results.tcc_marker == expected_result, f"Test {test_id} failed: Unexpected result"
+            assert final_results == expected_result, f"Test {test_id} failed: Unexpected result"
         except Exception as e:
             pytest.fail(EXCEPTION_FAIL_MESSAGE.format(test_id=test_id, exception_type=type(e).__name__,
                                                       exception_msg=str(e)))
