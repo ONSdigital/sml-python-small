@@ -1,5 +1,6 @@
 # In this python file, we are calling the T&C method and passing in the
-# test data to be processed by the T&C method and return the result
+# test data to be processed by the T&C method and return the result to
+# be displayed in a formatted table on command line
 
 from totals_and_components import totals_and_components, Component_list
 from tabulate import tabulate
@@ -28,16 +29,16 @@ test_data = [
     # 11,
     # None],
 
-    # ["C",
-    # "202301",
-    # 90,
-    # [Component_list(90, None), Component_list(0, None), Component_list(4, None), Component_list(6, None)],
-    # False,
-    # 90,
-    # "202301",
-    # None,
-    # None,
-    # 0.1],
+    ["C",
+    "202301",
+    90,
+    [Component_list(90, None), Component_list(0, None), Component_list(4, None), Component_list(6, None)],
+    False,
+    90,
+    "202301",
+    None,
+    None,
+    0.1],
 
     # ["D",
     # "202301",
@@ -61,16 +62,16 @@ test_data = [
     # 25,
     # 0.1],
 
-    ["F",
-    "202301",
-    11,
-    [Component_list(0, None), Component_list(0, None), Component_list(0, None), Component_list(0, None)],
-    True,
-    11,
-    "202301",
-    None,
-    11,
-    None],
+    # ["F",
+    # "202301",
+    # 11,
+    # [Component_list(0, None), Component_list(0, None), Component_list(0, None), Component_list(0, None)],
+    # True,
+    # 11,
+    # "202301",
+    # None,
+    # 11,
+    # None],
 
 
 ]
@@ -78,6 +79,7 @@ test_data = [
 def invoke_process():
     for data in test_data:
         # print("Test_data", *data)
+        # Pass in arguments manually for demo purposes
         result = totals_and_components(*data)
         format_result(result, data)
 
@@ -94,7 +96,7 @@ def format_result(result, original_data):
     new_result_comp = []
     for component in result.final_components:
             new_result_comp.append(component.final_value)  
-    # print("N", new_result_comp)
+    print("N", new_result_comp)
     
     # print(original_data)
     original_data_comp = original_data[3]
@@ -106,7 +108,7 @@ def format_result(result, original_data):
             unpack_original_data_comp.append(component.original_value)  
 
 
-    os.system("clear")
+    # os.system("clear")
 
     table_1 = [original_data]
     print("Original Input: ")
@@ -173,7 +175,6 @@ def format_result(result, original_data):
                         ]
                     )
         )
-
 
 
 invoke_process()
