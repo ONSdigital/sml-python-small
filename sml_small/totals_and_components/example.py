@@ -106,7 +106,7 @@ def format_result(result, original_data):
             unpack_original_data_comp.append(component.original_value)  
 
 
-    # os.system("clear")
+    os.system("clear")
 
     table_1 = [original_data]
     print("Original Input: ")
