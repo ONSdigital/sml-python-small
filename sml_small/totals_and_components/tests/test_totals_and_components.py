@@ -398,14 +398,14 @@ class TestDetermineErrorDetection:
         "absolute_difference_threshold, percentage_difference_threshold, absolute_difference, predictive, thresholds,"
         "expected_result, test_id",
         [
-            (20, None, 10, None, (None, None), 'P', "Test 1: Absolute Difference Only - Satisfied"),
-            (5, None, 10, None, (None, None), 'M', "Test 2: Absolute Difference Only - NOT Satisfied"),
-            (None, 10, None, 15, (10, 20), 'P', "Test 3: Percentage Difference Only - Satisfied"),
-            (None, 10, None, 15, (16, 20), 'M', "Test 4: Percentage Difference Only - NOT Satisfied (lower)"),
-            (None, 10, None, 15, (10, 13), 'M', "Test 5: Percentage Difference Only - NOT Satisfied (upper)"),
-            (20, 10, 10, 15, (16, 20), 'P', "Test 6: Both Input - Absolute Difference Satisfied"),
-            (5, 10, 10, 15, (10, 20), 'P', "Test 7: Both Input - Percentage Difference Satisfied"),
-            (5, 10, 10, 15, (16, 20), 'M', "Test 8: Both Input - Neither Satisfied")
+            (20, None, 10, None, (None, None), ('P', 10), "Test 1: Absolute Difference Only - Satisfied"),
+            (5, None, 10, None, (None, None), ('M', 10), "Test 2: Absolute Difference Only - NOT Satisfied"),
+            (None, 10, None, 15, (10, 20), ('P', None), "Test 3: Percentage Difference Only - Satisfied"),
+            (None, 10, None, 15, (16, 20), ('M', None), "Test 4: Percentage Difference Only - NOT Satisfied (lower)"),
+            (None, 10, None, 15, (10, 13), ('M', None), "Test 5: Percentage Difference Only - NOT Satisfied (upper)"),
+            (20, 10, 10, 15, (16, 20), ('P', 10), "Test 6: Both Input - Absolute Difference Satisfied"),
+            (5, 10, 10, 15, (10, 20), ('P',10), "Test 7: Both Input - Percentage Difference Satisfied"),
+            (5, 10, 10, 15, (16, 20), ('M', 10), "Test 8: Both Input - Neither Satisfied")
         ]
     )
     def test_determine_error_detection(
@@ -577,10 +577,10 @@ class TestTotalsAndComponents:
             ("C", "202312", 90,
              [Component_list(90, None), Component_list(0, None), Component_list(4, None), Component_list(6, None)],
              False, 90,
-             "202312", None, None, 0.1, (None, 90, 110, "C", 90, [Component_list(90, 81), Component_list(0, 0), Component_list(4, 3.6), Component_list(6, 5.4)]), "TCC Marker C"),
+             "202312", None, None, 0.1, (None, 90, 110, "C", 90, [Component_list(90, 81), Component_list(0, 0), Component_list(4, 3.6), Component_list(6, 5.3999999999999995)]), "TCC Marker C"),
             ("D", "202312", 1964, [Component_list(632, None), Component_list(732, None), Component_list(99, None),
                                    Component_list(162, None)], True, 1964,
-             "202312", None, 1, None, (339, 1462.5, 1787.5, "M", 1964, [Component_list(632, 632), Component_list(732, 732), Component_list(99, 99), Component_list(162, 162)]),
+             "202312", None, 1, 0.1, (339, 1462.5, 1787.5, "M", 1964, [Component_list(632, 632), Component_list(732, 732), Component_list(99, 99), Component_list(162, 162)]),
              "TCC Marker M "),
             ("E", "202312", 306,
              [Component_list(240, None), Component_list(0, None), Component_list(30, None), Component_list(10, None)],

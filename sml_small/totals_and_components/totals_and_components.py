@@ -289,7 +289,7 @@ def determine_error_detection(
     absolute_difference: float,
     predictive: float,
     thresholds: tuple,
-) -> str:
+) -> tuple[str, float | None]:
     """
     Determines and calls the relevant error detection methods to be applied to the input
 
@@ -322,6 +322,8 @@ def determine_error_detection(
         error_detection_satisfiable = check_absolute_difference_threshold(
             absolute_difference_threshold, absolute_difference
         )
+    elif absolute_difference_threshold is None:
+        absolute_difference = None
     if (
         percentage_difference_threshold is not None
         and error_detection_satisfiable is False
@@ -333,7 +335,7 @@ def determine_error_detection(
         tcc_marker = TccMarker.MANUAL.value
     else:
         tcc_marker = TccMarker.METHOD_PROCEED.value
-    return tcc_marker
+    return tcc_marker, absolute_difference
 
 
 def check_absolute_difference_threshold(
@@ -514,11 +516,11 @@ def calculate_percent_threshold(
                                      and percentage threshold
     :rtype high_percent_threshold: float
     """
-    low_percent_threshold = sum_of_components - (
-        sum_of_components / percentage_threshold
+    low_percent_threshold = (
+        abs(sum_of_components - (sum_of_components / percentage_threshold)) / 10
     )
-    high_percent_threshold = sum_of_components + (
-        sum_of_components / percentage_threshold
+    high_percent_threshold = (
+        abs(sum_of_components + (sum_of_components / percentage_threshold)) / 10
     )
 
     return low_percent_threshold, high_percent_threshold
@@ -623,6 +625,8 @@ def totals_and_components(
         )
 
         if tcc_marker == TccMarker.METHOD_PROCEED.value:
+            for x in components:
+                x.final_value = x.original_value
             component_total = sum_components(
                 components=input_parameters[Input_Parameters.COMPONENTS.value]
             )
@@ -630,10 +634,13 @@ def totals_and_components(
             absolute_difference = check_sum_components_predictive(
                 predictive, component_total
             )
-            if absolute_difference == 0:
+            if input_parameters[Input_Parameters.PREDICTIVE.value] == component_total:
                 tcc_marker = TccMarker.NO_CORRECTION.value
             if tcc_marker == TccMarker.METHOD_PROCEED.value:
-                thresholds = [0, 0]
+                if percentage_difference_threshold is None:
+                    thresholds = [None, None]
+                else:
+                    thresholds = [0, 0]
                 if percentage_difference_threshold:
                     thresholds = calculate_percent_threshold(
                         component_total,
@@ -641,7 +648,7 @@ def totals_and_components(
                             Input_Parameters.PERCENTAGE_DIFFERENCE_THRESHOLD.value
                         ],
                     )
-                tcc_marker = determine_error_detection(
+                tcc_marker, absolute_difference = determine_error_detection(
                     input_parameters[
                         Input_Parameters.ABSOLUTE_DIFFERENCE_THRESHOLD.value
                     ],
