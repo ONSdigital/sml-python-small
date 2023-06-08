@@ -206,7 +206,8 @@ def validate_number(tag: str, value) -> bool:
     :rtype: boolean
     """
     if not is_number(value):
-        raise ValueError(f"{tag} is missing or not a number")
+        if tag != 'predictive':
+            raise ValueError(f"{tag} is missing or not a number")
     return True
 
 
