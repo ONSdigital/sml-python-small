@@ -166,13 +166,15 @@ def format_result(result, original_data):
     print("Final Results Components: ")
     print("=========================")
     table_4 = [new_result_comp]
+    print("Table_4", table_4)
     print(tabulate(table_4, 
                    headers=[
                         "Final Comp 1",
                         "Final Comp 2",
                         "Final Comp 3",
                         "Final Comp 4"
-                        ]
+                        ],
+                        floatfmt=""
                     )
         )
 
