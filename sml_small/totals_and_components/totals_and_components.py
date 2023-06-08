@@ -121,7 +121,8 @@ def validate_input(
 ]:
     """
     validate_input is to ensure that the dataset input record has all the values
-    we need in the correct format. To do this we check to see if the data exists and is a number. If the data does not exist and is not a number we throw ValueError's as appropriate.
+    we need in the correct format. To do this we check to see if the data exists and is a number.
+    If the data does not exist and is not a number we throw ValueError's as appropriate.
 
     :param identifier: Any e.g., Business Reporting Unit
     :type identifier: Optional[str]
@@ -131,13 +132,16 @@ def validate_input(
     :type total: float
     :param components: Corresponding list of Total variable's components, numeric – nulls allowed
     :type components: List[Component_list]
-    :param amend_total: This decided whether Total Variable should be automatically corrected, Boolean. FALSE = correct components, TRUE = correct total
+    :param amend_total: This decided whether Total Variable should be automatically corrected,
+                        Boolean. FALSE = correct components, TRUE = correct total
     :type amend_total: bool
     :param predictive:A value used as a predictor for a contributor's target variable.
     :type predictive: Optional[float]
     :param predictive_period: The period containing predictive records; defined relative to the target period.
     :type predictive_period: Optional[str]
-    :param auxiliary: The variable used as a predictor for a contributor’s target variable, where the predictive value is not available (e.g., where the contributor was not sampled in the predictive period).
+    :param auxiliary: The variable used as a predictor for a contributor’s target variable,
+                      where the predictive value is not available
+                      (e.g., where the contributor was not sampled in the predictive period).
     :type auxiliary: Optional[float]
     :param absolute_difference_threshold: Is the predefined threshold for the absolute difference
     :type absolute_difference_threshold: Optional[float]
@@ -145,7 +149,8 @@ def validate_input(
     :type percentage_difference_threshold: Optional[float]
     :raises ValueError: ValueErrors are returned when data is missing or in the incorrect type/format.
     :return: The tuple is a returned list of values converted to floats (if possible).
-    :rtype: tuple[float | List[Component_list] | None, float | None, float | None, float | None, float | None, float | None]
+    :rtype: tuple[float |
+            List[Component_list] | None, float | None, float | None, float | None, float | None, float | None]
     """
     if total:
         validate_number("total", total)
@@ -517,15 +522,15 @@ def calculate_percent_threshold(
     :rtype high_percent_threshold: float
     """
     if percentage_threshold is None:
-       low_percent_threshold = None
-       high_percent_threshold = None
-    else: 
+        low_percent_threshold = None
+        high_percent_threshold = None
+    else:
         low_percent_threshold = (
             abs(sum_of_components - (sum_of_components / percentage_threshold)) / 10
         )
         high_percent_threshold = (
             abs(sum_of_components + (sum_of_components / percentage_threshold)) / 10
-    )
+        )
     return low_percent_threshold, high_percent_threshold
 
 
