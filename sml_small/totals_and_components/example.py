@@ -93,27 +93,28 @@ def format_result(result, original_data):
         result.final_total,
         result.tcc_marker,
         ]
-    new_result_comp = []
-    for component in result.final_components:
-            new_result_comp.append(component.final_value)  
-    print("N", new_result_comp)
     
-    # print(original_data)
+    print("Original data", original_data)
     original_data_comp = original_data[3]
     original_data.pop(3)
-    # print("O", original_data_comp)
+    print("Original data comp", original_data_comp)
+    print("Original data popped objects", original_data)
 
     unpack_original_data_comp = []
     for component in original_data_comp:
-            unpack_original_data_comp.append(component.original_value)  
+            unpack_original_data_comp.append(component.original_value)
+    print("Unpack original data comp", unpack_original_data_comp)
 
+    new_result_comp = []
+    for component in result.final_components:
+            new_result_comp.append(component.final_value)  
+    print("New result comp", new_result_comp)
 
-    # os.system("clear")
+    os.system("clear")
 
     table_1 = [original_data]
     print("Original Input: ")
     print("====================")
-    # print(f"Original data: {original_data}")
     print(tabulate(table_1, 
                    headers=[
                         "Identifier",
@@ -125,7 +126,8 @@ def format_result(result, original_data):
                         "Auxiliary Variable",
                         "Absolute Difference Threshold",
                         "Percentage Difference Threshold"
-                        ]
+                        ],
+                        floatfmt=""
                     )
         )
     
@@ -143,7 +145,8 @@ def format_result(result, original_data):
                         "High Percent Threshold",
                         "Final Total",
                         "TCC Marker"
-                        ]
+                        ],
+                        floatfmt=""
                     )
         )
     
@@ -157,7 +160,8 @@ def format_result(result, original_data):
                         "Final Comp 2",
                         "Final Comp 3",
                         "Final Comp 4"
-                            ]
+                            ],
+                        floatfmt=""
                         )
             )
     
@@ -166,7 +170,7 @@ def format_result(result, original_data):
     print("Final Results Components: ")
     print("=========================")
     table_4 = [new_result_comp]
-    print("Table_4", table_4)
+    # print("Table_4", table_4)
     print(tabulate(table_4, 
                    headers=[
                         "Final Comp 1",
