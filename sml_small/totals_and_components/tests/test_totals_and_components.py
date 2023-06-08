@@ -126,7 +126,7 @@ class TestValidateInput:
                     Component_list(original_value=4, final_value=None),
                 ],
                 101.0,
-                '',  # missing predictive
+                None,  # missing predictive
                 "202312",
                 300.0,
                 20,
@@ -139,7 +139,7 @@ class TestValidateInput:
                         Component_list(original_value=3, final_value=None),
                         Component_list(original_value=4, final_value=None),
                     ],
-                    '',  # missing predictive does not trigger value error
+                    None,  # missing predictive does not trigger value error
                     300.0,
                     20,
                     0.1,
