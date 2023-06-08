@@ -836,7 +836,7 @@ class TestTotalsAndComponents:
         [
             (
                 "A",
-                "202312",
+                "202301",
                 1625,
                 [
                     Component_list(632, None),
@@ -846,15 +846,16 @@ class TestTotalsAndComponents:
                 ],
                 True,
                 1625,
-                "202312",
+                "202301",
                 None,
                 11,
                 None,
                 (
+                "A",
+                "202301",
                     0,
                     None,
                     None,
-                    "N",
                     1625,
                     [
                         Component_list(632, 632),
@@ -862,12 +863,13 @@ class TestTotalsAndComponents:
                         Component_list(99, 99),
                         Component_list(162, 162),
                     ],
+                    "N",
                 ),
                 "TCC Marker N",
             ),
             (
                 "B",
-                "202312",
+                "202301",
                 10817,
                 [
                     Component_list(9201, None),
@@ -877,15 +879,16 @@ class TestTotalsAndComponents:
                 ],
                 True,
                 10817,
-                "202312",
+                "202301",
                 None,
                 11,
                 None,
                 (
+                "B",
+                "202301",
                     6,
                     None,
                     None,
-                    "T",
                     10811,
                     [
                         Component_list(9201, 9201),
@@ -893,12 +896,13 @@ class TestTotalsAndComponents:
                         Component_list(632, 632),
                         Component_list(112, 112),
                     ],
+                    "T",
                 ),
                 "TCC Marker T",
             ),
             (
                 "C",
-                "202312",
+                "202301",
                 90,
                 [
                     Component_list(90, None),
@@ -908,15 +912,16 @@ class TestTotalsAndComponents:
                 ],
                 False,
                 90,
-                "202312",
+                "202301",
                 None,
                 None,
                 0.1,
                 (
+                "C",
+                "202301",
                     None,
                     90,
                     110,
-                    "C",
                     90,
                     [
                         Component_list(90, 81),
@@ -924,6 +929,7 @@ class TestTotalsAndComponents:
                         Component_list(4, 3.6),
                         Component_list(6, 5.4),
                     ],
+                    "C",
                 ),
                 "TCC Marker C",
             ),
@@ -944,10 +950,11 @@ class TestTotalsAndComponents:
                 1,
                 0.1,
                 (
+                "D",
+                "202312",
                     339,
                     1462.5,
                     1787.5,
-                    "M",
                     1964,
                     [
                         Component_list(632, 632),
@@ -955,6 +962,7 @@ class TestTotalsAndComponents:
                         Component_list(99, 99),
                         Component_list(162, 162),
                     ],
+                    "M",
                 ),
                 "TCC Marker M ",
             ),
@@ -975,10 +983,11 @@ class TestTotalsAndComponents:
                 26,
                 0.1,
                 (
+                "E",
+                "202312",
                     26,
                     252,
                     308,
-                    "T",
                     280,
                     [
                         Component_list(240, 240),
@@ -986,13 +995,14 @@ class TestTotalsAndComponents:
                         Component_list(30, 30),
                         Component_list(10, 10),
                     ],
+                    "T",
                 ),
                 "TCC Marker T",
             ),
             (
-                "F",
+                "G",
                 "202312",
-                11,
+                "InvalidString",
                 [
                     Component_list(0, None),
                     Component_list(0, None),
@@ -1005,20 +1015,82 @@ class TestTotalsAndComponents:
                 None,
                 11,
                 None,
-                (
-                    11,
-                    None,
-                    None,
-                    "S",
-                    11,
-                    [
-                        Component_list(0, 0),
-                        Component_list(0, 0),
-                        Component_list(0, 0),
-                        Component_list(0, 0),
-                    ],
-                ),
-                "TCC Marker S",
+                Exception,
+                "Invalid total value entered by user",
+            ),
+            (
+                "H",
+                "202301",
+                1625,
+                [
+                    Component_list("InvalidString", None),
+                    Component_list(732, None),
+                    Component_list(99, None),
+                    Component_list(162, None),
+                ],
+                True,
+                1625,
+                "202301",
+                None,
+                11,
+                0.1,
+                Exception,
+                "Invalid component value entered by user",
+            ),(
+                "I",
+                "202301",
+                1625,
+                [
+                    Component_list(632, None),
+                    Component_list(732, None),
+                    Component_list(99, None),
+                    Component_list(162, None),
+                ],
+                True,
+                "InvalidString",
+                "202301",
+                None,
+                11,
+                0.1,
+                Exception,
+                "Invalid predictive value entered by user",
+            ),(
+                "J",
+                "202301",
+                1625,
+                [
+                    Component_list(632, None),
+                    Component_list(732, None),
+                    Component_list(99, None),
+                    Component_list(162, None),
+                ],
+                True,
+                1625,
+                "202301",
+                "InvalidString",
+                11,
+                0.1,
+                Exception,
+                "Invalid auxiliary value entered by user",
+            ),
+            (
+                "K",
+                "202301",
+                1625,
+                [
+                    Component_list(632, None),
+                    Component_list(732, None),
+                    Component_list(99, None),
+                    Component_list(162, None),
+                ],
+                True,
+                1625,
+                "202301",
+                None,
+                None,
+                None,
+                Exception,
+                "Absolute and percentage difference threshold None value entered by user",
             ),
         ],
     )
@@ -1038,41 +1110,60 @@ class TestTotalsAndComponents:
         expected_result,
         test_id,
     ):
-        try:
-            results = totals_and_components(
-                identifier=identifier,
-                period=period,
-                total=total,
-                components=components,
-                amend_total=amend_total,
-                predictive=predictive,
-                predictive_period=predictive_period,
-                auxiliary=auxiliary,
-                absolute_difference_threshold=absolute_difference_threshold,
-                percentage_difference_threshold=percentage_difference_threshold,
-            )
-
-            # Capture the printed output and remove any leading or trailing whitespace
-            captured = capfd.readouterr()
-            printed_output = captured.out.strip()
-            print(results, printed_output)
-            final_results = (
-                results.absolute_difference,
-                results.low_percent_threshold,
-                results.high_percent_threshold,
-                results.tcc_marker,
-                results.final_total,
-                results.final_components,
-            )
-
-            assert (
-                final_results == expected_result
-            ), f"Test {test_id} failed: Unexpected result"
-        except Exception as e:
-            pytest.fail(
-                EXCEPTION_FAIL_MESSAGE.format(
-                    test_id=test_id,
-                    exception_type=type(e).__name__,
-                    exception_msg=str(e),
+        if isinstance(expected_result, tuple):
+            try:
+                results = totals_and_components(
+                    identifier=identifier,
+                    period=period,
+                    total=total,
+                    components=components,
+                    amend_total=amend_total,
+                    predictive=predictive,
+                    predictive_period=predictive_period,
+                    auxiliary=auxiliary,
+                    absolute_difference_threshold=absolute_difference_threshold,
+                    percentage_difference_threshold=percentage_difference_threshold,
                 )
-            )
+
+                # Capture the printed output and remove any leading or trailing whitespace
+                captured = capfd.readouterr()
+                printed_output = captured.out.strip()
+                print(results, printed_output)
+                final_results = (
+                    results.identifier,
+                    results.period,
+                    results.absolute_difference,
+                    results.low_percent_threshold,
+                    results.high_percent_threshold,
+                    results.final_total,
+                    results.final_components,
+                    results.tcc_marker,
+                )
+
+                assert (
+                    final_results == expected_result
+                ), f"Test {test_id} failed: Unexpected result"
+            except Exception as e:
+                pytest.fail(
+                    EXCEPTION_FAIL_MESSAGE.format(
+                        test_id=test_id,
+                        exception_type=type(e).__name__,
+                        exception_msg=str(e),
+                    )
+                )
+        else:
+            with pytest.raises(expected_result) as exc_info:
+                result = totals_and_components(
+                    identifier=identifier,
+                    period=period,
+                    total=total,
+                    components=components,
+                    amend_total=amend_total,
+                    predictive=predictive,
+                    predictive_period=predictive_period,
+                    auxiliary=auxiliary,
+                    absolute_difference_threshold=absolute_difference_threshold,
+                    percentage_difference_threshold=percentage_difference_threshold,
+                )
+                print('he;llo', str(exc_info.value))
+            assert exc_info.type == expected_result

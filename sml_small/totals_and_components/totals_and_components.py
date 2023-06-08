@@ -729,7 +729,9 @@ def totals_and_components(
 
         output.print_output_table()
 
+        return output
+
     except Exception as error:
         print("Exception error detected:", error)
+        raise Exception(error)
 
-    return output
