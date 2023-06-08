@@ -54,7 +54,7 @@ class TestValidateInput:
                 "Test 1: Correct values test",
             ),
             (
-                "A",
+                "B",
                 "202312",
                 100.0,
                 [
@@ -85,7 +85,7 @@ class TestValidateInput:
                 "Test 2: None value for percentage difference threshold",
             ),
             (
-                "A",
+                "C",
                 "202312",
                 100.0,
                 [
@@ -116,7 +116,7 @@ class TestValidateInput:
                 "Test 3: None value for absolute difference threshold",
             ),
             (
-                "A",
+                "D",
                 "202312",
                 100.0,
                 [],
@@ -130,7 +130,7 @@ class TestValidateInput:
                 "Test 4: Empty component list",
             ),
             (
-                "A",
+                "E",
                 "202312",
                 100.0,
                 [
@@ -149,7 +149,7 @@ class TestValidateInput:
                 "Test 5: None in component list",
             ),
             (
-                "A",
+                "F",
                 "202312",
                 "String",
                 [
@@ -168,7 +168,7 @@ class TestValidateInput:
                 "Test 6: Invalid Total",
             ),
             (
-                "A",
+                "G",
                 "202312",
                 100.0,
                 [
@@ -187,7 +187,7 @@ class TestValidateInput:
                 "Test 7: Invalid predictive test",
             ),
             (
-                "A",
+                "H",
                 "202312",
                 100.0,
                 [
@@ -206,7 +206,7 @@ class TestValidateInput:
                 "Test 8: Invalid auxiliary",
             ),
             (
-                "A",
+                "I",
                 "202312",
                 100.0,
                 [
@@ -225,7 +225,7 @@ class TestValidateInput:
                 "Test 9: Invalid absolute difference threshold",
             ),
             (
-                "A",
+                "J",
                 "202312",
                 100.0,
                 [
@@ -244,7 +244,7 @@ class TestValidateInput:
                 "Test 10: Invalid percentage difference threshold",
             ),
             (
-                "A",
+                "K",
                 "202312",
                 100.0,
                 [
