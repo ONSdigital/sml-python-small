@@ -2,7 +2,7 @@ import random
 
 import pytest
 
-from sml_small.totals_and_components.totals_and_components import (Component_list, check_absolute_difference_threshold,
+from sml_small.totals_and_components.totals_and_components import (Component_list, TACException, check_absolute_difference_threshold,
                                                                    check_percentage_difference_threshold,
                                                                    check_predictive_value,
                                                                    check_sum_components_predictive, check_zero_errors,
@@ -896,7 +896,7 @@ class TestTotalsAndComponents:
                     ],
                     "N",
                 ),
-                "TCC Marker N",
+                "Test 1 - Totals matches components TCC Marker N",
             ),
             (
                 "B",
@@ -929,7 +929,7 @@ class TestTotalsAndComponents:
                     ],
                     "T",
                 ),
-                "TCC Marker T",
+                "Test 2 - Totals corrected with non zero component values TCC Marker T",
             ),
             (
                 "C",
@@ -962,7 +962,7 @@ class TestTotalsAndComponents:
                     ],
                     "C",
                 ),
-                "TCC Marker C",
+                "Test 3 - Components corrected - TCC Marker C",
             ),
             (
                 "D",
@@ -995,7 +995,7 @@ class TestTotalsAndComponents:
                     ],
                     "M",
                 ),
-                "TCC Marker M ",
+                "Test 4 - Manual correction required TCC Marker M ",
             ),
             (
                 "E",
@@ -1028,7 +1028,7 @@ class TestTotalsAndComponents:
                     ],
                     "T",
                 ),
-                "TCC Marker T",
+                "Test 5 - Totals corrected with zeros as components TCC Marker T",
             ),
             (
                 "G",
@@ -1046,8 +1046,8 @@ class TestTotalsAndComponents:
                 None,
                 11,
                 None,
-                Exception,
-                "Invalid total value entered by user",
+                "total is missing or not a number",
+                "Test 6 - Invalid total value entered by user",
             ),
             (
                 "H",
@@ -1065,8 +1065,8 @@ class TestTotalsAndComponents:
                 None,
                 11,
                 0.1,
-                Exception,
-                "Invalid component value entered by user",
+                "component is missing or not a number",
+                "Test 6 - Invalid component value entered by user",
             ),(
                 "I",
                 "202301",
@@ -1083,8 +1083,8 @@ class TestTotalsAndComponents:
                 None,
                 11,
                 0.1,
-                Exception,
-                "Invalid predictive value entered by user",
+                "predictive must not be a string",
+                "Test 7 - Invalid predictive value entered by user",
             ),(
                 "J",
                 "202301",
@@ -1101,8 +1101,8 @@ class TestTotalsAndComponents:
                 "InvalidString",
                 11,
                 0.1,
-                Exception,
-                "Invalid auxiliary value entered by user",
+                "auxiliary is missing or not a number",
+                "Test 8 - Invalid auxiliary value entered by user",
             ),
             (
                 "K",
@@ -1120,8 +1120,8 @@ class TestTotalsAndComponents:
                 None,
                 None,
                 None,
-                Exception,
-                "Absolute and percentage difference threshold None value entered by user",
+                "One or both of absolute/percentage difference thresholds must be specified",
+                "Test 9 - Absolute and percentage difference threshold None value entered by user",
             ),
             (
                 "L",
@@ -1154,7 +1154,7 @@ class TestTotalsAndComponents:
                     ],
                     "T",
                 ),
-                "Auxiliary variable replaces the missing predictive variable",
+                "Test 10 - Auxiliary variable replaces the missing predictive variable",
             ),
             (
                 "M",
@@ -1187,7 +1187,7 @@ class TestTotalsAndComponents:
                     ],
                     "N",
                 ),
-                "Predictive value is 0 and component sum is zero",
+                "Test 11 - Predictive value is 0 and component sum is zero",
             ),
             (
                 "N",
@@ -1220,12 +1220,12 @@ class TestTotalsAndComponents:
                     ],
                     "T",
                 ),
-                "Absolute Difference Threshold Only specified and satisfied",
+                "Test 12 - Absolute Difference Threshold Only specified and satisfied",
             ),
             (
                 "O",
                 "202301",
-                10817,
+                15,
                 [
                     Component_list(1, None),
                     Component_list(2, None),
@@ -1233,18 +1233,18 @@ class TestTotalsAndComponents:
                     Component_list(4, None),
                 ],
                 True,
-                10817,
+                5,
                 "202301",
                 None,
-                11,
-                25,
+                4,
+                None,
                 (
                 "O",
                 "202301",
-                    10807,
-                    0.96,
-                    1.04,
-                    10817,
+                    5,
+                    None,
+                    None,
+                    5,
                     [
                         Component_list(1, 1),
                         Component_list(2, 2),
@@ -1253,7 +1253,73 @@ class TestTotalsAndComponents:
                     ],
                     "M",
                 ),
-                "Absolute Difference Threshold Only specified and not satisfied",
+                "Test 13 - Absolute Difference Threshold Only specified and not satisfied",
+            ),
+            (
+                "P",
+                "202301",
+                9,
+                [
+                    Component_list(1, None),
+                    Component_list(2, None),
+                    Component_list(3, None),
+                    Component_list(4, None),
+                ],
+                True,
+                9,
+                "202301",
+                None,
+                None,
+                0.1,
+                (
+                "P",
+                "202301",
+                    None,
+                    9,
+                    11,
+                    10,
+                    [
+                        Component_list(1, 1),
+                        Component_list(2, 2),
+                        Component_list(3, 3),
+                        Component_list(4, 4),
+                    ],
+                    "T",
+                ),
+                "Test 14 - Percentage Difference Threshold Only specified and satisfied",
+            ),
+            (
+                "Q",
+                "202301",
+                15,
+                [
+                    Component_list(1, None),
+                    Component_list(2, None),
+                    Component_list(3, None),
+                    Component_list(4, None),
+                ],
+                True,
+                5,
+                "202301",
+                None,
+                None,
+                0.1,
+                (
+                "Q",
+                "202301",
+                    None,
+                    9,
+                    11,
+                    5,
+                    [
+                        Component_list(1, 1),
+                        Component_list(2, 2),
+                        Component_list(3, 3),
+                        Component_list(4, 4),
+                    ],
+                    "M",
+                ),
+                "Test 15 - Percentage Difference Threshold Only specified and not satisfied",
             ),
         ],
     )
@@ -1291,7 +1357,10 @@ class TestTotalsAndComponents:
                 # Capture the printed output and remove any leading or trailing whitespace
                 captured = capfd.readouterr()
                 printed_output = captured.out.strip()
-                print(results, printed_output)
+                sum_of_components  = results.final_components[0].final_value + results.final_components[1].final_value + results.final_components[2].final_value + results.final_components[3].final_value
+                # this will be a for loop once jason's component list removal takes place
+                
+                print(printed_output)
 
                 assert results.identifier == expected_result[0]
                 assert results.period == expected_result[1]
@@ -1307,6 +1376,9 @@ class TestTotalsAndComponents:
                 assert results.final_components[2].final_value == expected_result[6][2].final_value
                 assert results.final_components[3].original_value == expected_result[6][3].original_value
                 assert results.final_components[3].final_value == expected_result[6][3].final_value
+                # this will be a one liner once jason's component list removal takes place
+                if results.tcc_marker != "M":
+                    assert sum_of_components == expected_result[5]
                 assert results.tcc_marker == expected_result[7]
 
             except Exception as e:
@@ -1318,8 +1390,8 @@ class TestTotalsAndComponents:
                     )
                 )
         else:
-            with pytest.raises(expected_result) as exc_info:
-                result = totals_and_components(
+            with pytest.raises(Exception) as exc_info:
+                totals_and_components(
                     identifier=identifier,
                     period=period,
                     total=total,
@@ -1331,5 +1403,5 @@ class TestTotalsAndComponents:
                     absolute_difference_threshold=absolute_difference_threshold,
                     percentage_difference_threshold=percentage_difference_threshold,
                 )
-                print('he;llo', str(exc_info.value))
-            assert exc_info.type == expected_result
+                print(str(exc_info.value))
+            assert str(exc_info.value) == expected_result

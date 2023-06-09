@@ -49,6 +49,9 @@ class Component_list:
             and self.final_value == other.final_value
         )
 
+class TACException(Exception):
+      "Totals and Components error"
+      pass
 
 @dataclass(frozen=True)
 class Totals_and_Components_Output:
@@ -159,7 +162,7 @@ def validate_input(
         raise ValueError("The components are not populated")
     if components:
         for x in components:
-            validate_number(f"component={x.original_value}", x.original_value)
+            validate_number("component", x.original_value)
             float(x.original_value)
     if predictive:
         validate_number("predictive", predictive)
@@ -208,6 +211,8 @@ def validate_number(tag: str, value) -> bool:
     if not is_number(value):
         if tag != 'predictive':
             raise ValueError(f"{tag} is missing or not a number")
+        elif type(tag) == str:
+            raise ValueError(f"{tag} must not be a string")
     return True
 
 
@@ -734,5 +739,4 @@ def totals_and_components(
 
     except Exception as error:
         print("Exception error detected:", error)
-        raise Exception(error)
-
+        raise TACException(error)
