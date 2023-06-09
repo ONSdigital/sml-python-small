@@ -126,7 +126,7 @@ class TestValidateInput:
                     Component_list(original_value=4, final_value=None),
                 ],
                 101.0,
-                '',  # missing predictive
+                None,  # missing predictive
                 "202312",
                 300.0,
                 20,
@@ -139,7 +139,7 @@ class TestValidateInput:
                         Component_list(original_value=3, final_value=None),
                         Component_list(original_value=4, final_value=None),
                     ],
-                    '',  # missing predictive does not trigger value error
+                    None,  # missing predictive does not trigger value error
                     300.0,
                     20,
                     0.1,
@@ -1123,6 +1123,138 @@ class TestTotalsAndComponents:
                 Exception,
                 "Absolute and percentage difference threshold None value entered by user",
             ),
+            (
+                "L",
+                "202301",
+                10817,
+                [
+                    Component_list(9201, None),
+                    Component_list(866, None),
+                    Component_list(632, None),
+                    Component_list(112, None),
+                ],
+                True,
+                None,
+                "202301",
+                10817,
+                11,
+                None,
+                (
+                "L",
+                "202301",
+                    6,
+                    None,
+                    None,
+                    10811,
+                    [
+                        Component_list(9201, 9201),
+                        Component_list(866, 866),
+                        Component_list(632, 632),
+                        Component_list(112, 112),
+                    ],
+                    "T",
+                ),
+                "Auxiliary variable replaces the missing predictive variable",
+            ),
+            (
+                "M",
+                "202301",
+                10817,
+                [
+                    Component_list(0, None),
+                    Component_list(0, None),
+                    Component_list(0, None),
+                    Component_list(0, None),
+                ],
+                True,
+                0,
+                "202301",
+                None,
+                11,
+                None,
+                (
+                "M",
+                "202301",
+                    0,
+                    None,
+                    None,
+                    0,
+                    [
+                        Component_list(0, 0),
+                        Component_list(0, 0),
+                        Component_list(0, 0),
+                        Component_list(0, 0),
+                    ],
+                    "N",
+                ),
+                "Predictive value is 0 and component sum is zero",
+            ),
+            (
+                "N",
+                "202301",
+                10817,
+                [
+                    Component_list(9201, None),
+                    Component_list(866, None),
+                    Component_list(632, None),
+                    Component_list(112, None),
+                ],
+                True,
+                10817,
+                "202301",
+                None,
+                11,
+                None,
+                (
+                "N",
+                "202301",
+                    6,
+                    None,
+                    None,
+                    10811,
+                    [
+                        Component_list(9201, 9201),
+                        Component_list(866, 866),
+                        Component_list(632, 632),
+                        Component_list(112, 112),
+                    ],
+                    "T",
+                ),
+                "Absolute Difference Threshold Only specified and satisfied",
+            ),
+            (
+                "O",
+                "202301",
+                10817,
+                [
+                    Component_list(1, None),
+                    Component_list(2, None),
+                    Component_list(3, None),
+                    Component_list(4, None),
+                ],
+                True,
+                10817,
+                "202301",
+                None,
+                11,
+                25,
+                (
+                "O",
+                "202301",
+                    10807,
+                    0.96,
+                    1.04,
+                    10817,
+                    [
+                        Component_list(1, 1),
+                        Component_list(2, 2),
+                        Component_list(3, 3),
+                        Component_list(4, 4),
+                    ],
+                    "M",
+                ),
+                "Absolute Difference Threshold Only specified and not satisfied",
+            ),
         ],
     )
     def test_totals_and_components(
@@ -1160,26 +1292,29 @@ class TestTotalsAndComponents:
                 captured = capfd.readouterr()
                 printed_output = captured.out.strip()
                 print(results, printed_output)
-                final_results = (
-                    results.identifier,
-                    results.period,
-                    results.absolute_difference,
-                    results.low_percent_threshold,
-                    results.high_percent_threshold,
-                    results.final_total,
-                    results.final_components,
-                    results.tcc_marker,
-                )
 
-                assert (
-                    final_results == expected_result
-                ), f"Test {test_id} failed: Unexpected result"
+                assert results.identifier == expected_result[0]
+                assert results.period == expected_result[1]
+                assert results.absolute_difference == expected_result[2]
+                assert results.low_percent_threshold == expected_result[3]
+                assert results.high_percent_threshold == expected_result[4]
+                assert results.final_total == expected_result[5]
+                assert results.final_components[0].original_value == expected_result[6][0].original_value
+                assert results.final_components[0].final_value == expected_result[6][0].final_value
+                assert results.final_components[1].original_value == expected_result[6][1].original_value
+                assert results.final_components[1].final_value == expected_result[6][1].final_value
+                assert results.final_components[2].original_value == expected_result[6][2].original_value
+                assert results.final_components[2].final_value == expected_result[6][2].final_value
+                assert results.final_components[3].original_value == expected_result[6][3].original_value
+                assert results.final_components[3].final_value == expected_result[6][3].final_value
+                assert results.tcc_marker == expected_result[7]
+
             except Exception as e:
                 pytest.fail(
                     EXCEPTION_FAIL_MESSAGE.format(
                         test_id=test_id,
                         exception_type=type(e).__name__,
-                        exception_msg=str(e),
+                        exception_msg=str(e.args),
                     )
                 )
         else:
