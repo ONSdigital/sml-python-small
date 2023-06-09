@@ -49,6 +49,23 @@ test_data = [
         0.1,
     ],
     # [
+    #     "X",
+    #     "202301",
+    #     41,
+    #     [
+    #         Component_list(10, None),
+    #         Component_list(10, None),
+    #         Component_list(10, None),
+    #         Component_list(10, None),
+    #     ],
+    #     False,
+    #     41,
+    #     "202301",
+    #     None,
+    #     None,
+    #     None,
+    # ],
+    # [
     #   "D",
     #   "202301",
     #   1964,
@@ -96,7 +113,13 @@ def invoke_process():
 
 
 def format_result(result, original_data):
+    """_summary_
 
+    :param result: _description_
+    :type result: _type_
+    :param original_data: _description_
+    :type original_data: _type_
+    """
     new_result = [
         result.identifier,
         result.period,

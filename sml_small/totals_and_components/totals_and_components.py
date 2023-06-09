@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from enum import Enum
 from typing import List, Optional, Tuple
+from decimal import Decimal
 
 
 class Index(Enum):
@@ -475,7 +476,7 @@ def correct_components(
     """
     final_total = predictive
     for component in original_components:
-        component.final_value = (component.original_value / components_sum) * predictive
+        component.final_value = (Decimal(component.original_value) / Decimal(components_sum)) * predictive
     tcc_marker = TccMarker.COMPONENTS_CORRECTED.value
     return final_total, original_components, tcc_marker
 
@@ -725,8 +726,8 @@ def totals_and_components(
             )
 
         output.print_output_table()
-
+        return output
+    
     except Exception as error:
         print("Exception error detected:", error)
-
-    return output
+        raise Exception(error)
