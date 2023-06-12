@@ -2,7 +2,7 @@ import random
 
 import pytest
 
-from sml_small.totals_and_components.totals_and_components import (ComponentList, check_absolute_difference_threshold,
+from sml_small.totals_and_components.totals_and_components import (ComponentPair, check_absolute_difference_threshold,
                                                                    check_percentage_difference_threshold,
                                                                    check_predictive_value,
                                                                    check_sum_components_predictive, check_zero_errors,
@@ -27,10 +27,10 @@ class TestValidateInput:
                 "202312",
                 100,
                 [
-                    ComponentList(original_value=1, final_value=None),
-                    ComponentList(original_value=2, final_value=None),
-                    ComponentList(original_value=3, final_value=None),
-                    ComponentList(original_value=4, final_value=None),
+                    ComponentPair(original_value=1, final_value=None),
+                    ComponentPair(original_value=2, final_value=None),
+                    ComponentPair(original_value=3, final_value=None),
+                    ComponentPair(original_value=4, final_value=None),
                 ],
                 101.0,
                 102.0,
@@ -41,10 +41,10 @@ class TestValidateInput:
                 (
                     100,
                     [
-                        ComponentList(original_value=1, final_value=None),
-                        ComponentList(original_value=2, final_value=None),
-                        ComponentList(original_value=3, final_value=None),
-                        ComponentList(original_value=4, final_value=None),
+                        ComponentPair(original_value=1, final_value=None),
+                        ComponentPair(original_value=2, final_value=None),
+                        ComponentPair(original_value=3, final_value=None),
+                        ComponentPair(original_value=4, final_value=None),
                     ],
                     102.0,
                     300.0,
@@ -58,10 +58,10 @@ class TestValidateInput:
                 "202312",
                 100.0,
                 [
-                    ComponentList(original_value=1, final_value=None),
-                    ComponentList(original_value=2, final_value=None),
-                    ComponentList(original_value=3, final_value=None),
-                    ComponentList(original_value=4, final_value=None),
+                    ComponentPair(original_value=1, final_value=None),
+                    ComponentPair(original_value=2, final_value=None),
+                    ComponentPair(original_value=3, final_value=None),
+                    ComponentPair(original_value=4, final_value=None),
                 ],
                 102.0,
                 103.0,
@@ -72,10 +72,10 @@ class TestValidateInput:
                 (
                     100.0,
                     [
-                        ComponentList(original_value=1, final_value=None),
-                        ComponentList(original_value=2, final_value=None),
-                        ComponentList(original_value=3, final_value=None),
-                        ComponentList(original_value=4, final_value=None),
+                        ComponentPair(original_value=1, final_value=None),
+                        ComponentPair(original_value=2, final_value=None),
+                        ComponentPair(original_value=3, final_value=None),
+                        ComponentPair(original_value=4, final_value=None),
                     ],
                     103.0,
                     104.0,
@@ -89,10 +89,10 @@ class TestValidateInput:
                 "202312",
                 100.0,
                 [
-                    ComponentList(original_value=1, final_value=None),
-                    ComponentList(original_value=2, final_value=None),
-                    ComponentList(original_value=3, final_value=None),
-                    ComponentList(original_value=4, final_value=None),
+                    ComponentPair(original_value=1, final_value=None),
+                    ComponentPair(original_value=2, final_value=None),
+                    ComponentPair(original_value=3, final_value=None),
+                    ComponentPair(original_value=4, final_value=None),
                 ],
                 102.0,
                 103.0,
@@ -103,10 +103,10 @@ class TestValidateInput:
                 (
                     100.0,
                     [
-                        ComponentList(original_value=1, final_value=None),
-                        ComponentList(original_value=2, final_value=None),
-                        ComponentList(original_value=3, final_value=None),
-                        ComponentList(original_value=4, final_value=None),
+                        ComponentPair(original_value=1, final_value=None),
+                        ComponentPair(original_value=2, final_value=None),
+                        ComponentPair(original_value=3, final_value=None),
+                        ComponentPair(original_value=4, final_value=None),
                     ],
                     103.0,
                     104.0,
@@ -134,10 +134,10 @@ class TestValidateInput:
                 "202312",
                 100.0,
                 [
-                    ComponentList(original_value=None, final_value=None),
-                    ComponentList(original_value=2, final_value=None),
-                    ComponentList(original_value=3, final_value=None),
-                    ComponentList(original_value=4, final_value=None),
+                    ComponentPair(original_value=None, final_value=None),
+                    ComponentPair(original_value=2, final_value=None),
+                    ComponentPair(original_value=3, final_value=None),
+                    ComponentPair(original_value=4, final_value=None),
                 ],
                 101.0,
                 102.0,
@@ -153,10 +153,10 @@ class TestValidateInput:
                 "202312",
                 "String",
                 [
-                    ComponentList(original_value=1, final_value=None),
-                    ComponentList(original_value=2, final_value=None),
-                    ComponentList(original_value=3, final_value=None),
-                    ComponentList(original_value=4, final_value=None),
+                    ComponentPair(original_value=1, final_value=None),
+                    ComponentPair(original_value=2, final_value=None),
+                    ComponentPair(original_value=3, final_value=None),
+                    ComponentPair(original_value=4, final_value=None),
                 ],
                 102.0,
                 103.0,
@@ -172,10 +172,10 @@ class TestValidateInput:
                 "202312",
                 100.0,
                 [
-                    ComponentList(original_value=1, final_value=None),
-                    ComponentList(original_value=2, final_value=None),
-                    ComponentList(original_value=3, final_value=None),
-                    ComponentList(original_value=4, final_value=None),
+                    ComponentPair(original_value=1, final_value=None),
+                    ComponentPair(original_value=2, final_value=None),
+                    ComponentPair(original_value=3, final_value=None),
+                    ComponentPair(original_value=4, final_value=None),
                 ],
                 101.0,
                 "String",
@@ -191,10 +191,10 @@ class TestValidateInput:
                 "202312",
                 100.0,
                 [
-                    ComponentList(original_value=1, final_value=None),
-                    ComponentList(original_value=2, final_value=None),
-                    ComponentList(original_value=3, final_value=None),
-                    ComponentList(original_value=4, final_value=None),
+                    ComponentPair(original_value=1, final_value=None),
+                    ComponentPair(original_value=2, final_value=None),
+                    ComponentPair(original_value=3, final_value=None),
+                    ComponentPair(original_value=4, final_value=None),
                 ],
                 101.0,
                 102.0,
@@ -210,10 +210,10 @@ class TestValidateInput:
                 "202312",
                 100.0,
                 [
-                    ComponentList(original_value=1, final_value=None),
-                    ComponentList(original_value=2, final_value=None),
-                    ComponentList(original_value=3, final_value=None),
-                    ComponentList(original_value=4, final_value=None),
+                    ComponentPair(original_value=1, final_value=None),
+                    ComponentPair(original_value=2, final_value=None),
+                    ComponentPair(original_value=3, final_value=None),
+                    ComponentPair(original_value=4, final_value=None),
                 ],
                 102.0,
                 103.0,
@@ -229,10 +229,10 @@ class TestValidateInput:
                 "202312",
                 100.0,
                 [
-                    ComponentList(original_value=1, final_value=None),
-                    ComponentList(original_value=2, final_value=None),
-                    ComponentList(original_value=3, final_value=None),
-                    ComponentList(original_value=4, final_value=None),
+                    ComponentPair(original_value=1, final_value=None),
+                    ComponentPair(original_value=2, final_value=None),
+                    ComponentPair(original_value=3, final_value=None),
+                    ComponentPair(original_value=4, final_value=None),
                 ],
                 102.0,
                 103.0,
@@ -248,10 +248,10 @@ class TestValidateInput:
                 "202312",
                 100.0,
                 [
-                    ComponentList(original_value=1, final_value=None),
-                    ComponentList(original_value=2, final_value=None),
-                    ComponentList(original_value=3, final_value=None),
-                    ComponentList(original_value=4, final_value=None),
+                    ComponentPair(original_value=1, final_value=None),
+                    ComponentPair(original_value=2, final_value=None),
+                    ComponentPair(original_value=3, final_value=None),
+                    ComponentPair(original_value=4, final_value=None),
                 ],
                 102.0,
                 101.0,
@@ -282,13 +282,9 @@ class TestValidateInput:
         if isinstance(expected_result, tuple):
             try:
                 result = validate_input(
-                    identifier=identifier,
-                    period=period,
                     total=total,
                     components=components,
-                    amend_total=amend_total,
                     predictive=predictive,
-                    predictive_period=predictive_period,
                     auxiliary=auxiliary,
                     absolute_difference_threshold=absolute_difference_threshold,
                     percentage_difference_threshold=percentage_difference_threshold,
@@ -305,13 +301,9 @@ class TestValidateInput:
         else:
             with pytest.raises(expected_result) as exc_info:
                 validate_input(
-                    identifier=identifier,
-                    period=period,
                     total=total,
                     components=components,
-                    amend_total=amend_total,
                     predictive=predictive,
-                    predictive_period=predictive_period,
                     auxiliary=auxiliary,
                     absolute_difference_threshold=absolute_difference_threshold,
                     percentage_difference_threshold=percentage_difference_threshold,
@@ -356,8 +348,8 @@ class TestCheckZeroErrors:
             ([], 100.0, "P", "Test 1: 12 RandomComponents, predictive positive"),
             (
                 [
-                    ComponentList(original_value=0, final_value=None),
-                    ComponentList(original_value=0, final_value=None),
+                    ComponentPair(original_value=0, final_value=None),
+                    ComponentPair(original_value=0, final_value=None),
                 ],
                 150.0,
                 "S",
@@ -365,8 +357,8 @@ class TestCheckZeroErrors:
             ),
             (
                 [
-                    ComponentList(original_value=5, final_value=None),
-                    ComponentList(original_value=32, final_value=None),
+                    ComponentPair(original_value=5, final_value=None),
+                    ComponentPair(original_value=32, final_value=None),
                 ],
                 0,
                 "P",
@@ -380,7 +372,7 @@ class TestCheckZeroErrors:
         if "RandomComponents" in test_id:
             for _ in range(12):
                 random_float = random.uniform(0, 12)
-                component = ComponentList(
+                component = ComponentPair(
                     original_value=random_float, final_value=None
                 )
                 test_components.append(component)
@@ -409,18 +401,18 @@ class TestCheckSumComponentsPredictive:
         [
             (
                 [
-                    ComponentList(original_value=3.5, final_value=None),
-                    ComponentList(original_value=6.5, final_value=None),
-                    ComponentList(original_value=8.0, final_value=None),
-                    ComponentList(original_value=2.0, final_value=None),
-                    ComponentList(original_value=4.5, final_value=None),
-                    ComponentList(original_value=5.5, final_value=None),
-                    ComponentList(original_value=2.8, final_value=None),
-                    ComponentList(original_value=7.2, final_value=None),
-                    ComponentList(original_value=1.0, final_value=None),
-                    ComponentList(original_value=9.0, final_value=None),
-                    ComponentList(original_value=0.3, final_value=None),
-                    ComponentList(original_value=9.7, final_value=None),
+                    ComponentPair(original_value=3.5, final_value=None),
+                    ComponentPair(original_value=6.5, final_value=None),
+                    ComponentPair(original_value=8.0, final_value=None),
+                    ComponentPair(original_value=2.0, final_value=None),
+                    ComponentPair(original_value=4.5, final_value=None),
+                    ComponentPair(original_value=5.5, final_value=None),
+                    ComponentPair(original_value=2.8, final_value=None),
+                    ComponentPair(original_value=7.2, final_value=None),
+                    ComponentPair(original_value=1.0, final_value=None),
+                    ComponentPair(original_value=9.0, final_value=None),
+                    ComponentPair(original_value=0.3, final_value=None),
+                    ComponentPair(original_value=9.7, final_value=None),
                 ],
                 60.0,
                 0,
@@ -428,18 +420,18 @@ class TestCheckSumComponentsPredictive:
             ),
             (
                 [
-                    ComponentList(original_value=3.2, final_value=None),
-                    ComponentList(original_value=5.1, final_value=None),
-                    ComponentList(original_value=2.4, final_value=None),
-                    ComponentList(original_value=1.5, final_value=None),
-                    ComponentList(original_value=0.8, final_value=None),
-                    ComponentList(original_value=4.6, final_value=None),
-                    ComponentList(original_value=2.7, final_value=None),
-                    ComponentList(original_value=3.9, final_value=None),
-                    ComponentList(original_value=1.2, final_value=None),
-                    ComponentList(original_value=0.5, final_value=None),
-                    ComponentList(original_value=4.3, final_value=None),
-                    ComponentList(original_value=2.0, final_value=None),
+                    ComponentPair(original_value=3.2, final_value=None),
+                    ComponentPair(original_value=5.1, final_value=None),
+                    ComponentPair(original_value=2.4, final_value=None),
+                    ComponentPair(original_value=1.5, final_value=None),
+                    ComponentPair(original_value=0.8, final_value=None),
+                    ComponentPair(original_value=4.6, final_value=None),
+                    ComponentPair(original_value=2.7, final_value=None),
+                    ComponentPair(original_value=3.9, final_value=None),
+                    ComponentPair(original_value=1.2, final_value=None),
+                    ComponentPair(original_value=0.5, final_value=None),
+                    ComponentPair(original_value=4.3, final_value=None),
+                    ComponentPair(original_value=2.0, final_value=None),
                 ],
                 100.0,
                 67.8,  # This is the returned stored absolute_difference value
@@ -663,7 +655,7 @@ class TestErrorCorrection:
             (
                     True,
                     100.0,
-                    [ComponentList(10.0, None)] * 10,
+                    [ComponentPair(10.0, None)] * 10,
                     100.0,
                     100.0,
                     [10.0] * 10,
@@ -673,7 +665,7 @@ class TestErrorCorrection:
             (
                     False,
                     82.0,
-                    [ComponentList(8.2, None)] * 10,
+                    [ComponentPair(8.2, None)] * 10,
                     100.0,
                     100.0,
                     [10.0] * 10,
@@ -724,13 +716,13 @@ class TestCorrectTotal:
         [
             (
                     100.0,
-                    [ComponentList(10.0, None)] * 10,
+                    [ComponentPair(10.0, None)] * 10,
                     100.0,
                 "Test 1: Final total is sum of received components",
             ),
             (
                     30.0,
-                    [ComponentList(10.0, None)] * 10,
+                    [ComponentPair(10.0, None)] * 10,
                     30.0,
                 "Test 2: Final total is not sum of received components",
             ),
@@ -766,7 +758,7 @@ class TestCorrectComponents:
         [
             (
                     90.0,
-                    [ComponentList(9.0, None)] * 10,
+                    [ComponentPair(9.0, None)] * 10,
                     100.0,
                     100.0,
                     [10.0] * 10,
@@ -775,9 +767,9 @@ class TestCorrectComponents:
             (
                 130.0,
                 [
-                    ComponentList(75.0, None),
-                    ComponentList(25.0, None),
-                    ComponentList(30.0, None),
+                    ComponentPair(75.0, None),
+                    ComponentPair(25.0, None),
+                    ComponentPair(30.0, None),
                 ],
                 200.0,
                 200.0,
@@ -786,7 +778,7 @@ class TestCorrectComponents:
             ),
             (
                     100.0,
-                    [ComponentList(10.0, None)] * 10,
+                    [ComponentPair(10.0, None)] * 10,
                     0,
                     0,
                     [0.0] * 10,
@@ -839,10 +831,7 @@ class TestTotalsAndComponents:
                 "202312",
                 1625,
                 [
-                    ComponentList(632, None),
-                    ComponentList(732, None),
-                    ComponentList(99, None),
-                    ComponentList(162, None),
+                    632, 732, 99, 162
                 ],
                 True,
                 1625,
@@ -866,10 +855,7 @@ class TestTotalsAndComponents:
                 "202312",
                 10817,
                 [
-                    ComponentList(9201, None),
-                    ComponentList(866, None),
-                    ComponentList(632, None),
-                    ComponentList(112, None),
+                    9201, 866,632,112
                 ],
                 True,
                 10817,
@@ -893,10 +879,7 @@ class TestTotalsAndComponents:
                 "202312",
                 90,
                 [
-                    ComponentList(90, None),
-                    ComponentList(0, None),
-                    ComponentList(4, None),
-                    ComponentList(6, None),
+                    90,0,4,6
                 ],
                 False,
                 90,
@@ -920,10 +903,7 @@ class TestTotalsAndComponents:
                 "202312",
                 1964,
                 [
-                    ComponentList(632, None),
-                    ComponentList(732, None),
-                    ComponentList(99, None),
-                    ComponentList(162, None),
+                    632,732,99,162
                 ],
                 True,
                 1964,
@@ -947,10 +927,7 @@ class TestTotalsAndComponents:
                 "202312",
                 306,
                 [
-                    ComponentList(240, None),
-                    ComponentList(0, None),
-                    ComponentList(30, None),
-                    ComponentList(10, None),
+                    240,0,30,10
                 ],
                 True,
                 306,
@@ -974,10 +951,7 @@ class TestTotalsAndComponents:
                 "202312",
                 11,
                 [
-                    ComponentList(0, None),
-                    ComponentList(0, None),
-                    ComponentList(0, None),
-                    ComponentList(0, None),
+                   0,0,0,0
                 ],
                 True,
                 11,
@@ -1040,9 +1014,10 @@ class TestTotalsAndComponents:
                 results.final_total,
                 results.final_components,
             )
-
+            assert results.tcc_marker == expected_result[3]
             assert (
-                final_results == expected_result
+                final_results == expected_result,
+                results.tcc_marker == expected_result[3]
             ), f"Test {test_id} failed: Unexpected result"
         except Exception as e:
             pytest.fail(
