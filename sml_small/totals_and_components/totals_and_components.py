@@ -171,11 +171,12 @@ def validate_input(
         validate_number("auxiliary", auxiliary)
         float(auxiliary)
     if (
-        absolute_difference_threshold is None
-        and percentage_difference_threshold is None
+        (absolute_difference_threshold is None
+        and percentage_difference_threshold is None) or (absolute_difference_threshold == 0
+        and percentage_difference_threshold == 0)
     ):
         raise ValueError(
-            "One or both of absolute/percentage difference thresholds must be specified"
+            "One or both of absolute/percentage difference thresholds must be specified and non-zero"
         )
     if absolute_difference_threshold:
         validate_number("absolute difference threshold", absolute_difference_threshold)
