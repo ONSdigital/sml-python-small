@@ -40,6 +40,18 @@ class TccMarker(Enum):
     NO_CORRECTION = "N"
     METHOD_PROCEED = "P"
 
+    def __eq__(self, value):
+        """
+        Function to determine equality between ComponentList objects
+
+        :param value: string to compare against
+        :type value: string
+        :return: Boolean, True if equality test passes
+        """
+        return (
+                self.value == value
+        )
+
 
 class ComponentPair:
     """
@@ -335,7 +347,10 @@ def check_zero_errors(predictive: float, components_sum: float) -> TccMarker:
     return tcc_marker
 
 
-def check_sum_components_predictive(predictive: float, components_sum: float, absolute_difference_threshold) -> float:
+def check_sum_components_predictive(predictive: float,
+                                    components_sum: float,
+                                    absolute_difference_threshold: Optional[float]
+                                    ) -> float:
     """
     Calculates the absolute difference between the predictive value and the sum of the
     components and returns that value
