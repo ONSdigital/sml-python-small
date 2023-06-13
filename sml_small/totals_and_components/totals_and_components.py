@@ -476,7 +476,7 @@ def correct_components(
     """
     final_total = predictive
     for component in original_components:
-        component.final_value = (Decimal(component.original_value) / Decimal(components_sum)) * predictive
+        component.final_value = ((component.original_value) / (components_sum)) * predictive
     tcc_marker = TccMarker.COMPONENTS_CORRECTED.value
     return final_total, original_components, tcc_marker
 

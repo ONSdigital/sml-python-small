@@ -1,10 +1,9 @@
 # In this python file, we are calling the T&C method and passing in the
 # test data to be processed by the T&C method and return the result to
-# be displayed in a formatted table on command line
+# be displayed in a formatted table on the command line
 
 from totals_and_components import totals_and_components, Component_list
 from tabulate import tabulate
-import os
 
 test_data = [
     # [
@@ -105,21 +104,49 @@ test_data = [
 
 
 def invoke_process():
+    # data = ["A",
+    #         "202301",
+    #         1625, 
+    #         [Component_list(632, None), Component_list(732, None), Component_list(99, None), Component_list(162, None)],
+    #         True,
+    #         1625,
+    #         "202301",
+    #         None,
+    #         11,
+    #         None]
+
+    # result = totals_and_components(
+    #         "A",
+    #         "202301",
+    #         1625, 
+    #         [Component_list(632, None), Component_list(732, None), Component_list(99, None), Component_list(162, None)],
+    #         True,
+    #         1625,
+    #         "202301",
+    #         None,
+    #         11,
+    #         None)
+    
+    # format_result(result, data)
+
     for data in test_data:
-        # print("Test_data", *data)
-        # Pass in arguments manually for demo purposes
         result = totals_and_components(*data)
-        format_result(result, data)
+        filter_data(result, data)
 
 
-def format_result(result, original_data):
-    """_summary_
-
-    :param result: _description_
-    :type result: _type_
-    :param original_data: _description_
-    :type original_data: _type_
+def filter_data(result, original_data):
     """
+    Formats the result we get back from the T&C method into a table format
+    to be viewed on the command line.
+
+    :param result: The processed data we get back once we pass the input data to the T&C method.
+    :type result: Object[Totals_and_Components_Output]
+    :param original_data: In this case the original data is the input data we hold in memory.
+    :type original_data: 2D List
+    """
+
+    # Once we get the result/ T&C output object, we take the values and convert
+    # it to a list
     new_result = [
         result.identifier,
         result.period,
@@ -130,89 +157,72 @@ def format_result(result, original_data):
         result.tcc_marker,
     ]
 
-    print("Original data", original_data)
     original_data_comp = original_data[3]
     original_data.pop(3)
-    print("Original data comp", original_data_comp)
-    print("Original data popped objects", original_data)
 
     unpack_original_data_comp = []
     for component in original_data_comp:
         unpack_original_data_comp.append(component.original_value)
-    print("Unpack original data comp", unpack_original_data_comp)
 
     new_result_comp = []
     for component in result.final_components:
         new_result_comp.append(component.final_value)
-    print("New result comp", new_result_comp)
+    
+    results = [original_data, new_result, unpack_original_data_comp, new_result_comp]
+    display_results(results)
 
-    os.system("clear")
 
-    table_1 = [original_data]
-    print("Original Input: ")
-    print("====================")
-    print(
-        tabulate(
-            table_1,
-            headers=[
-                "Identifier",
-                "Period",
-                "Total",
-                "Amend Total",
-                "Predictive",
-                "Predictive Period",
-                "Auxiliary Variable",
-                "Absolute Difference Threshold",
-                "Percentage Difference Threshold",
-            ],
-            floatfmt="",
-        )
-    )
+def display_results(results):
+    """
+    This function is used to display the results on the command line in a table format, 
+    that came back from the T&C method.
 
-    table_2 = [new_result]
+    :param results: Contains the original data inputted, results that came back from the T&C method,
+    components data of original inputted data and components of the results that came back from the T&C method.
+    :type results: A 2D List
+    """
+
+    headers = {
+        "Original Input": [
+            "Identifier",
+            "Period",
+            "Total",
+            "Amend Total",
+            "Predictive",
+            "Predictive Period",
+            "Auxiliary Variable",
+            "Absolute Difference Threshold",
+            "Percentage Difference Threshold",
+        ],
+        "Final Results": [
+            "Identifier",
+            "Period",
+            "Absolute Difference",
+            "Low Percent Threshold",
+            "High Percent Threshold",
+            "Final Total",
+            "TCC Marker",
+        ],
+        "Original Input Components": ["Original Comp 1", "Original Comp 2", "Original Comp 3", "Original Comp 4"],
+        "Final Results Components": ["Final Comp 1", "Final Comp 2", "Final Comp 3", "Final Comp 4"]
+    }
+    
     print("\n")
-    print("Final Results: ")
-    print("==============")
-    print(
-        tabulate(
-            table_2,
-            headers=[
-                "Identifier",
-                "Period",
-                "Absolute Difference",
-                "Low Percent Threshold",
-                "High Percent Threshold",
-                "Final Total",
-                "TCC Marker",
-            ],
-            floatfmt="",
-        )
-    )
 
-    print("\n")
-    print("Original Input Components: ")
-    print("==========================")
-    table_3 = [unpack_original_data_comp]
-    print(
-        tabulate(
-            table_3,
-            headers=["Final Comp 1", "Final Comp 2", "Final Comp 3", "Final Comp 4"],
-            floatfmt="",
-        )
-    )
+    for header, result in zip(headers, results):
+        title = header
+        header = headers[header]
 
-    print("\n")
-    print("Final Results Components: ")
-    print("=========================")
-    table_4 = [new_result_comp]
-    # print("Table_4", table_4)
-    print(
-        tabulate(
-            table_4,
-            headers=["Final Comp 1", "Final Comp 2", "Final Comp 3", "Final Comp 4"],
-            floatfmt="",
+        table = [result]
+        print(title)
+        print("==========================")
+        print(
+            tabulate(
+                table,
+                headers=header,
+                floatfmt="",
+            )
         )
-    )
-
+        print("\n")
 
 invoke_process()
