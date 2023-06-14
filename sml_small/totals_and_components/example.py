@@ -107,37 +107,54 @@ test_data = [
 ]
 
 
-# In this function we pass in the test data into the totals_and_components function
-def invoke_process_in_memory_data():
-    # data = ["A",
-    #         "202301",
-    #         1625, 
-    #         [Component_list(632, None), Component_list(732, None), Component_list(99, None), Component_list(162, None)],
-    #         True,
-    #         1625,
-    #         "202301",
-    #         None,
-    #         11,
-    #         None]
+# In this function we pass in the in memory test data into the totals_and_components function
+def invoke_process_in_memory_data_example():
+    data = ["A",
+            "202301",
+            1625, 
+            [Component_list(632, None), Component_list(732, None), Component_list(99, None), Component_list(162, None)],
+            True,
+            1625,
+            "202301",
+            None,
+            11,
+            None]
 
-    # result = totals_and_components(
-    #         "A",
-    #         "202301",
-    #         1625, 
-    #         [Component_list(632, None), Component_list(732, None), Component_list(99, None), Component_list(162, None)],
-    #         True,
-    #         1625,
-    #         "202301",
-    #         None,
-    #         11,
-    #         None)
+    result = totals_and_components(
+            "A",
+            "202301",
+            1625, 
+            [Component_list(632, None), Component_list(732, None), Component_list(99, None), Component_list(162, None)],
+            True,
+            1625,
+            "202301",
+            None,
+            11,
+            None)
     
-    # format_result(result, data)
+    filter_data(result, data)
 
-    for data in test_data:
-        result = totals_and_components(*data)
-        filter_data(result, data)
 
+# In this example we can pass in the data as a list and unpack it into separate arguments
+def invoke_process_in_memory_data_example_2():
+    data = ["A",
+            "202301",
+            1625, 
+            [Component_list(632, None), Component_list(732, None), Component_list(99, None), Component_list(162, None)],
+            True,
+            1625,
+            "202301",
+            None,
+            11,
+            None]
+
+    # We use * to unpack the above list into separate arguments
+    result = totals_and_components(*data)
+    filter_data(result, data)
+
+# The two functions below are solely used to create a pretty table on the command line
+# to display the data in a nice format/ table
+# They aren't essential to work with the T&C method
 
 # Filter the results returned from T&C method
 # This function is used to wrangle the results returned so we can pass the results
@@ -240,4 +257,5 @@ def display_results(results):
         )
         print("\n")
 
-invoke_process_in_memory_data()
+# You can run the functions invoke_process_in_memory_data_example or invoke_process_in_memory_data_example_2 below
+invoke_process_in_memory_data_example()
