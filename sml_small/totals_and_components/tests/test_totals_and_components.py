@@ -863,7 +863,7 @@ class TestTotalsAndComponents:
                             None,
                             None,
                             "N",
-                            None,
+                            1625,
                             None,
                     ),
                     "TCC Marker N",
