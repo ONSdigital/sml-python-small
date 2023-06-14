@@ -322,7 +322,7 @@ def invoke_process_with_local_csv():
                     Component_list(float(row["comp_3"])),
                     Component_list(float(row["comp_4"]))
                 ],
-                bool(row["amend_total"]), 
+                True if not row["amend_total"] == "FALSE" else False, 
                 float(row["predictive"]),
                 str(row["period"]),
                 None if not row["auxiliary"] else float(row["auxiliary"]),
