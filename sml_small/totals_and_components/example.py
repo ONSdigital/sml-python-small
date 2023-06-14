@@ -2,7 +2,11 @@
 # test data to be processed by the T&C method and return the result to
 # be displayed in a formatted table on the command line
 
+# Importing the totals_and_components method from the totals_and_components.py file
 from totals_and_components import totals_and_components, Component_list
+# Importing tabulate function from tabulate to pretty print the input and output results
+# from the T&C method in a tabular format
+# This import isn't necessary to work with the T&C method
 from tabulate import tabulate
 
 test_data = [
@@ -103,7 +107,8 @@ test_data = [
 ]
 
 
-def invoke_process():
+# In this function we pass in the test data into the totals_and_components function
+def invoke_process_in_memory_data():
     # data = ["A",
     #         "202301",
     #         1625, 
@@ -134,6 +139,9 @@ def invoke_process():
         filter_data(result, data)
 
 
+# Filter the results returned from T&C method
+# This function is used to wrangle the results returned so we can pass the results
+# into the tabulate function to create the table on the command line
 def filter_data(result, original_data):
     """
     Formats the result we get back from the T&C method into a table format
@@ -172,6 +180,8 @@ def filter_data(result, original_data):
     display_results(results)
 
 
+# This function is used to display the input data and output data returned from the
+# T&C method in a pretty table format on the command line
 def display_results(results):
     """
     This function is used to display the results on the command line in a table format, 
@@ -182,6 +192,7 @@ def display_results(results):
     :type results: A 2D List
     """
 
+    # Headers to be passed into the tabulate function for the input and output tables
     headers = {
         "Original Input": [
             "Identifier",
@@ -208,7 +219,10 @@ def display_results(results):
     }
     
     print("\n")
-
+    
+    # The for loop iterates through the headers and results simultaneously and passes in the results data
+    # and table headers into the tabulate function so the tables can be created on the command line and
+    # then displayed
     for header, result in zip(headers, results):
         title = header
         header = headers[header]
@@ -225,4 +239,4 @@ def display_results(results):
         )
         print("\n")
 
-invoke_process()
+invoke_process_in_memory_data()
