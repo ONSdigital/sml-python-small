@@ -223,6 +223,7 @@ def display_results(results):
     # The for loop iterates through the headers and results simultaneously and passes in the results data
     # and table headers into the tabulate function so the tables can be created on the command line and
     # then displayed
+    # zip function is used here to to iterate through the dictionary headers and the results list simultaneously
     for header, result in zip(headers, results):
         title = header
         header = headers[header]
