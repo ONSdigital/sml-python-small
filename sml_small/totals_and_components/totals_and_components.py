@@ -101,18 +101,18 @@ class TotalsAndComponentsOutput:
     # difference between the components input and the predictive total
     low_percent_threshold: Optional[
         float
-    ] = 0  # the sum of the input components minus the absolute percentage difference
+    ] = None  # the sum of the input components minus the absolute percentage difference
     high_percent_threshold: Optional[
         float
-    ] = 0  # the sum of the input components plus the absolute percentage difference
+    ] = None  # the sum of the input components plus the absolute percentage difference
     final_total: Optional[
         float
-    ] = 0  # the output total which may have been corrected based on user input amend_
+    ] = None  # the output total which may have been corrected based on user input amend_
     # total variable
     original_components: Optional[float]  # the original input components
     final_components: Optional[
         float
-    ] = [0]  # the output components which may have been corrected to match the received
+    ] = None  # the output components which may have been corrected to match the received
     # predictive value. If corrected the components are scaled proportionally
     # based on the input values
     tcc_marker: Optional[str]  # Indicates what correction (if any) was necessary.

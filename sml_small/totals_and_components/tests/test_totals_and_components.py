@@ -859,13 +859,12 @@ class TestTotalsAndComponents:
                     11,
                     None,
                     (
-                            0,
+                            0.0,
                             None,
                             None,
                             "N",
-                            1625,
-                            [632, 732, 99, 162],
-                            [632, 732, 99, 162],
+                            None,
+                            None,
                     ),
                     "TCC Marker N",
             ),
@@ -883,13 +882,12 @@ class TestTotalsAndComponents:
                     11,
                     None,
                     (
-                            6,
+                            6.0,
                             None,
                             None,
                             "T",
-                            10811,
+                            10811.0,
                             [9201, 866, 632, 112],
-                            [9201, 866, 632, 122],
                     ),
                     "TCC Marker T",
             ),
@@ -908,12 +906,11 @@ class TestTotalsAndComponents:
                     0.1,
                     (
                             None,
-                            90,
-                            110,
+                            90.0,
+                            110.0,
                             "C",
                             90,
-                            [90, 0, 4, 6],
-                            [81, 0, 3.6, 5.4],
+                            [81.0, 0.0, 3.6, 5.3999999999999995],
                     ),
                     "TCC Marker C",
             ),
@@ -931,13 +928,12 @@ class TestTotalsAndComponents:
                     1,
                     0.1,
                     (
-                            339,
+                            339.0,
                             1462.5,
                             1787.5,
                             "M",
-                            1964,
-                            [632, 732, 99, 162],
-                            [632, 732, 99, 162],
+                            None,
+                            None,
                     ),
                     "TCC Marker M ",
             ),
@@ -961,7 +957,6 @@ class TestTotalsAndComponents:
                             "T",
                             280,
                             [240, 0, 30, 10],
-                            [240, 0, 30, 10],
                     ),
                     "TCC Marker T",
             ),
@@ -979,13 +974,12 @@ class TestTotalsAndComponents:
                     11,
                     None,
                     (
-                            11,
+                            11.0,
                             None,
                             None,
                             "S",
-                            11,
-                            [0, 0, 0, 0],
-                            [0, 0, 0, 0],
+                            None,
+                            None,
                     ),
                     "TCC Marker S",
             ),
@@ -1033,11 +1027,7 @@ class TestTotalsAndComponents:
                 results.final_total,
                 results.final_components,
             )
-            assert results.tcc_marker == expected_result[3]
-            assert (
-                final_results == expected_result,
-                results.tcc_marker == expected_result[3]
-            ), f"Test {test_id} failed: Unexpected result"
+            assert final_results == expected_result, f"Test {test_id} failed: Unexpected result"
         except Exception as e:
             pytest.fail(
                 EXCEPTION_FAIL_MESSAGE.format(
