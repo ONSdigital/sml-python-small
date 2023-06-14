@@ -309,6 +309,8 @@ def display_results(results):
 
 
 def invoke_process_with_local_csv():
+    # Read the CSV file and extract the input data and pass into the
+    # T&C method
     with open("TCC_test_data_demo.csv", mode="r") as csv_file:
         csv_reader = csv.DictReader(csv_file)
         for row in csv_reader:
@@ -334,6 +336,56 @@ def invoke_process_with_local_csv():
 
             result = totals_and_components(*input_data)
             print(result)
+
+            new_result = [
+                result.identifier,
+                result.period,
+                result.absolute_difference,
+                result.low_percent_threshold,
+                result.high_percent_threshold,
+                result.final_total,
+                result.tcc_marker,
+            ]
+
+            new_result_comp = []
+            for component in result.final_components:
+                new_result_comp.append(component.final_value)
+
+            # Write the results returned by the T&C into the CSV file
+            with open("TCC_test_data_demo.csv", mode="w") as csv_file:
+                field_names = [
+                    "\ufeffreference", 
+                    "period", 
+                    "abs_threshold",
+                    "perc_low",
+                    "perc_high",
+                    "final_total",
+                    "final_comp_1",
+                    "final_comp_2",
+                    "final_comp_3",
+                    "final_comp_4"
+                    "TCC_marker",
+                    ]
+                
+                writer = csv.DictWriter(csv_file, fieldnames=field_names, extrasaction='ignore')
+
+                writer.writeheader()
+                writer.writerow({
+                    '\ufeffreference': result.identifier, 
+                    'period': result.period,
+                    'abs_threshold': result.absolute_difference,
+                    'perc_low': result.low_percent_threshold,
+                    'perc_high': result.high_percent_threshold,
+                    'final_total': result.final_total,
+                    'final_comp_1': new_result_comp[0],
+                    'final_comp_2': new_result_comp[1],
+                    'final_comp_3': new_result_comp[2],
+                    'final_comp_4': new_result_comp[3],
+                    'TCC_marker': result.tcc_marker,
+                    })
+
+
+
             
 
 
@@ -341,39 +393,3 @@ def invoke_process_with_local_csv():
 invoke_process_with_local_csv()
 # invoke_process_in_memory_data_example()
 # invoke_process_in_memory_data_example_2()
-
-
-# Input Table Function
-# Variable Name   |   Value
-# ----------------|---------
-# identifier     |   A
-# period         |   202301
-# total          |   1625
-# components     |   [<totals_and_components.Component_list object at 0x105522890>, <totals_and_components.Component_list object at 0x105522c50>, <totals_and_components.Component_list object at 0x105522c20>, <totals_and_components.Component_list object at 0x105522950>]
-# amend_total    |   True
-# predictive     |   1625
-# predictive_period|   202301
-# auxiliary      |   None
-# absolute_difference_threshold|   11
-# percentage_difference_threshold|   None
-# Totals and Components Output:
-# -----------------------------
-# Identifier: A
-# Period: 202301
-# Absolute Difference: 0.0
-# Low Percent Threshold: None
-# High Percent Threshold: None
-# Final Total: 1625
-# Final Components:
-#   Original Value: 632
-#   Final Value: 632
-#   Original Value: 732
-#   Final Value: 732
-#   Original Value: 99
-#   Final Value: 99
-#   Original Value: 162
-#   Final Value: 162
-# TCC Marker: N
-
-
-# ['C', '202301', 90.0, [<totals_and_components.Component_list object at 0x1085aea70>, <totals_and_components.Component_list object at 0x1085aee90>, <totals_and_components.Component_list object at 0x1085ae830>, <totals_and_components.Component_list object at 0x1085aebf0>], True, 90.0, '202301', None, None, 0.1]
