@@ -774,6 +774,7 @@ def totals_and_components(
             if input_parameters[InputParameters.PREDICTIVE.value] == component_total:
                 output_list["tcc_marker"] = TccMarker.NO_CORRECTION
                 output_list["final_total"] = total
+                output_list["final_components"] = components
             if output_list["tcc_marker"] == TccMarker.METHOD_PROCEED:
                 low_threshold, high_threshold, output_list = calculate_percent_thresholds(
                     component_total,
@@ -795,7 +796,9 @@ def totals_and_components(
                     low_threshold,
                     high_threshold
                 )
-
+                if output_list["tcc_marker"] == TccMarker.MANUAL:
+                    output_list["final_total"] = total
+                    output_list["final_components"] = components
                 if output_list["tcc_marker"] == TccMarker.METHOD_PROCEED:
                     output_list["final_total"], output_list["final_components"], output_list["tcc_marker"] = \
                         error_correction(
