@@ -109,6 +109,9 @@ test_data = [
 
 # In this function we pass in the in memory test data into the totals_and_components function
 def invoke_process_in_memory_data_example():
+
+    # This list is used to keep track of the original data inputted, so we can display this
+    # on the command line on a table
     data = ["A",
             "202301",
             1625, 
@@ -120,6 +123,7 @@ def invoke_process_in_memory_data_example():
             11,
             None]
 
+    # We pass in the input data to be processed and returned by the T&C method
     result = totals_and_components(
             "A",
             "202301",
@@ -137,16 +141,16 @@ def invoke_process_in_memory_data_example():
 
 # In this example we can pass in the data as a list and unpack it into separate arguments
 def invoke_process_in_memory_data_example_2():
-    data = ["A",
+    data = ["C",
             "202301",
-            1625, 
-            [Component_list(632, None), Component_list(732, None), Component_list(99, None), Component_list(162, None)],
-            True,
-            1625,
+            90,
+            [Component_list(90, None), Component_list(0, None), Component_list(4, None), Component_list(6, None)],
+            False,
+            90,
             "202301",
             None,
-            11,
-            None]
+            None,
+            0.1]
 
     # We use * to unpack the above list into separate arguments
     result = totals_and_components(*data)
@@ -182,18 +186,24 @@ def filter_data(result, original_data):
         result.tcc_marker,
     ]
 
-    original_data_comp = original_data[3]
+    # We pop the components object from the original_data list as we wouldn't be needing it
     original_data.pop(3)
 
-    unpack_original_data_comp = []
-    for component in original_data_comp:
-        unpack_original_data_comp.append(component.original_value)
+    # We extract the original_value from the components from the final_components list returned from
+    # the T&C method
+    original_data_comp = []
+    for component in result.final_components:
+        original_data_comp.append(component.original_value)
 
+    # We extract the final_value from the components from the final_components list returned from
+    # the T&C method
     new_result_comp = []
     for component in result.final_components:
         new_result_comp.append(component.final_value)
     
-    results = [original_data, new_result, unpack_original_data_comp, new_result_comp]
+    # We get all the list data above and amend that to a 2D list to be passed on to the
+    # display_results function
+    results = [original_data, new_result, original_data_comp, new_result_comp]
     display_results(results)
 
 
@@ -258,4 +268,4 @@ def display_results(results):
         print("\n")
 
 # You can run the functions invoke_process_in_memory_data_example or invoke_process_in_memory_data_example_2 below
-invoke_process_in_memory_data_example()
+invoke_process_in_memory_data_example_2()
