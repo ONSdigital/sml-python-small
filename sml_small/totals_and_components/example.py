@@ -4,6 +4,7 @@
 
 # Importing the totals_and_components method from the totals_and_components.py file
 from totals_and_components import totals_and_components, Component_list
+import csv
 
 # Importing tabulate function from tabulate to pretty print the input and output results
 # from the T&C method in a tabular format
@@ -307,5 +308,72 @@ def display_results(results):
         print("\n")
 
 
+def invoke_process_with_local_csv():
+    with open("TCC_test_data_demo.csv", mode="r") as csv_file:
+        csv_reader = csv.DictReader(csv_file)
+        for row in csv_reader:
+            input_data = [
+                str(row["\ufeffreference"]),
+                str(row["period"]), 
+                float(row["total"]),
+                [
+                    Component_list(float(row["comp_1"])),
+                    Component_list(float(row["comp_2"])),
+                    Component_list(float(row["comp_3"])),
+                    Component_list(float(row["comp_4"]))
+                ],
+                bool(row["amend_total"]), 
+                float(row["predictive"]),
+                str(row["period"]),
+                None if not row["auxiliary"] else float(row["auxiliary"]),
+                None if not row["abs_threshold"] else float(row["abs_threshold"]),
+                None if not row["perc_threshold"] else float(row["perc_threshold"]),
+            ]
+
+            # print(input_data)
+
+            result = totals_and_components(*input_data)
+            print(result)
+            
+
+
 # You can run the functions invoke_process_in_memory_data_example or invoke_process_in_memory_data_example_2 below
-invoke_process_in_memory_data_example_2()
+invoke_process_with_local_csv()
+# invoke_process_in_memory_data_example()
+# invoke_process_in_memory_data_example_2()
+
+
+# Input Table Function
+# Variable Name   |   Value
+# ----------------|---------
+# identifier     |   A
+# period         |   202301
+# total          |   1625
+# components     |   [<totals_and_components.Component_list object at 0x105522890>, <totals_and_components.Component_list object at 0x105522c50>, <totals_and_components.Component_list object at 0x105522c20>, <totals_and_components.Component_list object at 0x105522950>]
+# amend_total    |   True
+# predictive     |   1625
+# predictive_period|   202301
+# auxiliary      |   None
+# absolute_difference_threshold|   11
+# percentage_difference_threshold|   None
+# Totals and Components Output:
+# -----------------------------
+# Identifier: A
+# Period: 202301
+# Absolute Difference: 0.0
+# Low Percent Threshold: None
+# High Percent Threshold: None
+# Final Total: 1625
+# Final Components:
+#   Original Value: 632
+#   Final Value: 632
+#   Original Value: 732
+#   Final Value: 732
+#   Original Value: 99
+#   Final Value: 99
+#   Original Value: 162
+#   Final Value: 162
+# TCC Marker: N
+
+
+# ['C', '202301', 90.0, [<totals_and_components.Component_list object at 0x1085aea70>, <totals_and_components.Component_list object at 0x1085aee90>, <totals_and_components.Component_list object at 0x1085ae830>, <totals_and_components.Component_list object at 0x1085aebf0>], True, 90.0, '202301', None, None, 0.1]
