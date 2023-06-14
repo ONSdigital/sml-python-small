@@ -178,6 +178,10 @@ def validate_input(
         raise ValueError(
             "One or both of absolute/percentage difference thresholds must be specified and non-zero"
         )
+    if amend_total is None:
+        raise ValueError(
+            "Amend total needs to be True or False"
+        )
     if absolute_difference_threshold:
         validate_number("absolute difference threshold", absolute_difference_threshold)
         float(absolute_difference_threshold)
