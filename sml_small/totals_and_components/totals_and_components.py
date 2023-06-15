@@ -107,7 +107,6 @@ class TotalsAndComponentsOutput:
         float
     ] = None  # the output total which may have been corrected based on user input amend_
     # total variable
-    original_components: Optional[float]  # the original input components
     final_components: Optional[
         float
     ] = None  # the output components which may have been corrected to match the received
@@ -141,7 +140,6 @@ class TotalsAndComponentsOutput:
         print(f"Low Percent Threshold: {self.low_percent_threshold}")
         print(f"High Percent Threshold: {self.high_percent_threshold}")
         print(f"Final Total: {self.final_total}")
-        print(f"Original Value: {self.original_components}")
         print(f"Final Value: {self.final_components}")
         print(f"TCC Marker: {self.tcc_marker}")
 
@@ -720,7 +718,7 @@ def totals_and_components(
                difference (default: None).
              - final_total (float): The output total, which may have been corrected based on
              the amend_total variable.
-             - final_components (List[Component_list]): The output components, which may have been
+             - final_components (List[float]): The output components, which may have been
              corrected to match the received predictive value. If corrected, the components are
                scaled proportionally
              - Tcc_Marker (str): Indicates what correction (if any) was necessary.
@@ -749,7 +747,6 @@ def totals_and_components(
         output_list = {
             "identifier": identifier,
             "period": period,
-            "original_components": components,
         }
         components_list = initialize_components_list(components)
         #  Check for invalid parameter values
