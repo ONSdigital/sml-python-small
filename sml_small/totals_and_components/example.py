@@ -317,15 +317,15 @@ def invoke_process_with_local_csv():
         for row in csv_reader:
             input_data = [
                 str(row["\ufeffreference"]),
-                str(row["period"]), 
+                str(row["period"]),
                 float(row["total"]),
                 [
                     Component_list(float(row["comp_1"])),
                     Component_list(float(row["comp_2"])),
                     Component_list(float(row["comp_3"])),
-                    Component_list(float(row["comp_4"]))
+                    Component_list(float(row["comp_4"])),
                 ],
-                True if not row["amend_total"] == "FALSE" else False, 
+                True if not row["amend_total"] == "FALSE" else False,
                 float(row["predictive"]),
                 str(row["period"]),
                 None if not row["auxiliary"] else float(row["auxiliary"]),
@@ -368,12 +368,10 @@ def invoke_process_with_local_csv():
             # print(results)
     # print(results)
 
-
-
     # Write the results returned by the T&C into the CSV file
     with open("TCC_test_data_demo_processed.csv", mode="w") as csv_file:
         field_names = [
-            "\ufeffreference", 
+            "\ufeffreference",
             "period",
             # "total",
             # "comp_1"
@@ -393,30 +391,37 @@ def invoke_process_with_local_csv():
             "final_comp_1",
             "final_comp_2",
             "final_comp_3",
-            "final_comp_4"
-            ]
-        
-        writer = csv.DictWriter(csv_file, fieldnames=field_names, extrasaction='ignore')
+            "final_comp_4",
+        ]
+
+        writer = csv.DictWriter(csv_file, fieldnames=field_names, extrasaction="ignore")
 
         writer.writeheader()
         for identifier in results:
             # print(results[identifier])
-            writer.writerow({
-                '\ufeffreference': identifier,
-                'period': results[identifier]["period"],
-                'abs_diff': results[identifier]["absolute_difference"],
-                'perc_low': results[identifier]["low_percent_threshold"],
-                'perc_high': results[identifier]["high_percent_threshold"],
-                'final_total': results[identifier]["final_total"],
-                'final_comp_1': results[identifier]["comp"][0],
-                'final_comp_2': results[identifier]["comp"][1],
-                'final_comp_3': results[identifier]["comp"][2],
-                'final_comp_4': results[identifier]["comp"][3],
-                'TCC_marker': results[identifier]["tcc_marker"],
-                })
+            writer.writerow(
+                {
+                    "\ufeffreference": identifier,
+                    "period": results[identifier]["period"],
+                    "abs_diff": results[identifier]["absolute_difference"],
+                    "perc_low": results[identifier]["low_percent_threshold"],
+                    "perc_high": results[identifier]["high_percent_threshold"],
+                    "final_total": results[identifier]["final_total"],
+                    "final_comp_1": results[identifier]["comp"][0],
+                    "final_comp_2": results[identifier]["comp"][1],
+                    "final_comp_3": results[identifier]["comp"][2],
+                    "final_comp_4": results[identifier]["comp"][3],
+                    "TCC_marker": results[identifier]["tcc_marker"],
+                }
+            )
+
+
+def invoke_process_with_in_memory_csv():
+    pass
 
 
 # You can run the functions invoke_process_in_memory_data_example or invoke_process_in_memory_data_example_2 below
 invoke_process_with_local_csv()
+# invoke_process_with_in_memory_csv()
 # invoke_process_in_memory_data_example()
 # invoke_process_in_memory_data_example_2()
