@@ -1510,7 +1510,7 @@ class TestTotalsAndComponents:
                     [2.4, 2.6, 2.8, 3.1],
                     "T",
                 ),
-                "Test 25 - Amend True scenario with floating point components and total",
+                "Test 25 - Amend True scenario with floating point components that sum to make a floating point total",
             ),
             (
                 "ZA",
@@ -1538,7 +1538,7 @@ class TestTotalsAndComponents:
                     [0.4403669724770642, 0.47706422018348627, 0.5137614678899082, 0.5688073394495413],
                     "C",
                 ),
-                "Test 26 - Amend False scenario with floating point components and total",
+                "Test 26 - Amend True scenario with floating point components that sum to make a floating point total",
             ),
             (
                 "ZB",
