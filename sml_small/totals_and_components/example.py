@@ -311,6 +311,7 @@ def display_results(results):
 def invoke_process_with_local_csv():
     # Read the CSV file and extract the input data and pass into the
     # T&C method
+    results = {}
     with open("TCC_test_data_demo.csv", mode="r") as csv_file:
         csv_reader = csv.DictReader(csv_file)
         for row in csv_reader:
@@ -335,7 +336,7 @@ def invoke_process_with_local_csv():
             # print(input_data)
 
             result = totals_and_components(*input_data)
-            print(result)
+            # print(result)
 
             new_result = [
                 result.identifier,
@@ -347,46 +348,72 @@ def invoke_process_with_local_csv():
                 result.tcc_marker,
             ]
 
+            new_result = {
+                result.identifier: {
+                    "period": result.period,
+                    "absolute_difference": result.absolute_difference,
+                    "low_percent_threshold": result.low_percent_threshold,
+                    "high_percent_threshold": result.high_percent_threshold,
+                    "final_total": result.final_total,
+                    "tcc_marker": result.tcc_marker,
+                }
+            }
+
             new_result_comp = []
             for component in result.final_components:
                 new_result_comp.append(component.final_value)
+            new_result[result.identifier]["comp"] = new_result_comp
 
-            # Write the results returned by the T&C into the CSV file
-            with open("TCC_test_data_demo.csv", mode="w") as csv_file:
-                field_names = [
-                    "\ufeffreference", 
-                    "period", 
-                    "abs_threshold",
-                    "perc_low",
-                    "perc_high",
-                    "final_total",
-                    "final_comp_1",
-                    "final_comp_2",
-                    "final_comp_3",
-                    "final_comp_4"
-                    "TCC_marker",
-                    ]
-                
-                writer = csv.DictWriter(csv_file, fieldnames=field_names, extrasaction='ignore')
-
-                writer.writeheader()
-                writer.writerow({
-                    '\ufeffreference': result.identifier, 
-                    'period': result.period,
-                    'abs_threshold': result.absolute_difference,
-                    'perc_low': result.low_percent_threshold,
-                    'perc_high': result.high_percent_threshold,
-                    'final_total': result.final_total,
-                    'final_comp_1': new_result_comp[0],
-                    'final_comp_2': new_result_comp[1],
-                    'final_comp_3': new_result_comp[2],
-                    'final_comp_4': new_result_comp[3],
-                    'TCC_marker': result.tcc_marker,
-                    })
+            results.update(new_result)
+            # print(results)
+    # print(results)
 
 
 
-            
+    # Write the results returned by the T&C into the CSV file
+    with open("TCC_test_data_demo_processed.csv", mode="w") as csv_file:
+        field_names = [
+            "\ufeffreference", 
+            "period",
+            # "total",
+            # "comp_1"
+            # "comp_2",
+            # "comp_3",
+            # "comp_4",
+            # "comp_sum",
+            # "amend_total",
+            # "predictive",
+            # "auxiliary",
+            # "abs_threshold",
+            "abs_diff",
+            "perc_low",
+            "perc_high",
+            "TCC_marker",
+            "final_total",
+            "final_comp_1",
+            "final_comp_2",
+            "final_comp_3",
+            "final_comp_4"
+            ]
+        
+        writer = csv.DictWriter(csv_file, fieldnames=field_names, extrasaction='ignore')
+
+        writer.writeheader()
+        for identifier in results:
+            # print(results[identifier])
+            writer.writerow({
+                '\ufeffreference': identifier,
+                'period': results[identifier]["period"],
+                'abs_diff': results[identifier]["absolute_difference"],
+                'perc_low': results[identifier]["low_percent_threshold"],
+                'perc_high': results[identifier]["high_percent_threshold"],
+                'final_total': results[identifier]["final_total"],
+                'final_comp_1': results[identifier]["comp"][0],
+                'final_comp_2': results[identifier]["comp"][1],
+                'final_comp_3': results[identifier]["comp"][2],
+                'final_comp_4': results[identifier]["comp"][3],
+                'TCC_marker': results[identifier]["tcc_marker"],
+                })
 
 
 # You can run the functions invoke_process_in_memory_data_example or invoke_process_in_memory_data_example_2 below
