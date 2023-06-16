@@ -1000,7 +1000,7 @@ class TestTotalsAndComponents:
                 (
                     "F",
                     "202312",
-                    None,
+                    11,
                     None,
                     None,
                     11,

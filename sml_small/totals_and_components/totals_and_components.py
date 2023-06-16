@@ -791,6 +791,9 @@ def totals_and_components(
             absolute_difference = check_sum_components_predictive(
                 predictive, component_total, absolute_difference_threshold
             )
+            if output_list["tcc_marker"] == TccMarker.STOP:
+                output_list["final_total"] = total
+                output_list["final_components"] = components
             output_list["absolute_difference"] = absolute_difference
             #  Determine if a correction is required
             if input_parameters[InputParameters.PREDICTIVE.value] == component_total:
@@ -838,6 +841,9 @@ def totals_and_components(
                         ],
                         predictive=predictive,
                     )
+        elif output_list["tcc_marker"] == TccMarker.STOP:
+            output_list["final_total"] = total
+            output_list["final_components"] = components
         output_list["tcc_marker"] = output_list["tcc_marker"].value
         output = TotalsAndComponentsOutput(output_list)
         output.print_output_table()
