@@ -1849,7 +1849,7 @@ class TestTotalsAndComponents:
                 assert results.final_total == expected_result[5]
                 assert results.final_components == expected_result[6]
 
-                if (results.tcc_marker == "T" or results.tcc_marker == "C") and results.final_components != None:
+                if results.tcc_marker == "T" or results.tcc_marker == "C":
                     sum_of_components = 0
                     for component in results.final_components:
                         sum_of_components += component
