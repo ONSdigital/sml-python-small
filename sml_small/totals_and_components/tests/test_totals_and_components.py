@@ -16,6 +16,13 @@ EXCEPTION_FAIL_MESSAGE = (
 )
 
 
+#  Class used to force str() cast during validation to fail as all standard library python types have
+#  valid string conversions
+class NoString:
+    def __str__(self):
+        pass
+
+
 class TestValidateInput:
     @pytest.mark.parametrize(
         "identifier, period, total, components, amend_total, predictive, "
@@ -313,6 +320,25 @@ class TestValidateInput:
                     "Test 13: None value identifier",
             ),
             (
+                    NoString(),
+                    "202312121212",
+                    100.0,
+                    [
+                        ComponentPair(original_value=1, final_value=None),
+                        ComponentPair(original_value=2, final_value=None),
+                        ComponentPair(original_value=3, final_value=None),
+                        ComponentPair(original_value=4, final_value=None),
+                    ],
+                    102.0,
+                    101.0,
+                    "202312",
+                    89.0,
+                    100.0,
+                    None,
+                    TypeError,
+                    "Test 14: Identifier can't be cast as string",
+            ),
+            (
                     "M",
                     "202312121212",
                     100.0,
@@ -329,7 +355,7 @@ class TestValidateInput:
                     100.0,
                     None,
                     ValueError,
-                    "Test 14: Period in wrong format",
+                    "Test 15: Period in wrong format",
             ),
         ],
     )

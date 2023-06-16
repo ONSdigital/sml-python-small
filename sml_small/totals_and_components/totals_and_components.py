@@ -767,8 +767,10 @@ def totals_and_components(
         components_list = initialize_components_list(components)
         #  Check for invalid parameter values
         input_parameters = validate_input(
+            identifier,
             total,
             components_list,
+            period,
             predictive,
             auxiliary,
             absolute_difference_threshold,
@@ -843,5 +845,6 @@ def totals_and_components(
 
     except Exception as error:
         print("Exception error detected:", error)
+        raise error
 
     return output
