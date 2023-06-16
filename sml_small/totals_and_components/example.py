@@ -147,7 +147,7 @@ def invoke_process_in_memory_data_example_2():
 
     # The input data below once passed into the T&C method should return
     # a TCC Marker of C = Components corrected
-    data = [
+    data =  [
         "C",
         "202301",
         90,
@@ -381,8 +381,8 @@ def invoke_process_with_local_csv():
 def invoke_process_with_in_memory_csv():
     # Read the CSV file and extract the input data and pass into the
     # T&C method
-    in_memory_csv_data = """reference,period,total,comp_1,comp_2,comp_3,comp_4,amend_total,comp_sum,predictive,auxiliary,abs_threshold,perc_threshold
-F,202301,11,0,0,0,0,0,TRUE,202301,,11"""
+    in_memory_csv_data = """reference,period,total,comp_1,comp_2,comp_3,comp_4,amend_total,predictive,auxiliary,abs_threshold,perc_threshold
+A,202301,1625,632,732,99,162,TRUE,1625,202301,,11"""
 
     csv_reader = csv.DictReader(in_memory_csv_data.splitlines())
     print("CSV reader", csv_reader)
@@ -420,8 +420,8 @@ F,202301,11,0,0,0,0,0,TRUE,202301,,11"""
             }
         }
 
-        # new_result_comp = result.final_components
-        # new_result[result.identifier]["comp"] = new_result_comp
+        new_result_comp = result.final_components
+        new_result[result.identifier]["comp"] = new_result_comp
 
         results.update(new_result)
     print(results)
@@ -464,10 +464,10 @@ F,202301,11,0,0,0,0,0,TRUE,202301,,11"""
                     "perc_low": results[identifier]["low_percent_threshold"],
                     "perc_high": results[identifier]["high_percent_threshold"],
                     "final_total": results[identifier]["final_total"],
-                    # "final_comp_1": results[identifier]["comp"][0],
-                    # "final_comp_2": results[identifier]["comp"][1],
-                    # "final_comp_3": results[identifier]["comp"][2],
-                    # "final_comp_4": results[identifier]["comp"][3],
+                    "final_comp_1": results[identifier]["comp"][0],
+                    "final_comp_2": results[identifier]["comp"][1],
+                    "final_comp_3": results[identifier]["comp"][2],
+                    "final_comp_4": results[identifier]["comp"][3],
                     "TCC_marker": results[identifier]["tcc_marker"],
                 }
             )
