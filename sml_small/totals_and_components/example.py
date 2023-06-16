@@ -299,10 +299,10 @@ def invoke_process_with_local_csv():
                 str(row["period"]),
                 float(row["total"]),
                 [
-                    ComponentPair(float(row["comp_1"])),
-                    ComponentPair(float(row["comp_2"])),
-                    ComponentPair(float(row["comp_3"])),
-                    ComponentPair(float(row["comp_4"])),
+                    float(row["comp_1"]),
+                    float(row["comp_2"]),
+                    float(row["comp_3"]),
+                    float(row["comp_4"])
                 ],
                 True if not row["amend_total"] == "FALSE" else False,
                 float(row["predictive"]),
@@ -338,14 +338,12 @@ def invoke_process_with_local_csv():
                 }
             }
 
-            new_result_comp = []
-            for component in result.final_components:
-                new_result_comp.append(component.final_value)
+            new_result_comp = result.final_components
             new_result[result.identifier]["comp"] = new_result_comp
 
             results.update(new_result)
             # print(results)
-    # print(results)
+    print(results)
 
     # Write the results returned by the T&C into the CSV file
     with open("TCC_test_data_demo_processed.csv", mode="w") as csv_file:
@@ -400,7 +398,7 @@ def invoke_process_with_in_memory_csv():
 
 
 # You can run the functions invoke_process_in_memory_data_example or invoke_process_in_memory_data_example_2 below
-# invoke_process_with_local_csv()
+invoke_process_with_local_csv()
 # invoke_process_with_in_memory_csv()
 # invoke_process_in_memory_data_example()
-invoke_process_in_memory_data_example_2()
+# invoke_process_in_memory_data_example_2()
