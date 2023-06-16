@@ -1510,7 +1510,7 @@ class TestTotalsAndComponents:
                     [2.4, 2.6, 2.8, 3.1],
                     "T",
                 ),
-                "Test 25 - Amend True scenario with floating point components that sum to make a floating point total",
+                "Test 25 - Amend Total True scenario with floating point components that sum to make a floating point total",
             ),
             (
                 "ZA",
@@ -1538,7 +1538,7 @@ class TestTotalsAndComponents:
                     [0.4403669724770642, 0.47706422018348627, 0.5137614678899082, 0.5688073394495413],
                     "C",
                 ),
-                "Test 26 - Amend True scenario with floating point components that sum to make a floating point total",
+                "Test 26 - Amend Total False scenario with floating point components that sum to make a floating point total",
             ),
             (
                 "ZB",
@@ -1743,16 +1743,7 @@ class TestTotalsAndComponents:
                 None,
                 None,
                 0.1,
-                (
-                "",
-                "202301",
-                    None,
-                    9,
-                    11,
-                    10,
-                    [1, 2, 3, 4],
-                    "T",
-                ),
+                Exception,
                 "Test 34 - Missing identifier value",
             ),
             (
