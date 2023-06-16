@@ -862,6 +862,8 @@ class TestCorrectComponents:
                     exception_msg=str(e),
                 )
             )
+
+
 class TestTotalsAndComponents:
     @pytest.mark.parametrize(
         "identifier, period, total, components, amend_total, predictive, predictive_period, auxiliary,"
@@ -884,8 +886,8 @@ class TestTotalsAndComponents:
                 11,
                 None,
                 (
-                "A",
-                "202301",
+                    "A",
+                    "202301",
                     0,
                     None,
                     None,
@@ -912,8 +914,8 @@ class TestTotalsAndComponents:
                 11,
                 None,
                 (
-                "B",
-                "202301",
+                    "B",
+                    "202301",
                     6,
                     None,
                     None,
@@ -940,8 +942,8 @@ class TestTotalsAndComponents:
                 None,
                 0.1,
                 (
-                "C",
-                "202301",
+                    "C",
+                    "202301",
                     None,
                     90,
                     110,
@@ -968,8 +970,8 @@ class TestTotalsAndComponents:
                 1,
                 0.1,
                 (
-                "D",
-                "202312",
+                    "D",
+                    "202312",
                     339,
                     1462.5,
                     1787.5,
@@ -996,8 +998,8 @@ class TestTotalsAndComponents:
                 11,
                 None,
                 (
-                "F",
-                "202312",
+                    "F",
+                    "202312",
                     None,
                     None,
                     None,
@@ -1025,7 +1027,8 @@ class TestTotalsAndComponents:
                 0.1,
                 "component=InvalidString is missing or not a number",
                 "Test 6 - Invalid component value entered by user",
-            ),(
+            ),
+            (
                 "I",
                 "202301",
                 1625,
@@ -1043,7 +1046,8 @@ class TestTotalsAndComponents:
                 0.1,
                 "predictive must not be a string",
                 "Test 7 - Invalid predictive value entered by user",
-            ),(
+            ),
+            (
                 "J",
                 "202301",
                 1625,
@@ -1098,8 +1102,8 @@ class TestTotalsAndComponents:
                 11,
                 None,
                 (
-                "L",
-                "202301",
+                    "L",
+                    "202301",
                     6,
                     None,
                     None,
@@ -1126,8 +1130,8 @@ class TestTotalsAndComponents:
                 11,
                 None,
                 (
-                "M",
-                "202301",
+                    "M",
+                    "202301",
                     0,
                     None,
                     None,
@@ -1154,8 +1158,8 @@ class TestTotalsAndComponents:
                 11,
                 None,
                 (
-                "N",
-                "202301",
+                    "N",
+                    "202301",
                     6,
                     None,
                     None,
@@ -1182,8 +1186,8 @@ class TestTotalsAndComponents:
                 4,
                 None,
                 (
-                "O",
-                "202301",
+                    "O",
+                    "202301",
                     5,
                     None,
                     None,
@@ -1210,8 +1214,8 @@ class TestTotalsAndComponents:
                 None,
                 0.1,
                 (
-                "P",
-                "202301",
+                    "P",
+                    "202301",
                     None,
                     9,
                     11,
@@ -1238,8 +1242,8 @@ class TestTotalsAndComponents:
                 None,
                 0.1,
                 (
-                "Q",
-                "202301",
+                    "Q",
+                    "202301",
                     None,
                     9,
                     11,
@@ -1266,8 +1270,8 @@ class TestTotalsAndComponents:
                 11,
                 0.1,
                 (
-                "R",
-                "202301",
+                    "R",
+                    "202301",
                     6,
                     9729.9,
                     11892.1,
@@ -1275,7 +1279,7 @@ class TestTotalsAndComponents:
                     [9201, 866, 632, 112],
                     "T",
                 ),
-                "Test 16 - Absolute and Percentage Difference Thresholds specified and Absolute Difference Threshold satisfied",
+                "Test 16 - ADT and PDT specified and ADT satisfied",
             ),
             (
                 "S",
@@ -1294,8 +1298,8 @@ class TestTotalsAndComponents:
                 4,
                 0.1,
                 (
-                "S",
-                "202301",
+                    "S",
+                    "202301",
                     1,
                     9,
                     11,
@@ -1303,7 +1307,7 @@ class TestTotalsAndComponents:
                     [0.9, 1.8, 2.7, 3.6],
                     "C",
                 ),
-                "Test 17 - Absolute and Percentage Difference Thresholds specified and Absolute Difference Threshold not satisfied and Percentage Difference Threshold satisfied",
+                "Test 17 - ADT and PDT specified and ADT not satisfied and PDT satisfied",
             ),
             (
                 "U",
@@ -1360,8 +1364,8 @@ class TestTotalsAndComponents:
                 11,
                 None,
                 (
-                "U",
-                "202301",
+                    "U",
+                    "202301",
                     10817,
                     None,
                     None,
@@ -1388,8 +1392,8 @@ class TestTotalsAndComponents:
                 11,
                 None,
                 (
-                "V",
-                "202301",
+                    "V",
+                    "202301",
                     10817,
                     None,
                     None,
@@ -1400,7 +1404,6 @@ class TestTotalsAndComponents:
                 "Test 21 - Zero Case 2",
             ),
             (
-                
                 "W",
                 "202301",
                 10817,
@@ -1417,8 +1420,8 @@ class TestTotalsAndComponents:
                 11,
                 None,
                 (
-                "W",
-                "202301",
+                    "W",
+                    "202301",
                     10811,
                     None,
                     None,
@@ -1445,8 +1448,8 @@ class TestTotalsAndComponents:
                 45,
                 None,
                 (
-                "X",
-                "202301",
+                    "X",
+                    "202301",
                     40,
                     None,
                     None,
@@ -1473,8 +1476,8 @@ class TestTotalsAndComponents:
                 11,
                 None,
                 (
-                "Y",
-                "202301",
+                    "Y",
+                    "202301",
                     10811,
                     None,
                     None,
@@ -1501,8 +1504,8 @@ class TestTotalsAndComponents:
                 11,
                 None,
                 (
-                "Z",
-                "202301",
+                    "Z",
+                    "202301",
                     7.9,
                     None,
                     None,
@@ -1510,7 +1513,7 @@ class TestTotalsAndComponents:
                     [2.4, 2.6, 2.8, 3.1],
                     "T",
                 ),
-                "Test 25 - Amend Total True scenario with floating point components that sum to make a floating point total",
+                "Test 25 - Amend Total True floating point components and floating point total",
             ),
             (
                 "ZA",
@@ -1529,8 +1532,8 @@ class TestTotalsAndComponents:
                 11,
                 None,
                 (
-                "ZA",
-                "202301",
+                    "ZA",
+                    "202301",
                     8.9,
                     None,
                     None,
@@ -1538,7 +1541,7 @@ class TestTotalsAndComponents:
                     [0.4403669724770642, 0.47706422018348627, 0.5137614678899082, 0.5688073394495413],
                     "C",
                 ),
-                "Test 26 - Amend Total False scenario with floating point components that sum to make a floating point total",
+                "Test 26 - Amend Total False floating point components and floating point total",
             ),
             (
                 "ZB",
@@ -1557,8 +1560,8 @@ class TestTotalsAndComponents:
                 None,
                 0.1,
                 (
-                "ZB",
-                "202301",
+                    "ZB",
+                    "202301",
                     None,
                     9,
                     11,
@@ -1585,8 +1588,8 @@ class TestTotalsAndComponents:
                 None,
                 0.1,
                 (
-                "ZC",
-                "202301",
+                    "ZC",
+                    "202301",
                     None,
                     9,
                     11,
@@ -1613,8 +1616,8 @@ class TestTotalsAndComponents:
                 None,
                 0.1,
                 (
-                "ZD",
-                "202301",
+                    "ZD",
+                    "202301",
                     None,
                     9,
                     11,
@@ -1641,8 +1644,8 @@ class TestTotalsAndComponents:
                 None,
                 0.1,
                 (
-                "ZE",
-                "202301",
+                    "ZE",
+                    "202301",
                     None,
                     9,
                     11,
@@ -1669,13 +1672,13 @@ class TestTotalsAndComponents:
                 None,
                 0.1,
                 (
-                "ZF",
-                "202301",
+                    "ZF",
+                    "202301",
                     None,
                     9,
                     11,
                     11,
-                    [1.1, 2.2, 3.3 , 4.4],
+                    [1.1, 2.2, 3.3, 4.4],
                     "T",
                 ),
                 "Test 31 - predictive is equal to than upper threshold",
@@ -1697,8 +1700,8 @@ class TestTotalsAndComponents:
                 None,
                 0.1,
                 (
-                "ZG",
-                "202301",
+                    "ZG",
+                    "202301",
                     None,
                     9,
                     11,
@@ -1763,8 +1766,8 @@ class TestTotalsAndComponents:
                 None,
                 0.1,
                 (
-                "ZI",
-                "202301",
+                    "ZI",
+                    "202301",
                     None,
                     9,
                     11,

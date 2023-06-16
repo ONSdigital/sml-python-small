@@ -85,9 +85,11 @@ class ComponentPair:
             and self.final_value == other.final_value
         )
 
+
 class TACException(Exception):
-      "Totals and Components error"
-      pass
+    "Totals and Components error"
+    pass
+
 
 class TotalsAndComponentsOutput:
     """
@@ -246,8 +248,8 @@ def validate_input(
         float(auxiliary)
     if (
         (absolute_difference_threshold is None
-        and percentage_difference_threshold is None) or (absolute_difference_threshold == 0
-        and percentage_difference_threshold == 0)
+            and percentage_difference_threshold is None) or (absolute_difference_threshold == 0
+                                                             and percentage_difference_threshold == 0)
     ):
         raise ValueError(
             "One or both of absolute/percentage difference thresholds must be specified and non-zero"
