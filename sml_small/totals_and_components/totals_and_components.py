@@ -30,7 +30,7 @@ class InputParameters(Enum):
 
 class TccMarker(Enum):
     """
-    enum for use when setting/comparing tcc_marker values
+    Enum for use when setting/comparing tcc_marker values
     """
 
     STOP = "S"
@@ -673,20 +673,21 @@ def totals_and_components(
 ) -> TotalsAndComponentsOutput:
     """
     Determines whether a difference exists between a provided total value and the sum of
-    individual components. In the case where a difference exists teh function can decide
+    individual components. In the case where a difference exists the function can decide
     whether an automatic correction should be made based on the provided absolute difference
     and/or percentage difference thresholds. Where the correction satisfies the given thresholds
     the amend_total variable determines whether the correction is applied to the total value
-    (to match the sum of the given components) or the individual components ( so they add up
+    (to match the sum of the given components) or the individual components (so they add up
     to the received total). When the components are corrected to match the total then the original
-    value of the components is taken into account to ensure that the corrected values and weighted
-    accordingly to maintain the original distribution. If a manual correction cannot be applied but
-    the difference is out of bounds of the given thresholds then the function indicates that a
-    manual correction could be attempted. When there is no difference between the provided total
-    and the sum of the individual components then the function indicates no correction has been
-    applied. For exceptional cases where the sum of the original components is zero and a positive
-    total has been received the function indicates the method stopped processing. When invalid types
-    are received for the function then an exception will be raised and no output is generated.
+    value of the components is taken into account to ensure that the corrected values are weighted
+    accordingly to maintain the original distribution. If an automatic correction cannot be applied
+    because the difference is out of bounds of the given thresholds then the function indicates
+    that a manual correction could be attempted. When there is no difference between the provided
+    total and the sum of the individual components then the function indicates no correction has
+    been applied. For exceptional cases where the sum of the original components is zero and a
+    positive total has been received the function indicates the method stopped processing. When
+    invalid types are received for the function then an exception will be raised and no output is
+    generated.
 
 
     :param identifier: Unique identifier for the calculation.
