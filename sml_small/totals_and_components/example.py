@@ -312,10 +312,7 @@ def invoke_process_with_local_csv():
                 None if not row["perc_threshold"] else float(row["perc_threshold"]),
             ]
 
-            # print(input_data)
-
             result = totals_and_components(*input_data)
-            # print(result)
 
             new_result = {
                 result.identifier: {
@@ -332,8 +329,6 @@ def invoke_process_with_local_csv():
             new_result[result.identifier]["comp"] = new_result_comp
 
             results.update(new_result)
-            # print(results)
-    # print(results)
 
     # Write the results returned by the T&C into the CSV file
     with open("TCC_test_data_demo_processed.csv", mode="w") as csv_file:
@@ -390,101 +385,92 @@ def invoke_process_with_in_memory_csv():
 F,202301,11,0,0,0,0,0,TRUE,202301,,11"""
 
     csv_reader = csv.DictReader(in_memory_csv_data.splitlines())
-    print(csv_reader)
+    print("CSV reader", csv_reader)
+
+    results = {}
     for row in csv_reader:
-        print(row)
+        input_data = [
+            str(row["reference"]),
+            str(row["period"]),
+            float(row["total"]),
+            [
+                float(row["comp_1"]),
+                float(row["comp_2"]),
+                float(row["comp_3"]),
+                float(row["comp_4"]),
+            ],
+            True if not row["amend_total"] == "FALSE" else False,
+            float(row["predictive"]),
+            str(row["period"]),
+            None if not row["auxiliary"] else float(row["auxiliary"]),
+            None if not row["abs_threshold"] else float(row["abs_threshold"]),
+            None if not row["perc_threshold"] else float(row["perc_threshold"]),
+        ]
 
-    # results = {}
-    # with open("TCC_test_data_demo.csv", mode="r") as csv_file:
-    #     csv_reader = csv.DictReader(csv_file)
-    #     for row in csv_reader:
-    #         input_data = [
-    #             str(row["\ufeffreference"]),
-    #             str(row["period"]),
-    #             float(row["total"]),
-    #             [
-    #                 float(row["comp_1"]),
-    #                 float(row["comp_2"]),
-    #                 float(row["comp_3"]),
-    #                 float(row["comp_4"]),
-    #             ],
-    #             True if not row["amend_total"] == "FALSE" else False,
-    #             float(row["predictive"]),
-    #             str(row["period"]),
-    #             None if not row["auxiliary"] else float(row["auxiliary"]),
-    #             None if not row["abs_threshold"] else float(row["abs_threshold"]),
-    #             None if not row["perc_threshold"] else float(row["perc_threshold"]),
-    #         ]
+        result = totals_and_components(*input_data)
 
-    #         # print(input_data)
+        new_result = {
+            result.identifier: {
+                "period": result.period,
+                "absolute_difference": result.absolute_difference,
+                "low_percent_threshold": result.low_percent_threshold,
+                "high_percent_threshold": result.high_percent_threshold,
+                "final_total": result.final_total,
+                "tcc_marker": result.tcc_marker,
+            }
+        }
 
-    #         result = totals_and_components(*input_data)
-    #         # print(result)
+        # new_result_comp = result.final_components
+        # new_result[result.identifier]["comp"] = new_result_comp
 
-    #         new_result = {
-    #             result.identifier: {
-    #                 "period": result.period,
-    #                 "absolute_difference": result.absolute_difference,
-    #                 "low_percent_threshold": result.low_percent_threshold,
-    #                 "high_percent_threshold": result.high_percent_threshold,
-    #                 "final_total": result.final_total,
-    #                 "tcc_marker": result.tcc_marker,
-    #             }
-    #         }
+        results.update(new_result)
+    print(results)
 
-    #         new_result_comp = result.final_components
-    #         new_result[result.identifier]["comp"] = new_result_comp
+    # Write the results returned by the T&C into the CSV file
+    with open("TCC_test_data_demo_processed_in_memory.csv", mode="w") as csv_file:
+        field_names = [
+            "\ufeffreference",
+            "period",
+            # "total",
+            # "comp_1"
+            # "comp_2",
+            # "comp_3",
+            # "comp_4",
+            # "comp_sum",
+            # "amend_total",
+            # "predictive",
+            # "auxiliary",
+            # "abs_threshold",
+            "abs_diff",
+            "perc_low",
+            "perc_high",
+            "TCC_marker",
+            "final_total",
+            "final_comp_1",
+            "final_comp_2",
+            "final_comp_3",
+            "final_comp_4",
+        ]
 
-    #         results.update(new_result)
-    #         # print(results)
-    # # print(results)
+        writer = csv.DictWriter(csv_file, fieldnames=field_names, extrasaction="ignore")
 
-    # # Write the results returned by the T&C into the CSV file
-    # with open("TCC_test_data_demo_processed.csv", mode="w") as csv_file:
-    #     field_names = [
-    #         "\ufeffreference",
-    #         "period",
-    #         # "total",
-    #         # "comp_1"
-    #         # "comp_2",
-    #         # "comp_3",
-    #         # "comp_4",
-    #         # "comp_sum",
-    #         # "amend_total",
-    #         # "predictive",
-    #         # "auxiliary",
-    #         # "abs_threshold",
-    #         "abs_diff",
-    #         "perc_low",
-    #         "perc_high",
-    #         "TCC_marker",
-    #         "final_total",
-    #         "final_comp_1",
-    #         "final_comp_2",
-    #         "final_comp_3",
-    #         "final_comp_4",
-    #     ]
-
-    #     writer = csv.DictWriter(csv_file, fieldnames=field_names, extrasaction="ignore")
-
-    #     writer.writeheader()
-    #     for identifier in results:
-    #         # print(results[identifier])
-    #         writer.writerow(
-    #             {
-    #                 "\ufeffreference": identifier,
-    #                 "period": results[identifier]["period"],
-    #                 "abs_diff": results[identifier]["absolute_difference"],
-    #                 "perc_low": results[identifier]["low_percent_threshold"],
-    #                 "perc_high": results[identifier]["high_percent_threshold"],
-    #                 "final_total": results[identifier]["final_total"],
-    #                 "final_comp_1": results[identifier]["comp"][0],
-    #                 "final_comp_2": results[identifier]["comp"][1],
-    #                 "final_comp_3": results[identifier]["comp"][2],
-    #                 "final_comp_4": results[identifier]["comp"][3],
-    #                 "TCC_marker": results[identifier]["tcc_marker"],
-    #             }
-    #         )
+        writer.writeheader()
+        for identifier in results:
+            writer.writerow(
+                {
+                    "\ufeffreference": identifier,
+                    "period": results[identifier]["period"],
+                    "abs_diff": results[identifier]["absolute_difference"],
+                    "perc_low": results[identifier]["low_percent_threshold"],
+                    "perc_high": results[identifier]["high_percent_threshold"],
+                    "final_total": results[identifier]["final_total"],
+                    # "final_comp_1": results[identifier]["comp"][0],
+                    # "final_comp_2": results[identifier]["comp"][1],
+                    # "final_comp_3": results[identifier]["comp"][2],
+                    # "final_comp_4": results[identifier]["comp"][3],
+                    "TCC_marker": results[identifier]["tcc_marker"],
+                }
+            )
 
 
 # You can run the functions invoke_process_in_memory_data_example or invoke_process_in_memory_data_example_2 below
