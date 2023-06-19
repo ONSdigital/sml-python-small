@@ -113,30 +113,30 @@ def invoke_process_in_memory_data_example():
     # The List[] data below is used to keep track of the original data to display on the command line
     # in a table format
     data = [
-        "A",
+        "F",
         "202301",
-        1625,
-        [632, 732, 99, 162],
+        11,
+        [0, 0, 0, 0],
         True,
-        1625,
+        11,
         "202301",
         None,
         11,
-        None,
+        None
     ]
 
     # We pass in the input data to be processed and returned by the T&C method
     result = totals_and_components(
-        "A",
+        "F",
         "202301",
-        1625,
-        [632, 732, 99, 162],
+        11,
+        [0, 0, 0, 0],
         True,
-        1625,
+        11,
         "202301",
         None,
         11,
-        None,
+        None
     )
 
     filter_data(result, data)
@@ -294,22 +294,23 @@ def invoke_process_with_local_csv():
     with open("TCC_test_data_demo.csv", mode="r") as csv_file:
         csv_reader = csv.DictReader(csv_file)
         for row in csv_reader:
+            print("Data type:::::::", type(row["comp_1"]))
             input_data = [
-                str(row["\ufeffreference"]),
-                str(row["period"]),
-                float(row["total"]),
+                (row["\ufeffreference"]),
+                (row["period"]),
+                (row["total"]),
                 [
-                    float(row["comp_1"]),
-                    float(row["comp_2"]),
-                    float(row["comp_3"]),
-                    float(row["comp_4"]),
+                    (row["comp_1"]),
+                    (row["comp_2"]),
+                    (row["comp_3"]),
+                    (row["comp_4"]),
                 ],
                 True if not row["amend_total"] == "FALSE" else False,
-                float(row["predictive"]),
-                str(row["period"]),
-                None if not row["auxiliary"] else float(row["auxiliary"]),
-                None if not row["abs_threshold"] else float(row["abs_threshold"]),
-                None if not row["perc_threshold"] else float(row["perc_threshold"]),
+                (row["predictive"]),
+                (row["period"]),
+                None if not row["auxiliary"] else (row["auxiliary"]),
+                None if not row["abs_threshold"] else (row["abs_threshold"]),
+                None if not row["perc_threshold"] else (row["perc_threshold"]),
             ]
 
             result = totals_and_components(*input_data)
@@ -390,21 +391,21 @@ A,202301,1625,632,732,99,162,TRUE,1625,202301,,11"""
     results = {}
     for row in csv_reader:
         input_data = [
-            str(row["reference"]),
-            str(row["period"]),
-            float(row["total"]),
+            (row["reference"]),
+            (row["period"]),
+            (row["total"]),
             [
-                float(row["comp_1"]),
-                float(row["comp_2"]),
-                float(row["comp_3"]),
-                float(row["comp_4"]),
+                (row["comp_1"]),
+                (row["comp_2"]),
+                (row["comp_3"]),
+                (row["comp_4"]),
             ],
             True if not row["amend_total"] == "FALSE" else False,
-            float(row["predictive"]),
-            str(row["period"]),
-            None if not row["auxiliary"] else float(row["auxiliary"]),
-            None if not row["abs_threshold"] else float(row["abs_threshold"]),
-            None if not row["perc_threshold"] else float(row["perc_threshold"]),
+            (row["predictive"]),
+            (row["period"]),
+            None if not row["auxiliary"] else (row["auxiliary"]),
+            None if not row["abs_threshold"] else (row["abs_threshold"]),
+            None if not row["perc_threshold"] else (row["perc_threshold"]),
         ]
 
         result = totals_and_components(*input_data)
@@ -475,6 +476,6 @@ A,202301,1625,632,732,99,162,TRUE,1625,202301,,11"""
 
 # You can run the functions invoke_process_in_memory_data_example or invoke_process_in_memory_data_example_2 below
 # invoke_process_with_local_csv()
-invoke_process_with_in_memory_csv()
+# invoke_process_with_in_memory_csv()
 # invoke_process_in_memory_data_example()
 # invoke_process_in_memory_data_example_2()

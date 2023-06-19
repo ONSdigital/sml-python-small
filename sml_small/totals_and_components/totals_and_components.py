@@ -225,9 +225,12 @@ def validate_input(
             List[Component_list] | None, float | None, float | None, float | None,
             float | None, float | None]
     """
+    print("Components debug", type(components[0].original_value), components[0].original_value)
+    print("Total 1", type(total))
     if total:
         validate_number("total", total)
-        float(total)
+        total = float(total)
+        print("Total 2", type(total))
     if not components:
         raise ValueError("The components are not populated")
     if components:
@@ -235,15 +238,16 @@ def validate_input(
             validate_number(
                 f"component={component.original_value}", component.original_value
             )
-            float(component.original_value)
+            component.original_value = float(component.original_value)
+            print("Component original value", type(component.original_value))
     if amend_total is None:
         raise ValueError("Amend total needs to be True or False")
     if predictive:
         validate_number("predictive", predictive)
-        float(predictive)
+        predictive = float(predictive)
     if auxiliary:
         validate_number("auxiliary", auxiliary)
-        float(auxiliary)
+        auxiliary = float(auxiliary)
     if (
         (absolute_difference_threshold is None
         and percentage_difference_threshold is None) or (absolute_difference_threshold == 0
@@ -254,12 +258,12 @@ def validate_input(
         )
     if absolute_difference_threshold:
         validate_number("absolute difference threshold", absolute_difference_threshold)
-        float(absolute_difference_threshold)
+        absolute_difference_threshold = float(absolute_difference_threshold)
     if percentage_difference_threshold:
         validate_number(
             "percentage difference threshold", percentage_difference_threshold
         )
-        float(percentage_difference_threshold)
+        percentage_difference_threshold = float(percentage_difference_threshold)
     return (
         total,
         components,
