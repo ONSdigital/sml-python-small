@@ -247,10 +247,9 @@ def validate_input(
         validate_number("auxiliary", auxiliary)
         float(auxiliary)
     if (
-        (absolute_difference_threshold is None
-            and percentage_difference_threshold is None) or (absolute_difference_threshold == 0
-                                                             and percentage_difference_threshold == 0)
-    ):
+        absolute_difference_threshold is None
+        and percentage_difference_threshold is None
+    ) or (absolute_difference_threshold == 0 and percentage_difference_threshold == 0):
         raise ValueError(
             "One or both of absolute/percentage difference thresholds must be specified and non-zero"
         )
@@ -657,6 +656,49 @@ def calculate_percent_thresholds(
     return low_percent_threshold, high_percent_threshold, output_list
 
 
+def set_outputs_for_stop_and_manual_correction(
+    total: float,
+    components: List[ComponentPair],
+    absolute_difference,
+    tcc_marker: TccMarker,
+    output_list: dict,
+) -> dict:
+    """
+    set_outputs_for_stop_and_manual_correction The purpose of this function is to ensure
+    that values in the output list are as we would expect. For example, if there is a
+    stop marker wwe would never have reached the point in the method where the absolute
+    difference is calculated and therefore it could be returned as a null value which
+    is dictated as None. We would always expect final total and components (providing there is no error).
+    Hence, we would use the original values.
+
+    :param total:this is the original total
+    :type total: float
+    :param components: this is the original component values
+    :type components: List[ComponentPair]
+    :param absolute_difference: this is None if absolute difference calculation is not reached.
+    :type absolute_difference: _type_
+    :param tcc_marker: this is the marker returned from the method which determines output list values
+    :type tcc_marker: TccMarker
+    :param output_list: the output list values for total, components and absolute_difference (if applicable)
+    :type output_list: dict
+    :return: output list type
+    :rtype: dict
+    """
+
+    if tcc_marker == TccMarker.STOP:
+        output_list["final_total"] = total
+        output_list["final_components"] = components
+        output_list["absolute_difference"] = None
+    elif tcc_marker == TccMarker.MANUAL:
+        output_list["final_total"] = total
+        output_list["final_components"] = components
+    elif tcc_marker == TccMarker.NO_CORRECTION:
+        output_list["final_total"] = total
+        output_list["final_components"] = components
+        output_list["absolute_difference"] = absolute_difference
+    return output_list
+
+
 def totals_and_components(
     identifier: Optional[
         str
@@ -689,8 +731,8 @@ def totals_and_components(
     been applied. For exceptional cases where the sum of the original components is zero and a
     positive total has been received the function indicates the method stopped processing. When
     invalid types are received for the function then an exception will be raised and no output is
-    generated.
-
+    generated. It is important to note that the value None is not to be mistaken for zero.
+    It is actually representative of a null value.
 
     :param identifier: Unique identifier for the calculation.
     :type identifier: Optional[str]
@@ -792,14 +834,19 @@ def totals_and_components(
                 predictive, component_total, absolute_difference_threshold
             )
             if output_list["tcc_marker"] == TccMarker.STOP:
-                output_list["final_total"] = total
-                output_list["final_components"] = components
-            output_list["absolute_difference"] = absolute_difference
+                set_outputs_for_stop_and_manual_correction(
+                    total, components, absolute_difference, TccMarker.STOP, output_list
+                )
             #  Determine if a correction is required
             if input_parameters[InputParameters.PREDICTIVE.value] == component_total:
                 output_list["tcc_marker"] = TccMarker.NO_CORRECTION
-                output_list["final_total"] = total
-                output_list["final_components"] = components
+                set_outputs_for_stop_and_manual_correction(
+                    total,
+                    components,
+                    absolute_difference,
+                    TccMarker.NO_CORRECTION,
+                    output_list,
+                )
             if output_list["tcc_marker"] == TccMarker.METHOD_PROCEED:
                 (
                     low_threshold,
@@ -826,8 +873,13 @@ def totals_and_components(
                     high_threshold,
                 )
                 if output_list["tcc_marker"] == TccMarker.MANUAL:
-                    output_list["final_total"] = total
-                    output_list["final_components"] = components
+                    set_outputs_for_stop_and_manual_correction(
+                        total,
+                        components,
+                        absolute_difference,
+                        TccMarker.MANUAL,
+                        output_list,
+                    )
                 if output_list["tcc_marker"] == TccMarker.METHOD_PROCEED:
                     (
                         output_list["final_total"],
@@ -841,9 +893,11 @@ def totals_and_components(
                         ],
                         predictive=predictive,
                     )
+                output_list["absolute_difference"] = absolute_difference
         elif output_list["tcc_marker"] == TccMarker.STOP:
-            output_list["final_total"] = total
-            output_list["final_components"] = components
+            set_outputs_for_stop_and_manual_correction(
+                total, components, absolute_difference, TccMarker.STOP, output_list
+            )
         output_list["tcc_marker"] = output_list["tcc_marker"].value
         output = TotalsAndComponentsOutput(output_list)
         output.print_output_table()
