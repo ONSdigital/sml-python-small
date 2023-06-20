@@ -419,7 +419,7 @@ class TestCheckZeroErrors:
 
 class TestCheckSumComponentsPredictive:
     @pytest.mark.parametrize(
-        "test_components, predictive, absolute_difference_threshold, expected_result, test_id",
+        "test_components, predictive, absolute_difference_threshold, percentage_difference_threshold, expected_result, test_id",
         [
             (
                 [
@@ -437,6 +437,7 @@ class TestCheckSumComponentsPredictive:
                     ComponentPair(original_value=9.7, final_value=None),
                 ],
                 60.0,
+                0.1,
                 100.0,
                 0,
                 "Test 1: Component Sum Matches Predictive",
@@ -457,9 +458,31 @@ class TestCheckSumComponentsPredictive:
                     ComponentPair(original_value=2.0, final_value=None),
                 ],
                 100.0,
+                0.1,
                 150.0,
                 67.8,  # This is the returned stored absolute_difference value
                 "Test 2: Component Sum Does NOT Match Predictive and returns absolute_difference",
+            ),
+            (
+                [
+                    ComponentPair(original_value=3.2, final_value=None),
+                    ComponentPair(original_value=5.1, final_value=None),
+                    ComponentPair(original_value=2.4, final_value=None),
+                    ComponentPair(original_value=1.5, final_value=None),
+                    ComponentPair(original_value=0.8, final_value=None),
+                    ComponentPair(original_value=4.6, final_value=None),
+                    ComponentPair(original_value=2.7, final_value=None),
+                    ComponentPair(original_value=3.9, final_value=None),
+                    ComponentPair(original_value=1.2, final_value=None),
+                    ComponentPair(original_value=0.5, final_value=None),
+                    ComponentPair(original_value=4.3, final_value=None),
+                    ComponentPair(original_value=2.0, final_value=None),
+                ],
+                100.0,
+                None,
+                0.1,
+                67.8,  # This is the returned stored absolute_difference value
+                "Test 2: Absolute difference threshold is None but percentage difference threshold is defined",
             ),
             (
                 [
@@ -479,7 +502,8 @@ class TestCheckSumComponentsPredictive:
                 60.0,
                 None,
                 None,
-                "Test 3: Absolute Difference Threshold is None",
+                0,
+                "Test 3: Absolute and Percentage Difference Threshold is None",
             ),
         ],
     )
@@ -488,13 +512,17 @@ class TestCheckSumComponentsPredictive:
         test_components,
         predictive,
         absolute_difference_threshold,
+        percentage_difference_threshold,
         expected_result,
         test_id,
     ):
         try:
             components_sum = sum_components(test_components)
             absolute_difference = check_sum_components_predictive(
-                predictive, components_sum, absolute_difference_threshold
+                predictive,
+                components_sum,
+                absolute_difference_threshold,
+                percentage_difference_threshold,
             )
             assert absolute_difference == expected_result
         except Exception as e:
@@ -947,7 +975,7 @@ class TestTotalsAndComponents:
                 (
                     "C",
                     "202301",
-                    None,
+                    10,
                     90,
                     110,
                     90,
@@ -1209,7 +1237,7 @@ class TestTotalsAndComponents:
                 (
                     "P",
                     "202301",
-                    None,
+                    1,
                     9,
                     11,
                     10,
@@ -1232,7 +1260,7 @@ class TestTotalsAndComponents:
                 (
                     "Q",
                     "202301",
-                    None,
+                    5,
                     9,
                     11,
                     15,
@@ -1530,7 +1558,7 @@ class TestTotalsAndComponents:
                 (
                     "ZB",
                     "202301",
-                    None,
+                    3,
                     9,
                     11,
                     15,
@@ -1553,7 +1581,7 @@ class TestTotalsAndComponents:
                 (
                     "ZC",
                     "202301",
-                    None,
+                    0.5,
                     9,
                     11,
                     10,
@@ -1576,7 +1604,7 @@ class TestTotalsAndComponents:
                 (
                     "ZD",
                     "202301",
-                    None,
+                    1,
                     9,
                     11,
                     9,
@@ -1599,7 +1627,7 @@ class TestTotalsAndComponents:
                 (
                     "ZE",
                     "202301",
-                    None,
+                    0.9,
                     9,
                     11,
                     10.9,
@@ -1622,7 +1650,7 @@ class TestTotalsAndComponents:
                 (
                     "ZF",
                     "202301",
-                    None,
+                    1,
                     9,
                     11,
                     11,
@@ -1645,7 +1673,7 @@ class TestTotalsAndComponents:
                 (
                     "ZG",
                     "202301",
-                    None,
+                    2.0,
                     9,
                     11,
                     15,
@@ -1711,7 +1739,7 @@ class TestTotalsAndComponents:
                 (
                     "ZI",
                     "202301",
-                    None,
+                    0.9,
                     9,
                     11,
                     10,
@@ -1758,9 +1786,9 @@ class TestTotalsAndComponents:
                 (
                     "ZK",
                     "202301",
-                    None,
-                    None,
-                    None,
+                    0,
+                    1462.5,
+                    1787.5,
                     1625,
                     [632, 732, 99, 162],
                     "N",
