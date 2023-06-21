@@ -363,7 +363,6 @@ def check_zero_errors(predictive: float, components_sum: float) -> TccMarker:
 def check_sum_components_predictive(
     predictive: float,
     components_sum: float,
-    absolute_difference_threshold: Optional[float],
 ) -> float:
     """
     Calculates the absolute difference between the predictive value and the sum of the
@@ -373,19 +372,12 @@ def check_sum_components_predictive(
     :type predictive: float
     :param components_sum: total sum of all the components values entered.
     :type components_sum: float
-    :param absolute_difference_threshold:Value used to check if the difference
-                                          between the predictive total and sum
-                                          of components requires an automatic update.
-                                          Absolute difference is None is threshold is None
-    :type absolute_difference_threshold: float
     ...
     :return: We will be returning a number for the absolute difference.
     :rtype: float
     """
-    if absolute_difference_threshold is None:
-        absolute_difference = None
-    else:
-        absolute_difference = abs(predictive - components_sum)
+
+    absolute_difference = abs(predictive - components_sum)
     return absolute_difference
 
 
@@ -691,8 +683,8 @@ def totals_and_components(
     been applied. For exceptional cases where the sum of the original components is zero and a
     positive total has been received the function indicates the method stopped processing. When
     invalid types are received for the function then an exception will be raised and no output is
-    generated.
-
+    generated. It is important to note that the value None is not to be mistaken for zero.
+    It is actually representative of a null value.
 
     :param identifier: Unique identifier for the calculation.
     :type identifier: Optional[str]
@@ -765,6 +757,9 @@ def totals_and_components(
         output_list = {
             "identifier": identifier,
             "period": period,
+            "final_total": total,
+            "final_components": components,
+            "absolute_difference": None,
         }
         components_list = initialize_components_list(components)
         #  Check for invalid parameter values
@@ -791,14 +786,10 @@ def totals_and_components(
             #  a positive predictive value has been received
             output_list["tcc_marker"] = check_zero_errors(predictive, component_total)
             absolute_difference = check_sum_components_predictive(
-                predictive, component_total, absolute_difference_threshold
+                predictive,
+                component_total,
             )
-            output_list["absolute_difference"] = absolute_difference
             #  Determine if a correction is required
-            if input_parameters[InputParameters.PREDICTIVE.value] == component_total:
-                output_list["tcc_marker"] = TccMarker.NO_CORRECTION
-                output_list["final_total"] = total
-                output_list["final_components"] = components
             if output_list["tcc_marker"] == TccMarker.METHOD_PROCEED:
                 (
                     low_threshold,
@@ -811,35 +802,41 @@ def totals_and_components(
                     ],
                     output_list,
                 )
-                #  Determine if the difference error can be automatically corrected
-                output_list["tcc_marker"] = determine_error_detection(
-                    input_parameters[
-                        InputParameters.ABSOLUTE_DIFFERENCE_THRESHOLD.value
-                    ],
-                    input_parameters[
-                        InputParameters.PERCENTAGE_DIFFERENCE_THRESHOLD.value
-                    ],
-                    absolute_difference,
-                    predictive,
-                    low_threshold,
-                    high_threshold,
-                )
-                if output_list["tcc_marker"] == TccMarker.MANUAL:
-                    output_list["final_total"] = total
-                    output_list["final_components"] = components
-                if output_list["tcc_marker"] == TccMarker.METHOD_PROCEED:
-                    (
-                        output_list["final_total"],
-                        output_list["final_components"],
-                        output_list["tcc_marker"],
-                    ) = error_correction(
-                        amend_total=amend_total,
-                        components_sum=component_total,
-                        original_components=input_parameters[
-                            InputParameters.COMPONENTS.value
+
+                if (
+                    input_parameters[InputParameters.PREDICTIVE.value]
+                    == component_total
+                ):
+                    output_list["tcc_marker"] = TccMarker.NO_CORRECTION
+                    output_list["absolute_difference"] = absolute_difference
+                else:
+                    #  Determine if the difference error can be automatically corrected
+                    output_list["tcc_marker"] = determine_error_detection(
+                        input_parameters[
+                            InputParameters.ABSOLUTE_DIFFERENCE_THRESHOLD.value
                         ],
-                        predictive=predictive,
+                        input_parameters[
+                            InputParameters.PERCENTAGE_DIFFERENCE_THRESHOLD.value
+                        ],
+                        absolute_difference,
+                        predictive,
+                        low_threshold,
+                        high_threshold,
                     )
+                    if output_list["tcc_marker"] == TccMarker.METHOD_PROCEED:
+                        (
+                            output_list["final_total"],
+                            output_list["final_components"],
+                            output_list["tcc_marker"],
+                        ) = error_correction(
+                            amend_total=amend_total,
+                            components_sum=component_total,
+                            original_components=input_parameters[
+                                InputParameters.COMPONENTS.value
+                            ],
+                            predictive=predictive,
+                        )
+                    output_list["absolute_difference"] = absolute_difference
         output_list["tcc_marker"] = output_list["tcc_marker"].value
         output = TotalsAndComponentsOutput(output_list)
         output.print_output_table()
