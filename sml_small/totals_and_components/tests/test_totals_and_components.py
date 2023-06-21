@@ -20,7 +20,7 @@ class TestValidateInput:
     @pytest.mark.parametrize(
         "identifier, total, components, amend_total, predictive, "
         "auxiliary, absolute_difference_threshold, "
-        "percentage_difference_threshold, expected_result, test_id",
+        "percentage_difference_threshold, precision, expected_result, test_id",
         [
             (
                     "A",
@@ -36,6 +36,7 @@ class TestValidateInput:
                     300.0,
                     20,
                     0.1,
+                    6,
                     (
                             100,
                             [
@@ -48,6 +49,7 @@ class TestValidateInput:
                             300.0,
                             20,
                             0.1,
+                            6,
                     ),
                     "Test 1: Correct values test",
             ),
@@ -65,6 +67,7 @@ class TestValidateInput:
                     104.0,
                     105.0,
                     None,
+                    28,
                     (
                             100.0,
                             [
@@ -77,6 +80,7 @@ class TestValidateInput:
                             104.0,
                             105.0,
                             None,
+                            28,
                     ),
                     "Test 2: None value for percentage difference threshold",
             ),
@@ -94,6 +98,7 @@ class TestValidateInput:
                     104.0,
                     None,
                     20,
+                    28,
                     (
                             100.0,
                             [
@@ -106,6 +111,7 @@ class TestValidateInput:
                             104.0,
                             None,
                             20,
+                            28,
                     ),
                     "Test 3: None value for absolute difference threshold",
             ),
@@ -123,6 +129,7 @@ class TestValidateInput:
                     300.0,
                     20,
                     0.1,
+                    28,
                     (
                             100,
                             [
@@ -135,6 +142,7 @@ class TestValidateInput:
                             300.0,
                             20,
                             0.1,
+                            28,
                     ),
                     "Test 4: Predictive is missing so method carries on",
             ),
@@ -147,6 +155,7 @@ class TestValidateInput:
                     103.0,
                     20,
                     0.1,
+                    28,
                     ValueError,
                     "Test 5: Empty component list",
             ),
@@ -164,6 +173,7 @@ class TestValidateInput:
                     103.0,
                     20,
                     0.1,
+                    28,
                     ValueError,
                     "Test 6: None in component list",
             ),
@@ -181,6 +191,7 @@ class TestValidateInput:
                     104.0,
                     20,
                     0.1,
+                    28,
                     ValueError,
                     "Test 7: Invalid Total",
             ),
@@ -198,6 +209,7 @@ class TestValidateInput:
                     102.0,
                     20,
                     0.1,
+                    28,
                     ValueError,
                     "Test 8: Invalid predictive test",
             ),
@@ -215,6 +227,7 @@ class TestValidateInput:
                     "String",
                     20,
                     0.1,
+                    28,
                     ValueError,
                     "Test 9: Invalid auxiliary",
             ),
@@ -232,6 +245,7 @@ class TestValidateInput:
                     104.0,
                     {20},
                     0.1,
+                    28,
                     ValueError,
                     "Test 10: Invalid absolute difference threshold",
             ),
@@ -249,6 +263,7 @@ class TestValidateInput:
                     104.0,
                     20,
                     {2},
+                    28,
                     ValueError,
                     "Test 11: Invalid percentage difference threshold",
             ),
@@ -266,6 +281,7 @@ class TestValidateInput:
                     89.0,
                     None,
                     None,
+                    28,
                     ValueError,
                     "Test 12: None value for percentage and absolute difference threshold",
             ),
@@ -283,8 +299,40 @@ class TestValidateInput:
                     89.0,
                     11,
                     0.1,
+                    28,
                     ValueError,
                     "Test 13: None value for amend value",
+            ),
+            (
+                    "N",
+                    100,
+                    [
+                        ComponentPair(original_value=1, final_value=None),
+                        ComponentPair(original_value=2, final_value=None),
+                        ComponentPair(original_value=3, final_value=None),
+                        ComponentPair(original_value=4, final_value=None),
+                    ],
+                    True,
+                    102.0,
+                    300.0,
+                    20,
+                    0.1,
+                    None,
+                    (
+                            100,
+                            [
+                                ComponentPair(original_value=1, final_value=None),
+                                ComponentPair(original_value=2, final_value=None),
+                                ComponentPair(original_value=3, final_value=None),
+                                ComponentPair(original_value=4, final_value=None),
+                            ],
+                            102.0,
+                            300.0,
+                            20,
+                            0.1,
+                            28,
+                    ),
+                    "Test 14: None value corrected to 28",
             ),
         ],
     )
@@ -298,6 +346,7 @@ class TestValidateInput:
             auxiliary,
             absolute_difference_threshold,
             percentage_difference_threshold,
+            precision,
             expected_result,
             test_id,
     ):
@@ -311,6 +360,7 @@ class TestValidateInput:
                     auxiliary=auxiliary,
                     absolute_difference_threshold=absolute_difference_threshold,
                     percentage_difference_threshold=percentage_difference_threshold,
+                    precision=precision,
                 )
                 assert result == expected_result
             except Exception as e:
@@ -331,6 +381,7 @@ class TestValidateInput:
                     auxiliary=auxiliary,
                     absolute_difference_threshold=absolute_difference_threshold,
                     percentage_difference_threshold=percentage_difference_threshold,
+                    precision=precision,
                 )
                 print(exc_info.value)
             assert exc_info.type == expected_result
@@ -709,13 +760,14 @@ class TestCheckPercentageDifferenceThreshold:
 
 class TestErrorCorrection:
     @pytest.mark.parametrize(
-        "amend_total, components_sum, original_components, predictive, expected_result, test_id",
+        "amend_total, components_sum, original_components, predictive, precision,  expected_result, test_id",
         [
             (
                     True,
                     100.0,
                     [ComponentPair(10.0, None)] * 10,
                     100.0,
+                    16,
                     (100.0, [10.0] * 10, "T"),
                     "Test 1: Amend total",
             ),
@@ -724,6 +776,7 @@ class TestErrorCorrection:
                     82.0,
                     [ComponentPair(8.2, None)] * 10,
                     100.0,
+                    16,
                     (100.0, [10.0] * 10, "C"),
                     "Test 2: Amend components",
             ),
@@ -735,12 +788,13 @@ class TestErrorCorrection:
             components_sum,
             original_components,
             predictive,
+            precision,
             expected_result,
             test_id,
     ):
         try:
             result = error_correction(
-                amend_total, components_sum, original_components, predictive
+                amend_total, components_sum, original_components, predictive, precision,
             )
             assert (
                     result == expected_result
@@ -797,12 +851,13 @@ class TestCorrectTotal:
 
 class TestCorrectComponents:
     @pytest.mark.parametrize(
-        "components_sum, original_components, predictive, expected_total, expected_component, test_id",
+        "components_sum, original_components, predictive, precision, expected_total, expected_component, test_id",
         [
             (
                     90.0,
                     [ComponentPair(9.0, None)] * 10,
                     100.0,
+                    28,
                     100.0,
                     [10.0] * 10,
                     "Test 1: Component = 90, " "predictive = 100",
@@ -815,6 +870,7 @@ class TestCorrectComponents:
                         ComponentPair(30.0, None),
                     ],
                     200.0,
+                    14,
                     200.0,
                     [115.38, 38.46, 46.15],
                     "Test 2: Component sum = 130, Total = 200",
@@ -823,6 +879,7 @@ class TestCorrectComponents:
                     100.0,
                     [ComponentPair(10.0, None)] * 10,
                     0,
+                    1,
                     0,
                     [0.0] * 10,
                     "Test 3: Component = 100, " "predictive = 0",
@@ -834,6 +891,7 @@ class TestCorrectComponents:
             components_sum,
             original_components,
             predictive,
+            precision,
             expected_total,
             expected_component,
             test_id,
@@ -843,6 +901,7 @@ class TestCorrectComponents:
                 components_sum=components_sum,
                 original_components=original_components,
                 predictive=predictive,
+                precision=precision,
             )
 
             assert (
@@ -1795,6 +1854,156 @@ class TestTotalsAndComponents:
                 0.1,
                 "Amend total needs to be True or False",
                 "Test 36 - Missing Amend total",
+            ),
+            (
+                "AP",
+                "202301",
+                90,
+                [
+                    (90),
+                    (0),
+                    (4),
+                    (6),
+                ],
+                False,
+                90,
+                "202301",
+                None,
+                None,
+                0.1,
+                (
+                    "C",
+                    "202301",
+                    10,
+                    90,
+                    110,
+                    90,
+                    [81, 0, 3.6, 5.4],
+                    "C",
+                ),
+                "Test 42 - Testing decimal place to 1 decimal place",
+            ),
+            (
+                "AQ",
+                "202301",
+                10817,
+                [
+                    (2.4),
+                    (2.6),
+                    (2.8),
+                    (3.1),
+                ],
+                False,
+                2,
+                "202301",
+                None,
+                11,
+                None,
+                (
+                    "AQ",
+                    "202301",
+                    8.9,
+                    None,
+                    None,
+                    2,
+                    [0.4403669724770642, 0.47706422018348627, 0.5137614678899082, 0.5688073394495413],
+                    "C",
+                ),
+                "Test 43 - Testing decimal place to 28 decimal place",
+            ),
+            (
+                "AR",
+                "202301",
+                10817,
+                [
+                    (2.4),
+                    (2.6),
+                    (2.8),
+                    (3.1),
+                ],
+                False,
+                2,
+                "202301",
+                None,
+                11,
+                None,
+                "valid range for prec is [1, MAX_PREC]",
+                "Test 44 - Testing decimal place to 29 decimal place",
+            ),
+            (
+                "AS",
+                "202301",
+                10817,
+                [
+                    (2.4),
+                    (2.6),
+                    (2.8),
+                    (3.1),
+                ],
+                False,
+                2,
+                "202301",
+                None,
+                11,
+                None,
+                "valid range for prec is [1, MAX_PREC]",
+                "Test 45 - Testing decimal place to 0 decimal place",
+            ),
+            (
+                "AT",
+                "202301",
+                10817,
+                [
+                    (2.4),
+                    (2.6),
+                    (2.8),
+                    (3.1),
+                ],
+                False,
+                2,
+                "202301",
+                None,
+                11,
+                None,
+                (
+                    "AT",
+                    "202301",
+                    8.9,
+                    None,
+                    None,
+                    0.60,
+                    [0.15, 0.2, 0.35],
+                    "C",
+                ),
+                "Test 46 - Testing decimal place to 2 decimal place",
+            ),
+            (
+                "AU",
+                "202301",
+                10817,
+                [
+                    (2.4),
+                    (2.6),
+                    (2.8),
+                    (3.1),
+                ],
+                False,
+                2,
+                "202301",
+                None,
+                11,
+                None,
+                (
+                    "AU",
+                    "202301",
+                    8.9,
+                    None,
+                    None,
+                    0.5,
+                    [0.1, 0.2, 0.3],
+                    "C",
+                ),
+                "Test 47 - Testing decimal place to 1 decimal place",
             ),
         ],
     )

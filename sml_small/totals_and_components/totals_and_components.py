@@ -4,7 +4,7 @@ For Copyright information, please see LICENCE.
 
 from enum import Enum
 from typing import List, Optional, Tuple
-
+import decimal
 
 class Index(Enum):
     """
@@ -26,6 +26,7 @@ class InputParameters(Enum):
     AUXILIARY = 3
     ABSOLUTE_DIFFERENCE_THRESHOLD = 4
     PERCENTAGE_DIFFERENCE_THRESHOLD = 5
+    PRECISION = 6
 
 
 class TccMarker(Enum):
@@ -108,6 +109,9 @@ class TotalsAndComponentsOutput:
     high_percent_threshold: Optional[
         float
     ] = None  # the sum of the input components plus the absolute percentage difference
+    precision: Optional[
+        int
+    ] = None # the precision value inputted by the user to calculate the components precisely
     final_total: Optional[
         float
     ] = None  # the output total which may have been corrected based on user input amend_
@@ -144,6 +148,7 @@ class TotalsAndComponentsOutput:
         print(f"Absolute Difference: {self.absolute_difference}")
         print(f"Low Percent Threshold: {self.low_percent_threshold}")
         print(f"High Percent Threshold: {self.high_percent_threshold}")
+        print(f"Precision: {self.precision}")
         print(f"Final Total: {self.final_total}")
         print(f"Final Value: {self.final_components}")
         print(f"TCC Marker: {self.tcc_marker}")
@@ -189,6 +194,7 @@ def validate_input(
     auxiliary: Optional[float],
     absolute_difference_threshold: Optional[float],
     percentage_difference_threshold: Optional[float],
+    precision: Optional[int],
 ) -> tuple[
     float,
     List[ComponentPair],
@@ -197,6 +203,7 @@ def validate_input(
     float | None,
     float | None,
     float | None,
+    int,
 ]:
     """
     validate_input is to ensure that the dataset input record has all the values
@@ -220,6 +227,9 @@ def validate_input(
     :param percentage_difference_threshold: Is the predefined percentage threshold
                                             represented as a decimal
     :type percentage_difference_threshold: Optional[float]
+    :param precision: Precision value is inputted by the user to determine the number of
+                      decimal places in the final components.
+    :type precision: Optional[int]
     :raises ValueError: ValueErrors are returned when data is missing or in the
                         incorrect type/format.
     :return: The tuple is a returned list of values converted to floats (if possible).
@@ -262,6 +272,11 @@ def validate_input(
             "percentage difference threshold", percentage_difference_threshold
         )
         float(percentage_difference_threshold)
+    if precision == None:
+        precision = 28
+    if precision:
+        validate_number("precision", precision)
+
     return (
         total,
         components,
@@ -269,6 +284,7 @@ def validate_input(
         auxiliary,
         absolute_difference_threshold,
         percentage_difference_threshold,
+        precision
     )
 
 
@@ -502,6 +518,7 @@ def error_correction(
     components_sum: float,
     original_components: List[ComponentPair],
     predictive: float,
+    precision: int,
 ) -> tuple[float, list[float], TccMarker]:
     """
     Function to run the relevant error correction method and output the final corrections
@@ -517,7 +534,10 @@ def error_correction(
     :param original_components: List of Components objects so final values can be amended
     :type original_components: list(ComponentPair)
     :param predictive: The predictive value, typically the total for the current period.
-    :type predictive: float
+    :type predictive: int
+    :param precision: Precision value is inputted by the user to determine the number of
+                      decimal places in the final components.
+    :type precision: Optional[int]
     ...
     :return final_total: Final Total value to be output
     :rtype final total: float
@@ -532,7 +552,7 @@ def error_correction(
         )
     else:
         final_total, original_components, tcc_marker = correct_components(
-            components_sum, original_components, predictive
+            components_sum, original_components, predictive, precision
         )
     final_components = []
     for component in original_components:
@@ -567,7 +587,7 @@ def correct_total(
 
 
 def correct_components(
-    components_sum: float, original_components: List[ComponentPair], predictive: float
+    components_sum: float, original_components: List[ComponentPair], predictive: float, precision: int
 ) -> tuple[float, list[ComponentPair], TccMarker]:
     """
     Function to correct the components values to add up to the received predictive value,
@@ -580,7 +600,10 @@ def correct_components(
     :param original_components: List of Components objects so final values can be amended
     :type original_components: list(Components_list)
     :param predictive: The predictive value, typically the total for the current period.
-    :type predictive: float
+    :type predictive: int
+    :param precision: Precision value is inputted by the user to determine the number of
+                      decimal places in the final components.
+    :type precision: Optional[int]
     ...
     :return final_total: Final Total value to be output
     :rtype final_total: float
@@ -591,7 +614,11 @@ def correct_components(
     """
     final_total = predictive
     for component in original_components:
-        component.final_value = (component.original_value / components_sum) * predictive
+        ctx = decimal.getcontext()
+        decimal.getcontext().prec=precision
+        print(ctx)
+
+        component.final_value = (decimal.Decimal(component.original_value) / decimal.Decimal(components_sum)) * predictive
     tcc_marker = TccMarker.COMPONENTS_CORRECTED
     return final_total, original_components, tcc_marker
 
@@ -672,6 +699,7 @@ def totals_and_components(
     auxiliary: Optional[float],
     absolute_difference_threshold: Optional[float],
     percentage_difference_threshold: Optional[float],
+    precision: Optional[int],
 ) -> TotalsAndComponentsOutput:
     """
     Determines whether a difference exists between a provided total value and the sum of
@@ -717,6 +745,9 @@ def totals_and_components(
                                             percentage of the sum of the components, the
                                             method will automatically correct.
     :type percentage_difference_threshold: Optional[float]
+    :param precision: Precision value is inputted by the user to determine the number of
+                      decimal places in the final components.
+    :type precision: Optional[int]
     :raises: N/A Currently
     :return TotalsAndComponentsOutput: TotalsAndComponentsOutput: An object containing the
                                        following attributes:
@@ -757,6 +788,7 @@ def totals_and_components(
         auxiliary=auxiliary,
         absolute_difference_threshold=absolute_difference_threshold,
         percentage_difference_threshold=percentage_difference_threshold,
+        precision=precision,
     )
 
     try:
@@ -774,6 +806,7 @@ def totals_and_components(
             auxiliary,
             absolute_difference_threshold,
             percentage_difference_threshold,
+            precision,
         )
         #  Ensure either the predictive or auxiliary parameter specified
         predictive, output_list["tcc_marker"] = check_predictive_value(
@@ -837,8 +870,12 @@ def totals_and_components(
                             InputParameters.COMPONENTS.value
                         ],
                         predictive=predictive,
+                        precision=input_parameters[
+                            InputParameters.PRECISION.value
+                        ],
                     )
         output_list["tcc_marker"] = output_list["tcc_marker"].value
+        output_list["precision"] = input_parameters[InputParameters.PRECISION.value]
         output = TotalsAndComponentsOutput(output_list)
         output.print_output_table()
 
