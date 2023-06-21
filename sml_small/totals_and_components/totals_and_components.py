@@ -360,8 +360,6 @@ def check_zero_errors(predictive: float, components_sum: float) -> TccMarker:
 def check_sum_components_predictive(
     predictive: float,
     components_sum: float,
-    absolute_difference_threshold: Optional[float],
-    percentage_difference_threshold: Optional[float],
 ) -> float:
     """
     Calculates the absolute difference between the predictive value and the sum of the
@@ -371,11 +369,6 @@ def check_sum_components_predictive(
     :type predictive: float
     :param components_sum: total sum of all the components values entered.
     :type components_sum: float
-    :param absolute_difference_threshold:Value used to check if the difference
-                                          between the predictive total and sum
-                                          of components requires an automatic update.
-                                          Absolute difference is None is threshold is None
-    :type absolute_difference_threshold: float
     ...
     :return: We will be returning a number for the absolute difference.
     :rtype: float
@@ -793,8 +786,6 @@ def totals_and_components(
             absolute_difference = check_sum_components_predictive(
                 predictive,
                 component_total,
-                absolute_difference_threshold,
-                percentage_difference_threshold,
             )
             #  Determine if a correction is required
             if output_list["tcc_marker"] == TccMarker.METHOD_PROCEED:

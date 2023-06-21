@@ -2,14 +2,21 @@ import random
 
 import pytest
 
-from sml_small.totals_and_components.totals_and_components import (ComponentPair, check_absolute_difference_threshold,
-                                                                   check_percentage_difference_threshold,
-                                                                   check_predictive_value,
-                                                                   check_sum_components_predictive, check_zero_errors,
-                                                                   correct_components, correct_total,
-                                                                   determine_error_detection, error_correction,
-                                                                   sum_components, totals_and_components,
-                                                                   validate_input)
+from sml_small.totals_and_components.totals_and_components import (
+    ComponentPair,
+    check_absolute_difference_threshold,
+    check_percentage_difference_threshold,
+    check_predictive_value,
+    check_sum_components_predictive,
+    check_zero_errors,
+    correct_components,
+    correct_total,
+    determine_error_detection,
+    error_correction,
+    sum_components,
+    totals_and_components,
+    validate_input,
+)
 
 EXCEPTION_FAIL_MESSAGE = (
     "{test_id} : Expected no exception, but got {exception_type}: {exception_msg}"
@@ -419,7 +426,7 @@ class TestCheckZeroErrors:
 
 class TestCheckSumComponentsPredictive:
     @pytest.mark.parametrize(
-        "test_components, predictive, absolute_difference_threshold, percentage_difference_threshold, expected_result, test_id",
+        "test_components, predictive, expected_result, test_id",
         [
             (
                 [
@@ -437,8 +444,6 @@ class TestCheckSumComponentsPredictive:
                     ComponentPair(original_value=9.7, final_value=None),
                 ],
                 60.0,
-                0.1,
-                100.0,
                 0,
                 "Test 1: Component Sum Matches Predictive",
             ),
@@ -458,52 +463,8 @@ class TestCheckSumComponentsPredictive:
                     ComponentPair(original_value=2.0, final_value=None),
                 ],
                 100.0,
-                0.1,
-                150.0,
                 67.8,  # This is the returned stored absolute_difference value
                 "Test 2: Component Sum Does NOT Match Predictive and returns absolute_difference",
-            ),
-            (
-                [
-                    ComponentPair(original_value=3.2, final_value=None),
-                    ComponentPair(original_value=5.1, final_value=None),
-                    ComponentPair(original_value=2.4, final_value=None),
-                    ComponentPair(original_value=1.5, final_value=None),
-                    ComponentPair(original_value=0.8, final_value=None),
-                    ComponentPair(original_value=4.6, final_value=None),
-                    ComponentPair(original_value=2.7, final_value=None),
-                    ComponentPair(original_value=3.9, final_value=None),
-                    ComponentPair(original_value=1.2, final_value=None),
-                    ComponentPair(original_value=0.5, final_value=None),
-                    ComponentPair(original_value=4.3, final_value=None),
-                    ComponentPair(original_value=2.0, final_value=None),
-                ],
-                100.0,
-                None,
-                0.1,
-                67.8,  # This is the returned stored absolute_difference value
-                "Test 2: Absolute difference threshold is None but percentage difference threshold is defined",
-            ),
-            (
-                [
-                    ComponentPair(original_value=3.5, final_value=None),
-                    ComponentPair(original_value=6.5, final_value=None),
-                    ComponentPair(original_value=8.0, final_value=None),
-                    ComponentPair(original_value=2.0, final_value=None),
-                    ComponentPair(original_value=4.5, final_value=None),
-                    ComponentPair(original_value=5.5, final_value=None),
-                    ComponentPair(original_value=2.8, final_value=None),
-                    ComponentPair(original_value=7.2, final_value=None),
-                    ComponentPair(original_value=1.0, final_value=None),
-                    ComponentPair(original_value=9.0, final_value=None),
-                    ComponentPair(original_value=0.3, final_value=None),
-                    ComponentPair(original_value=9.7, final_value=None),
-                ],
-                60.0,
-                None,
-                None,
-                0,
-                "Test 3: Absolute and Percentage Difference Threshold is None",
             ),
         ],
     )
@@ -511,8 +472,6 @@ class TestCheckSumComponentsPredictive:
         self,
         test_components,
         predictive,
-        absolute_difference_threshold,
-        percentage_difference_threshold,
         expected_result,
         test_id,
     ):
@@ -521,8 +480,6 @@ class TestCheckSumComponentsPredictive:
             absolute_difference = check_sum_components_predictive(
                 predictive,
                 components_sum,
-                absolute_difference_threshold,
-                percentage_difference_threshold,
             )
             assert absolute_difference == expected_result
         except Exception as e:
