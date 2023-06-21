@@ -754,6 +754,9 @@ def totals_and_components(
         output_list = {
             "identifier": identifier,
             "period": period,
+            "final_total": total,
+            "final_components": components,
+            "absolute_difference": None,
         }
         components_list = initialize_components_list(components)
         #  Check for invalid parameter values
@@ -771,10 +774,6 @@ def totals_and_components(
             input_parameters[InputParameters.PREDICTIVE.value],
             input_parameters[InputParameters.AUXILIARY.value],
         )
-
-        output_list["final_total"] = total
-        output_list["final_components"] = components
-        output_list["absolute_difference"] = None
 
         if output_list["tcc_marker"] == TccMarker.METHOD_PROCEED:
             component_total = sum_components(
