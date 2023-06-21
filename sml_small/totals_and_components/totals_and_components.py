@@ -786,6 +786,7 @@ def totals_and_components(
                 predictive,
                 component_total,
             )
+
             #  Determine if a correction is required
             if output_list["tcc_marker"] == TccMarker.METHOD_PROCEED:
                 (
@@ -800,12 +801,18 @@ def totals_and_components(
                     output_list,
                 )
 
+                # Absolute difference is output here as it would not change from this point
+                # it is not outputted sooner as a S marker could be returned
+                # before this point and that would have no absolute difference value.
+                output_list["absolute_difference"] = absolute_difference
+
+                # If the predictive value is not equal to the sum of components we
+                # return a no correction marker
                 if (
                     input_parameters[InputParameters.PREDICTIVE.value]
                     == component_total
                 ):
                     output_list["tcc_marker"] = TccMarker.NO_CORRECTION
-                    output_list["absolute_difference"] = absolute_difference
                 else:
                     #  Determine if the difference error can be automatically corrected
                     output_list["tcc_marker"] = determine_error_detection(
@@ -833,7 +840,8 @@ def totals_and_components(
                             ],
                             predictive=predictive,
                         )
-                    output_list["absolute_difference"] = absolute_difference
+
+        # We return the raw string instead of the enum value
         output_list["tcc_marker"] = output_list["tcc_marker"].value
         output = TotalsAndComponentsOutput(output_list)
         output.print_output_table()
