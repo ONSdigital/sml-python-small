@@ -1462,7 +1462,7 @@ class TestTotalsAndComponents:
                 "Test 25 - Amend Total True floating point components and floating point total",
             ),
             (
-                "ZA",
+                "AA",
                 "202301",
                 10817,
                 [
@@ -1478,7 +1478,7 @@ class TestTotalsAndComponents:
                 11,
                 None,
                 (
-                    "ZA",
+                    "AA",
                     "202301",
                     8.9,
                     None,
@@ -1495,7 +1495,7 @@ class TestTotalsAndComponents:
                 "Test 26 - Amend Total False floating point components and floating point total",
             ),
             (
-                "ZB",
+                "AB",
                 "202301",
                 15,
                 [(1), (2), (3), (4)],
@@ -1506,7 +1506,7 @@ class TestTotalsAndComponents:
                 None,
                 0.1,
                 (
-                    "ZB",
+                    "AB",
                     "202301",
                     3,
                     9,
@@ -1518,7 +1518,7 @@ class TestTotalsAndComponents:
                 "Test 27 - predictive is less than lower threshold",
             ),
             (
-                "ZC",
+                "AC",
                 "202301",
                 15,
                 [(1), (2), (3), (4)],
@@ -1529,7 +1529,7 @@ class TestTotalsAndComponents:
                 None,
                 0.1,
                 (
-                    "ZC",
+                    "AC",
                     "202301",
                     0.5,
                     9,
@@ -1541,7 +1541,7 @@ class TestTotalsAndComponents:
                 "Test 28 - predictive is greater than lower threshold",
             ),
             (
-                "ZD",
+                "AD",
                 "202301",
                 15,
                 [(1), (2), (3), (4)],
@@ -1552,7 +1552,7 @@ class TestTotalsAndComponents:
                 None,
                 0.1,
                 (
-                    "ZD",
+                    "AD",
                     "202301",
                     1,
                     9,
@@ -1564,7 +1564,7 @@ class TestTotalsAndComponents:
                 "Test 29 - predictive is equal to lower threshold and amend value is false",
             ),
             (
-                "ZE",
+                "AE",
                 "202301",
                 15,
                 [(1), (2), (3), (4)],
@@ -1575,7 +1575,7 @@ class TestTotalsAndComponents:
                 None,
                 0.1,
                 (
-                    "ZE",
+                    "AE",
                     "202301",
                     0.9,
                     9,
@@ -1587,7 +1587,7 @@ class TestTotalsAndComponents:
                 "Test 30 - predictive is less than upper threshold",
             ),
             (
-                "ZF",
+                "AF",
                 "202301",
                 15,
                 [(1), (2), (3), (4)],
@@ -1598,7 +1598,7 @@ class TestTotalsAndComponents:
                 None,
                 0.1,
                 (
-                    "ZF",
+                    "AF",
                     "202301",
                     1,
                     9,
@@ -1610,7 +1610,7 @@ class TestTotalsAndComponents:
                 "Test 31 - predictive is equal to than upper threshold",
             ),
             (
-                "ZG",
+                "AG",
                 "202301",
                 15,
                 [(1), (2), (3), (4)],
@@ -1621,7 +1621,7 @@ class TestTotalsAndComponents:
                 None,
                 0.1,
                 (
-                    "ZG",
+                    "AG",
                     "202301",
                     2.0,
                     9,
@@ -1633,7 +1633,7 @@ class TestTotalsAndComponents:
                 "Test 32 - predictive is greater than upper threshold",
             ),
             (
-                "ZH",
+                "AH",
                 "202312",
                 "InvalidString",
                 [
@@ -1671,7 +1671,7 @@ class TestTotalsAndComponents:
                 "Test 34 - Missing identifier value",
             ),
             (
-                "ZI",
+                "AI",
                 "202301",
                 15,
                 [
@@ -1687,7 +1687,7 @@ class TestTotalsAndComponents:
                 None,
                 0.1,
                 (
-                    "ZI",
+                    "AI",
                     "202301",
                     0.9,
                     9,
@@ -1699,7 +1699,7 @@ class TestTotalsAndComponents:
                 "Test 35 - Missing period value",
             ),
             (
-                "ZJ",
+                "AJ",
                 "202301",
                 15,
                 [
@@ -1718,7 +1718,7 @@ class TestTotalsAndComponents:
                 "Test 36 - Missing Amend total",
             ),
             (
-                "ZK",
+                "AK",
                 "202301",
                 1625,
                 [
@@ -1734,7 +1734,7 @@ class TestTotalsAndComponents:
                 None,
                 0.1,
                 (
-                    "ZK",
+                    "AK",
                     "202301",
                     0,
                     1462.5,
@@ -1746,7 +1746,7 @@ class TestTotalsAndComponents:
                 "Test 37 - PDT value returns absolute difference and percentage limits (marker N)",
             ),
             (
-                "ZL",
+                "AL",
                 "202301",
                 1625,
                 [
@@ -1762,7 +1762,7 @@ class TestTotalsAndComponents:
                 None,
                 0.1,
                 (
-                    "ZL",
+                    "AL",
                     "202301",
                     None,
                     None,
@@ -1774,7 +1774,7 @@ class TestTotalsAndComponents:
                 "Test 38 - Predictive and auxiliary are none returning S marker with none values",
             ),
             (
-                "ZM",
+                "AM",
                 "202301",
                 1625,
                 [
@@ -1790,7 +1790,7 @@ class TestTotalsAndComponents:
                 11,
                 None,
                 (
-                    "ZM",
+                    "AM",
                     "202301",
                     0,
                     None,
@@ -1802,7 +1802,7 @@ class TestTotalsAndComponents:
                 "Test 39 - None PDT value returns absolute difference but no percentage limits (marker N)",
             ),
             (
-                "ZN",
+                "AN",
                 "202301",
                 15,
                 [(1), (2), (3), (4)],
@@ -1813,7 +1813,7 @@ class TestTotalsAndComponents:
                 1,
                 None,
                 (
-                    "ZN",
+                    "AN",
                     "202301",
                     2.0,
                     None,
@@ -1825,7 +1825,7 @@ class TestTotalsAndComponents:
                 "Test 40 - None PDT value returns absolute difference but no percentage limits (marker M)",
             ),
             (
-                "ZO",
+                "AO",
                 "202301",
                 15,
                 [(1), (2), (3), (4)],
@@ -1836,7 +1836,7 @@ class TestTotalsAndComponents:
                 None,
                 0.1,
                 (
-                    "ZO",
+                    "AO",
                     "202301",
                     2.0,
                     9,
