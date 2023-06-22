@@ -759,7 +759,7 @@ class TestErrorCorrection:
                     82.0,
                     [ComponentPair(8.2, None)] * 10,
                     100.0,
-                    16,
+                    2,
                     (100.0, [10.0] * 10, "C"),
                     "Test 2: Amend components",
             ),
@@ -838,8 +838,8 @@ class TestCorrectComponents:
                     90.0,
                     [ComponentPair(9.0, None)] * 10,
                     100.0,
-                    100.0,
                     18,
+                    100.0,
                     [10.0] * 10,
                     "Test 1: Component = 90, " "predictive = 100",
             ),
@@ -981,7 +981,7 @@ class TestTotalsAndComponents:
                 ],
                 False,
                 90,
-                1,
+                2,
                 "202301",
                 None,
                 None,
@@ -992,7 +992,7 @@ class TestTotalsAndComponents:
                     10,
                     90,
                     110,
-                    1,
+                    2,
                     90,
                     [81, 0, 3.6, 5.4],
                     "C",
@@ -1576,7 +1576,7 @@ class TestTotalsAndComponents:
                 ],
                 False,
                 2,
-                16,
+                17,
                 "202301",
                 None,
                 11,
@@ -1587,11 +1587,11 @@ class TestTotalsAndComponents:
                     8.9,
                     None,
                     None,
-                    16,
+                    17,
                     2,
                     [
                         0.4403669724770642,
-                        0.4770642201834862,
+                        0.47706422018348627,
                         0.5137614678899082,
                         0.5688073394495413,
                     ],
@@ -1881,7 +1881,7 @@ class TestTotalsAndComponents:
                 ],
                 False,
                 2,
-                16,
+                17,
                 "202301",
                 None,
                 11,
@@ -1892,7 +1892,7 @@ class TestTotalsAndComponents:
                     8.9,
                     None,
                     None,
-                    16,
+                    17,
                     2,
                     [0.4403669724770642, 0.47706422018348627, 0.5137614678899082, 0.5688073394495413],
                     "C",
@@ -2050,7 +2050,7 @@ class TestTotalsAndComponents:
                     sum_of_components = 0
                     for component in results.final_components:
                         sum_of_components += component
-                    assert sum_of_components == expected_result[5]
+                    assert sum_of_components == expected_result[6]
 
             except Exception as e:
                 pytest.fail(

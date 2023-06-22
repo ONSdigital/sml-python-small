@@ -610,7 +610,7 @@ def correct_components(
         decimal.getcontext().prec=precision
         print(ctx)
 
-        component.final_value = (decimal.Decimal(component.original_value) / decimal.Decimal(components_sum)) * predictive
+        component.final_value = float((decimal.Decimal(component.original_value) / decimal.Decimal(components_sum)) * decimal.Decimal(predictive))
     tcc_marker = TccMarker.COMPONENTS_CORRECTED
     return final_total, original_components, tcc_marker
 
