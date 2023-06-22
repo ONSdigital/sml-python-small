@@ -399,12 +399,12 @@ class TestCheckPredictiveValue:
         ],
     )
     def test_check_predictive_value(
-            self, predictive, auxiliary, expected_result, test_id
+        self, predictive, auxiliary, expected_result, test_id
     ):
         try:
             result = check_predictive_value(predictive=predictive, auxiliary=auxiliary)
             assert (
-                    result == expected_result
+                result == expected_result
             ), f"Test {test_id} failed: Unexpected result. Result == {result}"
         except Exception as e:
             pytest.fail(
@@ -422,34 +422,32 @@ class TestCheckZeroErrors:
         [
             ([], 100.0, "P", "Test 1: 12 RandomComponents, predictive positive"),
             (
-                    [
-                        ComponentPair(original_value=0, final_value=None),
-                        ComponentPair(original_value=0, final_value=None),
-                    ],
-                    150.0,
-                    "S",
-                    "Test 2: Components 0, predictive positive",
+                [
+                    ComponentPair(original_value=0, final_value=None),
+                    ComponentPair(original_value=0, final_value=None),
+                ],
+                150.0,
+                "S",
+                "Test 2: Components 0, predictive positive",
             ),
             (
-                    [
-                        ComponentPair(original_value=5, final_value=None),
-                        ComponentPair(original_value=32, final_value=None),
-                    ],
-                    0,
-                    "P",
-                    "Test 3: Predictive 0, predictive positive",
+                [
+                    ComponentPair(original_value=5, final_value=None),
+                    ComponentPair(original_value=32, final_value=None),
+                ],
+                0,
+                "P",
+                "Test 3: Predictive 0, predictive positive",
             ),
         ],
     )
     def test_check_zero_errors(
-            self, test_components, predictive, expected_result, test_id
+        self, test_components, predictive, expected_result, test_id
     ):
         if "RandomComponents" in test_id:
             for _ in range(12):
                 random_float = random.uniform(0, 12)
-                component = ComponentPair(
-                    original_value=random_float, final_value=None
-                )
+                component = ComponentPair(original_value=random_float, final_value=None)
                 test_components.append(component)
 
         try:
@@ -458,7 +456,7 @@ class TestCheckZeroErrors:
                 predictive=predictive, components_sum=components_sum
             )
             assert (
-                    marker.value == expected_result
+                marker.value == expected_result
             ), f"Test {test_id} failed: Unexpected result. Result == {marker}"
         except Exception as e:
             pytest.fail(
@@ -472,77 +470,60 @@ class TestCheckZeroErrors:
 
 class TestCheckSumComponentsPredictive:
     @pytest.mark.parametrize(
-        "test_components, predictive, absolute_difference_threshold, expected_result, test_id",
+        "test_components, predictive, expected_result, test_id",
         [
             (
-                    [
-                        ComponentPair(original_value=3.5, final_value=None),
-                        ComponentPair(original_value=6.5, final_value=None),
-                        ComponentPair(original_value=8.0, final_value=None),
-                        ComponentPair(original_value=2.0, final_value=None),
-                        ComponentPair(original_value=4.5, final_value=None),
-                        ComponentPair(original_value=5.5, final_value=None),
-                        ComponentPair(original_value=2.8, final_value=None),
-                        ComponentPair(original_value=7.2, final_value=None),
-                        ComponentPair(original_value=1.0, final_value=None),
-                        ComponentPair(original_value=9.0, final_value=None),
-                        ComponentPair(original_value=0.3, final_value=None),
-                        ComponentPair(original_value=9.7, final_value=None),
-                    ],
-                    60.0,
-                    100.0,
-                    0,
-                    "Test 1: Component Sum Matches Predictive",
+                [
+                    ComponentPair(original_value=3.5, final_value=None),
+                    ComponentPair(original_value=6.5, final_value=None),
+                    ComponentPair(original_value=8.0, final_value=None),
+                    ComponentPair(original_value=2.0, final_value=None),
+                    ComponentPair(original_value=4.5, final_value=None),
+                    ComponentPair(original_value=5.5, final_value=None),
+                    ComponentPair(original_value=2.8, final_value=None),
+                    ComponentPair(original_value=7.2, final_value=None),
+                    ComponentPair(original_value=1.0, final_value=None),
+                    ComponentPair(original_value=9.0, final_value=None),
+                    ComponentPair(original_value=0.3, final_value=None),
+                    ComponentPair(original_value=9.7, final_value=None),
+                ],
+                60.0,
+                0,
+                "Test 1: Component Sum Matches Predictive",
             ),
             (
-                    [
-                        ComponentPair(original_value=3.2, final_value=None),
-                        ComponentPair(original_value=5.1, final_value=None),
-                        ComponentPair(original_value=2.4, final_value=None),
-                        ComponentPair(original_value=1.5, final_value=None),
-                        ComponentPair(original_value=0.8, final_value=None),
-                        ComponentPair(original_value=4.6, final_value=None),
-                        ComponentPair(original_value=2.7, final_value=None),
-                        ComponentPair(original_value=3.9, final_value=None),
-                        ComponentPair(original_value=1.2, final_value=None),
-                        ComponentPair(original_value=0.5, final_value=None),
-                        ComponentPair(original_value=4.3, final_value=None),
-                        ComponentPair(original_value=2.0, final_value=None),
-                    ],
-                    100.0,
-                    150.0,
-                    67.8,  # This is the returned stored absolute_difference value
-                    "Test 2: Component Sum Does NOT Match Predictive and returns absolute_difference",
-            ),
-            (
-                    [
-                        ComponentPair(original_value=3.5, final_value=None),
-                        ComponentPair(original_value=6.5, final_value=None),
-                        ComponentPair(original_value=8.0, final_value=None),
-                        ComponentPair(original_value=2.0, final_value=None),
-                        ComponentPair(original_value=4.5, final_value=None),
-                        ComponentPair(original_value=5.5, final_value=None),
-                        ComponentPair(original_value=2.8, final_value=None),
-                        ComponentPair(original_value=7.2, final_value=None),
-                        ComponentPair(original_value=1.0, final_value=None),
-                        ComponentPair(original_value=9.0, final_value=None),
-                        ComponentPair(original_value=0.3, final_value=None),
-                        ComponentPair(original_value=9.7, final_value=None),
-                    ],
-                    60.0,
-                    None,
-                    None,
-                    "Test 3: Absolute Difference Threshold is None",
+                [
+                    ComponentPair(original_value=3.2, final_value=None),
+                    ComponentPair(original_value=5.1, final_value=None),
+                    ComponentPair(original_value=2.4, final_value=None),
+                    ComponentPair(original_value=1.5, final_value=None),
+                    ComponentPair(original_value=0.8, final_value=None),
+                    ComponentPair(original_value=4.6, final_value=None),
+                    ComponentPair(original_value=2.7, final_value=None),
+                    ComponentPair(original_value=3.9, final_value=None),
+                    ComponentPair(original_value=1.2, final_value=None),
+                    ComponentPair(original_value=0.5, final_value=None),
+                    ComponentPair(original_value=4.3, final_value=None),
+                    ComponentPair(original_value=2.0, final_value=None),
+                ],
+                100.0,
+                67.8,  # This is the returned stored absolute_difference value
+                "Test 2: Component Sum Does NOT Match Predictive and returns absolute_difference",
             ),
         ],
     )
     def test_check_sum_components_predictive(
-            self, test_components, predictive, absolute_difference_threshold, expected_result, test_id
+        self,
+        test_components,
+        predictive,
+        expected_result,
+        test_id,
     ):
         try:
             components_sum = sum_components(test_components)
             absolute_difference = check_sum_components_predictive(
-                predictive, components_sum, absolute_difference_threshold
+                predictive,
+                components_sum,
             )
             assert absolute_difference == expected_result
         except Exception as e:
@@ -561,97 +542,97 @@ class TestDetermineErrorDetection:
         "low_threshold, high_threshold, expected_result, test_id",
         [
             (
-                    20,
-                    None,
-                    10,
-                    None,
-                    None,
-                    None,
-                    "P",
-                    "Test 1: Absolute Difference Only - Satisfied",
+                20,
+                None,
+                10,
+                None,
+                None,
+                None,
+                "P",
+                "Test 1: Absolute Difference Only - Satisfied",
             ),
             (
-                    5,
-                    None,
-                    10,
-                    None,
-                    None,
-                    None,
-                    "M",
-                    "Test 2: Absolute Difference Only - NOT Satisfied",
+                5,
+                None,
+                10,
+                None,
+                None,
+                None,
+                "M",
+                "Test 2: Absolute Difference Only - NOT Satisfied",
             ),
             (
-                    None,
-                    10,
-                    None,
-                    15,
-                    10,
-                    20,
-                    "P",
-                    "Test 3: Percentage Difference Only - Satisfied",
+                None,
+                10,
+                None,
+                15,
+                10,
+                20,
+                "P",
+                "Test 3: Percentage Difference Only - Satisfied",
             ),
             (
-                    None,
-                    10,
-                    None,
-                    15,
-                    16,
-                    20,
-                    "M",
-                    "Test 4: Percentage Difference Only - NOT Satisfied (lower)",
+                None,
+                10,
+                None,
+                15,
+                16,
+                20,
+                "M",
+                "Test 4: Percentage Difference Only - NOT Satisfied (lower)",
             ),
             (
-                    None,
-                    10,
-                    None,
-                    15,
-                    10,
-                    13,
-                    "M",
-                    "Test 5: Percentage Difference Only - NOT Satisfied (upper)",
+                None,
+                10,
+                None,
+                15,
+                10,
+                13,
+                "M",
+                "Test 5: Percentage Difference Only - NOT Satisfied (upper)",
             ),
             (
-                    20,
-                    10,
-                    10,
-                    15,
-                    16,
-                    20,
-                    "P",
-                    "Test 6: Both Input - Absolute Difference Satisfied",
+                20,
+                10,
+                10,
+                15,
+                16,
+                20,
+                "P",
+                "Test 6: Both Input - Absolute Difference Satisfied",
             ),
             (
-                    5,
-                    10,
-                    10,
-                    15,
-                    10,
-                    20,
-                    "P",
-                    "Test 7: Both Input - Percentage Difference Satisfied",
+                5,
+                10,
+                10,
+                15,
+                10,
+                20,
+                "P",
+                "Test 7: Both Input - Percentage Difference Satisfied",
             ),
             (
-                    5,
-                    10,
-                    10,
-                    15,
-                    16,
-                    20,
-                    "M",
-                    "Test 8: Both Input - Neither Satisfied",
+                5,
+                10,
+                10,
+                15,
+                16,
+                20,
+                "M",
+                "Test 8: Both Input - Neither Satisfied",
             ),
         ],
     )
     def test_determine_error_detection(
-            self,
-            absolute_difference_threshold,
-            percentage_difference_threshold,
-            absolute_difference,
-            predictive,
-            low_threshold,
-            high_threshold,
-            expected_result,
-            test_id,
+        self,
+        absolute_difference_threshold,
+        percentage_difference_threshold,
+        absolute_difference,
+        predictive,
+        low_threshold,
+        high_threshold,
+        expected_result,
+        test_id,
     ):
         try:
             result = determine_error_detection(
@@ -660,7 +641,7 @@ class TestDetermineErrorDetection:
                 absolute_difference=absolute_difference,
                 predictive=predictive,
                 low_threshold=low_threshold,
-                high_threshold=high_threshold
+                high_threshold=high_threshold,
             )
 
             assert result == expected_result, f"Test failed: {test_id}"
@@ -684,11 +665,11 @@ class TestCheckAbsoluteDifferenceThreshold:
         ],
     )
     def test_check_absolute_difference_threshold(
-            self,
-            absolute_difference_threshold,
-            absolute_difference,
-            expected_result,
-            test_id,
+        self,
+        absolute_difference_threshold,
+        absolute_difference,
+        expected_result,
+        test_id,
     ):
         try:
             result = check_absolute_difference_threshold(
@@ -712,40 +693,42 @@ class TestCheckPercentageDifferenceThreshold:
         "predictive, low_threshold, high_threshold, expected_result, test_id",
         [
             (
-                    110.0,
-                    100.0,
-                    110.0,
-                    True,
-                    "Test 1: Predictive total equals upper threshold",
+                110.0,
+                100.0,
+                110.0,
+                True,
+                "Test 1: Predictive total equals upper threshold",
             ),
             (
-                    120.0,
-                    100.0,
-                    110.0,
-                    False,
-                    "Test 2: Predictive total is greater than upper threshold",
+                120.0,
+                100.0,
+                110.0,
+                False,
+                "Test 2: Predictive total is greater than upper threshold",
             ),
             (
-                    110.0,
-                    105.0,
-                    115.0,
-                    True,
-                    "Test 3: Predictive total is less than upper threshold and greater than lower threshold",
+                110.0,
+                105.0,
+                115.0,
+                True,
+                "Test 3: Predictive total is less than upper threshold and greater than lower threshold",
             ),
             (
-                    79.5,
-                    105.0,
-                    115.0,
-                    False,
-                    "Test 4: Predictive total is less than lower threshold",
+                79.5,
+                105.0,
+                115.0,
+                False,
+                "Test 4: Predictive total is less than lower threshold",
             ),
         ],
     )
     def test_check_percentage_difference_threshold(
-            self, predictive, low_threshold, high_threshold, expected_result, test_id
+        self, predictive, low_threshold, high_threshold, expected_result, test_id
     ):
         try:
-            result = check_percentage_difference_threshold(predictive, low_threshold, high_threshold)
+            result = check_percentage_difference_threshold(
+                predictive, low_threshold, high_threshold
+            )
             assert result == expected_result, f"{test_id} - Unexpected result"
 
         except Exception as e:
@@ -796,9 +779,7 @@ class TestErrorCorrection:
             result = error_correction(
                 amend_total, components_sum, original_components, predictive, precision,
             )
-            assert (
-                    result == expected_result
-            ), f"{test_id} - Unexpected result"
+            assert result == expected_result, f"{test_id} - Unexpected result"
 
         except Exception as e:
             pytest.fail(
@@ -815,21 +796,21 @@ class TestCorrectTotal:
         "components_sum, original_components, expected_result, test_id",
         [
             (
-                    100.0,
-                    [ComponentPair(10.0, None)] * 10,
-                    (100.0, [ComponentPair(10.0, 10.0)] * 10, "T"),
-                    "Test 1: Final total is sum of received components",
+                100.0,
+                [ComponentPair(10.0, None)] * 10,
+                (100.0, [ComponentPair(10.0, 10.0)] * 10, "T"),
+                "Test 1: Final total is sum of received components",
             ),
             (
-                    30.0,
-                    [ComponentPair(10.0, None)] * 10,
-                    (30.0, [ComponentPair(10.0, 10.0)] * 10, "T"),
-                    "Test 2: Final total is not sum of received components",
+                30.0,
+                [ComponentPair(10.0, None)] * 10,
+                (30.0, [ComponentPair(10.0, 10.0)] * 10, "T"),
+                "Test 2: Final total is not sum of received components",
             ),
         ],
     )
     def test_correct_total(
-            self, components_sum, original_components, expected_result, test_id
+        self, components_sum, original_components, expected_result, test_id
     ):
         try:
             output = correct_total(
@@ -837,7 +818,7 @@ class TestCorrectTotal:
             )
             print(output)
             assert (
-                    output == expected_result
+                output == expected_result
             ), f"Test {test_id} failed: Unexpected result"
         except Exception as e:
             pytest.fail(
@@ -857,8 +838,8 @@ class TestCorrectComponents:
                     90.0,
                     [ComponentPair(9.0, None)] * 10,
                     100.0,
-                    28,
                     100.0,
+                    18,
                     [10.0] * 10,
                     "Test 1: Component = 90, " "predictive = 100",
             ),
@@ -870,7 +851,7 @@ class TestCorrectComponents:
                         ComponentPair(30.0, None),
                     ],
                     200.0,
-                    14,
+                    18,
                     200.0,
                     [115.38, 38.46, 46.15],
                     "Test 2: Component sum = 130, Total = 200",
@@ -905,13 +886,13 @@ class TestCorrectComponents:
             )
 
             assert (
-                    result[0] == expected_total
+                result[0] == expected_total
             ), f"Test {test_id} failed: Unexpected result"
             for index, component in enumerate(result[1]):
                 # Rounding to 2 decimal places for testing purposes
                 value = round(component.final_value, 2)
                 assert (
-                        value == expected_component[index]
+                    value == expected_component[index]
                 ), f"Test {test_id} failed: Unexpected result"
         except Exception as e:
             pytest.fail(
@@ -1003,7 +984,7 @@ class TestTotalsAndComponents:
                 (
                     "C",
                     "202301",
-                    None,
+                    10,
                     90,
                     110,
                     90,
@@ -1232,12 +1213,7 @@ class TestTotalsAndComponents:
                 "O",
                 "202301",
                 15,
-                [
-                    (1),
-                    (2),
-                    (3),
-                    (4)
-                ],
+                [(1), (2), (3), (4)],
                 True,
                 5,
                 "202301",
@@ -1260,12 +1236,7 @@ class TestTotalsAndComponents:
                 "P",
                 "202301",
                 9,
-                [
-                    (1),
-                    (2),
-                    (3),
-                    (4)
-                ],
+                [(1), (2), (3), (4)],
                 True,
                 9,
                 "202301",
@@ -1275,7 +1246,7 @@ class TestTotalsAndComponents:
                 (
                     "P",
                     "202301",
-                    None,
+                    1,
                     9,
                     11,
                     10,
@@ -1288,12 +1259,7 @@ class TestTotalsAndComponents:
                 "Q",
                 "202301",
                 15,
-                [
-                    (1),
-                    (2),
-                    (3),
-                    (4)
-                ],
+                [(1), (2), (3), (4)],
                 True,
                 5,
                 "202301",
@@ -1303,7 +1269,7 @@ class TestTotalsAndComponents:
                 (
                     "Q",
                     "202301",
-                    None,
+                    5,
                     9,
                     11,
                     15,
@@ -1344,12 +1310,7 @@ class TestTotalsAndComponents:
                 "S",
                 "202301",
                 15,
-                [
-                    (1),
-                    (2),
-                    (3),
-                    (4)
-                ],
+                [(1), (2), (3), (4)],
                 False,
                 9,
                 "202301",
@@ -1372,12 +1333,7 @@ class TestTotalsAndComponents:
                 "U",
                 "202301",
                 15,
-                [
-                    (1),
-                    (2),
-                    (3),
-                    (4)
-                ],
+                [(1), (2), (3), (4)],
                 False,
                 5,
                 "202301",
@@ -1425,7 +1381,7 @@ class TestTotalsAndComponents:
                 (
                     "U",
                     "202301",
-                    10817,
+                    None,
                     None,
                     None,
                     10817,
@@ -1438,12 +1394,7 @@ class TestTotalsAndComponents:
                 "V",
                 "202301",
                 10817,
-                [
-                    (0),
-                    (0),
-                    (0),
-                    (0)
-                ],
+                [(0), (0), (0), (0)],
                 False,
                 10817,
                 "202301",
@@ -1453,7 +1404,7 @@ class TestTotalsAndComponents:
                 (
                     "V",
                     "202301",
-                    10817,
+                    None,
                     None,
                     None,
                     10817,
@@ -1494,12 +1445,7 @@ class TestTotalsAndComponents:
                 "X",
                 "202301",
                 40,
-                [
-                    (10),
-                    (10),
-                    (10),
-                    (10)
-                ],
+                [(10), (10), (10), (10)],
                 False,
                 0,
                 "202301",
@@ -1575,7 +1521,7 @@ class TestTotalsAndComponents:
                 "Test 25 - Amend Total True floating point components and floating point total",
             ),
             (
-                "ZA",
+                "AA",
                 "202301",
                 10817,
                 [
@@ -1591,27 +1537,27 @@ class TestTotalsAndComponents:
                 11,
                 None,
                 (
-                    "ZA",
+                    "AA",
                     "202301",
                     8.9,
                     None,
                     None,
                     2,
-                    [0.4403669724770642, 0.47706422018348627, 0.5137614678899082, 0.5688073394495413],
+                    [
+                        0.4403669724770642,
+                        0.47706422018348627,
+                        0.5137614678899082,
+                        0.5688073394495413,
+                    ],
                     "C",
                 ),
                 "Test 26 - Amend Total False floating point components and floating point total",
             ),
             (
-                "ZB",
+                "AB",
                 "202301",
                 15,
-                [
-                    (1),
-                    (2),
-                    (3),
-                    (4)
-                ],
+                [(1), (2), (3), (4)],
                 True,
                 7,
                 "202301",
@@ -1619,9 +1565,9 @@ class TestTotalsAndComponents:
                 None,
                 0.1,
                 (
-                    "ZB",
+                    "AB",
                     "202301",
-                    None,
+                    3,
                     9,
                     11,
                     15,
@@ -1631,15 +1577,10 @@ class TestTotalsAndComponents:
                 "Test 27 - predictive is less than lower threshold",
             ),
             (
-                "ZC",
+                "AC",
                 "202301",
                 15,
-                [
-                    (1),
-                    (2),
-                    (3),
-                    (4)
-                ],
+                [(1), (2), (3), (4)],
                 True,
                 10.5,
                 "202301",
@@ -1647,9 +1588,9 @@ class TestTotalsAndComponents:
                 None,
                 0.1,
                 (
-                    "ZC",
+                    "AC",
                     "202301",
-                    None,
+                    0.5,
                     9,
                     11,
                     10,
@@ -1659,15 +1600,10 @@ class TestTotalsAndComponents:
                 "Test 28 - predictive is greater than lower threshold",
             ),
             (
-                "ZD",
+                "AD",
                 "202301",
                 15,
-                [
-                    (1),
-                    (2),
-                    (3),
-                    (4)
-                ],
+                [(1), (2), (3), (4)],
                 False,
                 9,
                 "202301",
@@ -1675,9 +1611,9 @@ class TestTotalsAndComponents:
                 None,
                 0.1,
                 (
-                    "ZD",
+                    "AD",
                     "202301",
-                    None,
+                    1,
                     9,
                     11,
                     9,
@@ -1687,15 +1623,10 @@ class TestTotalsAndComponents:
                 "Test 29 - predictive is equal to lower threshold and amend value is false",
             ),
             (
-                "ZE",
+                "AE",
                 "202301",
                 15,
-                [
-                    (1),
-                    (2),
-                    (3),
-                    (4)
-                ],
+                [(1), (2), (3), (4)],
                 False,
                 10.9,
                 "202301",
@@ -1703,9 +1634,9 @@ class TestTotalsAndComponents:
                 None,
                 0.1,
                 (
-                    "ZE",
+                    "AE",
                     "202301",
-                    None,
+                    0.9,
                     9,
                     11,
                     10.9,
@@ -1715,15 +1646,10 @@ class TestTotalsAndComponents:
                 "Test 30 - predictive is less than upper threshold",
             ),
             (
-                "ZF",
+                "AF",
                 "202301",
                 15,
-                [
-                    (1),
-                    (2),
-                    (3),
-                    (4)
-                ],
+                [(1), (2), (3), (4)],
                 False,
                 11,
                 "202301",
@@ -1731,9 +1657,9 @@ class TestTotalsAndComponents:
                 None,
                 0.1,
                 (
-                    "ZF",
+                    "AF",
                     "202301",
-                    None,
+                    1,
                     9,
                     11,
                     11,
@@ -1743,15 +1669,10 @@ class TestTotalsAndComponents:
                 "Test 31 - predictive is equal to than upper threshold",
             ),
             (
-                "ZG",
+                "AG",
                 "202301",
                 15,
-                [
-                    (1),
-                    (2),
-                    (3),
-                    (4)
-                ],
+                [(1), (2), (3), (4)],
                 True,
                 12,
                 "202301",
@@ -1759,9 +1680,9 @@ class TestTotalsAndComponents:
                 None,
                 0.1,
                 (
-                    "ZG",
+                    "AG",
                     "202301",
-                    None,
+                    2.0,
                     9,
                     11,
                     15,
@@ -1771,7 +1692,7 @@ class TestTotalsAndComponents:
                 "Test 32 - predictive is greater than upper threshold",
             ),
             (
-                "ZH",
+                "AH",
                 "202312",
                 "InvalidString",
                 [
@@ -1809,7 +1730,7 @@ class TestTotalsAndComponents:
                 "Test 34 - Missing identifier value",
             ),
             (
-                "ZI",
+                "AI",
                 "202301",
                 15,
                 [
@@ -1825,9 +1746,9 @@ class TestTotalsAndComponents:
                 None,
                 0.1,
                 (
-                    "ZI",
+                    "AI",
                     "202301",
-                    None,
+                    0.9,
                     9,
                     11,
                     10,
@@ -1837,7 +1758,7 @@ class TestTotalsAndComponents:
                 "Test 35 - Missing period value",
             ),
             (
-                "ZJ",
+                "AJ",
                 "202301",
                 15,
                 [
