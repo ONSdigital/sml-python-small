@@ -391,7 +391,11 @@ def check_sum_components_predictive(
     :rtype: float
     """
 
+    decimal.getcontext().prec = 1
+
     absolute_difference = abs(predictive - components_sum)
+
+    absolute_difference = float(decimal.Decimal(absolute_difference))
     return absolute_difference
 
 
