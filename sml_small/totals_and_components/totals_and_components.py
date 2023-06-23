@@ -391,8 +391,8 @@ def check_sum_components_predictive(
     :rtype: float
     """
     
-    absolute_difference = (abs(decimal.Decimal(predictive) - decimal.Decimal(components_sum)))
-
+    absolute_difference = abs((predictive) -(components_sum))
+    print("ABS DIFF", absolute_difference)
     absolute_difference = absolute_difference
     return absolute_difference
 
@@ -668,10 +668,10 @@ def calculate_percent_thresholds(
         high_percent_threshold = None
     else:
         low_percent_threshold = (
-            abs(decimal.Decimal(sum_of_components) - decimal.Decimal(sum_of_components) / decimal.Decimal(percentage_threshold)) / 10
+            abs(sum_of_components - (sum_of_components) / (percentage_threshold)) / 10
         )
         high_percent_threshold = (
-            abs(decimal.Decimal(sum_of_components) + decimal.Decimal(sum_of_components) / decimal.Decimal(percentage_threshold)) / 10
+            abs(sum_of_components + (sum_of_components) / (percentage_threshold)) / 10
         )
     output_list["low_percent_threshold"] = low_percent_threshold
     output_list["high_percent_threshold"] = high_percent_threshold
