@@ -206,10 +206,10 @@ def validate_input(
     we need in the correct format. To do this we check to see if the data exists and is a number.
     If the data does not exist and is not a number we throw ValueError's as appropriate.
 
-    :param identifier:
-    :type identifier:
-    :param period:
-    :type period
+    :param identifier: Unique identifier for the calculation.
+    :type identifier: str
+    :param period: Not used in initial Proof of Concept (PoC). Assumes current period.
+    :type period Optional(str)
     :param total: Target period total, numeric – nulls allowed
     :type total: float
     :param components: Corresponding list of Total variable's components, numeric – nulls allowed
