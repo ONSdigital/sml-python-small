@@ -16,6 +16,13 @@ EXCEPTION_FAIL_MESSAGE = (
 )
 
 
+#  Class used to force str() cast during validation to fail as all standard library python types have
+#  valid string conversions
+class NoString:
+    def __str__(self):
+        pass
+
+
 class TestValidateInput:
     @pytest.mark.parametrize(
         "identifier, total, components, amend_total, predictive, "
@@ -286,6 +293,63 @@ class TestValidateInput:
                 ValueError,
                 "Test 13: None value for amend value",
             ),
+            (
+                    None,
+                    "202312",
+                    100.0,
+                    [
+                        ComponentPair(original_value=1, final_value=None),
+                        ComponentPair(original_value=2, final_value=None),
+                        ComponentPair(original_value=3, final_value=None),
+                        ComponentPair(original_value=4, final_value=None),
+                    ],
+                    102.0,
+                    101.0,
+                    "202312",
+                    89.0,
+                    100.0,
+                    None,
+                    ValueError,
+                    "Test 13: None value identifier",
+            ),
+            (
+                    NoString(),
+                    "202312121212",
+                    100.0,
+                    [
+                        ComponentPair(original_value=1, final_value=None),
+                        ComponentPair(original_value=2, final_value=None),
+                        ComponentPair(original_value=3, final_value=None),
+                        ComponentPair(original_value=4, final_value=None),
+                    ],
+                    102.0,
+                    101.0,
+                    "202312",
+                    89.0,
+                    100.0,
+                    None,
+                    TypeError,
+                    "Test 14: Identifier can't be cast as string",
+            ),
+            (
+                    "M",
+                    "202312121212",
+                    100.0,
+                    [
+                        ComponentPair(original_value=1, final_value=None),
+                        ComponentPair(original_value=2, final_value=None),
+                        ComponentPair(original_value=3, final_value=None),
+                        ComponentPair(original_value=4, final_value=None),
+                    ],
+                    102.0,
+                    101.0,
+                    "202312",
+                    89.0,
+                    100.0,
+                    None,
+                    ValueError,
+                    "Test 15: Period in wrong format",
+            ),
         ],
     )
     def test_validate_input(
@@ -304,10 +368,12 @@ class TestValidateInput:
         if isinstance(expected_result, tuple):
             try:
                 result = validate_input(
+                    identifier=identifier,
                     total=total,
                     components=components,
                     amend_total=amend_total,
                     predictive=predictive,
+                    period=period,
                     auxiliary=auxiliary,
                     absolute_difference_threshold=absolute_difference_threshold,
                     percentage_difference_threshold=percentage_difference_threshold,
@@ -324,10 +390,12 @@ class TestValidateInput:
         else:
             with pytest.raises(expected_result) as exc_info:
                 validate_input(
+                    identifier=identifier,
                     total=total,
                     components=components,
                     amend_total=amend_total,
                     predictive=predictive,
+                    period=period,
                     auxiliary=auxiliary,
                     absolute_difference_threshold=absolute_difference_threshold,
                     percentage_difference_threshold=percentage_difference_threshold,

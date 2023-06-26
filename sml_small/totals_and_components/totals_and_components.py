@@ -2,6 +2,7 @@
 For Copyright information, please see LICENCE.
 """
 
+import datetime
 from enum import Enum
 from typing import List, Optional, Tuple
 
@@ -182,9 +183,11 @@ def print_input_table(**kwargs):
 
 
 def validate_input(
+    identifier: str,
     total: float,
     components: List[ComponentPair],
     amend_total: bool,
+    period: Optional[str],
     predictive: Optional[float],
     auxiliary: Optional[float],
     absolute_difference_threshold: Optional[float],
@@ -203,6 +206,10 @@ def validate_input(
     we need in the correct format. To do this we check to see if the data exists and is a number.
     If the data does not exist and is not a number we throw ValueError's as appropriate.
 
+    :param identifier:
+    :type identifier:
+    :param period:
+    :type period
     :param total: Target period total, numeric – nulls allowed
     :type total: float
     :param components: Corresponding list of Total variable's components, numeric – nulls allowed
@@ -227,6 +234,14 @@ def validate_input(
             List[Component_list] | None, float | None, float | None, float | None,
             float | None, float | None]
     """
+    if not identifier:
+        raise ValueError("The identifier is not populated")
+    str(identifier)
+    if period:
+        try:
+            datetime.datetime.strptime(period, "%Y%M")
+        except ValueError as exc:
+            raise type(exc)(str(exc) + f" Period: {period} must be a String of format 'YYYYMM'")
     if total:
         validate_number("total", total)
         float(total)
@@ -649,9 +664,7 @@ def calculate_percent_thresholds(
 
 
 def totals_and_components(
-    identifier: Optional[
-        str
-    ],  # unique identifier, e.g Business Reporting Unit SG-should this be optional?
+    identifier: str,  # unique identifier, e.g Business Reporting Unit SG-should this be optional?
     period: Optional[str],
     total: float,
     components: List[float],
@@ -684,7 +697,7 @@ def totals_and_components(
     It is actually representative of a null value.
 
     :param identifier: Unique identifier for the calculation.
-    :type identifier: Optional[str]
+    :type identifier: str
     :param period: Not used in initial Proof of Concept (PoC). Assumes current period.
     :type period: Optional[str]
     :param total: Original value returned for the total.
@@ -709,7 +722,7 @@ def totals_and_components(
                                             method will automatically correct.
     :type percentage_difference_threshold: Optional[float]
     :raises: N/A Currently
-    :return TotalsAndComponentsOutput: TotalsAndComponentsOutput: An object containing the
+    :return: TotalsAndComponentsOutput: An object containing the
                                        following attributes:
              - identifier (str, optional): Unique identifier (default: None).
              - period (str, optional): Not used in initial PoC, always assume current period
@@ -734,7 +747,7 @@ def totals_and_components(
                     C (components corrected), N (no correction required),
                     M (manual correction required),
                     S (method stopped due to lack of data or zero values).
-     :rtype TotalsAndComponentsOutput: Object[TotalsAndComponentsOutput]
+     :rtype: Object[TotalsAndComponentsOutput]
     """
 
     print_input_table(
@@ -761,9 +774,11 @@ def totals_and_components(
         components_list = initialize_components_list(components)
         #  Check for invalid parameter values
         input_parameters = validate_input(
+            identifier,
             total,
             components_list,
             amend_total,
+            period,
             predictive,
             auxiliary,
             absolute_difference_threshold,
