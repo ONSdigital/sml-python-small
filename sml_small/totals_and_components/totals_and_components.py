@@ -4,7 +4,7 @@ For Copyright information, please see LICENCE.
 
 from enum import Enum
 from typing import List, Optional, Tuple
-import decimal
+from decimal import Decimal
 
 class Index(Enum):
     """
@@ -229,7 +229,7 @@ def validate_input(
     """
     if total:
         validate_number("total", total)
-        float(total)
+        total = float(total)
     if not components:
         raise ValueError("The components are not populated")
     if components:
@@ -374,7 +374,8 @@ def check_sum_components_predictive(
     :rtype: float
     """
 
-    absolute_difference = abs(decimal.Decimal(str(predictive)) - decimal.Decimal(str(components_sum)))
+    absolute_difference = abs(Decimal(str(predictive)) - Decimal(str(components_sum)))
+    absolute_difference = float(absolute_difference)
     return absolute_difference
 
 
@@ -586,7 +587,8 @@ def correct_components(
     # print(type(add_sum))
     final_total = predictive
     for component in original_components:
-        component.final_value = (decimal.Decimal(str(component.original_value)) / decimal.Decimal(str(components_sum))) * decimal.Decimal(str(predictive))
+        component.final_value = (Decimal(str(component.original_value)) / Decimal(str(components_sum))) * Decimal(str(predictive))
+        component.final_value = float(component.final_value)
     tcc_marker = TccMarker.COMPONENTS_CORRECTED
     return final_total, original_components, tcc_marker
 
@@ -642,11 +644,13 @@ def calculate_percent_thresholds(
         high_percent_threshold = None
     else:
         low_percent_threshold = (
-            abs(decimal.Decimal(str(sum_of_components)) - (decimal.Decimal(str(sum_of_components)) / decimal.Decimal(str(percentage_threshold)))) / 10
+            abs(Decimal(str(sum_of_components)) - (Decimal(str(sum_of_components)) / Decimal(str(percentage_threshold)))) / 10
         )
+        low_percent_threshold = float(low_percent_threshold)
         high_percent_threshold = (
-            abs(decimal.Decimal(str(sum_of_components)) + (decimal.Decimal(str(sum_of_components)) / decimal.Decimal(str(percentage_threshold)))) / 10
+            abs(Decimal(str(sum_of_components)) + (Decimal(str(sum_of_components)) / Decimal(str(percentage_threshold)))) / 10
         )
+        high_percent_threshold = float(high_percent_threshold)
     output_list["low_percent_threshold"] = low_percent_threshold
     output_list["high_percent_threshold"] = high_percent_threshold
     return low_percent_threshold, high_percent_threshold, output_list

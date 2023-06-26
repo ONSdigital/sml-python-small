@@ -210,6 +210,7 @@ def filter_data(result, original_data):
     # We get all the list data above and amend that to a 2D list to be passed on to the
     # display_results function
     results = [original_data, new_result, original_data_comp, new_result_comp]
+    print("Results::::", results)
     display_results(results)
 
 
