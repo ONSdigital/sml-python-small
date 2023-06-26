@@ -2,9 +2,9 @@
 For Copyright information, please see LICENCE.
 """
 
+import datetime
 from enum import Enum
 from typing import List, Optional, Tuple
-import datetime
 
 
 class Index(Enum):
