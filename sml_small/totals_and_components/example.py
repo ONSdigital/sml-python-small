@@ -114,12 +114,17 @@ def invoke_process_in_memory_data_example():
     # The List[] data below is used to keep track of the original data to display on the command line
     # in a table format
     data = [
-        "AE",
+        "AU",
         "202301",
-        15,
-        [1, 2, 3, 4],
+        10817,
+        [
+            (0.1),
+            (0.2),
+            (0.4),
+        ],
         True,
-        10.9,
+        0.6,
+        1,
         "202301",
         None,
         None,
@@ -128,12 +133,17 @@ def invoke_process_in_memory_data_example():
 
     # We pass in the input data to be processed and returned by the T&C method
     result = totals_and_components(
-        "AE",
+        "AU",
         "202301",
-        15,
-        [1, 2, 3, 4],
+        10817,
+        [
+            (0.1),
+            (0.2),
+            (0.4),
+        ],
         True,
-        10.9,
+        0.6,
+        1,
         "202301",
         None,
         None,

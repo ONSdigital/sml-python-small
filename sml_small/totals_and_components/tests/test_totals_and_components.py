@@ -1,6 +1,8 @@
 import random
 
 import pytest
+from decimal import Decimal
+from decimal import getcontext
 
 from sml_small.totals_and_components.totals_and_components import (ComponentPair, check_absolute_difference_threshold,
                                                                    check_percentage_difference_threshold,
@@ -1949,18 +1951,18 @@ class TestTotalsAndComponents:
                     (2.8),
                 ],
                 False,
-                0.6,
+                7.5,
                 2,
                 "202301",
                 None,
                 None,
-                0.1,
+                0.3,
                 (
                     "AT",
                     "202301",
-                    7.2,
-                    7.02,
-                    8.58,
+                    7.0,
+                    8.6,
+                    7.5,
                     2,
                     0.6,
                     [0.18, 0.2, 0.22],
@@ -1975,9 +1977,9 @@ class TestTotalsAndComponents:
                 [
                     (0.1),
                     (0.2),
-                    (0.3),
+                    (0.4),
                 ],
-                False,
+                True,
                 0.6,
                 1,
                 "202301",
@@ -1987,13 +1989,13 @@ class TestTotalsAndComponents:
                 (
                     "AU",
                     "202301",
-                    1.1,
-                    0.54,
-                    0.66,
-                    1,
+                    0.1,
                     0.6,
-                    [0.1, 0.2, 1.3],
-                    "C",
+                    0.8,
+                    1,
+                    0.7,
+                    [0.1, 0.2, 0.4],
+                    "T",
                 ),
                 "Test 47 - Testing decimal place to 1 decimal place with floating components",
             ),
@@ -2047,10 +2049,13 @@ class TestTotalsAndComponents:
                 assert results.final_total == expected_result[6]
                 assert results.final_components == expected_result[7]
 
+                getcontext().prec = results.precision
                 if results.tcc_marker == "T" or results.tcc_marker == "C":
-                    sum_of_components = 0
+                    sum_of_components = Decimal("0")
                     for component in results.final_components:
-                        sum_of_components += component
+                        sum_of_components += Decimal(str(component))
+                    
+                    sum_of_components = float(sum_of_components)
                     assert sum_of_components == expected_result[6]
 
             except Exception as e:
