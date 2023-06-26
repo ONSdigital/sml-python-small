@@ -374,7 +374,7 @@ def check_sum_components_predictive(
     :rtype: float
     """
 
-    absolute_difference = abs(predictive - components_sum)
+    absolute_difference = abs(decimal.Decimal(str(predictive)) - decimal.Decimal(str(components_sum)))
     return absolute_difference
 
 
@@ -581,9 +581,9 @@ def correct_components(
     :rtype tcc_marker: TccMarker
     """
     # decimal.getcontext().prec = 10
-    add_sum = decimal.Decimal(0.125) + decimal.Decimal(0.225) + decimal.Decimal(0.315)
-    print(add_sum)
-    print(type(add_sum))
+    # add_sum = decimal.Decimal(0.125) + decimal.Decimal(0.225) + decimal.Decimal(0.315)
+    # print(add_sum)
+    # print(type(add_sum))
     final_total = predictive
     for component in original_components:
         component.final_value = (decimal.Decimal(str(component.original_value)) / decimal.Decimal(str(components_sum))) * decimal.Decimal(str(predictive))
@@ -642,10 +642,10 @@ def calculate_percent_thresholds(
         high_percent_threshold = None
     else:
         low_percent_threshold = (
-            abs(sum_of_components - (sum_of_components / percentage_threshold)) / 10
+            abs(decimal.Decimal(str(sum_of_components)) - (decimal.Decimal(str(sum_of_components)) / decimal.Decimal(str(percentage_threshold)))) / 10
         )
         high_percent_threshold = (
-            abs(sum_of_components + (sum_of_components / percentage_threshold)) / 10
+            abs(decimal.Decimal(str(sum_of_components)) + (decimal.Decimal(str(sum_of_components)) / decimal.Decimal(str(percentage_threshold)))) / 10
         )
     output_list["low_percent_threshold"] = low_percent_threshold
     output_list["high_percent_threshold"] = high_percent_threshold
