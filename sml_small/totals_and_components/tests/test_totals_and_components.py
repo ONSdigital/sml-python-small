@@ -6,6 +6,7 @@ from decimal import getcontext
 
 from sml_small.totals_and_components.totals_and_components import (
     ComponentPair,
+    TACException,
     check_absolute_difference_threshold,
     check_percentage_difference_threshold,
     check_predictive_value,
@@ -1938,7 +1939,7 @@ class TestTotalsAndComponents:
                 None,
                 11,
                 None,
-                Exception,
+                TACException("Precision range must be more than 0 and less than or equal to 28"),
                 "Test 44 - Testing precision value = 29",
             ),
             (
@@ -1958,7 +1959,7 @@ class TestTotalsAndComponents:
                 None,
                 11,
                 None,
-                Exception,
+                TACException("Precision range must be more than 0 and less than or equal to 28"),
                 "Test 45 - Testing precision value = 0",
             ),
             (

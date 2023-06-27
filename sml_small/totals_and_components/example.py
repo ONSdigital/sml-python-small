@@ -108,42 +108,32 @@ def invoke_process_in_memory_data_example():
     # The List[] data below is used to keep track of the original data to display on the command line
     # in a table format
     data = [
-        "AU",
+        "A",
         "202301",
         10817,
-        [
-            (2.4),
-            (2.6),
-            (2.8),
-            (3.1),
-        ],
-        False,
-        10,
-        3,
+        [632, 732, 99, 162],
+        True,
+        1625,
+        30,
         "202301",
         None,
+        11,
         None,
-        0.1,
     ]
 
     # We pass in the input data to be processed and returned by the T&C method
     result = totals_and_components(
-        "AU",
+        "A",
         "202301",
         10817,
-        [
-            (2.4),
-            (2.6),
-            (2.8),
-            (3.1),
-        ],
-        False,
-        10,
-        3,
+        [632, 732, 99, 162],
+        True,
+        1625,
+        30,
         "202301",
         None,
+        11,
         None,
-        0.1,
     )
 
     filter_data(result, data)

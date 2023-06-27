@@ -110,7 +110,9 @@ class TotalsAndComponentsOutput:
     high_percent_threshold: Optional[
         float
     ] = None  # the sum of the input components plus the absolute percentage difference
-    precision: Optional[int] = None  # Precision
+    precision: Optional[
+        int
+    ] = None  # Precision is not a decimal point indicator, it is instead used to adjust our error margins
     final_total: Optional[
         float
     ] = None  # the output total which may have been corrected based on user input amend_
@@ -217,6 +219,8 @@ def validate_input(
     :type bool
     :param predictive:A value used as a predictor for a contributor's target variable.
     :type predictive: Optional[float]
+    :param precision: Precision is not a decimal point indicator, it is instead used to adjust our error margins.
+    :type precision: Optional[int]
     :param auxiliary: The variable used as a predictor for a contributor’s target variable,
                       where the predictive value is not available
                       (e.g., where the contributor was not sampled in the predictive period).
@@ -270,6 +274,8 @@ def validate_input(
     if precision is None:
         precision = 28
     if precision:
+        if precision > 28:
+            raise ValueError("Precision range must be more than 0 and less than or equal to 28")
         validate_number("Precision", precision)
     print("Validate input", precision)
 
@@ -383,6 +389,8 @@ def check_sum_components_predictive(
     :type predictive: float
     :param components_sum: total sum of all the components values entered.
     :type components_sum: float
+    :param precision: Precision is not a decimal point indicator, it is instead used to adjust our error margins.
+    :type precision: Optional[int]
     ...
     :return: We will be returning a number for the absolute difference.
     :rtype: float
@@ -525,6 +533,8 @@ def error_correction(
     :type original_components: list(ComponentPair)
     :param predictive: The predictive value, typically the total for the current period.
     :type predictive: float
+    :param precision: Precision is not a decimal point indicator, it is instead used to adjust our error margins.
+    :type precision: Optional[int]
     ...
     :return final_total: Final Total value to be output
     :rtype final total: float
@@ -594,6 +604,8 @@ def correct_components(
     :type original_components: list(Components_list)
     :param predictive: The predictive value, typically the total for the current period.
     :type predictive: float
+    :param precision: Precision is not a decimal point indicator, it is instead used to adjust our error margins.
+    :type precision: Optional[int]
     ...
     :return final_total: Final Total value to be output
     :rtype final_total: float
@@ -602,10 +614,6 @@ def correct_components(
     :return tcc_marker: Returned Tcc_Marker (Components_corrected)
     :rtype tcc_marker: TccMarker
     """
-    # decimal.getcontext().prec = 10
-    # add_sum = decimal.Decimal("0.125") + decimal.Decimal("0.225") + decimal.Decimal("0.315")
-    # print(add_sum)
-    # print(type(add_sum))
     getcontext().prec = precision
     final_total = predictive
     for component in original_components:
@@ -622,7 +630,9 @@ def sum_components(components: list[ComponentPair], precision: int) -> float:
     Returns the total sum of a received list of component values
 
     :param components: List of components to be summed together.
-    :type components liat(components_list)
+    :type components list(components_list)
+    :param precision: Precision is not a decimal point indicator, it is instead used to adjust our error margins.
+    :type precision: Optional[int]
     ...
     :return total_sum: Final total of summed components
     :rtype total_sum: float
@@ -657,6 +667,8 @@ def calculate_percent_thresholds(
     :param output_list: dictionary containing attributes output at the end of the totals and
     components function
     :type output_list: dict
+    :param precision: Precision is not a decimal point indicator, it is instead used to adjust our error margins.
+    :type precision: Optional[int]
     ...
     :return low_percent_threshold: The lower threshold calculated from the sum of components
                                     and percentage threshold
@@ -668,7 +680,6 @@ def calculate_percent_thresholds(
     components function
     :rtype output_list: dict
     """
-    print("Prec caclcu prec thresholds", precision)
     getcontext().prec = precision
     if percentage_threshold is None:
         low_percent_threshold = None
@@ -744,6 +755,8 @@ def totals_and_components(
     :type amend_total:bool
     :param predictive: The predictive value, typically the total for the current period.
     :type predictive: Optional[float]
+    :param precision: Precision is not a decimal point indicator, it is instead used to adjust our error margins.
+    :type precision: Optional[int]
     :param predictive_period: Not used in initial PoC. Assumes current period.
     :type predictive_period: Optional[str]
     :param auxiliary: The value to be used in the absence of a predictive value.
@@ -784,7 +797,6 @@ def totals_and_components(
                     S (method stopped due to lack of data or zero values).
      :rtype TotalsAndComponentsOutput: Object[TotalsAndComponentsOutput]
     """
-    print("Prec T&C", precision)
     print_input_table(
         identifier=identifier,
         period=period,
