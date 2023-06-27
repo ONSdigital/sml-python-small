@@ -6,6 +6,7 @@ from enum import Enum
 from typing import List, Optional, Tuple
 from decimal import Decimal, getcontext
 
+
 class Index(Enum):
     """
     Enum for use when accessing values from thresholds tuple
@@ -27,7 +28,6 @@ class InputParameters(Enum):
     ABSOLUTE_DIFFERENCE_THRESHOLD = 4
     PERCENTAGE_DIFFERENCE_THRESHOLD = 5
     PRECISION = 6
-
 
 
 class TccMarker(Enum):
@@ -110,7 +110,7 @@ class TotalsAndComponentsOutput:
     high_percent_threshold: Optional[
         float
     ] = None  # the sum of the input components plus the absolute percentage difference
-    precision: Optional[int] = None # Precision
+    precision: Optional[int] = None  # Precision
     final_total: Optional[
         float
     ] = None  # the output total which may have been corrected based on user input amend_
@@ -267,14 +267,12 @@ def validate_input(
             "percentage difference threshold", percentage_difference_threshold
         )
         float(percentage_difference_threshold)
-    if precision == None:
+    if precision is None:
         precision = 28
     if precision:
-        validate_number(
-            "Precision", precision
-        )
+        validate_number("Precision", precision)
     print("Validate input", precision)
-    
+
     return (
         total,
         components,
@@ -541,7 +539,10 @@ def error_correction(
         )
     else:
         final_total, original_components, tcc_marker = correct_components(
-            components_sum, original_components, predictive, precision,
+            components_sum,
+            original_components,
+            predictive,
+            precision,
         )
     final_components = []
     for component in original_components:
@@ -576,7 +577,10 @@ def correct_total(
 
 
 def correct_components(
-    components_sum: float, original_components: List[ComponentPair], predictive: float, precision: int
+    components_sum: float,
+    original_components: List[ComponentPair],
+    predictive: float,
+    precision: int,
 ) -> tuple[float, list[ComponentPair], TccMarker]:
     """
     Function to correct the components values to add up to the received predictive value,
@@ -605,7 +609,9 @@ def correct_components(
     getcontext().prec = precision
     final_total = predictive
     for component in original_components:
-        component.final_value = (Decimal(str(component.original_value)) / Decimal(str(components_sum))) * Decimal(str(predictive))
+        component.final_value = (
+            Decimal(str(component.original_value)) / Decimal(str(components_sum))
+        ) * Decimal(str(predictive))
         component.final_value = float(component.final_value)
     tcc_marker = TccMarker.COMPONENTS_CORRECTED
     return final_total, original_components, tcc_marker
@@ -632,7 +638,10 @@ def sum_components(components: list[ComponentPair], precision: int) -> float:
 
 
 def calculate_percent_thresholds(
-    sum_of_components: float, percentage_threshold: float, output_list: dict, precision: int,
+    sum_of_components: float,
+    percentage_threshold: float,
+    output_list: dict,
+    precision: int,
 ) -> Tuple[float | None, float | None, dict]:
     """
     Calculate and return the low and high percentage thresholds based on the
@@ -666,11 +675,19 @@ def calculate_percent_thresholds(
         high_percent_threshold = None
     else:
         low_percent_threshold = (
-            abs(Decimal(str(sum_of_components)) - (Decimal(str(sum_of_components)) / Decimal(str(percentage_threshold)))) /  10
+            abs(
+                Decimal(str(sum_of_components))
+                - (Decimal(str(sum_of_components)) / Decimal(str(percentage_threshold)))
+            )
+            / 10
         )
         low_percent_threshold = float(low_percent_threshold)
         high_percent_threshold = (
-            abs(Decimal(str(sum_of_components)) + (Decimal(str(sum_of_components)) / Decimal(str(percentage_threshold)))) /  10
+            abs(
+                Decimal(str(sum_of_components))
+                + (Decimal(str(sum_of_components)) / Decimal(str(percentage_threshold)))
+            )
+            / 10
         )
         high_percent_threshold = float(high_percent_threshold)
     output_list["low_percent_threshold"] = low_percent_threshold
@@ -819,7 +836,7 @@ def totals_and_components(
             absolute_difference = check_sum_components_predictive(
                 predictive,
                 component_total,
-                input_parameters[InputParameters.PRECISION.value]
+                input_parameters[InputParameters.PRECISION.value],
             )
 
             #  Determine if a correction is required
@@ -834,9 +851,7 @@ def totals_and_components(
                         InputParameters.PERCENTAGE_DIFFERENCE_THRESHOLD.value
                     ],
                     output_list,
-                    input_parameters[
-                        InputParameters.PRECISION.value
-                    ],
+                    input_parameters[InputParameters.PRECISION.value],
                 )
 
                 # Absolute difference is output here as it would not change from this point
@@ -877,9 +892,7 @@ def totals_and_components(
                                 InputParameters.COMPONENTS.value
                             ],
                             predictive=predictive,
-                            precision=input_parameters[
-                                InputParameters.PRECISION.value
-                            ],
+                            precision=input_parameters[InputParameters.PRECISION.value],
                         )
 
         # We return the raw string instead of the enum value
