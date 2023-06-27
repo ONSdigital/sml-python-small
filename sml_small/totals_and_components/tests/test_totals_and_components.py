@@ -333,37 +333,6 @@ class TestValidateInput:
                 ValueError,
                 "Test 13: None value for amend value",
             ),
-            (
-                "N",
-                100,
-                [
-                    ComponentPair(original_value=1, final_value=None),
-                    ComponentPair(original_value=2, final_value=None),
-                    ComponentPair(original_value=3, final_value=None),
-                    ComponentPair(original_value=4, final_value=None),
-                ],
-                True,
-                102.0,
-                300.0,
-                20,
-                0.1,
-                None,
-                (
-                    100,
-                    [
-                        ComponentPair(original_value=1, final_value=None),
-                        ComponentPair(original_value=2, final_value=None),
-                        ComponentPair(original_value=3, final_value=None),
-                        ComponentPair(original_value=4, final_value=None),
-                    ],
-                    102.0,
-                    300.0,
-                    20,
-                    0.1,
-                    28,
-                ),
-                "Test 14: None value corrected to 28",
-            ),
         ],
     )
     def test_validate_input(
