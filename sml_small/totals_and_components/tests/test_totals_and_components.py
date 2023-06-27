@@ -8,7 +8,7 @@ from sml_small.totals_and_components.totals_and_components import (ComponentPair
                                                                    check_sum_components_predictive, check_zero_errors,
                                                                    correct_components, correct_total,
                                                                    determine_error_detection, error_correction,
-                                                                   sum_components, totals_and_components,
+                                                                   sum_components, TACException, totals_and_components,
                                                                    validate_input)
 
 EXCEPTION_FAIL_MESSAGE = (
@@ -1085,7 +1085,7 @@ class TestTotalsAndComponents:
                 None,
                 11,
                 0.1,
-                "component=InvalidString is missing or not a number",
+                TACException("component=InvalidString is missing or not a number"),
                 "Test 6 - Invalid component value entered by user",
             ),
             (
@@ -1104,7 +1104,7 @@ class TestTotalsAndComponents:
                 None,
                 11,
                 0.1,
-                "predictive must not be a string",
+                TACException("predictive must not be a string"),
                 "Test 7 - Invalid predictive value entered by user",
             ),
             (
@@ -1123,7 +1123,7 @@ class TestTotalsAndComponents:
                 "InvalidString",
                 11,
                 0.1,
-                "auxiliary is missing or not a number",
+                TACException("auxiliary is missing or not a number"),
                 "Test 8 - Invalid auxiliary value entered by user",
             ),
             (
@@ -1142,7 +1142,7 @@ class TestTotalsAndComponents:
                 None,
                 None,
                 None,
-                "One or both of absolute/percentage difference thresholds must be specified and non-zero",
+                TACException("One or both of absolute/percentage difference thresholds must be specified and non-zero"),
                 "Test 9 - Absolute and percentage difference threshold None value entered by user",
             ),
             (
@@ -1360,7 +1360,7 @@ class TestTotalsAndComponents:
                 None,
                 0,
                 0,
-                "One or both of absolute/percentage difference thresholds must be specified and non-zero",
+                TACException("One or both of absolute/percentage difference thresholds must be specified and non-zero"),
                 "Test 18 - Absolute and Percentage Difference Thresholds set to zero",
             ),
             (
@@ -1379,7 +1379,7 @@ class TestTotalsAndComponents:
                 None,
                 None,
                 None,
-                "One or both of absolute/percentage difference thresholds must be specified and non-zero",
+                TACException("One or both of absolute/percentage difference thresholds must be specified and non-zero"),
                 "Test 19 - Absolute and Percentage Difference Thresholds not specified",
             ),
             (
@@ -1727,11 +1727,11 @@ class TestTotalsAndComponents:
                 None,
                 11,
                 None,
-                "total is missing or not a number",
+                TACException("total is missing or not a number"),
                 "Test 33 - Invalid total value entered by user",
             ),
             (
-                "",
+                None,
                 "202301",
                 15,
                 [
@@ -1746,7 +1746,7 @@ class TestTotalsAndComponents:
                 None,
                 None,
                 0.1,
-                Exception,
+                TACException("The identifier is not populated"),
                 "Test 34 - Missing identifier value",
             ),
             (
@@ -1793,7 +1793,7 @@ class TestTotalsAndComponents:
                 None,
                 11,
                 0.1,
-                "Amend total needs to be True or False",
+                TACException("Amend total needs to be True or False"),
                 "Test 36 - Missing Amend total",
             ),
             (
@@ -2002,4 +2002,4 @@ class TestTotalsAndComponents:
                     percentage_difference_threshold=percentage_difference_threshold,
                 )
                 print(str(exc_info.value))
-            assert str(exc_info.value) == expected_result
+            assert (str(exc_info.value)) == str(expected_result)
