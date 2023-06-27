@@ -389,11 +389,8 @@ def check_sum_components_predictive(
     :return: We will be returning a number for the absolute difference.
     :rtype: float
     """
-    print("Prec check sum comp predictive", precision)
     getcontext().prec = precision
     absolute_difference = abs(Decimal(str(predictive)) - Decimal(str(components_sum)))
-    print("Comp sum", components_sum)
-    print(Decimal(str(predictive)), Decimal(str(components_sum)), absolute_difference)
     absolute_difference = float(absolute_difference)
     return absolute_difference
 

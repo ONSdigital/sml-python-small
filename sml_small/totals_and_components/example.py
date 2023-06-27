@@ -10,7 +10,6 @@ import csv
 # from the T&C method in a tabular format
 # This import isn't necessary to work with the T&C method
 from tabulate import tabulate
-from typing import List, Optional, Tuple
 
 test_data = [
     # [
@@ -20,6 +19,7 @@ test_data = [
     #   [632, 732, 99, 162],
     #   True,
     #   1625,
+    #   None,
     #   "202301",
     #   None,
     #   11,
@@ -32,23 +32,25 @@ test_data = [
     #   [9201, 866, 632, 112],
     #   True,
     #   10817,
+    #   25,
     #   "202301",
     #   None,
     #   11,
     #   None
     # ],
-    [
-        "C",
-        "202301",
-        90,
-        [90, 0, 4, 6],
-        False,
-        90,
-        "202301",
-        None,
-        None,
-        0.1,
-    ],
+    # [
+    #     "C",
+    #     "202301",
+    #     90,
+    #     [90, 0, 4, 6],
+    #     False,
+    #     90,
+    #     28,
+    #     "202301",
+    #     None,
+    #     None,
+    #     0.1,
+    # ],
     # [
     #     "X",
     #     "202301",
@@ -56,10 +58,11 @@ test_data = [
     #     [10,10,10,10],
     #     False,
     #     41,
+    #     None,
     #     "202301",
     #     None,
     #     None,
-    #     None,
+    #     0.1,
     # ],
     # [
     #   "D",
@@ -68,6 +71,7 @@ test_data = [
     #   [632, 732, 99, 162],
     #   True,
     #   1964,
+    #   10,
     #   "202301",
     #   None,
     #   25,
@@ -80,23 +84,25 @@ test_data = [
     #   [240, 0, 30, 10],
     #   True,
     #   306,
+    #   17,
     #   "202301",
     #   None,
     #   25,
     #   0.1
     # ],
-    # [
-    #   "F",
-    #   "202301",
-    #   11,
-    #   [0, 0, 0, 0],
-    #   True,
-    #   11,
-    #   "202301",
-    #   None,
-    #   11,
-    #   None
-    # ],
+    [
+      "F",
+      "202301",
+      11,
+      [0, 0, 0, 0],
+      True,
+      11,
+      None,
+      "202301",
+      None,
+      11,
+      None
+    ],
 ]
 
 
@@ -118,13 +124,14 @@ def invoke_process_in_memory_data_example():
         "202301",
         10817,
         [
-            (0.1),
-            (0.2),
-            (0.4),
+            (2.4),
+            (2.6),
+            (2.8),
+            (3.1),
         ],
-        True,
-        0.6,
-        1,
+        False,
+        10,
+        3,
         "202301",
         None,
         None,
@@ -137,13 +144,14 @@ def invoke_process_in_memory_data_example():
         "202301",
         10817,
         [
-            (0.1),
-            (0.2),
-            (0.4),
+            (2.4),
+            (2.6),
+            (2.8),
+            (3.1),
         ],
-        True,
-        0.6,
-        1,
+        False,
+        10,
+        3,
         "202301",
         None,
         None,
@@ -159,21 +167,22 @@ def invoke_process_in_memory_data_example_2():
     # The input data below once passed into the T&C method should return
     # a TCC Marker of C = Components corrected
     data =  [
-        "F",
+        "C",
         "202301",
-        11,
-        [0, 0, 0, 0],
-        True,
-        11,
+        90,
+        [90, 0, 4, 6],
+        False,
+        90,
         "202301",
         None,
-        11,
-        None
+        None,
+        0.1,
     ]
 
     # We use * to unpack the above list into separate arguments to pass to the T&C method
-    result = totals_and_components(*data)
-    filter_data(result, data)
+    for data in test_data:
+        result = totals_and_components(*data)
+        filter_data(result, data)
 
 
 # The two functions below are solely used to create a pretty table on the command line
@@ -220,7 +229,6 @@ def filter_data(result, original_data):
     # We get all the list data above and amend that to a 2D list to be passed on to the
     # display_results function
     results = [original_data, new_result, original_data_comp, new_result_comp]
-    print("Results::::", results)
     display_results(results)
 
 
@@ -248,6 +256,7 @@ def display_results(results):
             "Total",
             "Amend Total",
             "Predictive",
+            "Precision",
             "Predictive Period",
             "Auxiliary Variable",
             "Absolute Difference Threshold",

@@ -1875,7 +1875,7 @@ class TestTotalsAndComponents:
                     [81, 0, 3.6, 5.4],
                     "C",
                 ),
-                "Test 42 - Testing decimal place to 1 decimal place",
+                "Test 42 - Testing precision value = 1",
             ),
             (
                 "AQ",
@@ -1905,7 +1905,7 @@ class TestTotalsAndComponents:
                     [2.2018348623853212, 2.385321100917431, 2.5688073394495414, 2.8440366972477062],
                     "C",
                 ),
-                "Test 43 - Testing decimal place to 28 decimal place",
+                "Test 43 - Testing precision value = 28",
             ),
             (
                 "AR",
@@ -1925,7 +1925,7 @@ class TestTotalsAndComponents:
                 11,
                 None,
                 Exception,
-                "Test 44 - Testing decimal place to 29 decimal place",
+                "Test 44 - Testing precision value = 29",
             ),
             (
                 "AS",
@@ -1945,7 +1945,7 @@ class TestTotalsAndComponents:
                 11,
                 None,
                 Exception,
-                "Test 45 - Testing decimal place to 0 decimal place",
+                "Test 45 - Testing precision value = 0",
             ),
             (
                 "AT",
@@ -1970,7 +1970,7 @@ class TestTotalsAndComponents:
                     [1.1, 2.2, 3.3, 4.4],
                     "T",
                 ),
-                "Test 46 - Testing decimal place to 2 decimal place with floating components",
+                "Test 46 - Testing precision value = 2 with floating components sum to a floating total",
             ),
             (
                 "AU",
@@ -1999,7 +1999,7 @@ class TestTotalsAndComponents:
                     [0.1, 0.2, 0.4],
                     "T",
                 ),
-                "Test 47 - Testing decimal place to 1 decimal place with floating components",
+                "Test 47 - Testing precision value = 1 with floating components sum to a floating total",
             ),
             (
                 "AW",
@@ -2029,7 +2029,7 @@ class TestTotalsAndComponents:
                     [1, 2, 3, 4],
                     "T",
                 ),
-                "Test 48 - Missing precision value (defaults to 28",
+                "Test 48 - Missing precision value (defaults to 28)",
             ),
         ],
     )
