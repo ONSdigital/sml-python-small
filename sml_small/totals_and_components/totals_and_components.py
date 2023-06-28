@@ -866,7 +866,7 @@ def totals_and_components(
         output_list = {
             "identifier": identifier,
             "period": period,
-            "predictive_eriod": predictive_period,
+            "predictive_period": predictive_period,
             "final_total": total,
             "final_components": components,
             "absolute_difference": None,
