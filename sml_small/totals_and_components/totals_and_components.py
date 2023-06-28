@@ -29,6 +29,7 @@ class InputParameters(Enum):
     ABSOLUTE_DIFFERENCE_THRESHOLD = 4
     PERCENTAGE_DIFFERENCE_THRESHOLD = 5
     PRECISION = 6
+    COMPONENT_RESCALE = 7
 
 
 class TccMarker(Enum):
@@ -103,6 +104,7 @@ class TotalsAndComponentsOutput:
         str
     ] = ""  # unique identifier, e.g Business Reporting Unit SG-should this be optional?
     period: [str] = ""  # not used in initial PoC always assume current period
+    predictive_period: [str] = ""  # used for determining calculation values
     absolute_difference: Optional[float]  # this is the absolute value showing the
     # difference between the components input and the predictive total
     low_percent_threshold: Optional[
@@ -194,6 +196,7 @@ def validate_input(
     components: List[ComponentPair],
     amend_total: bool,
     period: Optional[str],
+    predictive_period: Optional[str],
     predictive: Optional[float],
     precision: Optional[int],
     auxiliary: Optional[float],
@@ -208,6 +211,7 @@ def validate_input(
     float | None,
     float | None,
     float | None,
+    float,
 ]:
     """
     validate_input is to ensure that the dataset input record has all the values
@@ -218,10 +222,14 @@ def validate_input(
     :type identifier: str
     :param period: Not used in initial Proof of Concept (PoC). Assumes current period.
     :type period Optional(str)
+    :param predictive_period: The predictive period is the period cycle.
+    :type predictive_period Optional(str)
     :param total: Target period total, numeric – nulls allowed
     :type total: float
     :param components: Corresponding list of Total variable's components, numeric – nulls allowed
     :type components: List[ComponentPair]
+    :param component_scale: Value set to total for use with periodicity
+    :type component_scale: float
     :param amend_total: amend total is used for error correction
     :type bool
     :param predictive:A value used as a predictor for a contributor's target variable.
@@ -252,9 +260,17 @@ def validate_input(
             datetime.datetime.strptime(period, "%Y%M")
         except ValueError as exc:
             raise type(exc)(str(exc) + f" Period: {period} must be a String of format 'YYYYMM'")
+    if predictive_period:
+        try:
+            datetime.datetime.strptime(predictive_period, "%Y%M")
+        except ValueError as exc:
+            raise type(exc)(str(exc) + f" Period: {predictive_period} must be a String of format 'YYYYMM'")
+    if total is None:
+        raise ValueError("We would always expect a current total to accompany the components")
     if total:
         validate_number("total", total)
         total = float(total)
+        component_rescale = float(total)
     if not components:
         raise ValueError("The components are not populated")
     if components:
@@ -265,7 +281,7 @@ def validate_input(
             float(component.original_value)
     if amend_total is None:
         raise ValueError("Amend total needs to be True or False")
-    if predictive:
+    if predictive is not None:
         validate_number("predictive", predictive)
         float(predictive)
     if auxiliary:
@@ -301,6 +317,7 @@ def validate_input(
         absolute_difference_threshold,
         percentage_difference_threshold,
         precision,
+        component_rescale
     )
 
 
@@ -343,8 +360,8 @@ def is_number(value) -> bool:
 
 
 def check_predictive_value(
-    predictive: Optional[float], auxiliary: Optional[float]
-) -> tuple[float | None, TccMarker]:
+    predictive: Optional[float], auxiliary: Optional[float], total: float
+) -> tuple[float | None]:
     """
     Checks if predictive and auxiliary values are input, when predictive is None and auxiliary
     is input set predictive to auxiliary, when both are None, set Tcc_Marker to S
@@ -360,14 +377,36 @@ def check_predictive_value(
     :return Tcc_Marker: Returned Tcc_Marker if all values are None
     :rtype Tcc_Marker: TccMarker
     """
-    tcc_marker = TccMarker.METHOD_PROCEED
     if predictive is None:
         if auxiliary is None:
-            tcc_marker = TccMarker.STOP
+            predictive = total
         else:
-            tcc_marker = TccMarker.METHOD_PROCEED
             predictive = auxiliary
-    return predictive, tcc_marker
+    return predictive
+
+def check_auxiliary_value(
+        auxiliary: Optional[float], total: float,
+) -> tuple[float | None]:
+    """
+    Checks if predictive and auxiliary values are input, when predictive is None and auxiliary
+    is input set predictive to auxiliary, when both are None, set Tcc_Marker to S
+    and stop calculation
+
+    :param predictive: The predictive value, typically the total for the current period.
+    :type predictive: float, optional
+    :param auxiliary: The value to be used in the absence of a predictive value.
+    :type auxiliary: float, optional
+    ...
+    :return predictive: updated predictive value
+    :rtype predictive: None | float
+    :return Tcc_Marker: Returned Tcc_Marker if all values are None
+    :rtype Tcc_Marker: TccMarker
+    """
+    if auxiliary is None:
+        predictive = total
+    else:
+        predictive = auxiliary
+    return predictive
 
 
 def check_zero_errors(predictive: float, components_sum: float) -> TccMarker:
@@ -758,6 +797,8 @@ def totals_and_components(
     :type identifier: str
     :param period: Not used in initial Proof of Concept (PoC). Assumes current period.
     :type period: Optional[str]
+    :param predictive_period: The predictive period is the period cycle.
+    :type predictive_period: float
     :param total: Original value returned for the total.
     :type total: float
     :param components: List of components that should equal the total or predictive value.
@@ -769,8 +810,6 @@ def totals_and_components(
     :type predictive: Optional[float]
     :param precision: Precision is not a decimal point indicator, it is instead used to adjust our error margins.
     :type precision: Optional[int]
-    :param predictive_period: Not used in initial PoC. Assumes current period.
-    :type predictive_period: Optional[str]
     :param auxiliary: The value to be used in the absence of a predictive value.
     :type auxiliary: Optional[float]
     :param absolute_difference_threshold: Value used to check if the difference between
@@ -827,6 +866,7 @@ def totals_and_components(
         output_list = {
             "identifier": identifier,
             "period": period,
+            "predictive_eriod": predictive_period,
             "final_total": total,
             "final_components": components,
             "absolute_difference": None,
@@ -839,6 +879,7 @@ def totals_and_components(
             components_list,
             amend_total,
             period,
+            predictive_period,
             predictive,
             precision,
             auxiliary,
@@ -846,80 +887,86 @@ def totals_and_components(
             percentage_difference_threshold,
         )
         #  Ensure either the predictive or auxiliary parameter specified
-        predictive, output_list["tcc_marker"] = check_predictive_value(
+        predictive = check_predictive_value(
             input_parameters[InputParameters.PREDICTIVE.value],
             input_parameters[InputParameters.AUXILIARY.value],
+            input_parameters[InputParameters.TOTAL.value],
         )
 
+        if predictive_period is not "t-1": # what is this and how does it work?
+            auxiliary = check_auxiliary_value(
+            input_parameters[InputParameters.AUXILIARY.value],
+            input_parameters[InputParameters.TOTAL.value],
+        )
+
+        component_total = sum_components(
+            input_parameters[InputParameters.COMPONENTS.value],
+            input_parameters[InputParameters.PRECISION.value],
+        )
+        #  Check for error scenarios where the sum of the components is zero and
+        #  a positive predictive value has been received
+        output_list["tcc_marker"] = check_zero_errors(predictive, component_total)
+        absolute_difference = check_sum_components_predictive(
+            predictive,
+            component_total,
+            input_parameters[InputParameters.PRECISION.value],
+        )
+
+        #  Determine if a correction is required
         if output_list["tcc_marker"] == TccMarker.METHOD_PROCEED:
-            component_total = sum_components(
-                input_parameters[InputParameters.COMPONENTS.value],
-                input_parameters[InputParameters.PRECISION.value],
-            )
-            #  Check for error scenarios where the sum of the components is zero and
-            #  a positive predictive value has been received
-            output_list["tcc_marker"] = check_zero_errors(predictive, component_total)
-            absolute_difference = check_sum_components_predictive(
-                predictive,
+            (
+                low_threshold,
+                high_threshold,
+                output_list,
+            ) = calculate_percent_thresholds(
                 component_total,
+                input_parameters[
+                    InputParameters.PERCENTAGE_DIFFERENCE_THRESHOLD.value
+                ],
+                output_list,
                 input_parameters[InputParameters.PRECISION.value],
             )
 
-            #  Determine if a correction is required
-            if output_list["tcc_marker"] == TccMarker.METHOD_PROCEED:
-                (
-                    low_threshold,
-                    high_threshold,
-                    output_list,
-                ) = calculate_percent_thresholds(
-                    component_total,
+            # Absolute difference is output here as it would not change from this point
+            # it is not outputted sooner as a S marker could be returned
+            # before this point and that would have no absolute difference value.
+            output_list["absolute_difference"] = absolute_difference
+
+            # If the predictive value is not equal to the sum of components we
+            # return a no correction marker
+            if (
+                input_parameters[InputParameters.PREDICTIVE.value]
+                == component_total
+            ):
+                output_list["tcc_marker"] = TccMarker.NO_CORRECTION
+            else:
+                #  Determine if the difference error can be automatically corrected
+                output_list["tcc_marker"] = determine_error_detection(
+                    input_parameters[
+                        InputParameters.ABSOLUTE_DIFFERENCE_THRESHOLD.value
+                    ],
                     input_parameters[
                         InputParameters.PERCENTAGE_DIFFERENCE_THRESHOLD.value
                     ],
-                    output_list,
-                    input_parameters[InputParameters.PRECISION.value],
+                    absolute_difference,
+                    predictive,
+                    low_threshold,
+                    high_threshold,
                 )
-
-                # Absolute difference is output here as it would not change from this point
-                # it is not outputted sooner as a S marker could be returned
-                # before this point and that would have no absolute difference value.
-                output_list["absolute_difference"] = absolute_difference
-
-                # If the predictive value is not equal to the sum of components we
-                # return a no correction marker
-                if (
-                    input_parameters[InputParameters.PREDICTIVE.value]
-                    == component_total
-                ):
-                    output_list["tcc_marker"] = TccMarker.NO_CORRECTION
-                else:
-                    #  Determine if the difference error can be automatically corrected
-                    output_list["tcc_marker"] = determine_error_detection(
-                        input_parameters[
-                            InputParameters.ABSOLUTE_DIFFERENCE_THRESHOLD.value
+                if output_list["tcc_marker"] == TccMarker.METHOD_PROCEED:
+                    (
+                        output_list["final_total"],
+                        output_list["final_components"],
+                        output_list["tcc_marker"],
+                    ) = error_correction(
+                        amend_total=amend_total,
+                        components_sum=component_total,
+                        original_components=input_parameters[
+                            InputParameters.COMPONENTS.value
                         ],
-                        input_parameters[
-                            InputParameters.PERCENTAGE_DIFFERENCE_THRESHOLD.value
-                        ],
-                        absolute_difference,
-                        predictive,
-                        low_threshold,
-                        high_threshold,
+                        predictive=predictive,
+                        precision=input_parameters[InputParameters.PRECISION.value],
                     )
-                    if output_list["tcc_marker"] == TccMarker.METHOD_PROCEED:
-                        (
-                            output_list["final_total"],
-                            output_list["final_components"],
-                            output_list["tcc_marker"],
-                        ) = error_correction(
-                            amend_total=amend_total,
-                            components_sum=component_total,
-                            original_components=input_parameters[
-                                InputParameters.COMPONENTS.value
-                            ],
-                            predictive=predictive,
-                            precision=input_parameters[InputParameters.PRECISION.value],
-                        )
 
         # We return the raw string instead of the enum value
         output_list["tcc_marker"] = output_list["tcc_marker"].value

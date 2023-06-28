@@ -8,6 +8,7 @@ from sml_small.totals_and_components.totals_and_components import (
     ComponentPair,
     TACException,
     check_absolute_difference_threshold,
+    check_auxiliary_value,
     check_percentage_difference_threshold,
     check_predictive_value,
     check_sum_components_predictive,
@@ -35,7 +36,7 @@ class NoString:
 
 class TestValidateInput:
     @pytest.mark.parametrize(
-        "identifier, total, components, amend_total, period, predictive, "
+        "identifier, total, components, amend_total, period, predictive_period, predictive, "
         "auxiliary, absolute_difference_threshold, "
         "percentage_difference_threshold, precision, expected_result, test_id",
         [
@@ -49,6 +50,7 @@ class TestValidateInput:
                     ComponentPair(original_value=4, final_value=None),
                 ],
                 True,
+                "202203",
                 "202203",
                 102.0,
                 300.0,
@@ -68,6 +70,7 @@ class TestValidateInput:
                     20,
                     0.1,
                     6,
+                    100,
                 ),
                 "Test 1: Correct values test",
             ),
@@ -81,6 +84,7 @@ class TestValidateInput:
                     ComponentPair(original_value=4, final_value=None),
                 ],
                 False,
+                "202203",
                 "202203",
                 102.0,
                 104.0,
@@ -100,6 +104,7 @@ class TestValidateInput:
                     105.0,
                     None,
                     28,
+                    100,
                 ),
                 "Test 2: None value for percentage difference threshold",
             ),
@@ -113,6 +118,7 @@ class TestValidateInput:
                     ComponentPair(original_value=4, final_value=None),
                 ],
                 True,
+                "202203",
                 "202203",
                 102.0,
                 104.0,
@@ -132,6 +138,7 @@ class TestValidateInput:
                     None,
                     20,
                     28,
+                    100,
                 ),
                 "Test 3: None value for absolute difference threshold",
             ),
@@ -145,6 +152,7 @@ class TestValidateInput:
                     ComponentPair(original_value=4, final_value=None),
                 ],
                 False,
+                "202203",
                 "202203",
                 None,  # missing predictive
                 300.0,
@@ -164,6 +172,7 @@ class TestValidateInput:
                     20,
                     0.1,
                     28,
+                    100,
                 ),
                 "Test 4: Predictive is missing so method carries on",
             ),
@@ -172,6 +181,7 @@ class TestValidateInput:
                 100.0,
                 [],
                 True,
+                "202203",
                 "202203",
                 101.0,
                 103.0,
@@ -192,6 +202,7 @@ class TestValidateInput:
                 ],
                 True,
                 "202203",
+                "202203",
                 101.0,
                 103.0,
                 20,
@@ -210,6 +221,7 @@ class TestValidateInput:
                     ComponentPair(original_value=4, final_value=None),
                 ],
                 False,
+                "202203",
                 "202203",
                 102.0,
                 104.0,
@@ -230,6 +242,7 @@ class TestValidateInput:
                 ],
                 True,
                 "202203",
+                "202203",
                 "String",
                 102.0,
                 20,
@@ -248,6 +261,7 @@ class TestValidateInput:
                     ComponentPair(original_value=4, final_value=None),
                 ],
                 False,
+                "202203",
                 "202203",
                 101.0,
                 "String",
@@ -268,6 +282,7 @@ class TestValidateInput:
                 ],
                 True,
                 "202203",
+                "202203",
                 102.0,
                 104.0,
                 {20},
@@ -286,6 +301,7 @@ class TestValidateInput:
                     ComponentPair(original_value=4, final_value=None),
                 ],
                 False,
+                "202203",
                 "202203",
                 102.0,
                 104.0,
@@ -306,6 +322,7 @@ class TestValidateInput:
                 ],
                 True,
                 "202203",
+                "202203",
                 102.0,
                 89.0,
                 None,
@@ -325,6 +342,7 @@ class TestValidateInput:
                 ],
                 None,
                 "202203",
+                "202203",
                 102.0,
                 89.0,
                 11,
@@ -342,6 +360,7 @@ class TestValidateInput:
         components,
         amend_total,
         period,
+        predictive_period,
         predictive,
         auxiliary,
         absolute_difference_threshold,
@@ -359,6 +378,7 @@ class TestValidateInput:
                     amend_total=amend_total,
                     predictive=predictive,
                     period=period,
+                    predictive_period=predictive_period,
                     auxiliary=auxiliary,
                     absolute_difference_threshold=absolute_difference_threshold,
                     percentage_difference_threshold=percentage_difference_threshold,
@@ -382,6 +402,7 @@ class TestValidateInput:
                     amend_total=amend_total,
                     predictive=predictive,
                     period=period,
+                    predictive_period=predictive_period,
                     auxiliary=auxiliary,
                     absolute_difference_threshold=absolute_difference_threshold,
                     percentage_difference_threshold=percentage_difference_threshold,
@@ -393,20 +414,44 @@ class TestValidateInput:
 
 class TestCheckPredictiveValue:
     @pytest.mark.parametrize(
-        "predictive, auxiliary, expected_result, test_id",
+        "predictive, auxiliary, total, expected_result, test_id",
         [
-            (100.0, None, (100.0, "P"), "Test 1: Predictive Only"),
-            (None, 50.0, (50.0, "P"), "Test 2: Auxiliary Only"),
-            (None, None, (None, "S"), "Test 3: No Inputs"),
-            (150.0, 50.0, (150.0, "P"), "Test 4: All Inputs"),
-            (0, 0, (0, "P"), "Test 5: All 0"),
+            (100.0, None, 10, (100.0), "Test 1: Predictive Only"),
+            (None, 50.0, 10, (50.0), "Test 2: Auxiliary Only"),
+            (None, None, 10, (10), "Test 3: Predictive and auxiliary are None"),
+            (150.0, 50.0, 10, (150.0), "Test 4: All Inputs"),
         ],
     )
     def test_check_predictive_value(
-        self, predictive, auxiliary, expected_result, test_id
+        self, predictive, auxiliary, total, expected_result, test_id
     ):
         try:
-            result = check_predictive_value(predictive=predictive, auxiliary=auxiliary)
+            result = check_predictive_value(predictive=predictive, auxiliary=auxiliary, total=total)
+            assert (
+                result == expected_result
+            ), f"Test {test_id} failed: Unexpected result. Result == {result}"
+        except Exception as e:
+            pytest.fail(
+                EXCEPTION_FAIL_MESSAGE.format(
+                    test_id=test_id,
+                    exception_type=type(e).__name__,
+                    exception_msg=str(e),
+                )
+            )
+
+class TestCheckAuxiliaryValue:
+    @pytest.mark.parametrize(
+        "auxiliary, total, expected_result, test_id",
+        [
+            (None, 10, (10), "Test 1: Auxiliary is None"),
+            (50.0, 10, (50.0), "Test 2: Auxiliary is not None"),
+        ],
+    )
+    def test_check_auxiliary_value(
+        self, auxiliary, total, expected_result, test_id
+    ):
+        try:
+            result = check_auxiliary_value(auxiliary=auxiliary, total=total)
             assert (
                 result == expected_result
             ), f"Test {test_id} failed: Unexpected result. Result == {result}"
