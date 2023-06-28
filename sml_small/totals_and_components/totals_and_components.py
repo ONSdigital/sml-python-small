@@ -288,11 +288,10 @@ def validate_input(
         float(percentage_difference_threshold)
     if precision is None:
         precision = 28
-    if precision:
-        if precision > 28:
+    if precision is not None:
+        if not 0 < precision <= 28:
             raise ValueError("Precision range must be more than 0 and less than or equal to 28")
         validate_number("Precision", precision)
-    print("Validate input", precision)
 
     return (
         total,
