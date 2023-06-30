@@ -3,6 +3,7 @@ For Copyright information, please see LICENCE.
 """
 
 import datetime
+from dateutil.relativedelta import relativedelta
 from enum import Enum
 from typing import List, Optional, Tuple
 from decimal import Decimal, getcontext
@@ -29,7 +30,8 @@ class InputParameters(Enum):
     ABSOLUTE_DIFFERENCE_THRESHOLD = 4
     PERCENTAGE_DIFFERENCE_THRESHOLD = 5
     PRECISION = 6
-    COMPONENT_RESCALE = 7
+    PERIODICITY = 7
+    COMPONENT_RESCALE = 8
 
 
 class TccMarker(Enum):
@@ -105,6 +107,7 @@ class TotalsAndComponentsOutput:
     ] = ""  # unique identifier, e.g Business Reporting Unit SG-should this be optional?
     period: [str] = ""  # not used in initial PoC always assume current period
     predictive_period: [str] = ""  # used for determining calculation values
+    periodicity: Optional[int]
     absolute_difference: Optional[float]  # this is the absolute value showing the
     # difference between the components input and the predictive total
     low_percent_threshold: Optional[
@@ -153,6 +156,8 @@ class TotalsAndComponentsOutput:
         print(f"Low Percent Threshold: {self.low_percent_threshold}")
         print(f"High Percent Threshold: {self.high_percent_threshold}")
         print(f"Precision: {self.precision}")
+        print(f"Predictive Period: {self.predictive_period}")
+        print(f"Periodicity: {self.periodicity}")
         print(f"Final Total: {self.final_total}")
         print(f"Final Value: {self.final_components}")
         print(f"TCC Marker: {self.tcc_marker}")
@@ -197,6 +202,7 @@ def validate_input(
     amend_total: bool,
     period: Optional[str],
     predictive_period: Optional[str],
+    periodicity: Optional[int],
     predictive: Optional[float],
     precision: Optional[int],
     auxiliary: Optional[float],
@@ -205,13 +211,13 @@ def validate_input(
 ) -> tuple[
     float,
     List[ComponentPair],
-    bool,
+    float | None,
+    float | None,
+    float | None,
     float | None,
     int | None,
+    int | None,
     float | None,
-    float | None,
-    float | None,
-    float,
 ]:
     """
     validate_input is to ensure that the dataset input record has all the values
@@ -257,12 +263,12 @@ def validate_input(
     str(identifier)
     if period:
         try:
-            datetime.datetime.strptime(period, "%Y%M")
+            datetime.datetime.strptime(period, "%Y%m")
         except ValueError as exc:
             raise type(exc)(str(exc) + f" Period: {period} must be a String of format 'YYYYMM'")
     if predictive_period:
         try:
-            datetime.datetime.strptime(predictive_period, "%Y%M")
+            datetime.datetime.strptime(predictive_period, "%Y%m")
         except ValueError as exc:
             raise type(exc)(str(exc) + f" Period: {predictive_period} must be a String of format 'YYYYMM'")
     if total is None:
@@ -308,6 +314,8 @@ def validate_input(
         if not 0 < precision <= 28:
             raise ValueError("Precision range must be more than 0 and less than or equal to 28")
         validate_number("Precision", precision)
+    if periodicity:
+        validate_number("Periodicity", periodicity)
 
     return (
         total,
@@ -317,7 +325,8 @@ def validate_input(
         absolute_difference_threshold,
         percentage_difference_threshold,
         precision,
-        component_rescale
+        periodicity,
+        component_rescale,
     )
 
 
@@ -360,7 +369,7 @@ def is_number(value) -> bool:
 
 
 def check_predictive_value(
-    predictive: Optional[float], auxiliary: Optional[float], total: float
+    predictive: Optional[float], auxiliary: Optional[float], total: float, predictive_period: str, periodicity: int, period: str
 ) -> tuple[float | None]:
     """
     Checks if predictive and auxiliary values are input, when predictive is None and auxiliary
@@ -379,10 +388,36 @@ def check_predictive_value(
     """
     if predictive is None:
         if auxiliary is None:
-            predictive = total
+            determine_correction = total
         else:
-            predictive = auxiliary
-    return predictive
+            determine_correction = auxiliary
+    else:
+        period, prior_period = calculate_prior_period(period, periodicity)
+        print(period, prior_period)
+        if predictive_period is not prior_period:
+            determine_correction = check_auxiliary_value(
+            auxiliary,
+            total,
+        )
+        else:
+            determine_correction = predictive
+    return determine_correction
+
+
+def calculate_prior_period(period, periodicity) -> str:
+    """
+    calculate_prior_period _summary_
+
+    :param period: _description_
+    :type period: _type_
+    :param periodicity: _description_
+    :type periodicity: _type_
+    :return: _description_
+    :rtype: str
+    """    
+    period = datetime.datetime.strptime(period, "%Y%m")
+    prior_period = period - relativedelta(months=periodicity)
+    return period, prior_period
 
 def check_auxiliary_value(
         auxiliary: Optional[float], total: float,
@@ -403,10 +438,10 @@ def check_auxiliary_value(
     :rtype Tcc_Marker: TccMarker
     """
     if auxiliary is None:
-        predictive = total
+        determine_correction = total
     else:
-        predictive = auxiliary
-    return predictive
+        determine_correction = auxiliary
+    return determine_correction
 
 
 def check_zero_errors(predictive: float, components_sum: float) -> TccMarker:
@@ -568,7 +603,7 @@ def error_correction(
     amend_total: bool,
     components_sum: float,
     original_components: List[ComponentPair],
-    predictive: float,
+    component_rescale: float,
     precision: Optional[int],
 ) -> tuple[float, list[float], TccMarker]:
     """
@@ -604,7 +639,7 @@ def error_correction(
         final_total, original_components, tcc_marker = correct_components(
             components_sum,
             original_components,
-            predictive,
+            component_rescale,
             precision,
         )
     final_components = []
@@ -642,7 +677,7 @@ def correct_total(
 def correct_components(
     components_sum: float,
     original_components: List[ComponentPair],
-    predictive: float,
+    component_rescale: float,
     precision: int,
 ) -> tuple[float, list[ComponentPair], TccMarker]:
     """
@@ -668,11 +703,11 @@ def correct_components(
     :rtype tcc_marker: TccMarker
     """
     getcontext().prec = precision
-    final_total = predictive
+    final_total = component_rescale
     for component in original_components:
         component.final_value = (
             Decimal(str(component.original_value)) / Decimal(str(components_sum))
-        ) * Decimal(str(predictive))
+        ) * Decimal(str(component_rescale))
         component.final_value = float(component.final_value)
     tcc_marker = TccMarker.COMPONENTS_CORRECTED
     return final_total, original_components, tcc_marker
@@ -769,7 +804,8 @@ def totals_and_components(
     precision: Optional[int],
     predictive_period: Optional[
         str
-    ],  # not used in initial PoC always assume current period
+    ], 
+    periodicity: Optional[int],
     auxiliary: Optional[float],
     absolute_difference_threshold: Optional[float],
     percentage_difference_threshold: Optional[float],
@@ -857,16 +893,17 @@ def totals_and_components(
         predictive=predictive,
         precision=precision,
         predictive_period=predictive_period,
+        periodicity=periodicity,
         auxiliary=auxiliary,
         absolute_difference_threshold=absolute_difference_threshold,
         percentage_difference_threshold=percentage_difference_threshold,
     )
-
     try:
         output_list = {
             "identifier": identifier,
             "period": period,
             "predictive_period": predictive_period,
+            "periodicity": periodicity,
             "final_total": total,
             "final_components": components,
             "absolute_difference": None,
@@ -880,6 +917,7 @@ def totals_and_components(
             amend_total,
             period,
             predictive_period,
+            periodicity,
             predictive,
             precision,
             auxiliary,
@@ -891,12 +929,9 @@ def totals_and_components(
             input_parameters[InputParameters.PREDICTIVE.value],
             input_parameters[InputParameters.AUXILIARY.value],
             input_parameters[InputParameters.TOTAL.value],
-        )
-
-        if predictive_period is not "t-1": # what is this and how does it work?
-            auxiliary = check_auxiliary_value(
-            input_parameters[InputParameters.AUXILIARY.value],
-            input_parameters[InputParameters.TOTAL.value],
+            predictive_period,
+            periodicity,
+            period
         )
 
         component_total = sum_components(
@@ -964,7 +999,7 @@ def totals_and_components(
                         original_components=input_parameters[
                             InputParameters.COMPONENTS.value
                         ],
-                        predictive=predictive,
+                        component_rescale=input_parameters[InputParameters.COMPONENT_RESCALE.value],
                         precision=input_parameters[InputParameters.PRECISION.value],
                     )
 
