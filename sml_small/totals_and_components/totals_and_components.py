@@ -258,6 +258,7 @@ def validate_input(
             List[Component_list] | None, float | None, float | None, float | None,
             float | None, float | None]
     """
+    component_rescale = 0.0
     if not identifier:
         raise ValueError("The identifier is not populated")
     str(identifier)
