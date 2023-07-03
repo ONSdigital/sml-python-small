@@ -3,10 +3,11 @@ For Copyright information, please see LICENCE.
 """
 
 import datetime
-from dateutil.relativedelta import relativedelta
+from decimal import Decimal, getcontext
 from enum import Enum
 from typing import List, Optional, Tuple
-from decimal import Decimal, getcontext
+
+from dateutil.relativedelta import relativedelta
 
 
 class Index(Enum):
@@ -266,14 +267,21 @@ def validate_input(
         try:
             datetime.datetime.strptime(period, "%Y%m")
         except ValueError as exc:
-            raise type(exc)(str(exc) + f" Period: {period} must be a String of format 'YYYYMM'")
+            raise type(exc)(
+                str(exc) + f" Period: {period} must be a String of format 'YYYYMM'"
+            )
     if predictive_period:
         try:
             datetime.datetime.strptime(predictive_period, "%Y%m")
         except ValueError as exc:
-            raise type(exc)(str(exc) + f" Period: {predictive_period} must be a String of format 'YYYYMM'")
+            raise type(exc)(
+                str(exc)
+                + f" Period: {predictive_period} must be a String of format 'YYYYMM'"
+            )
     if total is None:
-        raise ValueError("We would always expect a current total to accompany the components")
+        raise ValueError(
+            "We would always expect a current total to accompany the components"
+        )
     if total:
         validate_number("total", total)
         total = float(total)
@@ -313,7 +321,9 @@ def validate_input(
         precision = 28
     if precision is not None:
         if not 0 < precision <= 28:
-            raise ValueError("Precision range must be more than 0 and less than or equal to 28")
+            raise ValueError(
+                "Precision range must be more than 0 and less than or equal to 28"
+            )
         validate_number("Precision", precision)
     if periodicity:
         validate_number("Periodicity", periodicity)
@@ -370,7 +380,12 @@ def is_number(value) -> bool:
 
 
 def check_predictive_value(
-    predictive: Optional[float], auxiliary: Optional[float], total: float, predictive_period: str, periodicity: int, period: str
+    predictive: Optional[float],
+    auxiliary: Optional[float],
+    total: float,
+    predictive_period: str,
+    periodicity: int,
+    period: str,
 ) -> tuple[float | None]:
     """
     Checks if predictive and auxiliary values are input, when predictive is None and auxiliary
@@ -397,9 +412,9 @@ def check_predictive_value(
         print(prior_period)
         if predictive_period != prior_period:
             determine_correction = check_auxiliary_value(
-            auxiliary,
-            total,
-        )
+                auxiliary,
+                total,
+            )
         else:
             determine_correction = predictive
     return determine_correction
@@ -415,14 +430,16 @@ def calculate_prior_period(period, periodicity) -> str:
     :type periodicity: _type_
     :return: _description_
     :rtype: str
-    """    
+    """
     period = datetime.datetime.strptime(period, "%Y%m")
     prior_period = period - relativedelta(months=periodicity)
-    prior_period_str = prior_period.strftime( "%Y%m")
+    prior_period_str = prior_period.strftime("%Y%m")
     return prior_period_str
 
+
 def check_auxiliary_value(
-        auxiliary: Optional[float], total: float,
+    auxiliary: Optional[float],
+    total: float,
 ) -> tuple[float | None]:
     """
     Checks if predictive and auxiliary values are input, when predictive is None and auxiliary
@@ -804,9 +821,7 @@ def totals_and_components(
     amend_total: bool,
     predictive: Optional[float],
     precision: Optional[int],
-    predictive_period: Optional[
-        str
-    ], 
+    predictive_period: Optional[str],
     periodicity: Optional[int],
     auxiliary: Optional[float],
     absolute_difference_threshold: Optional[float],
@@ -933,7 +948,7 @@ def totals_and_components(
             input_parameters[InputParameters.TOTAL.value],
             predictive_period,
             periodicity,
-            period
+            period,
         )
 
         component_total = sum_components(
@@ -957,9 +972,7 @@ def totals_and_components(
                 output_list,
             ) = calculate_percent_thresholds(
                 component_total,
-                input_parameters[
-                    InputParameters.PERCENTAGE_DIFFERENCE_THRESHOLD.value
-                ],
+                input_parameters[InputParameters.PERCENTAGE_DIFFERENCE_THRESHOLD.value],
                 output_list,
                 input_parameters[InputParameters.PRECISION.value],
             )
@@ -971,10 +984,7 @@ def totals_and_components(
 
             # If the predictive value is not equal to the sum of components we
             # return a no correction marker
-            if (
-                input_parameters[InputParameters.PREDICTIVE.value]
-                == component_total
-            ):
+            if input_parameters[InputParameters.PREDICTIVE.value] == component_total:
                 output_list["tcc_marker"] = TccMarker.NO_CORRECTION
             else:
                 #  Determine if the difference error can be automatically corrected
@@ -1001,7 +1011,9 @@ def totals_and_components(
                         original_components=input_parameters[
                             InputParameters.COMPONENTS.value
                         ],
-                        component_rescale=input_parameters[InputParameters.COMPONENT_RESCALE.value],
+                        component_rescale=input_parameters[
+                            InputParameters.COMPONENT_RESCALE.value
+                        ],
                         precision=input_parameters[InputParameters.PRECISION.value],
                     )
 

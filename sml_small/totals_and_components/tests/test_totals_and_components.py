@@ -1,27 +1,18 @@
 import random
+from decimal import Decimal, getcontext
 
 import pytest
-from decimal import Decimal
-from decimal import getcontext
 
-from sml_small.totals_and_components.totals_and_components import (
-    ComponentPair,
-    TACException,
-    calculate_prior_period,
-    check_absolute_difference_threshold,
-    check_auxiliary_value,
-    check_percentage_difference_threshold,
-    check_predictive_value,
-    check_sum_components_predictive,
-    check_zero_errors,
-    correct_components,
-    correct_total,
-    determine_error_detection,
-    error_correction,
-    sum_components,
-    totals_and_components,
-    validate_input,
-)
+from sml_small.totals_and_components.totals_and_components import (ComponentPair, TACException, calculate_prior_period,
+                                                                   check_absolute_difference_threshold,
+                                                                   check_auxiliary_value,
+                                                                   check_percentage_difference_threshold,
+                                                                   check_predictive_value,
+                                                                   check_sum_components_predictive, check_zero_errors,
+                                                                   correct_components, correct_total,
+                                                                   determine_error_detection, error_correction,
+                                                                   sum_components, totals_and_components,
+                                                                   validate_input)
 
 EXCEPTION_FAIL_MESSAGE = (
     "{test_id} : Expected no exception, but got {exception_type}: {exception_msg}"
@@ -109,7 +100,7 @@ class TestValidateInput:
                     None,
                     28,
                     1,
-                    100.0
+                    100.0,
                 ),
                 "Test 2: None value for percentage difference threshold",
             ),
@@ -145,7 +136,7 @@ class TestValidateInput:
                     20,
                     28,
                     1,
-                    100.0
+                    100.0,
                 ),
                 "Test 3: None value for absolute difference threshold",
             ),
@@ -437,19 +428,70 @@ class TestCheckPredictiveValue:
     @pytest.mark.parametrize(
         "predictive, auxiliary, total, predictive_period, periodicity, period, expected_result, test_id",
         [
-            (100.0, None, 10, "202203", 0, "202203", (100.0), "Test 1: Predictive Only"),
-            (None, 50.0, 10, "202203", 0, "202203",  (50.0), "Test 2: Auxiliary Only"),
-            (None, None, 10, "202203", 0, "202203",  (10), "Test 3: Predictive and auxiliary are None"),
-            (100, 90, 10, "202203", 2, "202203",  (90), "Test 4: Predictive and auxiliary exists but period does not match prior period"),
-            (100, None, 10, "202203", 2, "202203",  (10), "Test 5: Predictive exists but period does not match prior period"),
-            (150.0, 50.0, 10, "202203", 0, "202203",  (150.0), "Test 6: All Inputs"),
+            (
+                100.0,
+                None,
+                10,
+                "202203",
+                0,
+                "202203",
+                (100.0),
+                "Test 1: Predictive Only",
+            ),
+            (None, 50.0, 10, "202203", 0, "202203", (50.0), "Test 2: Auxiliary Only"),
+            (
+                None,
+                None,
+                10,
+                "202203",
+                0,
+                "202203",
+                (10),
+                "Test 3: Predictive and auxiliary are None",
+            ),
+            (
+                100,
+                90,
+                10,
+                "202203",
+                2,
+                "202203",
+                (90),
+                "Test 4: Predictive and auxiliary exists but period does not match prior period",
+            ),
+            (
+                100,
+                None,
+                10,
+                "202203",
+                2,
+                "202203",
+                (10),
+                "Test 5: Predictive exists but period does not match prior period",
+            ),
+            (150.0, 50.0, 10, "202203", 0, "202203", (150.0), "Test 6: All Inputs"),
         ],
     )
     def test_check_predictive_value(
-        self, predictive, auxiliary, total, predictive_period, periodicity, period, expected_result, test_id
+        self,
+        predictive,
+        auxiliary,
+        total,
+        predictive_period,
+        periodicity,
+        period,
+        expected_result,
+        test_id,
     ):
         try:
-            result = check_predictive_value(predictive=predictive, auxiliary=auxiliary, total=total, predictive_period=predictive_period, periodicity=periodicity, period=period)
+            result = check_predictive_value(
+                predictive=predictive,
+                auxiliary=auxiliary,
+                total=total,
+                predictive_period=predictive_period,
+                periodicity=periodicity,
+                period=period,
+            )
             assert (
                 result == expected_result
             ), f"Test {test_id} failed: Unexpected result. Result == {result}"
@@ -461,6 +503,7 @@ class TestCheckPredictiveValue:
                     exception_msg=str(e),
                 )
             )
+
 
 class TestCalculatePriorPeriod:
     @pytest.mark.parametrize(
@@ -479,7 +522,6 @@ class TestCalculatePriorPeriod:
             ("202203", 60, ("201703"), "Test 11: Periodicity is 60"),
         ],
     )
-    
     def test_calculate_prior_period(
         self, period, periodicity, expected_result, test_id
     ):
@@ -497,6 +539,7 @@ class TestCalculatePriorPeriod:
                 )
             )
 
+
 class TestCheckAuxiliaryValue:
     @pytest.mark.parametrize(
         "auxiliary, total, expected_result, test_id",
@@ -505,9 +548,7 @@ class TestCheckAuxiliaryValue:
             (50.0, 10, (50.0), "Test 2: Auxiliary is not None"),
         ],
     )
-    def test_check_auxiliary_value(
-        self, auxiliary, total, expected_result, test_id
-    ):
+    def test_check_auxiliary_value(self, auxiliary, total, expected_result, test_id):
         try:
             result = check_auxiliary_value(auxiliary=auxiliary, total=total)
             assert (
@@ -1260,7 +1301,9 @@ class TestTotalsAndComponents:
                 None,
                 None,
                 None,
-                TACException("One or both of absolute/percentage difference thresholds must be specified and non-zero"),
+                TACException(
+                    "One or both of absolute/percentage difference thresholds must be specified and non-zero"
+                ),
                 "Test 9 - Absolute and percentage difference threshold None value entered by user",
             ),
             (
@@ -1504,7 +1547,9 @@ class TestTotalsAndComponents:
                 None,
                 0,
                 0,
-                TACException("One or both of absolute/percentage difference thresholds must be specified and non-zero"),
+                TACException(
+                    "One or both of absolute/percentage difference thresholds must be specified and non-zero"
+                ),
                 "Test 18 - Absolute and Percentage Difference Thresholds set to zero",
             ),
             (
@@ -1525,7 +1570,9 @@ class TestTotalsAndComponents:
                 None,
                 None,
                 None,
-                TACException("One or both of absolute/percentage difference thresholds must be specified and non-zero"),
+                TACException(
+                    "One or both of absolute/percentage difference thresholds must be specified and non-zero"
+                ),
                 "Test 19 - Absolute and Percentage Difference Thresholds not specified",
             ),
             (
@@ -2065,7 +2112,9 @@ class TestTotalsAndComponents:
                 None,
                 11,
                 None,
-                TACException("Precision range must be more than 0 and less than or equal to 28"),
+                TACException(
+                    "Precision range must be more than 0 and less than or equal to 28"
+                ),
                 "Test 44 - Testing precision value = 29",
             ),
             (
@@ -2086,7 +2135,9 @@ class TestTotalsAndComponents:
                 None,
                 11,
                 None,
-                TACException("Precision range must be more than 0 and less than or equal to 28"),
+                TACException(
+                    "Precision range must be more than 0 and less than or equal to 28"
+                ),
                 "Test 45 - Testing precision value = 0",
             ),
             (
