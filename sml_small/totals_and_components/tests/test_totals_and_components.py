@@ -1,8 +1,6 @@
 import random
-from decimal import Decimal, getcontext
-
 import pytest
-
+from decimal import Decimal, getcontext
 from sml_small.totals_and_components.totals_and_components import (
     ComponentPair,
     TACException,
