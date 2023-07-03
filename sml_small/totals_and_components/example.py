@@ -3,8 +3,8 @@
 # be displayed in a formatted table on the command line
 
 # Importing the totals_and_components method from the totals_and_components.py file
-from totals_and_components import totals_and_components
 import csv
+from totals_and_components import totals_and_components
 
 # Importing tabulate function from tabulate to pretty print the input and output results
 # from the T&C method in a tabular format
