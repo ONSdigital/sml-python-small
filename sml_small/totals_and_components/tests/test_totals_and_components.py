@@ -440,7 +440,9 @@ class TestCheckPredictiveValue:
             (100.0, None, 10, "202203", 0, "202203", (100.0), "Test 1: Predictive Only"),
             (None, 50.0, 10, "202203", 0, "202203",  (50.0), "Test 2: Auxiliary Only"),
             (None, None, 10, "202203", 0, "202203",  (10), "Test 3: Predictive and auxiliary are None"),
-            (150.0, 50.0, 10, "202203", 0, "202203",  (150.0), "Test 4: All Inputs"),
+            (100, 90, 10, "202203", 2, "202203",  (90), "Test 4: Predictive and auxiliary exists but period does not match prior period"),
+            (100, None, 10, "202203", 2, "202203",  (10), "Test 5: Predictive exists but period does not match prior period"),
+            (150.0, 50.0, 10, "202203", 0, "202203",  (150.0), "Test 6: All Inputs"),
         ],
     )
     def test_check_predictive_value(
@@ -464,17 +466,17 @@ class TestCalculatePriorPeriod:
     @pytest.mark.parametrize(
         "period, periodicity, expected_result, test_id",
         [
-            ("202203", 0, ("202203", "202203"), "Test 1: Periodicity is 0"),
-            ("202203", 1, ("202203", "202202"), "Test 2: Periodicity is 1"),
-            ("202203", 3, ("202203", "202200"), "Test 3: Periodicity is 3"),
-            ("202203", 4, ("202203", "202112"), "Test 4: Periodicity is 4"),
-            ("202203", 6, ("202203", "202110"), "Test 5: Periodicity is 6"),
-            ("202203", 12, ("202203", "202104"), "Test 6: Periodicity is 12"),
-            ("202203", 18, ("202203", "202010"), "Test 7: Periodicity is 18"),
-            ("202203", 24, ("202203", "202003"), "Test 8: Periodicity is 24"),
-            ("202203", 36, ("202203", "201903"), "Test 9: Periodicity is 36"),
-            ("202203", 48, ("202203", "201803"), "Test 10: Periodicity is 48"),
-            ("202203", 60, ("202203", "201703"), "Test 11: Periodicity is 60"),
+            ("202203", 0, ("202203"), "Test 1: Periodicity is 0"),
+            ("202203", 1, ("202202"), "Test 2: Periodicity is 1"),
+            ("202203", 3, ("202112"), "Test 3: Periodicity is 3"),
+            ("202203", 4, ("202111"), "Test 4: Periodicity is 4"),
+            ("202203", 6, ("202109"), "Test 5: Periodicity is 6"),
+            ("202203", 12, ("202103"), "Test 6: Periodicity is 12"),
+            ("202203", 18, ("202009"), "Test 7: Periodicity is 18"),
+            ("202203", 24, ("202003"), "Test 8: Periodicity is 24"),
+            ("202203", 36, ("201903"), "Test 9: Periodicity is 36"),
+            ("202203", 48, ("201803"), "Test 10: Periodicity is 48"),
+            ("202203", 60, ("201703"), "Test 11: Periodicity is 60"),
         ],
     )
     

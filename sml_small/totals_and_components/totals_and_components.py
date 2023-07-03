@@ -393,9 +393,9 @@ def check_predictive_value(
         else:
             determine_correction = auxiliary
     else:
-        period, prior_period = calculate_prior_period(period, periodicity)
-        print(period, prior_period)
-        if predictive_period is not prior_period:
+        prior_period = calculate_prior_period(period, periodicity)
+        print(prior_period)
+        if predictive_period != prior_period:
             determine_correction = check_auxiliary_value(
             auxiliary,
             total,
@@ -417,14 +417,9 @@ def calculate_prior_period(period, periodicity) -> str:
     :rtype: str
     """    
     period = datetime.datetime.strptime(period, "%Y%m")
-    print("Period::::", period)
     prior_period = period - relativedelta(months=periodicity)
-    print("Prior period::::", period)
-    period_str = period.strftime( "%Y%m")
-    print("Period str::::", period_str)
     prior_period_str = prior_period.strftime( "%Y%m")
-    print("Prior period str::::", prior_period_str)
-    return period_str, prior_period_str
+    return prior_period_str
 
 def check_auxiliary_value(
         auxiliary: Optional[float], total: float,
