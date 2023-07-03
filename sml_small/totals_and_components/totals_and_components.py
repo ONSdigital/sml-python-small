@@ -228,14 +228,14 @@ def validate_input(
     :type identifier: str
     :param period: Not used in initial Proof of Concept (PoC). Assumes current period.
     :type period Optional(str)
+    :param periodicity: Value used to calculate the prior period
+    :type periodicity Optional(int)
     :param predictive_period: The predictive period is the period cycle.
     :type predictive_period Optional(str)
     :param total: Target period total, numeric – nulls allowed
     :type total: float
     :param components: Corresponding list of Total variable's components, numeric – nulls allowed
     :type components: List[ComponentPair]
-    :param component_scale: Value set to total for use with periodicity
-    :type component_scale: float
     :param amend_total: amend total is used for error correction
     :type bool
     :param predictive:A value used as a predictor for a contributor's target variable.
@@ -283,7 +283,6 @@ def validate_input(
     if total:
         validate_number("total", total)
         total = float(total)
-        
     if not components:
         raise ValueError("The components are not populated")
     if components:
@@ -386,8 +385,9 @@ def check_predictive_value(
 ) -> tuple[float | None]:
     """
     Checks if predictive and auxiliary values are input, when predictive is None and auxiliary
-    is input set predictive to auxiliary, when both are None, set Tcc_Marker to S
-    and stop calculation
+    is input set predictive to auxiliary, when both are None we use the total.
+    If however, predictive exist we must use this unless the predictive period
+    is not equal to the prior period
 
     :param predictive: The predictive value, typically the total for the current period.
     :type predictive: float, optional
@@ -398,34 +398,41 @@ def check_predictive_value(
     :rtype predictive: None | float
     :return Tcc_Marker: Returned Tcc_Marker if all values are None
     :rtype Tcc_Marker: TccMarker
+    :param period: The value of the current survey period
+    :type period: str
+    :param periodicity: The number of months to be subtracted
+                        from the period
+    :type periodicity: int
+    :return: returns the prior period in the same format as the current
+    :rtype: str
     """
     if predictive is None:
         if auxiliary is None:
-            determine_correction = total
+            predictive = total
         else:
-            determine_correction = auxiliary
+            predictive = auxiliary
     else:
         prior_period = calculate_prior_period(period, periodicity)
         print(prior_period)
         if predictive_period != prior_period:
-            determine_correction = check_auxiliary_value(
+            predictive = check_auxiliary_value(
                 auxiliary,
                 total,
             )
-        else:
-            determine_correction = predictive
-    return determine_correction
+    return predictive
 
 
 def calculate_prior_period(period, periodicity) -> str:
     """
-    calculate_prior_period _summary_
+    calculate_prior_period This will calculate the prior survey period
+    by taking the current period and subtracting the periodicity
 
-    :param period: _description_
-    :type period: _type_
-    :param periodicity: _description_
-    :type periodicity: _type_
-    :return: _description_
+    :param period: The value of the current survey period
+    :type period: str
+    :param periodicity: The number of months to be subtracted
+                        from the period
+    :type periodicity: int
+    :return: returns the prior period in the same format as the current
     :rtype: str
     """
     period = datetime.datetime.strptime(period, "%Y%m")
@@ -440,8 +447,7 @@ def check_auxiliary_value(
 ) -> tuple[float | None]:
     """
     Checks if predictive and auxiliary values are input, when predictive is None and auxiliary
-    is input set predictive to auxiliary, when both are None, set Tcc_Marker to S
-    and stop calculation
+    is input set predictive to auxiliary
 
     :param predictive: The predictive value, typically the total for the current period.
     :type predictive: float, optional
@@ -454,10 +460,10 @@ def check_auxiliary_value(
     :rtype Tcc_Marker: TccMarker
     """
     if auxiliary is None:
-        determine_correction = total
+        predictive = total
     else:
-        determine_correction = auxiliary
-    return determine_correction
+        predictive = auxiliary
+    return predictive
 
 
 def check_zero_errors(predictive: float, components_sum: float) -> TccMarker:
@@ -631,6 +637,8 @@ def error_correction(
     :param amend_total: Specifies whether the total or components should be corrected
                         when an error is detected.
     :type amend_total: bool
+    :param total: current total
+    :type total: float
     :param components_sum: Sum of original values of components list
     :type components_sum: float
     :param original_components: List of Components objects so final values can be amended
@@ -710,6 +718,8 @@ def correct_components(
     :type predictive: float
     :param precision: Precision is not a decimal point indicator, it is instead used to adjust our error margins.
     :type precision: Optional[int]
+    :param total: current total
+    :type total: float
     ...
     :return final_total: Final Total value to be output
     :rtype final_total: float
@@ -849,6 +859,8 @@ def totals_and_components(
     :type period: Optional[str]
     :param predictive_period: The predictive period is the period cycle.
     :type predictive_period: float
+    :param periodicity: Value used to calculate the prior period
+    :type periodicity Optional(int)
     :param total: Original value returned for the total.
     :type total: float
     :param components: List of components that should equal the total or predictive value.
@@ -1008,9 +1020,7 @@ def totals_and_components(
                         original_components=input_parameters[
                             InputParameters.COMPONENTS.value
                         ],
-                        total=input_parameters[
-                            InputParameters.TOTAL.value
-                        ],
+                        total=input_parameters[InputParameters.TOTAL.value],
                         precision=input_parameters[InputParameters.PRECISION.value],
                     )
 

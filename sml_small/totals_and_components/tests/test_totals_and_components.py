@@ -3,16 +3,24 @@ from decimal import Decimal, getcontext
 
 import pytest
 
-from sml_small.totals_and_components.totals_and_components import (ComponentPair, TACException, calculate_prior_period,
-                                                                   check_absolute_difference_threshold,
-                                                                   check_auxiliary_value,
-                                                                   check_percentage_difference_threshold,
-                                                                   check_predictive_value,
-                                                                   check_sum_components_predictive, check_zero_errors,
-                                                                   correct_components, correct_total,
-                                                                   determine_error_detection, error_correction,
-                                                                   sum_components, totals_and_components,
-                                                                   validate_input)
+from sml_small.totals_and_components.totals_and_components import (
+    ComponentPair,
+    TACException,
+    calculate_prior_period,
+    check_absolute_difference_threshold,
+    check_auxiliary_value,
+    check_percentage_difference_threshold,
+    check_predictive_value,
+    check_sum_components_predictive,
+    check_zero_errors,
+    correct_components,
+    correct_total,
+    determine_error_detection,
+    error_correction,
+    sum_components,
+    totals_and_components,
+    validate_input,
+)
 
 EXCEPTION_FAIL_MESSAGE = (
     "{test_id} : Expected no exception, but got {exception_type}: {exception_msg}"
@@ -501,6 +509,7 @@ class TestCheckPredictiveValue:
             )
 
 
+# Class to check if periodicity effects the predictive period to give the prior period
 class TestCalculatePriorPeriod:
     @pytest.mark.parametrize(
         "period, periodicity, expected_result, test_id",
@@ -536,6 +545,7 @@ class TestCalculatePriorPeriod:
             )
 
 
+# Class to check if the auxiliary value is used for the predictive
 class TestCheckAuxiliaryValue:
     @pytest.mark.parametrize(
         "auxiliary, total, expected_result, test_id",
