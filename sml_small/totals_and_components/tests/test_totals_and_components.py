@@ -988,7 +988,8 @@ class TestCorrectTotal:
 
 class TestCorrectComponents:
     @pytest.mark.parametrize(
-        "components_sum, original_components, component_rescale, precision, expected_total, expected_component, test_id",
+        "components_sum, original_components, component_rescale, precision,"
+        "expected_total, expected_component, test_id",
         [
             (
                 90.0,
@@ -1062,8 +1063,9 @@ class TestCorrectComponents:
 
 class TestTotalsAndComponents:
     @pytest.mark.parametrize(
-        "identifier, period, total, components, amend_total, predictive, precision, predictive_period, periodicity, auxiliary,"
-        "absolute_difference_threshold, percentage_difference_threshold, expected_result, test_id",
+        "identifier, period, total, components, amend_total, predictive, precision, predictive_period,"
+        "periodicity, auxiliary, absolute_difference_threshold, percentage_difference_threshold,"
+        "expected_result, test_id",
         [
             (
                 "A",
@@ -2504,7 +2506,7 @@ class TestTotalsAndComponents:
                     [81, 0, 3.6, 5.4],
                     "C",
                 ),
-                "Test 57 - Predictive exists and periodicity is 1, expect periods to match and total to be final total",
+                "Test 57 - Predictive exists and periodicity = 1, expect periods to match and total to be final total",
             ),
             (
                 "BG",
@@ -2535,7 +2537,7 @@ class TestTotalsAndComponents:
                     [81, 0, 3.6, 5.4],
                     "C",
                 ),
-                "Test 58 - Predictive exists and periodicity is 2, expect periods to not match and total is auxiliary",
+                "Test 58 - Predictive exists and periodicity = 2, expect periods to not match and total is auxiliary",
             ),
             (
                 "BH",
@@ -2566,7 +2568,7 @@ class TestTotalsAndComponents:
                     [81, 0, 3.6, 5.4],
                     "C",
                 ),
-                "Test 59 - Predictive exists and periodicity is 3, expect periods to match and total to be final total",
+                "Test 59 - Predictive exists and periodicity = 3, expect periods to match and total to be final total",
             ),
             (
                 "BI",
@@ -2597,7 +2599,7 @@ class TestTotalsAndComponents:
                     [81, 0, 3.6, 5.4],
                     "C",
                 ),
-                "Test 60 - Predictive exists and periodicity is 4, expect periods to match and total to be final total",
+                "Test 60 - Predictive exists and periodicity = 4, expect periods to match and total to be final total",
             ),
             (
                 "BJ",
@@ -2628,7 +2630,7 @@ class TestTotalsAndComponents:
                     [81, 0, 3.6, 5.4],
                     "C",
                 ),
-                "Test 61 - Predictive exists and periodicity is 6, expect periods to match and total to be final total",
+                "Test 61 - Predictive exists and periodicity = 6, expect periods to match and total to be final total",
             ),
             (
                 "BK",
@@ -2659,7 +2661,7 @@ class TestTotalsAndComponents:
                     [81, 0, 3.6, 5.4],
                     "C",
                 ),
-                "Test 62 - Predictive exists and periodicity is 12, expect periods to match and total to be final total",
+                "Test 62 - Predictive exists and periodicity = 12, expect periods to match and total to be final total",
             ),
             (
                 "BL",
@@ -2690,7 +2692,7 @@ class TestTotalsAndComponents:
                     [81, 0, 3.6, 5.4],
                     "C",
                 ),
-                "Test 63 - Predictive exists and periodicity is 18, expect periods to match and total to be final total",
+                "Test 63 - Predictive exists and periodicity = 18, expect periods to match and total to be final total",
             ),
             (
                 "BM",
@@ -2721,7 +2723,7 @@ class TestTotalsAndComponents:
                     [81, 0, 3.6, 5.4],
                     "C",
                 ),
-                "Test 64 - Predictive exists and periodicity is 24, expect periods to match and total to be final total",
+                "Test 64 - Predictive exists and periodicity = 24, expect periods to match and total to be final total",
             ),
             (
                 "BN",
@@ -2752,7 +2754,7 @@ class TestTotalsAndComponents:
                     [81, 0, 3.6, 5.4],
                     "C",
                 ),
-                "Test 65 - Predictive exists and periodicity is 36, expect periods to match and total to be final total",
+                "Test 65 - Predictive exists and periodicity = 36, expect periods to match and total to be final total",
             ),
             (
                 "BO",
@@ -2783,7 +2785,7 @@ class TestTotalsAndComponents:
                     [81, 0, 3.6, 5.4],
                     "C",
                 ),
-                "Test 66 - Predictive exists and periodicity is 48, expect periods to match and total to be final total",
+                "Test 66 - Predictive exists and periodicity = 48, expect periods to match and total to be final total",
             ),
             (
                 "BP",
@@ -2814,7 +2816,7 @@ class TestTotalsAndComponents:
                     [81, 0, 3.6, 5.4],
                     "C",
                 ),
-                "Test 67 - Predictive exists and periodicity is 60, expect periods to match and total to be final total",
+                "Test 67 - Predictive exists and periodicity = 60, expect periods to match and total to be final total",
             ),
         ],
     )
