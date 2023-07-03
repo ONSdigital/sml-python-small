@@ -32,7 +32,6 @@ class InputParameters(Enum):
     PERCENTAGE_DIFFERENCE_THRESHOLD = 5
     PRECISION = 6
     PERIODICITY = 7
-    COMPONENT_RESCALE = 8
 
 
 class TccMarker(Enum):
@@ -259,7 +258,6 @@ def validate_input(
             List[Component_list] | None, float | None, float | None, float | None,
             float | None, float | None]
     """
-    component_rescale = 0.0
     if not identifier:
         raise ValueError("The identifier is not populated")
     str(identifier)
@@ -285,7 +283,7 @@ def validate_input(
     if total:
         validate_number("total", total)
         total = float(total)
-        component_rescale = float(total)
+        
     if not components:
         raise ValueError("The components are not populated")
     if components:
@@ -337,7 +335,6 @@ def validate_input(
         percentage_difference_threshold,
         precision,
         periodicity,
-        component_rescale,
     )
 
 
@@ -622,7 +619,7 @@ def error_correction(
     amend_total: bool,
     components_sum: float,
     original_components: List[ComponentPair],
-    component_rescale: float,
+    total: float,
     precision: Optional[int],
 ) -> tuple[float, list[float], TccMarker]:
     """
@@ -658,7 +655,7 @@ def error_correction(
         final_total, original_components, tcc_marker = correct_components(
             components_sum,
             original_components,
-            component_rescale,
+            total,
             precision,
         )
     final_components = []
@@ -696,7 +693,7 @@ def correct_total(
 def correct_components(
     components_sum: float,
     original_components: List[ComponentPair],
-    component_rescale: float,
+    total: float,
     precision: int,
 ) -> tuple[float, list[ComponentPair], TccMarker]:
     """
@@ -722,11 +719,11 @@ def correct_components(
     :rtype tcc_marker: TccMarker
     """
     getcontext().prec = precision
-    final_total = component_rescale
+    final_total = total
     for component in original_components:
         component.final_value = (
             Decimal(str(component.original_value)) / Decimal(str(components_sum))
-        ) * Decimal(str(component_rescale))
+        ) * Decimal(str(total))
         component.final_value = float(component.final_value)
     tcc_marker = TccMarker.COMPONENTS_CORRECTED
     return final_total, original_components, tcc_marker
@@ -1011,8 +1008,8 @@ def totals_and_components(
                         original_components=input_parameters[
                             InputParameters.COMPONENTS.value
                         ],
-                        component_rescale=input_parameters[
-                            InputParameters.COMPONENT_RESCALE.value
+                        total=input_parameters[
+                            InputParameters.TOTAL.value
                         ],
                         precision=input_parameters[InputParameters.PRECISION.value],
                     )

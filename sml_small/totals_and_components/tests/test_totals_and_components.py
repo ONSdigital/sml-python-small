@@ -64,7 +64,6 @@ class TestValidateInput:
                     0.1,
                     6,
                     1,
-                    100,
                 ),
                 "Test 1: Correct values test",
             ),
@@ -100,7 +99,6 @@ class TestValidateInput:
                     None,
                     28,
                     1,
-                    100.0,
                 ),
                 "Test 2: None value for percentage difference threshold",
             ),
@@ -136,7 +134,6 @@ class TestValidateInput:
                     20,
                     28,
                     1,
-                    100.0,
                 ),
                 "Test 3: None value for absolute difference threshold",
             ),
@@ -172,7 +169,6 @@ class TestValidateInput:
                     0.1,
                     28,
                     1,
-                    100,
                 ),
                 "Test 4: Predictive is missing so method carries on",
             ),
@@ -988,7 +984,7 @@ class TestCorrectTotal:
 
 class TestCorrectComponents:
     @pytest.mark.parametrize(
-        "components_sum, original_components, component_rescale, precision,"
+        "components_sum, original_components, total, precision,"
         "expected_total, expected_component, test_id",
         [
             (
@@ -1028,7 +1024,7 @@ class TestCorrectComponents:
         self,
         components_sum,
         original_components,
-        component_rescale,
+        total,
         precision,
         expected_total,
         expected_component,
@@ -1038,7 +1034,7 @@ class TestCorrectComponents:
             result = correct_components(
                 components_sum=components_sum,
                 original_components=original_components,
-                component_rescale=component_rescale,
+                total=total,
                 precision=precision,
             )
 

@@ -4,12 +4,12 @@
 
 # Importing the totals_and_components method from the totals_and_components.py file
 import csv
-from totals_and_components import totals_and_components
 
 # Importing tabulate function from tabulate to pretty print the input and output results
 # from the T&C method in a tabular format
 # This import isn't necessary to work with the T&C method
 from tabulate import tabulate
+from totals_and_components import totals_and_components
 
 test_data = [
     # [
