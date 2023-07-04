@@ -2320,6 +2320,9 @@ class TestTotalsAndComponents:
                     "C",
                 ),
                 "Test 49 - Predictive total and predictive period are different to period and total",
+                # Current total is being used for all calculations
+                # Predictive total was not the prior period
+                # Auxiliary total is none
             ),
             (
                 "AY",
@@ -2351,6 +2354,9 @@ class TestTotalsAndComponents:
                     "C",
                 ),
                 "Test 50 - Use auxiliary when predictive is not specified",
+                # Predictive total is None
+                # Auxiliary is used to check if correction can be automatically applied
+                # Current total is used to calculate weighted components
             ),
             (
                 "AZ",
@@ -2382,6 +2388,9 @@ class TestTotalsAndComponents:
                     "C",
                 ),
                 "Test 51 - Use auxiliary when predictive is none and predictive period is not the prior period",
+                # Predictive total is none
+                # Auxiliary is used to check if correction can be automatically applied
+                # Current total is used to calculate weighted components
             ),
             (
                 "BA",
@@ -2413,6 +2422,8 @@ class TestTotalsAndComponents:
                     "C",
                 ),
                 "Test 52 - Use total when predictive and auxiliary is none",
+                # Auxiliary and predictive total are none
+                # Current total is used for all calculations
             ),
             (
                 "BB",
@@ -2444,6 +2455,9 @@ class TestTotalsAndComponents:
                     "T",
                 ),
                 "Test 53 - Predictive total and prior period are different",
+                # Predictive total was not the prior period
+                # Auxiliary total is none
+                # Current total is used for all calculations
             ),
             (
                 "BC",
@@ -2475,6 +2489,10 @@ class TestTotalsAndComponents:
                     "T",
                 ),
                 "Test 54 - Auxiliary is new predictive when predictive total and prior period are different",
+                # Predictive total is none
+                # Auxiliary is used to check if correction can be automatically applied
+                # Current total is used to calculate weighted components
+                # This wouldn't get to the prior period function
             ),
             (
                 "BD",
@@ -2506,6 +2524,10 @@ class TestTotalsAndComponents:
                     "T",
                 ),
                 "Test 55 - Use auxiliary when predictive is none and predictive period != the prior period",
+                # Predictive total is none
+                # Auxiliary is used to check if correction can be automatically applied
+                # Current total is used to calculate weighted components
+                # This wouldn't get to the prior period function
             ),
             (
                 "BE",
@@ -2537,6 +2559,8 @@ class TestTotalsAndComponents:
                     "T",
                 ),
                 "Test 56 - Predictive and prior periods match and total is new predictive",
+                # Current total is used to calculate weighted components
+                # Predictive total is used to check if correction can be automatically applied
             ),
             (
                 "BF",
@@ -2568,6 +2592,8 @@ class TestTotalsAndComponents:
                     "C",
                 ),
                 "Test 57 - Predictive exists and periodicity = 1, expect periods to match",
+                # Current total is used to calculate weighted components
+                # Predictive total is used to check if correction can be automatically applied
             ),
             (
                 "BG",
@@ -2599,6 +2625,8 @@ class TestTotalsAndComponents:
                     "C",
                 ),
                 "Test 58 - Predictive exists and periodicity = 2, expect periods to match",
+                # Current total is used to calculate weighted components
+                # Predictive total is used to check if correction can be automatically applied
             ),
             (
                 "BH",
@@ -2630,6 +2658,8 @@ class TestTotalsAndComponents:
                     "C",
                 ),
                 "Test 59 - Predictive exists and periodicity = 3, expect periods to match",
+                # Current total is used to calculate weighted components
+                # Predictive total is used to check if correction can be automatically applied
             ),
             (
                 "BI",
@@ -2661,6 +2691,8 @@ class TestTotalsAndComponents:
                     "C",
                 ),
                 "Test 60 - Predictive exists and periodicity = 4, expect periods to match",
+                # Current total is used to calculate weighted components
+                # Predictive total is used to check if correction can be automatically applied
             ),
             (
                 "BJ",
@@ -2692,6 +2724,8 @@ class TestTotalsAndComponents:
                     "C",
                 ),
                 "Test 61 - Predictive exists and periodicity = 6, expect periods to match",
+                # Current total is used to calculate weighted components
+                # Predictive total is used to check if correction can be automatically applied
             ),
             (
                 "BK",
@@ -2723,6 +2757,8 @@ class TestTotalsAndComponents:
                     "C",
                 ),
                 "Test 62 - Predictive exists and periodicity = 12, expect periods to match",
+                # Current total is used to calculate weighted components
+                # Predictive total is used to check if correction can be automatically applied
             ),
             (
                 "BL",
@@ -2754,6 +2790,8 @@ class TestTotalsAndComponents:
                     "C",
                 ),
                 "Test 63 - Predictive exists and periodicity = 18, expect periods to match",
+                # Current total is used to calculate weighted components
+                # Predictive total is used to check if correction can be automatically applied
             ),
             (
                 "BM",
@@ -2785,6 +2823,8 @@ class TestTotalsAndComponents:
                     "C",
                 ),
                 "Test 64 - Predictive exists and periodicity = 24, expect periods to match",
+                # Current total is used to calculate weighted components
+                # Predictive total is used to check if correction can be automatically applied
             ),
             (
                 "BN",
@@ -2816,6 +2856,8 @@ class TestTotalsAndComponents:
                     "C",
                 ),
                 "Test 65 - Predictive exists and periodicity = 36, expect periods to match",
+                # Current total is used to calculate weighted components
+                # Predictive total is used to check if correction can be automatically applied
             ),
             (
                 "BO",
@@ -2847,6 +2889,8 @@ class TestTotalsAndComponents:
                     "C",
                 ),
                 "Test 66 - Predictive exists and periodicity = 48, expect periods to match",
+                # Current total is used to calculate weighted components
+                # Predictive total is used to check if correction can be automatically applied
             ),
             (
                 "BP",
@@ -2878,6 +2922,8 @@ class TestTotalsAndComponents:
                     "C",
                 ),
                 "Test 67 - Predictive exists and periodicity = 60, expect periods to match",
+                # Current total is used to calculate weighted components
+                # Predictive total is used to check if correction can be automatically applied
             ),
             (
                 "BQ",
@@ -2909,6 +2955,8 @@ class TestTotalsAndComponents:
                     "C",
                 ),
                 "Test 68 - Predictive period is None so auxiliary value is used.",
+                # Auxiliary and predictive total are none
+                # Current total is used for all calculations
             ),
         ],
     )
