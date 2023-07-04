@@ -410,7 +410,7 @@ def set_predictive_value(
     """
     prior_period = calculate_prior_period(period, periodicity)
 
-    if (predictive is None) or (predictive_period != prior_period):
+    if (predictive is None) or (predictive and predictive_period != prior_period):
         predictive = check_auxiliary_value(
                 auxiliary,
                 total,

@@ -219,6 +219,8 @@ class TestValidateInput:
                 28,
                 ValueError,
                 "Test 6: None in component list",
+                # Test to see what happens when none value is within the 
+                # component list we expect the appropriate value error to be raised.
             ),
             (
                 "G",
@@ -240,6 +242,9 @@ class TestValidateInput:
                 28,
                 ValueError,
                 "Test 7: Invalid Total",
+                # Test to see what happens when an invalid total 
+                # string value is provided
+                # we expect the appropriate value error to be raised.
             ),
             (
                 "H",
@@ -261,6 +266,9 @@ class TestValidateInput:
                 28,
                 ValueError,
                 "Test 8: Invalid predictive test",
+                # Test to see what happens when an invalid predictive 
+                # string value is provided
+                # we expect the appropriate value error to be raised.
             ),
             (
                 "I",
@@ -282,6 +290,9 @@ class TestValidateInput:
                 28,
                 ValueError,
                 "Test 9: Invalid auxiliary",
+                # Test to see what happens when an invalid auxiliary 
+                # string value is provided
+                # we expect the appropriate value error to be raised.
             ),
             (
                 "J",
@@ -303,6 +314,9 @@ class TestValidateInput:
                 28,
                 ValueError,
                 "Test 10: Invalid absolute difference threshold",
+                # Test to see what happens when an invalid ABT 
+                # tuple value is provided
+                # we expect the appropriate value error to be raised.
             ),
             (
                 "K",
@@ -324,6 +338,9 @@ class TestValidateInput:
                 28,
                 ValueError,
                 "Test 11: Invalid percentage difference threshold",
+                # Test to see what happens when an invalid PDT 
+                # value is provided
+                # we expect the appropriate value error to be raised.
             ),
             (
                 "L",
@@ -345,6 +362,9 @@ class TestValidateInput:
                 28,
                 ValueError,
                 "Test 12: None value for percentage and absolute difference threshold",
+                # Test to see what happens when an invalid PDT and ABT 
+                # values are provided
+                # we expect the appropriate value error to be raised.
             ),
             (
                 "M",
@@ -366,6 +386,9 @@ class TestValidateInput:
                 28,
                 ValueError,
                 "Test 13: None value for amend value",
+                # Test to see what happens when an none amend total 
+                # value is provided
+                # we expect the appropriate value error to be raised.
             ),
             (
                 "N",
@@ -387,6 +410,9 @@ class TestValidateInput:
                 28,
                 ValueError,
                 "Test 14: None value for total",
+                # Test to see what happens when an none 
+                # value for total value is provided
+                # we expect the appropriate value error to be raised.
             ),
             (
                 "O",
@@ -408,6 +434,9 @@ class TestValidateInput:
                 28,
                 ValueError,
                 "Test 15: None value for period",
+                # Test to see what happens when an none 
+                # value for period value is provided
+                # we expect the appropriate value error to be raised.
             ),
         ],
     )
@@ -482,52 +511,81 @@ class TestSetPredictiveValue:
                 None,
                 10,
                 "202301",
-                24,
-                "202101",
-                10.0,
+                1,
+                "202302",
+                100.0,
                 "Test 1: Predictive Only",
+                # Test for when a predictive value is provided,
+                # we would not expect the check_auxiliary_value() function
+                # to be triggered and the predictive value to remain unchanged
+                # this is because the predictive period = prior period.
             ),
-            (None, 50.0, 10, "202207", 2, "202205", (50.0), "Test 2: Auxiliary Only"),
+            (None, 50.0, 10, "202205", 2, "202207", (50.0), "Test 2: Auxiliary Only"
+                # Test for when a predictive value is not provided,
+                # we would expect the check_auxiliary_value() function
+                # to be triggered and the auxiliary value to be used in 
+                # place of the predictive value
+            ),
             (
                 None,
                 None,
                 10,
-                "202201",
-                12,
                 "202101",
+                12,
+                "202201",
                 10,
                 "Test 3: Predictive and auxiliary are None",
+                # Test for when a predictive and auxiliary value is not provided,
+                # we would expect the check_auxiliary_value() function
+                # to be triggered and the total value to be used in 
+                # place of the predictive value
             ),
             (
                 100,
                 90,
                 10,
-                "202307",
-                1,
-                "202305",
+                "201907",
+                12,
+                "202106",
                 90,
                 "Test 4: Predictive and auxiliary exists but predictive period does not match prior period",
+                # Test for when a predictive value is provided,
+                # we would expect the check_auxiliary_value() function
+                # to be triggered and the auxiliary value to be used in 
+                # place of the predictive value as predictive period != prior period
             ),
             (
                 100,
                 None,
                 10,
-                "202203",
-                2,
                 "202107",
+                2,
+                "202207",
                 10,
                 "Test 5: Predictive exists but period does not match prior period",
+                # Test for when a predictive value is provided,
+                # we would expect the check_auxiliary_value() function
+                # to be triggered and the total value to be used in 
+                # place of the predictive value as predictive period != prior period
             ),
-            (150.0, 50.0, 10, "202203", 0, "202203", (150.0), "Test 6: All Inputs"),
+            (150.0, 50.0, 10, "202202", 1, "202203", (150.0), "Test 6: All Inputs"
+                # Test for when a all values is are provided,
+                # we would not expect the check_auxiliary_value() function
+                # to be triggered and the predictive is not changed as predictive period = prior period
+            ),
             (
                 100.0,
                 None,
                 10,
-                "202305",
-                13,
                 "202202",
+                24,
+                "202305",
                 10.0,
                 "Test 7: Predictive and prior periods do not match and auxiliary is None so total is returned as predictive",
+                # Test for when a predictive value is provided,
+                # we would expect the check_auxiliary_value() function
+                # to be triggered and the total value to be used in 
+                # place of the predictive value as predictive period != prior period
             ),
         ],
     )
@@ -605,8 +663,12 @@ class TestCheckAuxiliaryValue:
     @pytest.mark.parametrize(
         "auxiliary, total, expected_result, test_id",
         [
-            (None, 10, 10, "Test 1: Auxiliary is None"),
-            (50.0, 10, 50.0, "Test 2: Auxiliary is not None"),
+            (None, 10, 10, "Test 1: Auxiliary is None"
+                # In this scenario we would expect the total to be returned
+            ),
+            (50.0, 10, 50.0, "Test 2: Auxiliary is not None"
+            # In this scenario we would expect the test to return the auxiliary value
+            ),
         ],
     )
     def test_check_auxiliary_value(self, auxiliary, total, expected_result, test_id):
@@ -625,6 +687,7 @@ class TestCheckAuxiliaryValue:
             )
 
 
+# Tests to check the zero error cases (see method spec for more details)
 class TestCheckZeroErrors:
     @pytest.mark.parametrize(
         "test_components, predictive, precision, expected_result, test_id",
@@ -700,8 +763,11 @@ class TestCheckSumComponentsPredictive:
                 ],
                 60.0,
                 28,
-                0,
+                0, # This is the returned stored absolute_difference value
                 "Test 1: Component Sum Matches Predictive",
+                # For this test we are summing the components values and taking the 
+                # absolute value of the predictive minus the sum in this test 
+                # we would expect zero to be the absolute difference
             ),
             (
                 [
@@ -722,6 +788,9 @@ class TestCheckSumComponentsPredictive:
                 28,
                 67.8,  # This is the returned stored absolute_difference value
                 "Test 2: Component Sum Does NOT Match Predictive and returns absolute_difference",
+                # For this test we are summing the components values and taking the 
+                # absolute value of the predictive minus the sum in this test 
+                # we would expect 67.8 to be the absolute difference
             ),
         ],
     )
@@ -763,6 +832,7 @@ class TestDetermineErrorDetection:
                 None,
                 "P",
                 "Test 1: Absolute Difference Only - Satisfied",
+                # Test to check if ADT is satisfied and goes to the error correction
             ),
             (
                 5,
@@ -773,6 +843,8 @@ class TestDetermineErrorDetection:
                 None,
                 "M",
                 "Test 2: Absolute Difference Only - NOT Satisfied",
+                # Test to check if ADT is not satisfied meaning we would
+                #  need to check the percentage difference.
             ),
             (
                 None,
@@ -783,6 +855,7 @@ class TestDetermineErrorDetection:
                 20,
                 "P",
                 "Test 3: Percentage Difference Only - Satisfied",
+                # Test to check if PDT is satisfied and goes to the error correction
             ),
             (
                 None,
@@ -793,6 +866,8 @@ class TestDetermineErrorDetection:
                 20,
                 "M",
                 "Test 4: Percentage Difference Only - NOT Satisfied (lower)",
+                # Test to check if PDT lower threshold is not satisfied
+                #  this would result in an M TCC marker
             ),
             (
                 None,
@@ -803,6 +878,8 @@ class TestDetermineErrorDetection:
                 13,
                 "M",
                 "Test 5: Percentage Difference Only - NOT Satisfied (upper)",
+                # Test to check if PDT upper threshold is not satisfied
+                #  this would result in an M TCC marker
             ),
             (
                 20,
@@ -813,6 +890,8 @@ class TestDetermineErrorDetection:
                 20,
                 "P",
                 "Test 6: Both Input - Absolute Difference Satisfied",
+                # Test to check if ADT is satisfied and moves onto the
+                # error correction stage
             ),
             (
                 5,
@@ -823,6 +902,8 @@ class TestDetermineErrorDetection:
                 20,
                 "P",
                 "Test 7: Both Input - Percentage Difference Satisfied",
+                # Test to check if PDT is satisfied and moves onto the
+                # error correction stage
             ),
             (
                 5,
@@ -833,6 +914,8 @@ class TestDetermineErrorDetection:
                 20,
                 "M",
                 "Test 8: Both Input - Neither Satisfied",
+                # Test to check if ADT and PDT thresholds are not satisfied
+                #  this would result in an M TCC marker
             ),
         ],
     )
@@ -867,7 +950,7 @@ class TestDetermineErrorDetection:
                 )
             )
 
-
+# Tests to check if ABT threshold values are returning the correct boolean
 class TestCheckAbsoluteDifferenceThreshold:
     @pytest.mark.parametrize(
         "absolute_difference_threshold, absolute_difference, expected_result, test_id",
@@ -901,6 +984,7 @@ class TestCheckAbsoluteDifferenceThreshold:
             )
 
 
+# Tests to check if ABT threshold values are returning the correct boolean
 class TestCheckPercentageDifferenceThreshold:
     @pytest.mark.parametrize(
         "predictive, low_threshold, high_threshold, expected_result, test_id",
@@ -953,7 +1037,7 @@ class TestCheckPercentageDifferenceThreshold:
                 )
             )
 
-
+# Test to ensure the amend total determines the correct correction path and outputs the right tcc marker
 class TestErrorCorrection:
     @pytest.mark.parametrize(
         "amend_total, components_sum, original_components, predictive, precision,  expected_result, test_id",
@@ -1007,7 +1091,7 @@ class TestErrorCorrection:
                 )
             )
 
-
+# Test to ensure the total is corrected and the expected marker is returned
 class TestCorrectTotal:
     @pytest.mark.parametrize(
         "components_sum, original_components, expected_result, test_id",
@@ -1047,6 +1131,7 @@ class TestCorrectTotal:
             )
 
 
+# Test to ensure the component is corrected and the expected marker is returned
 class TestCorrectComponents:
     @pytest.mark.parametrize(
         "components_sum, original_components, total, precision,"
@@ -1158,6 +1243,8 @@ class TestTotalsAndComponents:
                     "N",
                 ),
                 "Test 1 - Totals matches components TCC Marker N",
+                # This test checks if the predicitve = sum of components 
+                # this is not the case so the tcc marker N is returned
             ),
             (
                 "B",
@@ -1189,6 +1276,8 @@ class TestTotalsAndComponents:
                     "T",
                 ),
                 "Test 2 - Totals corrected with non zero component values TCC Marker T",
+                # This test checks if the total is corrected
+                # by using a true amend value
             ),
             (
                 "C",
@@ -1220,6 +1309,8 @@ class TestTotalsAndComponents:
                     "C",
                 ),
                 "Test 3 - Components corrected - TCC Marker C",
+                # This test checks if the component is 
+                # corrected by using a true amend value
             ),
             (
                 "D",
@@ -1251,6 +1342,8 @@ class TestTotalsAndComponents:
                     "M",
                 ),
                 "Test 4 - Manual correction required TCC Marker M ",
+                # This test that if the predictive is not within the threshold limits
+                # then we get M tcc marker
             ),
             (
                 "F",
@@ -1282,6 +1375,10 @@ class TestTotalsAndComponents:
                     "S",
                 ),
                 "Test 5 - Predictive variable is None",
+                # If the predictive is passed as a None value by the use the auxiliary or total
+                # this depends on the prior calculate_prior_period
+                # In this case auxiliary is also None
+                # the prior period is equal to the predictive so we have S tcc marker
             ),
             (
                 "H",
@@ -1303,6 +1400,8 @@ class TestTotalsAndComponents:
                 0.1,
                 TACException("component=InvalidString is missing or not a number"),
                 "Test 6 - Invalid component value entered by user",
+                # An invalid component is passed to the method which is not allowed
+                # hence we will throw an error
             ),
             (
                 "I",
@@ -1323,6 +1422,8 @@ class TestTotalsAndComponents:
                 11,
                 0.1,
                 TACException("predictive must not be a string"),
+                # An invalid predictive is passed to the method which is not allowed
+                # hence we will throw an error
                 "Test 7 - Invalid predictive value entered by user",
             ),
             (
@@ -1344,6 +1445,8 @@ class TestTotalsAndComponents:
                 11,
                 0.1,
                 TACException("auxiliary is missing or not a number"),
+                # An invalid auxiliary is passed to the method which is not allowed
+                # hence we will throw an error
                 "Test 8 - Invalid auxiliary value entered by user",
             ),
             (
@@ -1367,6 +1470,8 @@ class TestTotalsAndComponents:
                 TACException(
                     "One or both of absolute/percentage difference thresholds must be specified and non-zero"
                 ),
+                # An invalid ADT or PDT is passed to the method which is not allowed
+                # hence we will throw an error
                 "Test 9 - Absolute and percentage difference threshold None value entered by user",
             ),
             (
@@ -1399,6 +1504,9 @@ class TestTotalsAndComponents:
                     "T",
                 ),
                 "Test 10 - Auxiliary variable replaces the missing predictive variable",
+                # If the predictive is None we trigger the check_auxiliary_value function
+                # this will replace the predictive with the auxiliary
+                #  as the auxiliary is not none
             ),
             (
                 "M",
@@ -1430,6 +1538,7 @@ class TestTotalsAndComponents:
                     "N",
                 ),
                 "Test 11 - Predictive value is 0 and component sum is zero",
+                # Special case where if both are zero we return N tcc marker
             ),
             (
                 "N",
@@ -1461,6 +1570,7 @@ class TestTotalsAndComponents:
                     "T",
                 ),
                 "Test 12 - Absolute Difference Threshold only specified and satisfied",
+                # Test checking ADT passes to totals correction and corrects the total
             ),
             (
                 "O",
@@ -1487,6 +1597,7 @@ class TestTotalsAndComponents:
                     "M",
                 ),
                 "Test 13 - Absolute Difference Threshold only specified and not satisfied",
+                # Test checking ADT fails to totals correction and returns M tcc marker
             ),
             (
                 "P",
@@ -1513,6 +1624,7 @@ class TestTotalsAndComponents:
                     "T",
                 ),
                 "Test 14 - Percentage Difference Threshold only specified and satisfied",
+                # Test checking PDT passes to component correction and corrects the components
             ),
             (
                 "Q",
@@ -1539,6 +1651,7 @@ class TestTotalsAndComponents:
                     "M",
                 ),
                 "Test 15 - Percentage Difference Threshold only specified and not satisfied",
+                # Test checking PDT returns M marker
             ),
             (
                 "R",
@@ -1570,6 +1683,7 @@ class TestTotalsAndComponents:
                     "T",
                 ),
                 "Test 16 - ADT and PDT specified and ADT satisfied",
+                # Check that the T marker is returned when a happy path is provided
             ),
             (
                 "S",
@@ -1596,6 +1710,7 @@ class TestTotalsAndComponents:
                     "C",
                 ),
                 "Test 17 - ADT and PDT specified and ADT not satisfied and PDT satisfied",
+                # Test to check that PDT can still complete a component correction
             ),
             (
                 "U",
@@ -1614,6 +1729,8 @@ class TestTotalsAndComponents:
                     "One or both of absolute/percentage difference thresholds must be specified and non-zero"
                 ),
                 "Test 18 - Absolute and Percentage Difference Thresholds set to zero",
+                # Test checking for a error exception thrown when we provide 
+                # zero values for ADT and PDT this is caught in validate input
             ),
             (
                 "T",
@@ -1637,6 +1754,8 @@ class TestTotalsAndComponents:
                     "One or both of absolute/percentage difference thresholds must be specified and non-zero"
                 ),
                 "Test 19 - Absolute and Percentage Difference Thresholds not specified",
+                # Test checking for a error exception thrown when we provide 
+                # zero values for ADT or PDT this is caught in validate input
             ),
             (
                 "U",
@@ -1668,6 +1787,11 @@ class TestTotalsAndComponents:
                     "S",
                 ),
                 "Test 20 - Zero Case 1",
+                # If target total > 0 and 
+                # components sum = 0 and amend total = TRUE: 
+                # No correction should be applied in this case. 
+                # A total only may be provided if the component 
+                # breakdown is unknown so would not want to remove true values. 
             ),
             (
                 "V",
@@ -1694,6 +1818,10 @@ class TestTotalsAndComponents:
                     "S",
                 ),
                 "Test 21 - Zero Case 2",
+            # If target total > 0 and components sum = 0 and 
+            # amend total = FALSE: In this case, the proportions 
+            # of the true components are unknown so the method 
+            # cannot apply a correction. 
             ),
             (
                 "W",
@@ -1725,6 +1853,12 @@ class TestTotalsAndComponents:
                     "M",
                 ),
                 "Test 22 - Zero Case 3",
+                # If target total = 0 and components sum > 0
+                # and amend total = TRUE: The total should be
+                # corrected if the difference observed is
+                # within the tolerances determined by the
+                # detection method. Else, the difference 
+                # should be flagged for manual checking.
             ),
             (
                 "X",
@@ -1751,6 +1885,11 @@ class TestTotalsAndComponents:
                     "C",
                 ),
                 "Test 23 - Zero Case 4 (where difference is within thresholds",
+                # If target total = 0 and components > 0 and amend total = FALSE. 
+                # Apply correction to override the components with zeros if the 
+                # difference observed is within the tolerances determined by the 
+                # detection method. Else, the difference should be flagged for 
+                # manual checking.
             ),
             (
                 "Y",
@@ -1782,6 +1921,11 @@ class TestTotalsAndComponents:
                     "M",
                 ),
                 "Test 24 - Zero Case 4 (where difference are not within the threshold)",
+                # If target total = 0 and components > 0 and amend total = FALSE. 
+                # Apply correction to override the components with zeros if the 
+                # difference observed is within the tolerances determined by the 
+                # detection method. Else, the difference should be flagged for 
+                # manual checking.
             ),
             (
                 "Z",
@@ -1813,6 +1957,9 @@ class TestTotalsAndComponents:
                     "T",
                 ),
                 "Test 25 - Amend Total True floating point components and floating point total",
+                # Test to check if the floating point 
+                # components sum to equal a floating total value
+                # when amend total is true.
             ),
             (
                 "AA",
@@ -1849,6 +1996,9 @@ class TestTotalsAndComponents:
                     "C",
                 ),
                 "Test 26 - Amend Total False floating point components and floating point total",
+                # Test to check if the floating point 
+                # components sum to equal a floating total value
+                # when amend total is false.
             ),
             (
                 "AB",
@@ -1875,6 +2025,7 @@ class TestTotalsAndComponents:
                     "M",
                 ),
                 "Test 27 - predictive is less than lower threshold",
+                # Test to check the margins for the thresholds of the lower limit
             ),
             (
                 "AC",
@@ -1901,6 +2052,7 @@ class TestTotalsAndComponents:
                     "T",
                 ),
                 "Test 28 - predictive is greater than lower threshold",
+                # Test to check the margins for the thresholds of the lower limit
             ),
             (
                 "AD",
@@ -1927,6 +2079,7 @@ class TestTotalsAndComponents:
                     "T",
                 ),
                 "Test 29 - predictive is equal to lower threshold and amend value is false",
+                # Test to check the margins for the thresholds of the lower limit
             ),
             (
                 "AE",
@@ -1953,6 +2106,7 @@ class TestTotalsAndComponents:
                     "T",
                 ),
                 "Test 30 - predictive is less than upper threshold",
+                # Test to check the margins for the thresholds of the upper limit
             ),
             (
                 "AF",
@@ -1979,6 +2133,7 @@ class TestTotalsAndComponents:
                     "T",
                 ),
                 "Test 31 - predictive is equal to than upper threshold",
+                # Test to check the margins for the thresholds of the upper limit
             ),
             (
                 "AG",
@@ -2005,6 +2160,7 @@ class TestTotalsAndComponents:
                     "M",
                 ),
                 "Test 32 - predictive is greater than upper threshold",
+                # Test to check the margins for the thresholds of the upper limit
             ),
             (
                 "AH",
@@ -2026,6 +2182,8 @@ class TestTotalsAndComponents:
                 None,
                 TACException("total is missing or not a number"),
                 "Test 33 - Invalid total value entered by user",
+                # Test to ensure a TACException is thrown when a
+                #user enters a None value for the total
             ),
             (
                 None,
@@ -2047,6 +2205,8 @@ class TestTotalsAndComponents:
                 0.1,
                 TACException("The identifier is not populated"),
                 "Test 34 - Missing identifier value",
+                # Test to ensure a TACException is thrown when a
+                #user enters a None value for the identifier
             ),
             (
                 "AI",
@@ -2068,6 +2228,8 @@ class TestTotalsAndComponents:
                 0.1,
                 ValueError("time data '' does not match format '%Y%m'"),
                 "Test 35 - Missing period value",
+                # Test to ensure a TACException is thrown when a
+                # user does not enter a value for the period
             ),
             (
                 "AJ",
@@ -2089,6 +2251,8 @@ class TestTotalsAndComponents:
                 0.1,
                 TACException("Amend total needs to be True or False"),
                 "Test 36 - Missing Amend total",
+                # Test to ensure a TACException is thrown when a
+                # user does not enter a value for the amend value
             ),
             (
                 "AP",
@@ -2120,6 +2284,8 @@ class TestTotalsAndComponents:
                     "C",
                 ),
                 "Test 42 - Testing precision value = 1",
+                # Testing the accuracy of the components returned 
+                # when the entered precision value is equal to 1
             ),
             (
                 "AQ",
@@ -2156,6 +2322,8 @@ class TestTotalsAndComponents:
                     "C",
                 ),
                 "Test 43 - Testing precision value = 28",
+                # Testing the accuracy of the components returned 
+                # when the entered precision value is equal to 28
             ),
             (
                 "AR",
@@ -2179,6 +2347,8 @@ class TestTotalsAndComponents:
                     "Precision range must be more than 0 and less than or equal to 28"
                 ),
                 "Test 44 - Testing precision value = 29",
+                # Testing the accuracy of the components returned 
+                # when the entered precision value is equal to 29
             ),
             (
                 "AS",
@@ -2202,6 +2372,8 @@ class TestTotalsAndComponents:
                     "Precision range must be more than 0 and less than or equal to 28"
                 ),
                 "Test 45 - Testing precision value = 0",
+                # Testing the accuracy of the components returned 
+                # when the entered precision value is equal to 0
             ),
             (
                 "AT",
@@ -2228,6 +2400,10 @@ class TestTotalsAndComponents:
                     "T",
                 ),
                 "Test 46 - Testing precision value = 2 with floating components sum to a floating total",
+                # Testing the accuracy of the components returned 
+                # when the entered precision value is equal to 2
+                # This test also checks floating components sum to a 
+                # floating total
             ),
             (
                 "AU",
@@ -2258,6 +2434,10 @@ class TestTotalsAndComponents:
                     "T",
                 ),
                 "Test 47 - Testing precision value = 1 with floating components sum to a floating total",
+                # Testing the accuracy of the components returned 
+                # when the entered precision value is equal to 1
+                # This test also checks floating components sum to a 
+                # floating total
             ),
             (
                 "AW",
@@ -2289,6 +2469,8 @@ class TestTotalsAndComponents:
                     "T",
                 ),
                 "Test 48 - Missing precision value (defaults to 28)",
+                # Testing the accuracy of the components returned 
+                # when the precision value is missing and so defaults to 28
             ),
             (
                 "AX",
@@ -2320,6 +2502,12 @@ class TestTotalsAndComponents:
                     "C",
                 ),
                 "Test 49 - Predictive total and predictive period are different to period and total",
+                # This test is to check the set_predictive_value() function
+                # The periodicity is 3
+                # The prior period would be calculated out to three months before the period 
+                # which does not match the predictive calculate_prior_period 
+                # Hence the check_auxiliary_value function is called and the predictive value 
+                # is replaced with the total value because the auxiliary is none
             ),
             (
                 "AY",
@@ -2335,7 +2523,7 @@ class TestTotalsAndComponents:
                 None,
                 28,
                 "202201",
-                0,
+                14,
                 95,
                 None,
                 0.1,
@@ -2351,10 +2539,14 @@ class TestTotalsAndComponents:
                     "C",
                 ),
                 "Test 50 - Use auxiliary when predictive is not specified",
+                # This test is to check the set_predictive_value() function
+                # The predictive value is none
+                # Hence the check_auxiliary_value function is called and the predictive value 
+                # is replaced with the auxiliary value
             ),
             (
                 "AZ",
-                "202301",
+                "202201",
                 90,
                 [
                     (90),
@@ -2365,14 +2557,14 @@ class TestTotalsAndComponents:
                 False,
                 None,
                 28,
-                "202201",
+                "202101",
                 3,
                 95,
                 None,
                 0.1,
                 (
                     "AZ",
-                    "202301",
+                    "202201",
                     5,
                     90,
                     110,
@@ -2382,10 +2574,17 @@ class TestTotalsAndComponents:
                     "C",
                 ),
                 "Test 51 - Use auxiliary when predictive is none and predictive period is not the prior period",
+                # This test is to check the set_predictive_value() function
+                # The predictive value is none
+                # The periodicity is 3
+                # The prior period would be calculated out to three months before the period 
+                # which does not match the predictive calculate_prior_period 
+                # Hence the check_auxiliary_value function is called and the predictive value 
+                # is replaced with the auxiliary
             ),
             (
                 "BA",
-                "202301",
+                "202501",
                 90,
                 [
                     (90),
@@ -2396,14 +2595,14 @@ class TestTotalsAndComponents:
                 False,
                 None,
                 28,
-                "202201",
-                3,
+                "202401",
+                6,
                 None,
                 None,
                 0.1,
                 (
                     "BA",
-                    "202301",
+                    "202501",
                     10,
                     90,
                     110,
@@ -2412,7 +2611,14 @@ class TestTotalsAndComponents:
                     [81, 0, 3.6, 5.4],
                     "C",
                 ),
-                "Test 52 - Use total when predictive and auxiliary is none",
+                "Test 52 - Use total when predictive and auxiliary is none",                
+                # This test is to check the set_predictive_value() function
+                # The periodicity is 6
+                # The prior period would be calculated out to 6 months before the period 
+                # The predictive value is none
+                # which does not match the predictive calculate_prior_period 
+                # Hence the check_auxiliary_value function is called and the predictive value 
+                # is replaced with the total value because the auxiliary is none
             ),
             (
                 "BB",
@@ -2428,7 +2634,7 @@ class TestTotalsAndComponents:
                 10817,
                 28,
                 "202201",
-                0,
+                13,
                 None,
                 11,
                 0.1,
@@ -2443,7 +2649,11 @@ class TestTotalsAndComponents:
                     [9201, 866, 632, 112],
                     "T",
                 ),
-                "Test 53 - Predictive total and prior period are different",
+                "Test 53 - Predictive total and prior period are different",                
+                # This test is to check the set_predictive_value() function
+                # The predictive exists but the predictive period
+                #  does not equal the prior
+                # Hence the function is applied and we use the total value as the predictive
             ),
             (
                 "BC",
@@ -2456,10 +2666,10 @@ class TestTotalsAndComponents:
                     (112),
                 ],
                 True,
-                None,
+                10,
                 28,
-                "202301",
-                0,
+                "202212",
+                10,
                 10817,
                 11,
                 0.1,
@@ -2474,11 +2684,18 @@ class TestTotalsAndComponents:
                     [9201, 866, 632, 112],
                     "T",
                 ),
-                "Test 54 - Auxiliary is new predictive when predictive total and prior period are different",
+                "Test 54 - Auxiliary is new predictive when predictive and prior period are different",              
+                # This test is to check the set_predictive_value() function
+                # The periodicity is 10
+                # The prior period would be calculated out to 10 months before the period 
+                # The predictive value is not none
+                # which does not match the predictive calculate_prior_period 
+                # Hence the check_auxiliary_value function is called and the predictive value 
+                # is replaced with the auxiliary value
             ),
             (
                 "BD",
-                "202301",
+                "202302",
                 10817,
                 [
                     (9201),
@@ -2487,7 +2704,7 @@ class TestTotalsAndComponents:
                     (112),
                 ],
                 True,
-                None,
+                60,
                 28,
                 "202301",
                 3,
@@ -2496,7 +2713,7 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "BD",
-                    "202301",
+                    "202302",
                     6,
                     9729.9,
                     11892.1,
@@ -2505,11 +2722,18 @@ class TestTotalsAndComponents:
                     [9201, 866, 632, 112],
                     "T",
                 ),
-                "Test 55 - Use auxiliary when predictive is none and predictive period != the prior period",
+                "Test 55 - Use auxiliary when predictive exists and predictive period != the prior period",              
+                # This test is to check the set_predictive_value() function
+                # The periodicity is 3
+                # The prior period would be calculated out to 3 months before the period 
+                # The predictive value is none
+                # which does not match the predictive calculate_prior_period 
+                # Hence the check_auxiliary_value function is called and the predictive value 
+                # is replaced with the auxiliary value
             ),
             (
                 "BE",
-                "202301",
+                "202212",
                 10817,
                 [
                     (9201),
@@ -2518,25 +2742,30 @@ class TestTotalsAndComponents:
                     (112),
                 ],
                 True,
-                None,
+                60,
                 28,
-                "202301",
-                0,
+                "202210",
+                2,
                 None,
                 11,
                 0.1,
                 (
                     "BE",
-                    "202301",
-                    6,
+                    "202212",
+                    10751.0,
                     9729.9,
                     11892.1,
                     28,
-                    10811,
+                    10817,
                     [9201, 866, 632, 112],
                     "T",
                 ),
-                "Test 56 - Predictive and prior periods match and total is new predictive",
+                "Test 56 - Predictive and prior periods match and total is new predictive",              
+                # This test is to check the set_predictive_value() function
+                # The predictive is None and the periodicity is 2
+                # The prior period matches the predictive period
+                # we apply the check_auxiliary_value() function
+                # and the predictive does not change
             ),
             (
                 "BF",
@@ -2567,7 +2796,12 @@ class TestTotalsAndComponents:
                     [81, 0, 3.6, 5.4],
                     "C",
                 ),
-                "Test 57 - Predictive exists and periodicity = 1, expect periods to match",
+                "Test 57 - Predictive exists and periodicity = 1, expect periods to match",              
+                # This test is to check the set_predictive_value() function
+                # The periodicity is 1
+                # The prior period would be calculated out to 1 months before the period 
+                # The predictive period matches the predictive calculate_prior_period 
+                # Hence the predictive is not changed
             ),
             (
                 "BG",
@@ -2598,7 +2832,14 @@ class TestTotalsAndComponents:
                     [81, 0, 3.6, 5.4],
                     "C",
                 ),
-                "Test 58 - Predictive exists and periodicity = 2, expect periods to match",
+                "Test 58 - Predictive exists and periodicity = 2, expect periods to match",              
+                # This test is to check the set_predictive_value() function
+                # The periodicity is 2
+                # The prior period would be calculated out to 2 months before the period 
+                # The predictive value is not none
+                # which does match the predictive calculate_prior_period 
+                # Hence the check_auxiliary_value function is not called and the predictive value 
+                # not changed
             ),
             (
                 "BH",
@@ -2629,7 +2870,14 @@ class TestTotalsAndComponents:
                     [81, 0, 3.6, 5.4],
                     "C",
                 ),
-                "Test 59 - Predictive exists and periodicity = 3, expect periods to match",
+                "Test 59 - Predictive exists and periodicity = 3, expect periods to match",         
+                # This test is to check the set_predictive_value() function
+                # The periodicity is 3
+                # The prior period would be calculated out to 3 months before the period 
+                # The predictive value is not none
+                # which does match the predictive calculate_prior_period 
+                # Hence the check_auxiliary_value function is not called and the predictive value 
+                # not changed
             ),
             (
                 "BI",
@@ -2660,7 +2908,14 @@ class TestTotalsAndComponents:
                     [81, 0, 3.6, 5.4],
                     "C",
                 ),
-                "Test 60 - Predictive exists and periodicity = 4, expect periods to match",
+                "Test 60 - Predictive exists and periodicity = 4, expect periods to match",         
+                # This test is to check the set_predictive_value() function
+                # The periodicity is 4
+                # The prior period would be calculated out to 4 months before the period 
+                # The predictive value is not none
+                # which does match the predictive calculate_prior_period 
+                # Hence the check_auxiliary_value function is not called and the predictive value 
+                # not changed
             ),
             (
                 "BJ",
@@ -2691,7 +2946,14 @@ class TestTotalsAndComponents:
                     [81, 0, 3.6, 5.4],
                     "C",
                 ),
-                "Test 61 - Predictive exists and periodicity = 6, expect periods to match",
+                "Test 61 - Predictive exists and periodicity = 6, expect periods to match",         
+                # This test is to check the set_predictive_value() function
+                # The periodicity is 6
+                # The prior period would be calculated out to 6 months before the period 
+                # The predictive value is not none
+                # which does match the predictive calculate_prior_period 
+                # Hence the check_auxiliary_value function is not called and the predictive value 
+                # not changed
             ),
             (
                 "BK",
@@ -2722,7 +2984,14 @@ class TestTotalsAndComponents:
                     [81, 0, 3.6, 5.4],
                     "C",
                 ),
-                "Test 62 - Predictive exists and periodicity = 12, expect periods to match",
+                "Test 62 - Predictive exists and periodicity = 12, expect periods to match",         
+                # This test is to check the set_predictive_value() function
+                # The periodicity is 12
+                # The prior period would be calculated out to 12 months before the period 
+                # The predictive value is not none
+                # which does match the predictive calculate_prior_period 
+                # Hence the check_auxiliary_value function is not called and the predictive value 
+                # not changed
             ),
             (
                 "BL",
@@ -2753,7 +3022,14 @@ class TestTotalsAndComponents:
                     [81, 0, 3.6, 5.4],
                     "C",
                 ),
-                "Test 63 - Predictive exists and periodicity = 18, expect periods to match",
+                "Test 63 - Predictive exists and periodicity = 18, expect periods to match",         
+                # This test is to check the set_predictive_value() function
+                # The periodicity is 18
+                # The prior period would be calculated out to 18 months before the period 
+                # The predictive value is not none
+                # which does match the predictive calculate_prior_period 
+                # Hence the check_auxiliary_value function is not called and the predictive value 
+                # not changed
             ),
             (
                 "BM",
@@ -2784,7 +3060,14 @@ class TestTotalsAndComponents:
                     [81, 0, 3.6, 5.4],
                     "C",
                 ),
-                "Test 64 - Predictive exists and periodicity = 24, expect periods to match",
+                "Test 64 - Predictive exists and periodicity = 24, expect periods to match",         
+                # This test is to check the set_predictive_value() function
+                # The periodicity is 24
+                # The prior period would be calculated out to 24 months before the period 
+                # The predictive value is not none
+                # which does match the predictive calculate_prior_period 
+                # Hence the check_auxiliary_value function is not called and the predictive value 
+                # not changed
             ),
             (
                 "BN",
@@ -2815,7 +3098,14 @@ class TestTotalsAndComponents:
                     [81, 0, 3.6, 5.4],
                     "C",
                 ),
-                "Test 65 - Predictive exists and periodicity = 36, expect periods to match",
+                "Test 65 - Predictive exists and periodicity = 36, expect periods to match",         
+                # This test is to check the set_predictive_value() function
+                # The periodicity is 36
+                # The prior period would be calculated out to 36 months before the period 
+                # The predictive value is not none
+                # which does match the predictive calculate_prior_period 
+                # Hence the check_auxiliary_value function is not called and the predictive value 
+                # not changed
             ),
             (
                 "BO",
@@ -2846,7 +3136,14 @@ class TestTotalsAndComponents:
                     [81, 0, 3.6, 5.4],
                     "C",
                 ),
-                "Test 66 - Predictive exists and periodicity = 48, expect periods to match",
+                "Test 66 - Predictive exists and periodicity = 48, expect periods to match",         
+                # This test is to check the set_predictive_value() function
+                # The periodicity is 48
+                # The prior period would be calculated out to 48 months before the period 
+                # The predictive value is not none
+                # which does match the predictive calculate_prior_period 
+                # Hence the check_auxiliary_value function is not called and the predictive value 
+                # not changed
             ),
             (
                 "BP",
@@ -2877,7 +3174,14 @@ class TestTotalsAndComponents:
                     [81, 0, 3.6, 5.4],
                     "C",
                 ),
-                "Test 67 - Predictive exists and periodicity = 60, expect periods to match",
+                "Test 67 - Predictive exists and periodicity = 60, expect periods to match",         
+                # This test is to check the set_predictive_value() function
+                # The periodicity is 60
+                # The prior period would be calculated out to 60 months before the period 
+                # The predictive value is not none
+                # which does match the predictive calculate_prior_period 
+                # Hence the check_auxiliary_value function is not called and the predictive value 
+                # not changed
             ),
             (
                 "BQ",
@@ -2908,7 +3212,14 @@ class TestTotalsAndComponents:
                     [81, 0, 3.6, 5.4],
                     "C",
                 ),
-                "Test 68 - Predictive period is None so auxiliary value is used.",
+                "Test 68 - Predictive period is None so auxiliary value is used.",         
+                # This test is to check the set_predictive_value() function
+                # The periodicity is 60
+                # The prior period would be calculated out to 60 months before the period 
+                # The predictive value is not none
+                # which does match the predictive calculate_prior_period 
+                # Hence the check_auxiliary_value function is called and the predictive value 
+                # is replaced by the auxiliary value
             ),
         ],
     )
