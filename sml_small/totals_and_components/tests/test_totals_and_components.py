@@ -7,12 +7,11 @@ from sml_small.totals_and_components.totals_and_components import (ComponentPair
                                                                    check_absolute_difference_threshold,
                                                                    check_auxiliary_value,
                                                                    check_percentage_difference_threshold,
-                                                                   check_predictive_value,
                                                                    check_sum_components_predictive, check_zero_errors,
                                                                    correct_components, correct_total,
                                                                    determine_error_detection, error_correction,
-                                                                   sum_components, totals_and_components,
-                                                                   validate_input)
+                                                                   set_predictive_value, sum_components,
+                                                                   totals_and_components, validate_input)
 
 EXCEPTION_FAIL_MESSAGE = (
     "{test_id} : Expected no exception, but got {exception_type}: {exception_msg}"
@@ -66,6 +65,7 @@ class TestValidateInput:
                     1,
                 ),
                 "Test 1: Correct values test",
+                # Test to ensure we have a happy path walkthrough
             ),
             (
                 "B",
@@ -101,6 +101,9 @@ class TestValidateInput:
                     1,
                 ),
                 "Test 2: None value for percentage difference threshold",
+                # Test to see what happens when a none value is entered by
+                # the user for the percentage difference threshold
+                # this will not trigger an error exception
             ),
             (
                 "C",
@@ -136,6 +139,9 @@ class TestValidateInput:
                     1,
                 ),
                 "Test 3: None value for absolute difference threshold",
+                # Test to see what happens when a none value is entered by
+                # the user for the absolute difference threshold
+                # this will not trigger an error exception
             ),
             (
                 "D",
@@ -171,6 +177,9 @@ class TestValidateInput:
                     1,
                 ),
                 "Test 4: Predictive is missing so method carries on",
+                # Test to see what happens when a none value is entered by
+                # the user for the predictive difference threshold
+                # this will not trigger an error exception
             ),
             (
                 "E",
@@ -187,6 +196,8 @@ class TestValidateInput:
                 28,
                 ValueError,
                 "Test 5: Empty component list",
+                # Test to see what happens when no component list is provided
+                # we expect the appropriate value error to be raised.
             ),
             (
                 "F",
@@ -356,6 +367,48 @@ class TestValidateInput:
                 ValueError,
                 "Test 13: None value for amend value",
             ),
+            (
+                "N",
+                None,
+                [
+                    ComponentPair(original_value=1, final_value=None),
+                    ComponentPair(original_value=2, final_value=None),
+                    ComponentPair(original_value=3, final_value=None),
+                    ComponentPair(original_value=4, final_value=None),
+                ],
+                True,
+                "202203",
+                "202203",
+                1,
+                102.0,
+                89.0,
+                11,
+                0.1,
+                28,
+                ValueError,
+                "Test 14: None value for total",
+            ),
+            (
+                "O",
+                100.0,
+                [
+                    ComponentPair(original_value=1, final_value=None),
+                    ComponentPair(original_value=2, final_value=None),
+                    ComponentPair(original_value=3, final_value=None),
+                    ComponentPair(original_value=4, final_value=None),
+                ],
+                True,
+                None,
+                "202203",
+                1,
+                102.0,
+                89.0,
+                11,
+                0.1,
+                28,
+                ValueError,
+                "Test 15: None value for period",
+            ),
         ],
     )
     def test_validate_input(
@@ -420,7 +473,7 @@ class TestValidateInput:
             assert exc_info.type == expected_result
 
 
-class TestCheckPredictiveValue:
+class TestSetPredictiveValue:
     @pytest.mark.parametrize(
         "predictive, auxiliary, total, predictive_period, periodicity, period, expected_result, test_id",
         [
@@ -428,32 +481,32 @@ class TestCheckPredictiveValue:
                 100.0,
                 None,
                 10,
-                "202203",
-                0,
-                "202203",
-                (100.0),
+                "202301",
+                24,
+                "202101",
+                10.0,
                 "Test 1: Predictive Only",
             ),
-            (None, 50.0, 10, "202203", 0, "202203", (50.0), "Test 2: Auxiliary Only"),
+            (None, 50.0, 10, "202207", 2, "202205", (50.0), "Test 2: Auxiliary Only"),
             (
                 None,
                 None,
                 10,
-                "202203",
-                0,
-                "202203",
-                (10),
+                "202201",
+                12,
+                "202101",
+                10,
                 "Test 3: Predictive and auxiliary are None",
             ),
             (
                 100,
                 90,
                 10,
-                "202203",
-                2,
-                "202203",
-                (90),
-                "Test 4: Predictive and auxiliary exists but period does not match prior period",
+                "202307",
+                1,
+                "202305",
+                90,
+                "Test 4: Predictive and auxiliary exists but predictive period does not match prior period",
             ),
             (
                 100,
@@ -461,14 +514,24 @@ class TestCheckPredictiveValue:
                 10,
                 "202203",
                 2,
-                "202203",
-                (10),
+                "202107",
+                10,
                 "Test 5: Predictive exists but period does not match prior period",
             ),
             (150.0, 50.0, 10, "202203", 0, "202203", (150.0), "Test 6: All Inputs"),
+            (
+                100.0,
+                None,
+                10,
+                "202305",
+                13,
+                "202202",
+                10.0,
+                "Test 7: Predictive and prior periods do not match and auxiliary is None so total is returned as predictive",
+            ),
         ],
     )
-    def test_check_predictive_value(
+    def test_set_predictive_value(
         self,
         predictive,
         auxiliary,
@@ -480,7 +543,7 @@ class TestCheckPredictiveValue:
         test_id,
     ):
         try:
-            result = check_predictive_value(
+            result = set_predictive_value(
                 predictive=predictive,
                 auxiliary=auxiliary,
                 total=total,
@@ -506,17 +569,17 @@ class TestCalculatePriorPeriod:
     @pytest.mark.parametrize(
         "period, periodicity, expected_result, test_id",
         [
-            ("202203", 0, ("202203"), "Test 1: Periodicity is 0"),
-            ("202203", 1, ("202202"), "Test 2: Periodicity is 1"),
-            ("202203", 3, ("202112"), "Test 3: Periodicity is 3"),
-            ("202203", 4, ("202111"), "Test 4: Periodicity is 4"),
-            ("202203", 6, ("202109"), "Test 5: Periodicity is 6"),
-            ("202203", 12, ("202103"), "Test 6: Periodicity is 12"),
-            ("202203", 18, ("202009"), "Test 7: Periodicity is 18"),
-            ("202203", 24, ("202003"), "Test 8: Periodicity is 24"),
-            ("202203", 36, ("201903"), "Test 9: Periodicity is 36"),
-            ("202203", 48, ("201803"), "Test 10: Periodicity is 48"),
-            ("202203", 60, ("201703"), "Test 11: Periodicity is 60"),
+            ("202203", 0, "202203", "Test 1: Periodicity is 0"),
+            ("202203", 1, "202202", "Test 2: Periodicity is 1"),
+            ("202203", 3, "202112", "Test 3: Periodicity is 3"),
+            ("202203", 4, "202111", "Test 4: Periodicity is 4"),
+            ("202203", 6, "202109", "Test 5: Periodicity is 6"),
+            ("202203", 12, "202103", "Test 6: Periodicity is 12"),
+            ("202203", 18, "202009", "Test 7: Periodicity is 18"),
+            ("202203", 24, "202003", "Test 8: Periodicity is 24"),
+            ("202203", 36, "201903", "Test 9: Periodicity is 36"),
+            ("202203", 48, "201803", "Test 10: Periodicity is 48"),
+            ("202203", 60, "201703", "Test 11: Periodicity is 60"),
         ],
     )
     def test_calculate_prior_period(
@@ -542,8 +605,8 @@ class TestCheckAuxiliaryValue:
     @pytest.mark.parametrize(
         "auxiliary, total, expected_result, test_id",
         [
-            (None, 10, (10), "Test 1: Auxiliary is None"),
-            (50.0, 10, (50.0), "Test 2: Auxiliary is not None"),
+            (None, 10, 10, "Test 1: Auxiliary is None"),
+            (50.0, 10, 50.0, "Test 2: Auxiliary is not None"),
         ],
     )
     def test_check_auxiliary_value(self, auxiliary, total, expected_result, test_id):
@@ -2256,7 +2319,7 @@ class TestTotalsAndComponents:
                     [81, 0, 3.6, 5.4],
                     "C",
                 ),
-                "Test 49 - Predictive total and period are different to period and total",
+                "Test 49 - Predictive total and predictive period are different to period and total",
             ),
             (
                 "AY",
@@ -2380,7 +2443,7 @@ class TestTotalsAndComponents:
                     [9201, 866, 632, 112],
                     "T",
                 ),
-                "Test 53 - Predictive total and period are different to period and total",
+                "Test 53 - Predictive total and prior period are different",
             ),
             (
                 "BC",
@@ -2411,7 +2474,7 @@ class TestTotalsAndComponents:
                     [9201, 866, 632, 112],
                     "T",
                 ),
-                "Test 54 - Use auxiliary when predictive is not specified",
+                "Test 54 - Auxiliary is new predictive when predictive total and prior period are different",
             ),
             (
                 "BD",
@@ -2442,7 +2505,7 @@ class TestTotalsAndComponents:
                     [9201, 866, 632, 112],
                     "T",
                 ),
-                "Test 55 - Use auxiliary when predictive is none and predictive period is not the prior period",
+                "Test 55 - Use auxiliary when predictive is none and predictive period != the prior period",
             ),
             (
                 "BE",
@@ -2473,7 +2536,7 @@ class TestTotalsAndComponents:
                     [9201, 866, 632, 112],
                     "T",
                 ),
-                "Test 56 - Use total when predictive and auxiliary is none",
+                "Test 56 - Predictive and prior periods match and total is new predictive",
             ),
             (
                 "BF",
@@ -2504,7 +2567,7 @@ class TestTotalsAndComponents:
                     [81, 0, 3.6, 5.4],
                     "C",
                 ),
-                "Test 57 - Predictive exists and periodicity = 1, expect periods to match and total to be final total",
+                "Test 57 - Predictive exists and periodicity = 1, expect periods to match",
             ),
             (
                 "BG",
@@ -2517,11 +2580,11 @@ class TestTotalsAndComponents:
                     (6),
                 ],
                 False,
-                None,
+                95,
                 28,
                 "202204",
                 2,
-                95,
+                None,
                 None,
                 0.1,
                 (
@@ -2535,7 +2598,7 @@ class TestTotalsAndComponents:
                     [81, 0, 3.6, 5.4],
                     "C",
                 ),
-                "Test 58 - Predictive exists and periodicity = 2, expect periods to not match and total is auxiliary",
+                "Test 58 - Predictive exists and periodicity = 2, expect periods to match",
             ),
             (
                 "BH",
@@ -2566,7 +2629,7 @@ class TestTotalsAndComponents:
                     [81, 0, 3.6, 5.4],
                     "C",
                 ),
-                "Test 59 - Predictive exists and periodicity = 3, expect periods to match and total to be final total",
+                "Test 59 - Predictive exists and periodicity = 3, expect periods to match",
             ),
             (
                 "BI",
@@ -2597,7 +2660,7 @@ class TestTotalsAndComponents:
                     [81, 0, 3.6, 5.4],
                     "C",
                 ),
-                "Test 60 - Predictive exists and periodicity = 4, expect periods to match and total to be final total",
+                "Test 60 - Predictive exists and periodicity = 4, expect periods to match",
             ),
             (
                 "BJ",
@@ -2628,7 +2691,7 @@ class TestTotalsAndComponents:
                     [81, 0, 3.6, 5.4],
                     "C",
                 ),
-                "Test 61 - Predictive exists and periodicity = 6, expect periods to match and total to be final total",
+                "Test 61 - Predictive exists and periodicity = 6, expect periods to match",
             ),
             (
                 "BK",
@@ -2659,7 +2722,7 @@ class TestTotalsAndComponents:
                     [81, 0, 3.6, 5.4],
                     "C",
                 ),
-                "Test 62 - Predictive exists and periodicity = 12, expect periods to match and total to be final total",
+                "Test 62 - Predictive exists and periodicity = 12, expect periods to match",
             ),
             (
                 "BL",
@@ -2690,7 +2753,7 @@ class TestTotalsAndComponents:
                     [81, 0, 3.6, 5.4],
                     "C",
                 ),
-                "Test 63 - Predictive exists and periodicity = 18, expect periods to match and total to be final total",
+                "Test 63 - Predictive exists and periodicity = 18, expect periods to match",
             ),
             (
                 "BM",
@@ -2721,7 +2784,7 @@ class TestTotalsAndComponents:
                     [81, 0, 3.6, 5.4],
                     "C",
                 ),
-                "Test 64 - Predictive exists and periodicity = 24, expect periods to match and total to be final total",
+                "Test 64 - Predictive exists and periodicity = 24, expect periods to match",
             ),
             (
                 "BN",
@@ -2752,7 +2815,7 @@ class TestTotalsAndComponents:
                     [81, 0, 3.6, 5.4],
                     "C",
                 ),
-                "Test 65 - Predictive exists and periodicity = 36, expect periods to match and total to be final total",
+                "Test 65 - Predictive exists and periodicity = 36, expect periods to match",
             ),
             (
                 "BO",
@@ -2783,7 +2846,7 @@ class TestTotalsAndComponents:
                     [81, 0, 3.6, 5.4],
                     "C",
                 ),
-                "Test 66 - Predictive exists and periodicity = 48, expect periods to match and total to be final total",
+                "Test 66 - Predictive exists and periodicity = 48, expect periods to match",
             ),
             (
                 "BP",
@@ -2814,7 +2877,38 @@ class TestTotalsAndComponents:
                     [81, 0, 3.6, 5.4],
                     "C",
                 ),
-                "Test 67 - Predictive exists and periodicity = 60, expect periods to match and total to be final total",
+                "Test 67 - Predictive exists and periodicity = 60, expect periods to match",
+            ),
+            (
+                "BQ",
+                "202206",
+                90,
+                [
+                    (90),
+                    (0),
+                    (4),
+                    (6),
+                ],
+                False,
+                None,
+                28,
+                None,
+                60,
+                None,
+                None,
+                0.1,
+                (
+                    "BQ",
+                    "202206",
+                    10,
+                    90,
+                    110,
+                    28,
+                    90,
+                    [81, 0, 3.6, 5.4],
+                    "C",
+                ),
+                "Test 68 - Predictive period is None so auxiliary value is used.",
             ),
         ],
     )

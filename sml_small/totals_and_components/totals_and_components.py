@@ -261,6 +261,8 @@ def validate_input(
     if not identifier:
         raise ValueError("The identifier is not populated")
     str(identifier)
+    if period is None:
+        raise ValueError("The period is not populated")
     if period:
         try:
             datetime.datetime.strptime(period, "%Y%m")
@@ -375,18 +377,18 @@ def is_number(value) -> bool:
     return True
 
 
-def check_predictive_value(
+def set_predictive_value(
     predictive: Optional[float],
     auxiliary: Optional[float],
     total: float,
     predictive_period: str,
     periodicity: int,
     period: str,
-) -> tuple[float | None]:
+) -> float | None:
     """
     Checks if predictive and auxiliary values are input, when predictive is None and auxiliary
     is input set predictive to auxiliary, when both are None we use the total.
-    If however, predictive exist we must use this unless the predictive period
+    If however, predictive exists we must use this value unless the predictive period
     is not equal to the prior period
 
     :param predictive: The predictive value, typically the total for the current period.
@@ -406,19 +408,14 @@ def check_predictive_value(
     :return: returns the prior period in the same format as the current
     :rtype: str
     """
-    if predictive is None:
-        if auxiliary is None:
-            predictive = total
-        else:
-            predictive = auxiliary
-    else:
-        prior_period = calculate_prior_period(period, periodicity)
-        print(prior_period)
-        if predictive_period != prior_period:
-            predictive = check_auxiliary_value(
+    prior_period = calculate_prior_period(period, periodicity)
+
+    if (predictive is None) or (predictive_period != prior_period):
+        predictive = check_auxiliary_value(
                 auxiliary,
                 total,
             )
+
     return predictive
 
 
@@ -444,7 +441,7 @@ def calculate_prior_period(period, periodicity) -> str:
 def check_auxiliary_value(
     auxiliary: Optional[float],
     total: float,
-) -> tuple[float | None]:
+) -> float | None:
     """
     Checks if predictive and auxiliary values are input, when predictive is None and auxiliary
     is input set predictive to auxiliary
@@ -951,7 +948,7 @@ def totals_and_components(
             percentage_difference_threshold,
         )
         #  Ensure either the predictive or auxiliary parameter specified
-        predictive = check_predictive_value(
+        predictive = set_predictive_value(
             input_parameters[InputParameters.PREDICTIVE.value],
             input_parameters[InputParameters.AUXILIARY.value],
             input_parameters[InputParameters.TOTAL.value],
