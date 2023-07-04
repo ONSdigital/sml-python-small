@@ -412,9 +412,9 @@ def set_predictive_value(
 
     if (predictive is None) or (predictive and predictive_period != prior_period):
         predictive = check_auxiliary_value(
-                auxiliary,
-                total,
-            )
+            auxiliary,
+            total,
+        )
 
     return predictive
 
