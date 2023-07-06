@@ -31,8 +31,7 @@ class InputParameters(Enum):
     ABSOLUTE_DIFFERENCE_THRESHOLD = 4
     PERCENTAGE_DIFFERENCE_THRESHOLD = 5
     PRECISION = 6
-    PERIODICITY = 7
-
+    PERIOD_ONSET = 7
 
 class TccMarker(Enum):
     """
@@ -107,7 +106,7 @@ class TotalsAndComponentsOutput:
     ] = ""  # unique identifier, e.g Business Reporting Unit SG-should this be optional?
     period: [str] = ""  # not used in initial PoC always assume current period
     predictive_period: [str] = ""  # used for determining calculation values
-    periodicity: Optional[int]
+    period_onset: Optional[int]
     absolute_difference: Optional[float]  # this is the absolute value showing the
     # difference between the components input and the predictive total
     low_percent_threshold: Optional[
@@ -157,7 +156,7 @@ class TotalsAndComponentsOutput:
         print(f"High Percent Threshold: {self.high_percent_threshold}")
         print(f"Precision: {self.precision}")
         print(f"Predictive Period: {self.predictive_period}")
-        print(f"Periodicity: {self.periodicity}")
+        print(f"period_onset: {self.period_onset}")
         print(f"Final Total: {self.final_total}")
         print(f"Final Value: {self.final_components}")
         print(f"TCC Marker: {self.tcc_marker}")
@@ -202,7 +201,7 @@ def validate_input(
     amend_total: bool,
     period: Optional[str],
     predictive_period: Optional[str],
-    periodicity: Optional[int],
+    period_onset: Optional[int],
     predictive: Optional[float],
     precision: Optional[int],
     auxiliary: Optional[float],
@@ -228,8 +227,8 @@ def validate_input(
     :type identifier: str
     :param period: Not used in initial Proof of Concept (PoC). Assumes current period.
     :type period Optional(str)
-    :param periodicity: Value used to calculate the prior period
-    :type periodicity Optional(int)
+    :param period_onset: Value used to calculate the prior period
+    :type period_onset Optional(int)
     :param predictive_period: The predictive period is the period cycle.
     :type predictive_period Optional(str)
     :param total: Target period total, numeric – nulls allowed
@@ -324,8 +323,8 @@ def validate_input(
                 "Precision range must be more than 0 and less than or equal to 28"
             )
         validate_number("Precision", precision)
-    if periodicity:
-        validate_number("Periodicity", periodicity)
+    if period_onset:
+        validate_number("period_onset", period_onset)
 
     return (
         total,
@@ -335,7 +334,7 @@ def validate_input(
         absolute_difference_threshold,
         percentage_difference_threshold,
         precision,
-        periodicity,
+        period_onset,
     )
 
 
@@ -382,7 +381,7 @@ def set_predictive_value(
     auxiliary: Optional[float],
     total: float,
     predictive_period: str,
-    periodicity: int,
+    period_onset: int,
     period: str,
 ) -> float | None:
     """
@@ -402,13 +401,13 @@ def set_predictive_value(
     :rtype Tcc_Marker: TccMarker
     :param period: The value of the current survey period
     :type period: str
-    :param periodicity: The number of months to be subtracted
+    :param period_onset: The number of months to be subtracted
                         from the period
-    :type periodicity: int
+    :type period_onset: int
     :return: returns the prior period in the same format as the current
     :rtype: str
     """
-    prior_period = calculate_prior_period(period, periodicity)
+    prior_period = calculate_prior_period(period, period_onset)
 
     if (predictive is None) or (predictive and predictive_period != prior_period):
         predictive = check_auxiliary_value(
@@ -419,21 +418,21 @@ def set_predictive_value(
     return predictive
 
 
-def calculate_prior_period(period, periodicity) -> str:
+def calculate_prior_period(period, period_onset) -> str:
     """
     calculate_prior_period This will calculate the prior survey period
-    by taking the current period and subtracting the periodicity
+    by taking the current period and subtracting the period_onset
 
     :param period: The value of the current survey period
     :type period: str
-    :param periodicity: The number of months to be subtracted
+    :param period_onset: The number of months to be subtracted
                         from the period
-    :type periodicity: int
+    :type period_onset: int
     :return: returns the prior period in the same format as the current
     :rtype: str
     """
     period = datetime.datetime.strptime(period, "%Y%m")
-    prior_period = period - relativedelta(months=periodicity)
+    prior_period = period - relativedelta(months=period_onset)
     prior_period_str = prior_period.strftime("%Y%m")
     return prior_period_str
 
@@ -826,7 +825,7 @@ def totals_and_components(
     predictive: Optional[float],
     precision: Optional[int],
     predictive_period: Optional[str],
-    periodicity: Optional[int],
+    period_onset: Optional[int],
     auxiliary: Optional[float],
     absolute_difference_threshold: Optional[float],
     percentage_difference_threshold: Optional[float],
@@ -856,8 +855,8 @@ def totals_and_components(
     :type period: Optional[str]
     :param predictive_period: The predictive period is the period cycle.
     :type predictive_period: float
-    :param periodicity: Value used to calculate the prior period
-    :type periodicity Optional(int)
+    :param period_onset: Value used to calculate the prior period
+    :type period_onset Optional(int)
     :param total: Original value returned for the total.
     :type total: float
     :param components: List of components that should equal the total or predictive value.
@@ -916,7 +915,7 @@ def totals_and_components(
         predictive=predictive,
         precision=precision,
         predictive_period=predictive_period,
-        periodicity=periodicity,
+        period_onset=period_onset,
         auxiliary=auxiliary,
         absolute_difference_threshold=absolute_difference_threshold,
         percentage_difference_threshold=percentage_difference_threshold,
@@ -926,7 +925,7 @@ def totals_and_components(
             "identifier": identifier,
             "period": period,
             "predictive_period": predictive_period,
-            "periodicity": periodicity,
+            "period_onset": period_onset,
             "final_total": total,
             "final_components": components,
             "absolute_difference": None,
@@ -940,7 +939,7 @@ def totals_and_components(
             amend_total,
             period,
             predictive_period,
-            periodicity,
+            period_onset,
             predictive,
             precision,
             auxiliary,
@@ -953,7 +952,7 @@ def totals_and_components(
             input_parameters[InputParameters.AUXILIARY.value],
             input_parameters[InputParameters.TOTAL.value],
             predictive_period,
-            periodicity,
+            period_onset,
             period,
         )
 

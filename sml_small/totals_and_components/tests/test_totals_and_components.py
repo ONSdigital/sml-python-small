@@ -27,7 +27,7 @@ class NoString:
 
 class TestValidateInput:
     @pytest.mark.parametrize(
-        "identifier, total, components, amend_total, period, predictive_period, periodicity, predictive, "
+        "identifier, total, components, amend_total, period, predictive_period, period_onset, predictive, "
         "auxiliary, absolute_difference_threshold, "
         "percentage_difference_threshold, precision, expected_result, test_id",
         [
@@ -448,7 +448,7 @@ class TestValidateInput:
         amend_total,
         period,
         predictive_period,
-        periodicity,
+        period_onset,
         predictive,
         auxiliary,
         absolute_difference_threshold,
@@ -467,7 +467,7 @@ class TestValidateInput:
                     predictive=predictive,
                     period=period,
                     predictive_period=predictive_period,
-                    periodicity=periodicity,
+                    period_onset=period_onset,
                     auxiliary=auxiliary,
                     absolute_difference_threshold=absolute_difference_threshold,
                     percentage_difference_threshold=percentage_difference_threshold,
@@ -492,7 +492,7 @@ class TestValidateInput:
                     predictive=predictive,
                     period=period,
                     predictive_period=predictive_period,
-                    periodicity=periodicity,
+                    period_onset=period_onset,
                     auxiliary=auxiliary,
                     absolute_difference_threshold=absolute_difference_threshold,
                     percentage_difference_threshold=percentage_difference_threshold,
@@ -504,7 +504,7 @@ class TestValidateInput:
 
 class TestSetPredictiveValue:
     @pytest.mark.parametrize(
-        "predictive, auxiliary, total, predictive_period, periodicity, period, expected_result, test_id",
+        "predictive, auxiliary, total, predictive_period, period_onset, period, expected_result, test_id",
         [
             (
                 100.0,
@@ -611,7 +611,7 @@ class TestSetPredictiveValue:
         auxiliary,
         total,
         predictive_period,
-        periodicity,
+        period_onset,
         period,
         expected_result,
         test_id,
@@ -622,7 +622,7 @@ class TestSetPredictiveValue:
                 auxiliary=auxiliary,
                 total=total,
                 predictive_period=predictive_period,
-                periodicity=periodicity,
+                period_onset=period_onset,
                 period=period,
             )
             assert (
@@ -638,29 +638,29 @@ class TestSetPredictiveValue:
             )
 
 
-# Class to check if periodicity effects the predictive period to give the prior period
+# Class to check if period_onset effects the predictive period to give the prior period
 class TestCalculatePriorPeriod:
     @pytest.mark.parametrize(
-        "period, periodicity, expected_result, test_id",
+        "period, period_onset, expected_result, test_id",
         [
-            ("202203", 0, "202203", "Test 1: Periodicity is 0"),
-            ("202103", 1, "202102", "Test 2: Periodicity is 1"),
-            ("201903", 3, "201812", "Test 3: Periodicity is 3"),
-            ("202203", 4, "202111", "Test 4: Periodicity is 4"),
-            ("202004", 6, "201910", "Test 5: Periodicity is 6"),
-            ("201903", 12, "201803", "Test 6: Periodicity is 12"),
-            ("202203", 18, "202009", "Test 7: Periodicity is 18"),
-            ("201206", 24, "201006", "Test 8: Periodicity is 24"),
-            ("201705", 36, "201405", "Test 9: Periodicity is 36"),
-            ("201302", 48, "200902", "Test 10: Periodicity is 48"),
-            ("201503", 60, "201003", "Test 11: Periodicity is 60"),
+            ("202203", 0, "202203", "Test 1: period_onset is 0"),
+            ("202103", 1, "202102", "Test 2: period_onset is 1"),
+            ("201903", 3, "201812", "Test 3: period_onset is 3"),
+            ("202203", 4, "202111", "Test 4: period_onset is 4"),
+            ("202004", 6, "201910", "Test 5: period_onset is 6"),
+            ("201903", 12, "201803", "Test 6: period_onset is 12"),
+            ("202203", 18, "202009", "Test 7: period_onset is 18"),
+            ("201206", 24, "201006", "Test 8: period_onset is 24"),
+            ("201705", 36, "201405", "Test 9: period_onset is 36"),
+            ("201302", 48, "200902", "Test 10: period_onset is 48"),
+            ("201503", 60, "201003", "Test 11: period_onset is 60"),
         ],
     )
     def test_calculate_prior_period(
-        self, period, periodicity, expected_result, test_id
+        self, period, period_onset, expected_result, test_id
     ):
         try:
-            result = calculate_prior_period(period=period, periodicity=periodicity)
+            result = calculate_prior_period(period=period, period_onset=period_onset)
             assert (
                 result == expected_result
             ), f"Test {test_id} failed: Unexpected result. Result == {result}"
@@ -1237,7 +1237,7 @@ class TestCorrectComponents:
 class TestTotalsAndComponents:
     @pytest.mark.parametrize(
         "identifier, period, total, components, amend_total, predictive, precision, predictive_period,"
-        "periodicity, auxiliary, absolute_difference_threshold, percentage_difference_threshold,"
+        "period_onset, auxiliary, absolute_difference_threshold, percentage_difference_threshold,"
         "expected_result, test_id",
         [
             (
@@ -2530,7 +2530,7 @@ class TestTotalsAndComponents:
                 ),
                 "Test 49 - Predictive total and predictive period are different to period and total",
                 # This test is to check the set_predictive_value() function
-                # The periodicity is 3
+                # The period_onset is 3
                 # The prior period would be calculated out to three months before the period
                 # which does not match the predictive calculate_prior_period
                 # Hence the check_auxiliary_value function is called and the predictive value
@@ -2603,7 +2603,7 @@ class TestTotalsAndComponents:
                 "Test 51 - Use auxiliary when predictive is none and predictive period is not the prior period",
                 # This test is to check the set_predictive_value() function
                 # The predictive value is none
-                # The periodicity is 3
+                # The period_onset is 3
                 # The prior period would be calculated out to three months before the period
                 # which does not match the predictive calculate_prior_period
                 # Hence the check_auxiliary_value function is called and the predictive value
@@ -2640,7 +2640,7 @@ class TestTotalsAndComponents:
                 ),
                 "Test 52 - Use total when predictive and auxiliary is none",
                 # This test is to check the set_predictive_value() function
-                # The periodicity is 6
+                # The period_onset is 6
                 # The prior period would be calculated out to 6 months before the period
                 # The predictive value is none
                 # which does not match the predictive calculate_prior_period
@@ -2713,7 +2713,7 @@ class TestTotalsAndComponents:
                 ),
                 "Test 54 - Auxiliary is new predictive when predictive total and prior period are different",
                 # This test is to check the set_predictive_value() function
-                # The periodicity is 10
+                # The period_onset is 10
                 # The prior period would be calculated out to 10 months before the period
                 # The predictive value is not none
                 # which does not match the predictive calculate_prior_period
@@ -2751,7 +2751,7 @@ class TestTotalsAndComponents:
                 ),
                 "Test 55 - Use auxiliary when predictive is none and predictive period != the prior period",
                 # This test is to check the set_predictive_value() function
-                # The periodicity is 3
+                # The period_onset is 3
                 # The prior period would be calculated out to 3 months before the period
                 # The predictive value is none
                 # which does not match the predictive calculate_prior_period
@@ -2789,7 +2789,7 @@ class TestTotalsAndComponents:
                 ),
                 "Test 56 - Predictive and prior periods match and total is new predictive",
                 # This test is to check the set_predictive_value() function
-                # The predictive is None and the periodicity is 2
+                # The predictive is None and the period_onset is 2
                 # The prior period matches the predictive period
                 # we apply the check_auxiliary_value() function
                 # and the predictive does not change
@@ -2823,9 +2823,9 @@ class TestTotalsAndComponents:
                     [81, 0, 3.6, 5.4],
                     "C",
                 ),
-                "Test 57 - Predictive exists and periodicity = 1, expect periods to match",
+                "Test 57 - Predictive exists and period_onset = 1, expect periods to match",
                 # This test is to check the set_predictive_value() function
-                # The periodicity is 1
+                # The period_onset is 1
                 # The prior period would be calculated out to 1 months before the period
                 # The predictive period matches the predictive calculate_prior_period
                 # Hence the predictive is not changed
@@ -2859,9 +2859,9 @@ class TestTotalsAndComponents:
                     [81, 0, 3.6, 5.4],
                     "C",
                 ),
-                "Test 58 - Predictive exists and periodicity = 2, expect periods to match",
+                "Test 58 - Predictive exists and period_onset = 2, expect periods to match",
                 # This test is to check the set_predictive_value() function
-                # The periodicity is 2
+                # The period_onset is 2
                 # The prior period would be calculated out to 2 months before the period
                 # The predictive value is not none
                 # which does match the predictive calculate_prior_period
@@ -2897,9 +2897,9 @@ class TestTotalsAndComponents:
                     [81, 0, 3.6, 5.4],
                     "C",
                 ),
-                "Test 59 - Predictive exists and periodicity = 3, expect periods to match",
+                "Test 59 - Predictive exists and period_onset = 3, expect periods to match",
                 # This test is to check the set_predictive_value() function
-                # The periodicity is 3
+                # The period_onset is 3
                 # The prior period would be calculated out to 3 months before the period
                 # The predictive value is not none
                 # which does match the predictive calculate_prior_period
@@ -2935,9 +2935,9 @@ class TestTotalsAndComponents:
                     [81, 0, 3.6, 5.4],
                     "C",
                 ),
-                "Test 60 - Predictive exists and periodicity = 4, expect periods to match",
+                "Test 60 - Predictive exists and period_onset = 4, expect periods to match",
                 # This test is to check the set_predictive_value() function
-                # The periodicity is 4
+                # The period_onset is 4
                 # The prior period would be calculated out to 4 months before the period
                 # The predictive value is not none
                 # which does match the predictive calculate_prior_period
@@ -2973,9 +2973,9 @@ class TestTotalsAndComponents:
                     [81, 0, 3.6, 5.4],
                     "C",
                 ),
-                "Test 61 - Predictive exists and periodicity = 6, expect periods to match",
+                "Test 61 - Predictive exists and period_onset = 6, expect periods to match",
                 # This test is to check the set_predictive_value() function
-                # The periodicity is 6
+                # The period_onset is 6
                 # The prior period would be calculated out to 6 months before the period
                 # The predictive value is not none
                 # which does match the predictive calculate_prior_period
@@ -3011,9 +3011,9 @@ class TestTotalsAndComponents:
                     [81, 0, 3.6, 5.4],
                     "C",
                 ),
-                "Test 62 - Predictive exists and periodicity = 12, expect periods to match",
+                "Test 62 - Predictive exists and period_onset = 12, expect periods to match",
                 # This test is to check the set_predictive_value() function
-                # The periodicity is 12
+                # The period_onset is 12
                 # The prior period would be calculated out to 12 months before the period
                 # The predictive value is not none
                 # which does match the predictive calculate_prior_period
@@ -3049,9 +3049,9 @@ class TestTotalsAndComponents:
                     [81, 0, 3.6, 5.4],
                     "C",
                 ),
-                "Test 63 - Predictive exists and periodicity = 18, expect periods to match",
+                "Test 63 - Predictive exists and period_onset = 18, expect periods to match",
                 # This test is to check the set_predictive_value() function
-                # The periodicity is 18
+                # The period_onset is 18
                 # The prior period would be calculated out to 18 months before the period
                 # The predictive value is not none
                 # which does match the predictive calculate_prior_period
@@ -3087,9 +3087,9 @@ class TestTotalsAndComponents:
                     [81, 0, 3.6, 5.4],
                     "C",
                 ),
-                "Test 64 - Predictive exists and periodicity = 24, expect periods to match",
+                "Test 64 - Predictive exists and period_onset = 24, expect periods to match",
                 # This test is to check the set_predictive_value() function
-                # The periodicity is 24
+                # The period_onset is 24
                 # The prior period would be calculated out to 24 months before the period
                 # The predictive value is not none
                 # which does match the predictive calculate_prior_period
@@ -3125,9 +3125,9 @@ class TestTotalsAndComponents:
                     [81, 0, 3.6, 5.4],
                     "C",
                 ),
-                "Test 65 - Predictive exists and periodicity = 36, expect periods to match",
+                "Test 65 - Predictive exists and period_onset = 36, expect periods to match",
                 # This test is to check the set_predictive_value() function
-                # The periodicity is 36
+                # The period_onset is 36
                 # The prior period would be calculated out to 36 months before the period
                 # The predictive value is not none
                 # which does match the predictive calculate_prior_period
@@ -3163,9 +3163,9 @@ class TestTotalsAndComponents:
                     [81, 0, 3.6, 5.4],
                     "C",
                 ),
-                "Test 66 - Predictive exists and periodicity = 48, expect periods to match",
+                "Test 66 - Predictive exists and period_onset = 48, expect periods to match",
                 # This test is to check the set_predictive_value() function
-                # The periodicity is 48
+                # The period_onset is 48
                 # The prior period would be calculated out to 48 months before the period
                 # The predictive value is not none
                 # which does match the predictive calculate_prior_period
@@ -3201,9 +3201,9 @@ class TestTotalsAndComponents:
                     [81, 0, 3.6, 5.4],
                     "C",
                 ),
-                "Test 67 - Predictive exists and periodicity = 60, expect periods to match",
+                "Test 67 - Predictive exists and period_onset = 60, expect periods to match",
                 # This test is to check the set_predictive_value() function
-                # The periodicity is 60
+                # The period_onset is 60
                 # The prior period would be calculated out to 60 months before the period
                 # The predictive value is not none
                 # which does match the predictive calculate_prior_period
@@ -3241,7 +3241,7 @@ class TestTotalsAndComponents:
                 ),
                 "Test 68 - Predictive period is None so auxiliary value is used.",
                 # This test is to check the set_predictive_value() function
-                # The periodicity is 60
+                # The period_onset is 60
                 # The prior period would be calculated out to 60 months before the period
                 # The predictive value is not none
                 # which does match the predictive calculate_prior_period
@@ -3261,7 +3261,7 @@ class TestTotalsAndComponents:
         predictive,
         precision,
         predictive_period,
-        periodicity,
+        period_onset,
         auxiliary,
         absolute_difference_threshold,
         percentage_difference_threshold,
@@ -3279,7 +3279,7 @@ class TestTotalsAndComponents:
                     predictive=predictive,
                     precision=precision,
                     predictive_period=predictive_period,
-                    periodicity=periodicity,
+                    period_onset=period_onset,
                     auxiliary=auxiliary,
                     absolute_difference_threshold=absolute_difference_threshold,
                     percentage_difference_threshold=percentage_difference_threshold,
@@ -3328,7 +3328,7 @@ class TestTotalsAndComponents:
                     predictive=predictive,
                     precision=precision,
                     predictive_period=predictive_period,
-                    periodicity=periodicity,
+                    period_onset=period_onset,
                     auxiliary=auxiliary,
                     absolute_difference_threshold=absolute_difference_threshold,
                     percentage_difference_threshold=percentage_difference_threshold,
