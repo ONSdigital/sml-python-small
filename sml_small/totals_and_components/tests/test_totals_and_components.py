@@ -3248,6 +3248,28 @@ class TestTotalsAndComponents:
                 # Hence the check_auxiliary_value function is called and the predictive value
                 # is replaced by the auxiliary value
             ),
+            (
+                "BX",
+                None,
+                90,
+                [
+                    (90),
+                    (0),
+                    (4),
+                    (6),
+                ],
+                False,
+                None,
+                28,
+                None,
+                60,
+                None,
+                None,
+                0.1,
+                TACException("The period is not populated"),
+                "Test 75 - Period is None error si thrown.",
+                # This test is to check an error is thrown if a period is not provided
+            ),
         ],
     )
     def test_totals_and_components(
