@@ -3,9 +3,8 @@ from decimal import Decimal, getcontext
 
 import pytest
 
-from sml_small.totals_and_components.totals_and_components import (ComponentPair, TACException, calculate_prior_period,
+from sml_small.totals_and_components.totals_and_components import (ComponentPair, TACException,
                                                                    check_absolute_difference_threshold,
-                                                                   check_auxiliary_value,
                                                                    check_percentage_difference_threshold,
                                                                    check_sum_components_predictive, check_zero_errors,
                                                                    correct_components, correct_total,
@@ -27,7 +26,7 @@ class NoString:
 
 class TestValidateInput:
     @pytest.mark.parametrize(
-        "identifier, total, components, amend_total, period, predictive_period, period_offset, predictive, "
+        "identifier, total, components, amend_total, period, predictive, "
         "auxiliary, absolute_difference_threshold, "
         "percentage_difference_threshold, precision, expected_result, test_id",
         [
@@ -42,8 +41,6 @@ class TestValidateInput:
                 ],
                 True,
                 "202203",
-                "202201",
-                1,
                 100.0,
                 300.0,
                 20,
@@ -62,7 +59,6 @@ class TestValidateInput:
                     20,
                     0.1,
                     6,
-                    1,
                 ),
                 "Test 1: Correct values test",
                 # Test to ensure we have a happy path walkthrough
@@ -78,8 +74,6 @@ class TestValidateInput:
                 ],
                 False,
                 "202303",
-                "202202",
-                1,
                 100.0,
                 104.0,
                 105.0,
@@ -98,7 +92,6 @@ class TestValidateInput:
                     105.0,
                     None,
                     28,
-                    1,
                 ),
                 "Test 2: None value for percentage difference threshold",
                 # Test to see what happens when a none value is entered by
@@ -116,8 +109,6 @@ class TestValidateInput:
                 ],
                 True,
                 "202109",
-                "202207",
-                1,
                 100.0,
                 104.0,
                 None,
@@ -136,7 +127,6 @@ class TestValidateInput:
                     None,
                     20,
                     28,
-                    1,
                 ),
                 "Test 3: None value for absolute difference threshold",
                 # Test to see what happens when a none value is entered by
@@ -154,8 +144,6 @@ class TestValidateInput:
                 ],
                 False,
                 "202003",
-                "202006",
-                1,
                 None,  # missing predictive
                 100.0,
                 20,
@@ -174,7 +162,6 @@ class TestValidateInput:
                     20,
                     0.1,
                     28,
-                    1,
                 ),
                 "Test 4: Predictive is missing so method carries on",
                 # Test to see what happens when a none value is entered by
@@ -187,8 +174,6 @@ class TestValidateInput:
                 [],
                 True,
                 "202001",
-                "202001",
-                1,
                 101.0,
                 103.0,
                 20,
@@ -210,8 +195,6 @@ class TestValidateInput:
                 ],
                 True,
                 "202002",
-                "202001",
-                1,
                 101.0,
                 103.0,
                 20,
@@ -233,8 +216,6 @@ class TestValidateInput:
                 ],
                 False,
                 "202203",
-                "202203",
-                1,
                 102.0,
                 104.0,
                 20,
@@ -257,8 +238,6 @@ class TestValidateInput:
                 ],
                 True,
                 "2022005",
-                "202204",
-                1,
                 "String",
                 102.0,
                 20,
@@ -281,8 +260,6 @@ class TestValidateInput:
                 ],
                 False,
                 "202202",
-                "202201",
-                1,
                 101.0,
                 "String",
                 20,
@@ -305,8 +282,6 @@ class TestValidateInput:
                 ],
                 True,
                 "202204",
-                "202103",
-                1,
                 102.0,
                 104.0,
                 {20},
@@ -329,8 +304,6 @@ class TestValidateInput:
                 ],
                 False,
                 "201910",
-                "201907",
-                1,
                 102.0,
                 104.0,
                 20,
@@ -353,8 +326,6 @@ class TestValidateInput:
                 ],
                 True,
                 "201896",
-                "201893",
-                1,
                 102.0,
                 89.0,
                 None,
@@ -377,8 +348,6 @@ class TestValidateInput:
                 ],
                 None,
                 "201604",
-                "201603",
-                1,
                 102.0,
                 89.0,
                 11,
@@ -401,8 +370,6 @@ class TestValidateInput:
                 ],
                 True,
                 "201604",
-                "201504",
-                1,
                 102.0,
                 89.0,
                 11,
@@ -425,8 +392,6 @@ class TestValidateInput:
                 ],
                 True,
                 None,
-                "201203",
-                1,
                 102.0,
                 89.0,
                 11,
@@ -447,8 +412,6 @@ class TestValidateInput:
         components,
         amend_total,
         period,
-        predictive_period,
-        period_offset,
         predictive,
         auxiliary,
         absolute_difference_threshold,
@@ -466,8 +429,6 @@ class TestValidateInput:
                     amend_total=amend_total,
                     predictive=predictive,
                     period=period,
-                    predictive_period=predictive_period,
-                    period_offset=period_offset,
                     auxiliary=auxiliary,
                     absolute_difference_threshold=absolute_difference_threshold,
                     percentage_difference_threshold=percentage_difference_threshold,
@@ -491,8 +452,6 @@ class TestValidateInput:
                     amend_total=amend_total,
                     predictive=predictive,
                     period=period,
-                    predictive_period=predictive_period,
-                    period_offset=period_offset,
                     auxiliary=auxiliary,
                     absolute_difference_threshold=absolute_difference_threshold,
                     percentage_difference_threshold=percentage_difference_threshold,
@@ -504,104 +463,45 @@ class TestValidateInput:
 
 class TestSetPredictiveValue:
     @pytest.mark.parametrize(
-        "predictive, auxiliary, total, predictive_period, period_offset, period, expected_result, test_id",
+        "predictive, auxiliary, total, expected_result, test_id",
         [
             (
                 100.0,
                 None,
                 10,
-                "202301",
-                1,
-                "202302",
                 100.0,
                 "Test 1: Predictive Only",
                 # Test for when a predictive value is provided,
-                # we would not expect the check_auxiliary_value() function
-                # to be triggered and the predictive value to remain unchanged
-                # this is because the predictive period = prior period.
+                # we would expect the predictive value to remain unchanged
             ),
             (
                 None,
                 50.0,
                 10,
-                "202205",
-                2,
-                "202207",
-                (50.0),
+                50.0,
                 "Test 2: Auxiliary Only"
                 # Test for when a predictive value is not provided,
-                # we would expect the check_auxiliary_value() function
-                # to be triggered and the auxiliary value to be used in
+                # we would expect the auxiliary value to be used in
                 # place of the predictive value
             ),
             (
                 None,
                 None,
                 10,
-                "202101",
-                12,
-                "202201",
                 10,
                 "Test 3: Predictive and auxiliary are None",
                 # Test for when a predictive and auxiliary value is not provided,
-                # we would expect the check_auxiliary_value() function
-                # to be triggered and the total value to be used in
+                # we would expect the the total value to be used in
                 # place of the predictive value
-            ),
-            (
-                100,
-                90,
-                10,
-                "201907",
-                12,
-                "202106",
-                90,
-                "Test 4: Predictive and auxiliary exists but predictive period does not match prior period",
-                # Test for when a predictive value is provided,
-                # we would expect the check_auxiliary_value() function
-                # to be triggered and the auxiliary value to be used in
-                # place of the predictive value as predictive period != prior period
-            ),
-            (
-                100,
-                None,
-                10,
-                "202107",
-                2,
-                "202207",
-                10,
-                "Test 5: Predictive exists but period does not match prior period",
-                # Test for when a predictive value is provided,
-                # we would expect the check_auxiliary_value() function
-                # to be triggered and the total value to be used in
-                # place of the predictive value as predictive period != prior period
             ),
             (
                 150.0,
                 50.0,
                 10,
-                "202202",
-                1,
-                "202203",
-                (150.0),
-                "Test 6: All Inputs"
+                150.0,
+                "Test 4: All Inputs"
                 # Test for when a all values is are provided,
-                # we would not expect the check_auxiliary_value() function
-                # to be triggered and the predictive is not changed as predictive period = prior period
-            ),
-            (
-                100.0,
-                None,
-                10,
-                "202201",
-                24,
-                "202305",
-                10.0,
-                "Test 7: Predictive and prior periods do not match and auxiliary is None so total is returned as predictive",
-                # Test for when a predictive value is provided,
-                # we would expect the check_auxiliary_value() function
-                # to be triggered and the total value to be used in
-                # place of the predictive value as predictive period != prior period
+                # we would expect the predictive is not changed as predictive period = prior period
             ),
         ],
     )
@@ -610,9 +510,6 @@ class TestSetPredictiveValue:
         predictive,
         auxiliary,
         total,
-        predictive_period,
-        period_offset,
-        period,
         expected_result,
         test_id,
     ):
@@ -621,83 +518,7 @@ class TestSetPredictiveValue:
                 predictive=predictive,
                 auxiliary=auxiliary,
                 total=total,
-                predictive_period=predictive_period,
-                period_offset=period_offset,
-                period=period,
             )
-            assert (
-                result == expected_result
-            ), f"Test {test_id} failed: Unexpected result. Result == {result}"
-        except Exception as e:
-            pytest.fail(
-                EXCEPTION_FAIL_MESSAGE.format(
-                    test_id=test_id,
-                    exception_type=type(e).__name__,
-                    exception_msg=str(e),
-                )
-            )
-
-
-# Class to check if period_offset effects the predictive period to give the prior period
-class TestCalculatePriorPeriod:
-    @pytest.mark.parametrize(
-        "period, period_offset, expected_result, test_id",
-        [
-            ("202203", 0, "202203", "Test 1: period_offset is 0"),
-            ("202103", 1, "202102", "Test 2: period_offset is 1"),
-            ("201903", 3, "201812", "Test 3: period_offset is 3"),
-            ("202203", 4, "202111", "Test 4: period_offset is 4"),
-            ("202004", 6, "201910", "Test 5: period_offset is 6"),
-            ("201903", 12, "201803", "Test 6: period_offset is 12"),
-            ("202203", 18, "202009", "Test 7: period_offset is 18"),
-            ("201206", 24, "201006", "Test 8: period_offset is 24"),
-            ("201705", 36, "201405", "Test 9: period_offset is 36"),
-            ("201302", 48, "200902", "Test 10: period_offset is 48"),
-            ("201503", 60, "201003", "Test 11: period_offset is 60"),
-        ],
-    )
-    def test_calculate_prior_period(
-        self, period, period_offset, expected_result, test_id
-    ):
-        try:
-            result = calculate_prior_period(period=period, period_offset=period_offset)
-            assert (
-                result == expected_result
-            ), f"Test {test_id} failed: Unexpected result. Result == {result}"
-        except Exception as e:
-            pytest.fail(
-                EXCEPTION_FAIL_MESSAGE.format(
-                    test_id=test_id,
-                    exception_type=type(e).__name__,
-                    exception_msg=str(e),
-                )
-            )
-
-
-# Class to check if the auxiliary value is used for the predictive
-class TestCheckAuxiliaryValue:
-    @pytest.mark.parametrize(
-        "auxiliary, total, expected_result, test_id",
-        [
-            (
-                None,
-                10,
-                10,
-                "Test 1: Auxiliary is None"
-                # In this scenario we would expect the total to be returned
-            ),
-            (
-                50.0,
-                10,
-                50.0,
-                "Test 2: Auxiliary is not None"
-                # In this scenario we would expect the test to return the auxiliary value
-            ),
-        ],
-    )
-    def test_check_auxiliary_value(self, auxiliary, total, expected_result, test_id):
-        try:
-            result = check_auxiliary_value(auxiliary=auxiliary, total=total)
             assert (
                 result == expected_result
             ), f"Test {test_id} failed: Unexpected result. Result == {result}"
@@ -1236,8 +1057,8 @@ class TestCorrectComponents:
 
 class TestTotalsAndComponents:
     @pytest.mark.parametrize(
-        "identifier, period, total, components, amend_total, predictive, precision, predictive_period,"
-        "period_offset, auxiliary, absolute_difference_threshold, percentage_difference_threshold,"
+        "identifier, period, total, components, amend_total, predictive, precision,"
+        "auxiliary, absolute_difference_threshold, percentage_difference_threshold,"
         "expected_result, test_id",
         [
             (
@@ -1253,8 +1074,6 @@ class TestTotalsAndComponents:
                 True,
                 1625,
                 28,
-                "202301",
-                1,
                 None,
                 11,
                 None,
@@ -1286,8 +1105,6 @@ class TestTotalsAndComponents:
                 True,
                 10817,
                 28,
-                "202201",
-                4,
                 None,
                 11,
                 None,
@@ -1319,8 +1136,6 @@ class TestTotalsAndComponents:
                 False,
                 90,
                 2,
-                "201512",
-                1,
                 None,
                 None,
                 0.1,
@@ -1352,8 +1167,6 @@ class TestTotalsAndComponents:
                 True,
                 1964,
                 28,
-                "201306",
-                1,
                 None,
                 1,
                 0.1,
@@ -1385,8 +1198,6 @@ class TestTotalsAndComponents:
                 True,
                 None,
                 1,
-                "201601",
-                5,
                 None,
                 11,
                 None,
@@ -1420,8 +1231,6 @@ class TestTotalsAndComponents:
                 True,
                 1625,
                 1,
-                "202012",
-                1,
                 None,
                 11,
                 0.1,
@@ -1443,8 +1252,6 @@ class TestTotalsAndComponents:
                 True,
                 "InvalidString",
                 1,
-                "201603",
-                0,
                 None,
                 11,
                 0.1,
@@ -1466,8 +1273,6 @@ class TestTotalsAndComponents:
                 True,
                 1625,
                 1,
-                "201505",
-                0,
                 "InvalidString",
                 11,
                 0.1,
@@ -1489,8 +1294,6 @@ class TestTotalsAndComponents:
                 True,
                 1625,
                 1,
-                "201203",
-                0,
                 None,
                 None,
                 None,
@@ -1514,8 +1317,6 @@ class TestTotalsAndComponents:
                 True,
                 None,
                 28,
-                "201103",
-                1,
                 10817,
                 11,
                 None,
@@ -1548,8 +1349,6 @@ class TestTotalsAndComponents:
                 True,
                 0,
                 28,
-                "201008",
-                1,
                 None,
                 11,
                 None,
@@ -1580,8 +1379,6 @@ class TestTotalsAndComponents:
                 True,
                 10817,
                 28,
-                "201907",
-                0,
                 None,
                 11,
                 None,
@@ -1606,8 +1403,6 @@ class TestTotalsAndComponents:
                 [(1), (2), (3), (4)],
                 True,
                 5,
-                1,
-                "200701",
                 1,
                 None,
                 4,
@@ -1634,8 +1429,6 @@ class TestTotalsAndComponents:
                 True,
                 9,
                 28,
-                "200606",
-                1,
                 None,
                 None,
                 0.1,
@@ -1661,8 +1454,6 @@ class TestTotalsAndComponents:
                 True,
                 5,
                 28,
-                "200501",
-                1,
                 None,
                 None,
                 0.1,
@@ -1693,8 +1484,6 @@ class TestTotalsAndComponents:
                 True,
                 10817,
                 28,
-                "200402",
-                1,
                 None,
                 11,
                 0.1,
@@ -1720,8 +1509,6 @@ class TestTotalsAndComponents:
                 False,
                 9,
                 2,
-                "200101",
-                1,
                 None,
                 4,
                 0.1,
@@ -1747,8 +1534,6 @@ class TestTotalsAndComponents:
                 False,
                 5,
                 1,
-                "200002",
-                1,
                 None,
                 0,
                 0,
@@ -1772,8 +1557,6 @@ class TestTotalsAndComponents:
                 True,
                 5,
                 1,
-                "200107",
-                1,
                 None,
                 None,
                 None,
@@ -1796,8 +1579,6 @@ class TestTotalsAndComponents:
                 ],
                 True,
                 10817,
-                1,
-                "200703",
                 1,
                 None,
                 11,
@@ -1827,8 +1608,6 @@ class TestTotalsAndComponents:
                 [(0), (0), (0), (0)],
                 False,
                 10817,
-                1,
-                "200108",
                 1,
                 None,
                 11,
@@ -1863,8 +1642,6 @@ class TestTotalsAndComponents:
                 True,
                 0,
                 28,
-                "201802",
-                1,
                 None,
                 11,
                 None,
@@ -1894,8 +1671,6 @@ class TestTotalsAndComponents:
                 [(10), (10), (10), (10)],
                 False,
                 0,
-                1,
-                "200112",
                 1,
                 None,
                 45,
@@ -1931,8 +1706,6 @@ class TestTotalsAndComponents:
                 False,
                 0,
                 28,
-                "200112",
-                1,
                 None,
                 None,
                 0.1,
@@ -1967,8 +1740,6 @@ class TestTotalsAndComponents:
                 True,
                 3,
                 28,
-                "200401",
-                1,
                 None,
                 11,
                 None,
@@ -2001,8 +1772,6 @@ class TestTotalsAndComponents:
                 False,
                 2,
                 28,
-                "200910",
-                1,
                 None,
                 16,
                 None,
@@ -2035,8 +1804,6 @@ class TestTotalsAndComponents:
                 True,
                 7,
                 28,
-                "202102",
-                1,
                 None,
                 None,
                 0.1,
@@ -2062,8 +1829,6 @@ class TestTotalsAndComponents:
                 True,
                 10.5,
                 28,
-                "200405",
-                1,
                 None,
                 None,
                 0.1,
@@ -2089,8 +1854,6 @@ class TestTotalsAndComponents:
                 False,
                 9,
                 2,
-                "200907",
-                1,
                 None,
                 None,
                 0.1,
@@ -2116,8 +1879,6 @@ class TestTotalsAndComponents:
                 True,
                 10.9,
                 28,
-                "201902",
-                1,
                 None,
                 None,
                 0.1,
@@ -2143,8 +1904,6 @@ class TestTotalsAndComponents:
                 False,
                 11,
                 2,
-                "201705",
-                1,
                 None,
                 None,
                 0.1,
@@ -2170,8 +1929,6 @@ class TestTotalsAndComponents:
                 True,
                 12,
                 28,
-                "200405",
-                1,
                 None,
                 None,
                 0.1,
@@ -2202,8 +1959,6 @@ class TestTotalsAndComponents:
                 True,
                 11,
                 1,
-                "200103",
-                None,
                 0,
                 11,
                 None,
@@ -2225,8 +1980,6 @@ class TestTotalsAndComponents:
                 True,
                 10.9,
                 28,
-                "204602",
-                0,
                 None,
                 None,
                 0.1,
@@ -2237,7 +1990,7 @@ class TestTotalsAndComponents:
             ),
             (
                 "AI",
-                "",
+                None,
                 10.9,
                 [
                     (1),
@@ -2248,12 +2001,10 @@ class TestTotalsAndComponents:
                 True,
                 10.9,
                 28,
-                "200803",
-                0,
                 None,
                 None,
                 0.1,
-                ValueError("time data '' does not match format '%Y%m'"),
+                ValueError("The period is not populated"),
                 "Test 35 - Missing period value",
                 # Test to ensure a TACException is thrown when a
                 # user does not enter a value for the period
@@ -2270,8 +2021,6 @@ class TestTotalsAndComponents:
                 ],
                 None,
                 10.9,
-                1,
-                "200907",
                 1,
                 None,
                 11,
@@ -2294,8 +2043,6 @@ class TestTotalsAndComponents:
                 False,
                 90,
                 28,
-                "200102",
-                1,
                 None,
                 None,
                 0.1,
@@ -2327,8 +2074,6 @@ class TestTotalsAndComponents:
                 False,
                 10,
                 28,
-                "200202",
-                1,
                 None,
                 None,
                 0.1,
@@ -2365,8 +2110,6 @@ class TestTotalsAndComponents:
                 False,
                 2,
                 29,
-                "200405",
-                1,
                 None,
                 11,
                 None,
@@ -2390,8 +2133,6 @@ class TestTotalsAndComponents:
                 False,
                 2,
                 0,
-                "199502",
-                1,
                 None,
                 11,
                 None,
@@ -2410,8 +2151,6 @@ class TestTotalsAndComponents:
                 False,
                 11,
                 2,
-                "199705",
-                1,
                 None,
                 None,
                 0.1,
@@ -2443,8 +2182,6 @@ class TestTotalsAndComponents:
                 ],
                 True,
                 0.6,
-                1,
-                "199808",
                 1,
                 None,
                 None,
@@ -2479,8 +2216,6 @@ class TestTotalsAndComponents:
                 True,
                 10.5,
                 None,
-                "199501",
-                1,
                 None,
                 None,
                 0.1,
@@ -2501,771 +2236,6 @@ class TestTotalsAndComponents:
             ),
             (
                 "AX",
-                "202001",
-                90,
-                [
-                    (90),
-                    (0),
-                    (4),
-                    (6),
-                ],
-                False,
-                95,
-                28,
-                "202001",
-                3,
-                None,
-                None,
-                0.1,
-                (
-                    "AX",
-                    "202001",
-                    10,
-                    90,
-                    110,
-                    28,
-                    90,
-                    [81, 0, 3.6, 5.4],
-                    "C",
-                ),
-                "Test 49 - Predictive total and predictive period are different to period and total",
-                # This test is to check the set_predictive_value() function
-                # The period_offset is 3
-                # The prior period would be calculated out to three months before the period
-                # which does not match the predictive calculate_prior_period
-                # Hence the check_auxiliary_value function is called and the predictive value
-                # is replaced with the total value because the auxiliary is none
-            ),
-            (
-                "AY",
-                "201809",
-                90,
-                [
-                    (90),
-                    (0),
-                    (4),
-                    (6),
-                ],
-                False,
-                None,
-                28,
-                "201709",
-                14,
-                95,
-                None,
-                0.1,
-                (
-                    "AY",
-                    "201809",
-                    5,
-                    90,
-                    110,
-                    28,
-                    90,
-                    [81, 0, 3.6, 5.4],
-                    "C",
-                ),
-                "Test 50 - Use auxiliary when predictive is not specified",
-                # This test is to check the set_predictive_value() function
-                # The predictive value is none
-                # Hence the check_auxiliary_value function is called and the predictive value
-                # is replaced with the auxiliary value
-            ),
-            (
-                "AZ",
-                "200304",
-                90,
-                [
-                    (90),
-                    (0),
-                    (4),
-                    (6),
-                ],
-                False,
-                None,
-                28,
-                "200204",
-                3,
-                95,
-                None,
-                0.1,
-                (
-                    "AZ",
-                    "200304",
-                    5,
-                    90,
-                    110,
-                    28,
-                    90,
-                    [81, 0, 3.6, 5.4],
-                    "C",
-                ),
-                "Test 51 - Use auxiliary when predictive is none and predictive period is not the prior period",
-                # This test is to check the set_predictive_value() function
-                # The predictive value is none
-                # The period_offset is 3
-                # The prior period would be calculated out to three months before the period
-                # which does not match the predictive calculate_prior_period
-                # Hence the check_auxiliary_value function is called and the predictive value
-                # is replaced with the auxiliary
-            ),
-            (
-                "BA",
-                "202501",
-                90,
-                [
-                    (90),
-                    (0),
-                    (4),
-                    (6),
-                ],
-                False,
-                None,
-                28,
-                "202401",
-                6,
-                None,
-                None,
-                0.1,
-                (
-                    "BA",
-                    "202501",
-                    10,
-                    90,
-                    110,
-                    28,
-                    90,
-                    [81, 0, 3.6, 5.4],
-                    "C",
-                ),
-                "Test 52 - Use total when predictive and auxiliary is none",
-                # This test is to check the set_predictive_value() function
-                # The period_offset is 6
-                # The prior period would be calculated out to 6 months before the period
-                # The predictive value is none
-                # which does not match the predictive calculate_prior_period
-                # Hence the check_auxiliary_value function is called and the predictive value
-                # is replaced with the total value because the auxiliary is none
-            ),
-            (
-                "BB",
-                "202201",
-                10000,
-                [
-                    (9201),
-                    (866),
-                    (632),
-                    (112),
-                ],
-                True,
-                10817,
-                28,
-                "202201",
-                13,
-                11,
-                11,
-                0.1,
-                (
-                    "BB",
-                    "202201",
-                    10800,
-                    9729.9,
-                    11892.1,
-                    28,
-                    10000,
-                    [9201, 866, 632, 112],
-                    "T",
-                ),
-                "Test 53 - Predictive total and prior period are different",
-                # This test is to check the set_predictive_value() function
-                # The predictive exists but the predictive period
-                #  does not equal the prior
-                # Hence the function is applied and we use the auxiliary value as the predictive
-            ),
-            (
-                "BC",
-                "200405",
-                10817,
-                [
-                    (9201),
-                    (866),
-                    (632),
-                    (112),
-                ],
-                True,
-                80,
-                28,
-                "200212",
-                10,
-                None,
-                11,
-                0.1,
-                (
-                    "BC",
-                    "200405",
-                    6,
-                    9729.9,
-                    11892.1,
-                    28,
-                    10811,
-                    [9201, 866, 632, 112],
-                    "T",
-                ),
-                "Test 54 - Total is new predictive when predictive total and prior period are different",
-                # This test is to check the set_predictive_value() function
-                # The period_offset is 10
-                # The prior period would be calculated out to 10 months before the period
-                # The predictive value is not none
-                # which does not match the predictive calculate_prior_period
-                # Hence the check_auxiliary_value function is called and the predictive value
-                # is replaced with the total value
-            ),
-            (
-                "BD",
-                "201409",
-                10817,
-                [
-                    (9201),
-                    (866),
-                    (632),
-                    (112),
-                ],
-                True,
-                60,
-                28,
-                "201402",
-                3,
-                10817,
-                11,
-                0.1,
-                (
-                    "BD",
-                    "201409",
-                    6,
-                    9729.9,
-                    11892.1,
-                    28,
-                    10811,
-                    [9201, 866, 632, 112],
-                    "T",
-                ),
-                "Test 55 - Use auxiliary when predictive is none and predictive period != the prior period",
-                # This test is to check the set_predictive_value() function
-                # The period_offset is 3
-                # The prior period would be calculated out to 3 months before the period
-                # The predictive value is none
-                # which does not match the predictive calculate_prior_period
-                # Hence the check_auxiliary_value function is called and the predictive value
-                # is replaced with the auxiliary value
-            ),
-            (
-                "BE",
-                "201807",
-                10817,
-                [
-                    (9201),
-                    (866),
-                    (632),
-                    (112),
-                ],
-                True,
-                60,
-                28,
-                "201805",
-                2,
-                None,
-                11,
-                0.1,
-                (
-                    "BE",
-                    "201807",
-                    10751.0,
-                    9729.9,
-                    11892.1,
-                    28,
-                    10817,
-                    [9201, 866, 632, 112],
-                    "T",
-                ),
-                "Test 56 - Predictive and prior periods match and total is new predictive",
-                # This test is to check the set_predictive_value() function
-                # The predictive is None and the period_offset is 2
-                # The prior period matches the predictive period
-                # we apply the check_auxiliary_value() function
-                # and the predictive does not change
-            ),
-            (
-                "BF",
-                "201701",
-                90,
-                [
-                    (90),
-                    (0),
-                    (4),
-                    (6),
-                ],
-                False,
-                95,
-                28,
-                "201612",
-                1,
-                None,
-                None,
-                0.1,
-                (
-                    "BF",
-                    "201701",
-                    5,
-                    90,
-                    110,
-                    28,
-                    90,
-                    [81, 0, 3.6, 5.4],
-                    "C",
-                ),
-                "Test 57 - Predictive exists and period_offset = 1, expect periods to match",
-                # This test is to check the set_predictive_value() function
-                # The period_offset is 1
-                # The prior period would be calculated out to 1 months before the period
-                # The predictive period matches the predictive calculate_prior_period
-                # Hence the predictive is not changed
-            ),
-            (
-                "BG",
-                "201503",
-                90,
-                [
-                    (90),
-                    (0),
-                    (4),
-                    (6),
-                ],
-                False,
-                95,
-                28,
-                "201501",
-                2,
-                None,
-                None,
-                0.1,
-                (
-                    "BG",
-                    "201503",
-                    5,
-                    90,
-                    110,
-                    28,
-                    90,
-                    [81, 0, 3.6, 5.4],
-                    "C",
-                ),
-                "Test 58 - Predictive exists and period_offset = 2, expect periods to match",
-                # This test is to check the set_predictive_value() function
-                # The period_offset is 2
-                # The prior period would be calculated out to 2 months before the period
-                # The predictive value is not none
-                # which does match the predictive calculate_prior_period
-                # Hence the check_auxiliary_value function is not called and the predictive value
-                # not changed
-            ),
-            (
-                "BH",
-                "201604",
-                90,
-                [
-                    (90),
-                    (0),
-                    (4),
-                    (6),
-                ],
-                False,
-                95,
-                28,
-                "201601",
-                3,
-                None,
-                None,
-                0.1,
-                (
-                    "BH",
-                    "201604",
-                    5,
-                    90,
-                    110,
-                    28,
-                    90,
-                    [81, 0, 3.6, 5.4],
-                    "C",
-                ),
-                "Test 59 - Predictive exists and period_offset = 3, expect periods to match",
-                # This test is to check the set_predictive_value() function
-                # The period_offset is 3
-                # The prior period would be calculated out to 3 months before the period
-                # The predictive value is not none
-                # which does match the predictive calculate_prior_period
-                # Hence the check_auxiliary_value function is not called and the predictive value
-                # not changed
-            ),
-            (
-                "BI",
-                "201403",
-                90,
-                [
-                    (90),
-                    (0),
-                    (4),
-                    (6),
-                ],
-                False,
-                95,
-                28,
-                "201311",
-                4,
-                None,
-                None,
-                0.1,
-                (
-                    "BI",
-                    "201403",
-                    5,
-                    90,
-                    110,
-                    28,
-                    90,
-                    [81, 0, 3.6, 5.4],
-                    "C",
-                ),
-                "Test 60 - Predictive exists and period_offset = 4, expect periods to match",
-                # This test is to check the set_predictive_value() function
-                # The period_offset is 4
-                # The prior period would be calculated out to 4 months before the period
-                # The predictive value is not none
-                # which does match the predictive calculate_prior_period
-                # Hence the check_auxiliary_value function is not called and the predictive value
-                # not changed
-            ),
-            (
-                "BJ",
-                "201207",
-                90,
-                [
-                    (90),
-                    (0),
-                    (4),
-                    (6),
-                ],
-                False,
-                95,
-                28,
-                "201201",
-                6,
-                None,
-                None,
-                0.1,
-                (
-                    "BJ",
-                    "201207",
-                    5,
-                    90,
-                    110,
-                    28,
-                    90,
-                    [81, 0, 3.6, 5.4],
-                    "C",
-                ),
-                "Test 61 - Predictive exists and period_offset = 6, expect periods to match",
-                # This test is to check the set_predictive_value() function
-                # The period_offset is 6
-                # The prior period would be calculated out to 6 months before the period
-                # The predictive value is not none
-                # which does match the predictive calculate_prior_period
-                # Hence the check_auxiliary_value function is not called and the predictive value
-                # not changed
-            ),
-            (
-                "BK",
-                "200201",
-                90,
-                [
-                    (90),
-                    (0),
-                    (4),
-                    (6),
-                ],
-                False,
-                95,
-                28,
-                "200101",
-                12,
-                None,
-                None,
-                0.1,
-                (
-                    "BK",
-                    "200201",
-                    5,
-                    90,
-                    110,
-                    28,
-                    90,
-                    [81, 0, 3.6, 5.4],
-                    "C",
-                ),
-                "Test 62 - Predictive exists and period_offset = 12, expect periods to match",
-                # This test is to check the set_predictive_value() function
-                # The period_offset is 12
-                # The prior period would be calculated out to 12 months before the period
-                # The predictive value is not none
-                # which does match the predictive calculate_prior_period
-                # Hence the check_auxiliary_value function is not called and the predictive value
-                # not changed
-            ),
-            (
-                "BL",
-                "202206",
-                90,
-                [
-                    (90),
-                    (0),
-                    (4),
-                    (6),
-                ],
-                False,
-                95,
-                28,
-                "202012",
-                18,
-                None,
-                None,
-                0.1,
-                (
-                    "BL",
-                    "202206",
-                    5,
-                    90,
-                    110,
-                    28,
-                    90,
-                    [81, 0, 3.6, 5.4],
-                    "C",
-                ),
-                "Test 63 - Predictive exists and period_offset = 18, expect periods to match",
-                # This test is to check the set_predictive_value() function
-                # The period_offset is 18
-                # The prior period would be calculated out to 18 months before the period
-                # The predictive value is not none
-                # which does match the predictive calculate_prior_period
-                # Hence the check_auxiliary_value function is not called and the predictive value
-                # not changed
-            ),
-            (
-                "BM",
-                "201903",
-                90,
-                [
-                    (90),
-                    (0),
-                    (4),
-                    (6),
-                ],
-                False,
-                95,
-                28,
-                "201703",
-                24,
-                None,
-                None,
-                0.1,
-                (
-                    "BM",
-                    "201903",
-                    5,
-                    90,
-                    110,
-                    28,
-                    90,
-                    [81, 0, 3.6, 5.4],
-                    "C",
-                ),
-                "Test 64 - Predictive exists and period_offset = 24, expect periods to match",
-                # This test is to check the set_predictive_value() function
-                # The period_offset is 24
-                # The prior period would be calculated out to 24 months before the period
-                # The predictive value is not none
-                # which does match the predictive calculate_prior_period
-                # Hence the check_auxiliary_value function is not called and the predictive value
-                # not changed
-            ),
-            (
-                "BN",
-                "202102",
-                90,
-                [
-                    (90),
-                    (0),
-                    (4),
-                    (6),
-                ],
-                False,
-                95,
-                28,
-                "201802",
-                36,
-                None,
-                None,
-                0.1,
-                (
-                    "BN",
-                    "202102",
-                    5,
-                    90,
-                    110,
-                    28,
-                    90,
-                    [81, 0, 3.6, 5.4],
-                    "C",
-                ),
-                "Test 65 - Predictive exists and period_offset = 36, expect periods to match",
-                # This test is to check the set_predictive_value() function
-                # The period_offset is 36
-                # The prior period would be calculated out to 36 months before the period
-                # The predictive value is not none
-                # which does match the predictive calculate_prior_period
-                # Hence the check_auxiliary_value function is not called and the predictive value
-                # not changed
-            ),
-            (
-                "BO",
-                "200908",
-                90,
-                [
-                    (90),
-                    (0),
-                    (4),
-                    (6),
-                ],
-                False,
-                95,
-                28,
-                "200508",
-                48,
-                None,
-                None,
-                0.1,
-                (
-                    "BO",
-                    "200908",
-                    5,
-                    90,
-                    110,
-                    28,
-                    90,
-                    [81, 0, 3.6, 5.4],
-                    "C",
-                ),
-                "Test 66 - Predictive exists and period_offset = 48, expect periods to match",
-                # This test is to check the set_predictive_value() function
-                # The period_offset is 48
-                # The prior period would be calculated out to 48 months before the period
-                # The predictive value is not none
-                # which does match the predictive calculate_prior_period
-                # Hence the check_auxiliary_value function is not called and the predictive value
-                # not changed
-            ),
-            (
-                "BP",
-                "201304",
-                90,
-                [
-                    (90),
-                    (0),
-                    (4),
-                    (6),
-                ],
-                False,
-                95,
-                28,
-                "200804",
-                60,
-                11,
-                None,
-                0.1,
-                (
-                    "BP",
-                    "201304",
-                    5,
-                    90,
-                    110,
-                    28,
-                    90,
-                    [81, 0, 3.6, 5.4],
-                    "C",
-                ),
-                "Test 67 - Predictive exists and period_offset = 60, expect periods to match",
-                # This test is to check the set_predictive_value() function
-                # The period_offset is 60
-                # The prior period would be calculated out to 60 months before the period
-                # The predictive value is not none
-                # which does match the predictive calculate_prior_period
-                # Hence the check_auxiliary_value function is not called and the predictive value
-                # not changed
-            ),
-            (
-                "BQ",
-                "201607",
-                90,
-                [
-                    (90),
-                    (0),
-                    (4),
-                    (6),
-                ],
-                False,
-                None,
-                28,
-                None,
-                60,
-                95,
-                None,
-                0.1,
-                (
-                    "BQ",
-                    "201607",
-                    5,
-                    90,
-                    110,
-                    28,
-                    90,
-                    [81, 0, 3.6, 5.4],
-                    "C",
-                ),
-                "Test 68 - Predictive period is None so total value is used.",
-                # Current period total is used if a correction to components is required, current period total is also used to determine if auto correct can take place as the predictive period is not specified
-            ),
-            (
-                "BX",
-                None,
-                90,
-                [
-                    (90),
-                    (0),
-                    (4),
-                    (6),
-                ],
-                False,
-                95,
-                28,
-                None,
-                None,
-                11,
-                None,
-                0.1,
-                TACException("The period is not populated"),
-                "Test 75 - Period is None so error is thrown.",
-                # This test is to check an error is thrown if a period is not provided
-            ),
-            (
-                "BY",
                 "202206",
                 90,
                 [
@@ -3277,46 +2247,11 @@ class TestTotalsAndComponents:
                 False,
                 None,
                 28,
-                None,
-                None,
-                None,
-                None,
-                0.1,
-                (
-                    "BY",
-                    "202206",
-                    10,
-                    90,
-                    110,
-                    28,
-                    90,
-                    [81, 0, 3.6, 5.4],
-                    "C",
-                ),
-                "Test 76 - Predictive, and auxiliary and period_offset is None, expect periods to match",
-                # This test is to check that of only total and period is specified
-                # then the current total and current period is used as the current total
-            ),
-            (
-                "BZ",
-                "202206",
-                90,
-                [
-                    (90),
-                    (0),
-                    (4),
-                    (6),
-                ],
-                False,
-                None,
-                28,
-                None,
-                None,
                 94,
                 None,
                 0.1,
                 (
-                    "BZ",
+                    "AX",
                     "202206",
                     6,
                     90,
@@ -3326,11 +2261,12 @@ class TestTotalsAndComponents:
                     [81, 0, 3.6, 5.4],
                     "C",
                 ),
-                "Test 77 - Auxiliary value is used  when predictive is none",
-                # Current period total is used if a correction to components is required, Predictive value is the Auxiliary value and is used to determine if automatic correction can take place
+                "Test 49 - Auxiliary value is used  when predictive is none",
+                # Predictive value is the Auxiliary value and is used to
+                # determine if automatic correction can take place
             ),
             (
-                "CA",
+                "AY",
                 "200103",
                 None,
                 [
@@ -3342,18 +2278,18 @@ class TestTotalsAndComponents:
                 True,
                 None,
                 None,
-                None,
-                None,
                 11,
                 11,
                 None,
-                TACException("We would always expect a current total to accompany the components"),
-                "Test 78 - Total is none value entered by user",
+                TACException(
+                    "We would always expect a current total to accompany the components"
+                ),
+                "Test 50 - Total is none value entered by user",
                 # Test to ensure a TACException is thrown when a
                 # user enters a None value for the total
             ),
             (
-                "CB",
+                "AZ",
                 "202001",
                 90,
                 [
@@ -3365,13 +2301,11 @@ class TestTotalsAndComponents:
                 False,
                 None,
                 28,
-                "202001",
-                10,
                 None,
                 None,
                 0.1,
                 (
-                    "CB",
+                    "AZ",
                     "202001",
                     10,
                     90,
@@ -3381,104 +2315,7 @@ class TestTotalsAndComponents:
                     [81, 0, 3.6, 5.4],
                     "C",
                 ),
-                "Test 79 - Period total is used when predictive is none",
-                # Current period total is used if a correction to components is required, current period total is also used to determine if auto correct can take place as the predictive value is not specified
-            ),
-            (
-                "CC",
-                "202001",
-                90,
-                [
-                    (90),
-                    (0),
-                    (4),
-                    (6),
-                ],
-                False,
-                95,
-                28,
-                None,
-                1,
-                95,
-                None,
-                0.1,
-                (
-                    "CC",
-                    "202001",
-                    5,
-                    90,
-                    110,
-                    28,
-                    90,
-                    [81, 0, 3.6, 5.4],
-                    "C",
-                ),
-                "Test 80 - Predictive is defined but auxiliary replaces it",
-                # Current period total is used if a correction to components is required, auxiliary is used as the predictive to determine if auto correct can take place as the predictive period is not specified
-            ),
-            (
-                "CD",
-                "202001",
-                90,
-                [
-                    (90),
-                    (0),
-                    (4),
-                    (6),
-                ],
-                False,
-                None,
-                28,
-                "202001",
-                1,
-                95,
-                None,
-                0.1,
-                (
-                    "CD",
-                    "202001",
-                    5,
-                    90,
-                    110,
-                    28,
-                    90,
-                    [81, 0, 3.6, 5.4],
-                    "C",
-                ),
-                "Test 81 - Predictive is not defined but auxiliary replaces it",
-                # Current period total is used if a correction to components is required, auxiliary is used as the predictive to determine if auto correct can take place as the predictive period is not specified
-            ),
-            (
-                "CE",
-                "200405",
-                10817,
-                [
-                    (9201),
-                    (866),
-                    (632),
-                    (112),
-                ],
-                True,
-                80,
-                28,
-                "200212",
-                None,
-                92,
-                11,
-                0.1,
-                (
-                    "CE",
-                    "200405",
-                    10719,
-                    9729.9,
-                    11892.1,
-                    28,
-                    10817,
-                    [9201, 866, 632, 112],
-                    "T",
-                ),
-                "Test 82 - Period offset is not defined but all other values are",
-                # Current period total is used if a correction to components is required, auxiliary is used as the predictive to determine if auto correct can take place as the period offset is not specified
+                "Test 51 - total is used when predictive and auxiliary is none",
             ),
         ],
     )
@@ -3492,8 +2329,6 @@ class TestTotalsAndComponents:
         amend_total,
         predictive,
         precision,
-        predictive_period,
-        period_offset,
         auxiliary,
         absolute_difference_threshold,
         percentage_difference_threshold,
@@ -3510,8 +2345,6 @@ class TestTotalsAndComponents:
                     amend_total=amend_total,
                     predictive=predictive,
                     precision=precision,
-                    predictive_period=predictive_period,
-                    period_offset=period_offset,
                     auxiliary=auxiliary,
                     absolute_difference_threshold=absolute_difference_threshold,
                     percentage_difference_threshold=percentage_difference_threshold,
@@ -3559,8 +2392,6 @@ class TestTotalsAndComponents:
                     amend_total=amend_total,
                     predictive=predictive,
                     precision=precision,
-                    predictive_period=predictive_period,
-                    period_offset=period_offset,
                     auxiliary=auxiliary,
                     absolute_difference_threshold=absolute_difference_threshold,
                     percentage_difference_threshold=percentage_difference_threshold,
