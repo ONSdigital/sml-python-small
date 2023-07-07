@@ -1212,11 +1212,9 @@ class TestTotalsAndComponents:
                     [0, 0, 0, 0],
                     "S",
                 ),
-                "Test 5 - Predictive variable is None",
-                # If the predictive is passed as a None value by the use the auxiliary or total
-                # this depends on the prior calculate_prior_period
-                # In this case auxiliary is also None
-                # the prior period is equal to the predictive so we have S tcc marker
+                "Test 5 - Predictive variable is None and sum of components is 0 (zero case)",
+                # If the predictive is passed as a None and auxiliary is also None so total is
+                # used with but sum of components = 0 so we have S tcc marker
             ),
             (
                 "H",
