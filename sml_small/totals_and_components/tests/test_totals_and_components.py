@@ -26,7 +26,7 @@ class NoString:
 
 class TestValidateInput:
     @pytest.mark.parametrize(
-        "identifier, total, components, amend_total, period, predictive, "
+        "identifier, total, components, amend_total, predictive, "
         "auxiliary, absolute_difference_threshold, "
         "percentage_difference_threshold, precision, expected_result, test_id",
         [
@@ -40,7 +40,6 @@ class TestValidateInput:
                     ComponentPair(original_value=4, final_value=None),
                 ],
                 True,
-                "202203",
                 100.0,
                 300.0,
                 20,
@@ -73,7 +72,6 @@ class TestValidateInput:
                     ComponentPair(original_value=4, final_value=None),
                 ],
                 False,
-                "202303",
                 100.0,
                 104.0,
                 105.0,
@@ -108,7 +106,6 @@ class TestValidateInput:
                     ComponentPair(original_value=4, final_value=None),
                 ],
                 True,
-                "202109",
                 100.0,
                 104.0,
                 None,
@@ -143,7 +140,6 @@ class TestValidateInput:
                     ComponentPair(original_value=4, final_value=None),
                 ],
                 False,
-                "202003",
                 None,  # missing predictive
                 100.0,
                 20,
@@ -173,7 +169,6 @@ class TestValidateInput:
                 100.0,
                 [],
                 True,
-                "202001",
                 101.0,
                 103.0,
                 20,
@@ -194,7 +189,6 @@ class TestValidateInput:
                     ComponentPair(original_value=4, final_value=None),
                 ],
                 True,
-                "202002",
                 101.0,
                 103.0,
                 20,
@@ -215,7 +209,6 @@ class TestValidateInput:
                     ComponentPair(original_value=4, final_value=None),
                 ],
                 False,
-                "202203",
                 102.0,
                 104.0,
                 20,
@@ -237,7 +230,6 @@ class TestValidateInput:
                     ComponentPair(original_value=4, final_value=None),
                 ],
                 True,
-                "2022005",
                 "String",
                 102.0,
                 20,
@@ -259,7 +251,6 @@ class TestValidateInput:
                     ComponentPair(original_value=4, final_value=None),
                 ],
                 False,
-                "202202",
                 101.0,
                 "String",
                 20,
@@ -281,7 +272,6 @@ class TestValidateInput:
                     ComponentPair(original_value=4, final_value=None),
                 ],
                 True,
-                "202204",
                 102.0,
                 104.0,
                 {20},
@@ -303,7 +293,6 @@ class TestValidateInput:
                     ComponentPair(original_value=4, final_value=None),
                 ],
                 False,
-                "201910",
                 102.0,
                 104.0,
                 20,
@@ -325,7 +314,6 @@ class TestValidateInput:
                     ComponentPair(original_value=4, final_value=None),
                 ],
                 True,
-                "201896",
                 102.0,
                 89.0,
                 None,
@@ -347,7 +335,6 @@ class TestValidateInput:
                     ComponentPair(original_value=4, final_value=None),
                 ],
                 None,
-                "201604",
                 102.0,
                 89.0,
                 11,
@@ -369,7 +356,6 @@ class TestValidateInput:
                     ComponentPair(original_value=4, final_value=None),
                 ],
                 True,
-                "201604",
                 102.0,
                 89.0,
                 11,
@@ -381,28 +367,6 @@ class TestValidateInput:
                 # value for total value is provided
                 # we expect the appropriate value error to be raised.
             ),
-            (
-                "O",
-                100.0,
-                [
-                    ComponentPair(original_value=1, final_value=None),
-                    ComponentPair(original_value=2, final_value=None),
-                    ComponentPair(original_value=3, final_value=None),
-                    ComponentPair(original_value=4, final_value=None),
-                ],
-                True,
-                None,
-                102.0,
-                89.0,
-                11,
-                0.1,
-                28,
-                ValueError,
-                "Test 15: None value for period",
-                # Test to see what happens when an none
-                # value for period value is provided
-                # we expect the appropriate value error to be raised.
-            ),
         ],
     )
     def test_validate_input(
@@ -411,7 +375,6 @@ class TestValidateInput:
         total,
         components,
         amend_total,
-        period,
         predictive,
         auxiliary,
         absolute_difference_threshold,
@@ -428,7 +391,6 @@ class TestValidateInput:
                     components=components,
                     amend_total=amend_total,
                     predictive=predictive,
-                    period=period,
                     auxiliary=auxiliary,
                     absolute_difference_threshold=absolute_difference_threshold,
                     percentage_difference_threshold=percentage_difference_threshold,
@@ -451,7 +413,6 @@ class TestValidateInput:
                     components=components,
                     amend_total=amend_total,
                     predictive=predictive,
-                    period=period,
                     auxiliary=auxiliary,
                     absolute_difference_threshold=absolute_difference_threshold,
                     percentage_difference_threshold=percentage_difference_threshold,
@@ -501,7 +462,7 @@ class TestSetPredictiveValue:
                 150.0,
                 "Test 4: All Inputs"
                 # Test for when a all values is are provided,
-                # we would expect the predictive is not changed as predictive period = prior period
+                # we would expect the predictive is not changed
             ),
         ],
     )
@@ -1057,13 +1018,12 @@ class TestCorrectComponents:
 
 class TestTotalsAndComponents:
     @pytest.mark.parametrize(
-        "identifier, period, total, components, amend_total, predictive, precision,"
+        "identifier, total, components, amend_total, predictive, precision,"
         "auxiliary, absolute_difference_threshold, percentage_difference_threshold,"
         "expected_result, test_id",
         [
             (
                 "A",
-                "202302",
                 1625,
                 [
                     (632),
@@ -1079,7 +1039,6 @@ class TestTotalsAndComponents:
                 None,
                 (
                     "A",
-                    "202302",
                     0,
                     None,
                     None,
@@ -1094,7 +1053,6 @@ class TestTotalsAndComponents:
             ),
             (
                 "B",
-                "202205",
                 10817,
                 [
                     (9201),
@@ -1110,7 +1068,6 @@ class TestTotalsAndComponents:
                 None,
                 (
                     "B",
-                    "202205",
                     6,
                     None,
                     None,
@@ -1125,7 +1082,6 @@ class TestTotalsAndComponents:
             ),
             (
                 "C",
-                "201601",
                 90,
                 [
                     (90),
@@ -1141,7 +1097,6 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "C",
-                    "201601",
                     10,
                     90,
                     110,
@@ -1156,7 +1111,6 @@ class TestTotalsAndComponents:
             ),
             (
                 "D",
-                "201307",
                 1964,
                 [
                     (632),
@@ -1172,7 +1126,6 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "D",
-                    "201307",
                     339,
                     1462.5,
                     1787.5,
@@ -1187,7 +1140,6 @@ class TestTotalsAndComponents:
             ),
             (
                 "F",
-                "201606",
                 11,
                 [
                     (0),
@@ -1203,7 +1155,6 @@ class TestTotalsAndComponents:
                 None,
                 (
                     "F",
-                    "201606",
                     None,
                     None,
                     None,
@@ -1218,7 +1169,6 @@ class TestTotalsAndComponents:
             ),
             (
                 "H",
-                "202101",
                 1625,
                 [
                     ("InvalidString"),
@@ -1239,7 +1189,6 @@ class TestTotalsAndComponents:
             ),
             (
                 "I",
-                "201603",
                 1625,
                 [
                     (632),
@@ -1260,7 +1209,6 @@ class TestTotalsAndComponents:
             ),
             (
                 "J",
-                "201505",
                 1625,
                 [
                     (632),
@@ -1281,7 +1229,6 @@ class TestTotalsAndComponents:
             ),
             (
                 "K",
-                "201203",
                 1625,
                 [
                     (632),
@@ -1304,7 +1251,6 @@ class TestTotalsAndComponents:
             ),
             (
                 "L",
-                "201104",
                 10817,
                 [
                     (9201),
@@ -1320,7 +1266,6 @@ class TestTotalsAndComponents:
                 None,
                 (
                     "L",
-                    "201104",
                     6,
                     None,
                     None,
@@ -1336,7 +1281,6 @@ class TestTotalsAndComponents:
             ),
             (
                 "M",
-                "201009",
                 0,
                 [
                     (0),
@@ -1352,7 +1296,6 @@ class TestTotalsAndComponents:
                 None,
                 (
                     "M",
-                    "201009",
                     0,
                     None,
                     None,
@@ -1366,7 +1309,6 @@ class TestTotalsAndComponents:
             ),
             (
                 "N",
-                "201908",
                 10817,
                 [
                     (9201),
@@ -1382,7 +1324,6 @@ class TestTotalsAndComponents:
                 None,
                 (
                     "N",
-                    "201908",
                     6,
                     None,
                     None,
@@ -1396,7 +1337,6 @@ class TestTotalsAndComponents:
             ),
             (
                 "O",
-                "200702",
                 5,
                 [(1), (2), (3), (4)],
                 True,
@@ -1407,7 +1347,6 @@ class TestTotalsAndComponents:
                 None,
                 (
                     "O",
-                    "200702",
                     5,
                     None,
                     None,
@@ -1421,7 +1360,6 @@ class TestTotalsAndComponents:
             ),
             (
                 "P",
-                "200606",
                 9,
                 [(1), (2), (3), (4)],
                 True,
@@ -1432,7 +1370,6 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "P",
-                    "200606",
                     1,
                     9,
                     11,
@@ -1446,7 +1383,6 @@ class TestTotalsAndComponents:
             ),
             (
                 "Q",
-                "200502",
                 5,
                 [(1), (2), (3), (4)],
                 True,
@@ -1457,7 +1393,6 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "Q",
-                    "200502",
                     5,
                     9,
                     11,
@@ -1471,7 +1406,6 @@ class TestTotalsAndComponents:
             ),
             (
                 "R",
-                "200403",
                 10817,
                 [
                     (9201),
@@ -1487,7 +1421,6 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "R",
-                    "200403",
                     6,
                     9729.9,
                     11892.1,
@@ -1501,7 +1434,6 @@ class TestTotalsAndComponents:
             ),
             (
                 "S",
-                "200102",
                 9,
                 [(1), (2), (3), (4)],
                 False,
@@ -1512,7 +1444,6 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "S",
-                    "200102",
                     1,
                     9,
                     11,
@@ -1526,7 +1457,6 @@ class TestTotalsAndComponents:
             ),
             (
                 "U",
-                "200003",
                 5,
                 [(1), (2), (3), (4)],
                 False,
@@ -1544,7 +1474,6 @@ class TestTotalsAndComponents:
             ),
             (
                 "T",
-                "200108",
                 5,
                 [
                     (0),
@@ -1567,7 +1496,6 @@ class TestTotalsAndComponents:
             ),
             (
                 "U",
-                "200704",
                 10817,
                 [
                     (0),
@@ -1583,7 +1511,6 @@ class TestTotalsAndComponents:
                 None,
                 (
                     "U",
-                    "200704",
                     None,
                     None,
                     None,
@@ -1601,7 +1528,6 @@ class TestTotalsAndComponents:
             ),
             (
                 "V",
-                "200109",
                 10817,
                 [(0), (0), (0), (0)],
                 False,
@@ -1612,7 +1538,6 @@ class TestTotalsAndComponents:
                 None,
                 (
                     "V",
-                    "200109",
                     None,
                     None,
                     None,
@@ -1629,7 +1554,6 @@ class TestTotalsAndComponents:
             ),
             (
                 "W",
-                "201803",
                 0,
                 [
                     (9201),
@@ -1645,7 +1569,6 @@ class TestTotalsAndComponents:
                 None,
                 (
                     "W",
-                    "201803",
                     10811,
                     None,
                     None,
@@ -1664,7 +1587,6 @@ class TestTotalsAndComponents:
             ),
             (
                 "X",
-                "200201",
                 0,
                 [(10), (10), (10), (10)],
                 False,
@@ -1675,7 +1597,6 @@ class TestTotalsAndComponents:
                 None,
                 (
                     "X",
-                    "200201",
                     40,
                     None,
                     None,
@@ -1693,7 +1614,6 @@ class TestTotalsAndComponents:
             ),
             (
                 "Y",
-                "200201",
                 0,
                 [
                     (1),
@@ -1709,7 +1629,6 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "Y",
-                    "200201",
                     10,
                     9,
                     11,
@@ -1727,7 +1646,6 @@ class TestTotalsAndComponents:
             ),
             (
                 "Z",
-                "200402",
                 3,
                 [
                     (2.4),
@@ -1743,7 +1661,6 @@ class TestTotalsAndComponents:
                 None,
                 (
                     "Z",
-                    "200402",
                     7.9,
                     None,
                     None,
@@ -1759,7 +1676,6 @@ class TestTotalsAndComponents:
             ),
             (
                 "AA",
-                "200911",
                 2,
                 [
                     (2.4),
@@ -1775,7 +1691,6 @@ class TestTotalsAndComponents:
                 None,
                 (
                     "AA",
-                    "200911",
                     8.9,
                     None,
                     None,
@@ -1796,7 +1711,6 @@ class TestTotalsAndComponents:
             ),
             (
                 "AB",
-                "202103",
                 7,
                 [(1), (2), (3), (4)],
                 True,
@@ -1807,7 +1721,6 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "AB",
-                    "202103",
                     3,
                     9,
                     11,
@@ -1821,7 +1734,6 @@ class TestTotalsAndComponents:
             ),
             (
                 "AC",
-                "200406",
                 10.5,
                 [(1), (2), (3), (4)],
                 True,
@@ -1832,7 +1744,6 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "AC",
-                    "200406",
                     0.5,
                     9,
                     11,
@@ -1846,7 +1757,6 @@ class TestTotalsAndComponents:
             ),
             (
                 "AD",
-                "200908",
                 9,
                 [(1), (2), (3), (4)],
                 False,
@@ -1857,7 +1767,6 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "AD",
-                    "200908",
                     1,
                     9,
                     11,
@@ -1871,7 +1780,6 @@ class TestTotalsAndComponents:
             ),
             (
                 "AE",
-                "201903",
                 10.9,
                 [(1), (2), (3), (4)],
                 True,
@@ -1882,7 +1790,6 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "AE",
-                    "201903",
                     0.9,
                     9,
                     11,
@@ -1896,7 +1803,6 @@ class TestTotalsAndComponents:
             ),
             (
                 "AF",
-                "201706",
                 11,
                 [(1), (2), (3), (4)],
                 False,
@@ -1907,7 +1813,6 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "AF",
-                    "201706",
                     1,
                     9,
                     11,
@@ -1921,7 +1826,6 @@ class TestTotalsAndComponents:
             ),
             (
                 "AG",
-                "200406",
                 12,
                 [(1), (2), (3), (4)],
                 True,
@@ -1932,7 +1836,6 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "AG",
-                    "200406",
                     2.0,
                     9,
                     11,
@@ -1946,7 +1849,6 @@ class TestTotalsAndComponents:
             ),
             (
                 "AH",
-                "200103",
                 "InvalidString",
                 [
                     (0),
@@ -1967,7 +1869,6 @@ class TestTotalsAndComponents:
             ),
             (
                 None,
-                "204602",
                 10.9,
                 [
                     (1),
@@ -1987,29 +1888,7 @@ class TestTotalsAndComponents:
                 # user enters a None value for the identifier
             ),
             (
-                "AI",
-                None,
-                10.9,
-                [
-                    (1),
-                    (2),
-                    (3),
-                    (4),
-                ],
-                True,
-                10.9,
-                28,
-                None,
-                None,
-                0.1,
-                ValueError("The period is not populated"),
-                "Test 35 - Missing period value",
-                # Test to ensure a TACException is thrown when a
-                # user does not enter a value for the period
-            ),
-            (
                 "AJ",
-                "200907",
                 10.9,
                 [
                     (1),
@@ -2030,7 +1909,6 @@ class TestTotalsAndComponents:
             ),
             (
                 "AP",
-                "200103",
                 90,
                 [
                     (90),
@@ -2046,7 +1924,6 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "AP",
-                    "200103",
                     10,
                     90,
                     110,
@@ -2061,7 +1938,6 @@ class TestTotalsAndComponents:
             ),
             (
                 "AQ",
-                "200203",
                 10,
                 [
                     (2.4),
@@ -2077,7 +1953,6 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "AQ",
-                    "200203",
                     0.9,
                     9.81,
                     11.99,
@@ -2097,7 +1972,6 @@ class TestTotalsAndComponents:
             ),
             (
                 "AR",
-                "200405",
                 2,
                 [
                     (2.4),
@@ -2120,7 +1994,6 @@ class TestTotalsAndComponents:
             ),
             (
                 "AS",
-                "199502",
                 2,
                 [
                     (2.4),
@@ -2143,7 +2016,6 @@ class TestTotalsAndComponents:
             ),
             (
                 "AT",
-                "199706",
                 11,
                 [(1), (2), (3), (4)],
                 False,
@@ -2154,7 +2026,6 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "AT",
-                    "199706",
                     1,
                     9,
                     11,
@@ -2171,7 +2042,6 @@ class TestTotalsAndComponents:
             ),
             (
                 "AU",
-                "199809",
                 0.6,
                 [
                     (0.1),
@@ -2186,7 +2056,6 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "AU",
-                    "199809",
                     0.1,
                     0.6,
                     0.8,
@@ -2203,7 +2072,6 @@ class TestTotalsAndComponents:
             ),
             (
                 "AW",
-                "199502",
                 10.5,
                 [
                     (1),
@@ -2219,7 +2087,6 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "AW",
-                    "199502",
                     0.5,
                     9,
                     11,
@@ -2234,7 +2101,6 @@ class TestTotalsAndComponents:
             ),
             (
                 "AX",
-                "202206",
                 90,
                 [
                     (90),
@@ -2250,7 +2116,6 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "AX",
-                    "202206",
                     6,
                     90,
                     110,
@@ -2265,7 +2130,6 @@ class TestTotalsAndComponents:
             ),
             (
                 "AY",
-                "200103",
                 None,
                 [
                     (0),
@@ -2288,7 +2152,6 @@ class TestTotalsAndComponents:
             ),
             (
                 "AZ",
-                "202001",
                 90,
                 [
                     (90),
@@ -2304,7 +2167,6 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "AZ",
-                    "202001",
                     10,
                     90,
                     110,
@@ -2321,7 +2183,6 @@ class TestTotalsAndComponents:
         self,
         capfd,
         identifier,
-        period,
         total,
         components,
         amend_total,
@@ -2337,7 +2198,6 @@ class TestTotalsAndComponents:
             try:
                 results = totals_and_components(
                     identifier=identifier,
-                    period=period,
                     total=total,
                     components=components,
                     amend_total=amend_total,
@@ -2355,13 +2215,12 @@ class TestTotalsAndComponents:
                 print(printed_output)
 
                 assert results.identifier == expected_result[0]
-                assert results.period == expected_result[1]
-                assert results.absolute_difference == expected_result[2]
-                assert results.low_percent_threshold == expected_result[3]
-                assert results.high_percent_threshold == expected_result[4]
-                assert results.precision == expected_result[5]
-                assert results.final_total == expected_result[6]
-                assert results.final_components == expected_result[7]
+                assert results.absolute_difference == expected_result[1]
+                assert results.low_percent_threshold == expected_result[2]
+                assert results.high_percent_threshold == expected_result[3]
+                assert results.precision == expected_result[4]
+                assert results.final_total == expected_result[5]
+                assert results.final_components == expected_result[6]
 
                 getcontext().prec = results.precision
                 if results.tcc_marker == "T" or results.tcc_marker == "C":
@@ -2370,7 +2229,7 @@ class TestTotalsAndComponents:
                         sum_of_components += Decimal(str(component))
 
                     sum_of_components = float(sum_of_components)
-                    assert sum_of_components == expected_result[6]
+                    assert sum_of_components == expected_result[5]
 
             except Exception as e:
                 pytest.fail(
@@ -2384,7 +2243,6 @@ class TestTotalsAndComponents:
             with pytest.raises(Exception) as exc_info:
                 totals_and_components(
                     identifier=identifier,
-                    period=period,
                     total=total,
                     components=components,
                     amend_total=amend_total,

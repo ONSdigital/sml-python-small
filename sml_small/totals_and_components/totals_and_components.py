@@ -102,7 +102,6 @@ class TotalsAndComponentsOutput:
     identifier: Optional[
         str
     ] = ""  # unique identifier, e.g Business Reporting Unit SG-should this be optional?
-    period: [str] = ""  # not used in initial PoC always assume current period
     absolute_difference: Optional[float]  # this is the absolute value showing the
     # difference between the components input and the predictive total
     low_percent_threshold: Optional[
@@ -146,7 +145,6 @@ class TotalsAndComponentsOutput:
         print("Totals and Components Output:")
         print("-----------------------------")
         print(f"Identifier: {self.identifier}")
-        print(f"Period: {self.period}")
         print(f"Absolute Difference: {self.absolute_difference}")
         print(f"Low Percent Threshold: {self.low_percent_threshold}")
         print(f"High Percent Threshold: {self.high_percent_threshold}")
@@ -193,7 +191,6 @@ def validate_input(
     total: float,
     components: List[ComponentPair],
     amend_total: bool,
-    period: Optional[str],
     predictive: Optional[float],
     precision: Optional[int],
     auxiliary: Optional[float],
@@ -215,9 +212,7 @@ def validate_input(
 
     :param identifier: Unique identifier for the calculation.
     :type identifier: str
-    :param period: Not used in initial Proof of Concept (PoC). Assumes current period.
-    :type period Optional(str)
-    :param total: Target period total, numeric – nulls allowed
+    :param total: Target total, numeric – nulls allowed
     :type total: float
     :param components: Corresponding list of Total variable's components, numeric – nulls allowed
     :type components: List[ComponentPair]
@@ -228,8 +223,7 @@ def validate_input(
     :param precision: Precision is not a decimal point indicator, it is instead used to adjust our error margins.
     :type precision: Optional[int]
     :param auxiliary: The variable used as a predictor for a contributor’s target variable,
-                      where the predictive value is not available
-                      (e.g., where the contributor was not sampled in the predictive period).
+                      where the predictive value is not available.
     :type auxiliary: Optional[float]
     :param absolute_difference_threshold: Is the predefined threshold for the absolute difference
     :type absolute_difference_threshold: Optional[float]
@@ -246,15 +240,6 @@ def validate_input(
     if not identifier:
         raise ValueError("The identifier is not populated")
     str(identifier)
-    if period is None:
-        raise ValueError("The period is not populated")
-    if period:
-        try:
-            datetime.datetime.strptime(period, "%Y%m")
-        except ValueError as exc:
-            raise type(exc)(
-                str(exc) + f" Period: {period} must be a String of format 'YYYYMM'"
-            )
     if total is None:
         raise ValueError(
             "We would always expect a current total to accompany the components"
@@ -360,7 +345,7 @@ def set_predictive_value(
     Checks if predictive and auxiliary values are input, when predictive is None and auxiliary
     is input set predictive to auxiliary
 
-    :param predictive: The predictive value, typically the total for the current period.
+    :param predictive: The predictive value, typically the total.
     :type predictive: float, optional
     :param auxiliary: The value to be used in the absence of a predictive value.
     :type auxiliary: float, optional
@@ -382,7 +367,7 @@ def check_zero_errors(predictive: float, components_sum: float) -> TccMarker:
     Stop method processing when the predictive value is positive but the sum of components is zero.
     In these scenarios a correction is not possible.
 
-    :param predictive: The predictive value, typically the total for the current period.
+    :param predictive: The predictive value, typically the total.
     :type predictive: float
     :param components_sum: total sum of all the components values entered.
     :type components_sum: float
@@ -445,8 +430,7 @@ def determine_error_detection(
     :param absolute_difference: The absolute value showing the difference between
                                 the input components and the predictive total.
     :type absolute_difference: Float
-    :param predictive: The predictive value, typically the total for the current
-                       period.
+    :param predictive: The predictive value, typically the total.
     :type predictive: float
     :param low_threshold: Low percentage threshold previously
                        calculated from the percentage_difference_threshold and
@@ -512,7 +496,7 @@ def check_percentage_difference_threshold(
     based on the calculated low and high threshold based on the received sum of
     components compared to the predictive value
 
-    :param predictive: The predictive value, typically the total for the current period.
+    :param predictive: The predictive value, typically the total.
     :type predictive: float
     :param low_threshold: Low percentage threshold previously
                        calculated from the percentage_difference_threshold and
@@ -554,7 +538,7 @@ def error_correction(
     :type components_sum: float
     :param original_components: List of Components objects so final values can be amended
     :type original_components: list(ComponentPair)
-    :param predictive: The predictive value, typically the total for the current period.
+    :param predictive: The predictive value, typically the total.
     :type predictive: float
     :param precision: Precision is not a decimal point indicator, it is instead used to adjust our error margins.
     :type precision: Optional[int]
@@ -625,7 +609,7 @@ def correct_components(
     :type components_sum: float
     :param original_components: List of Components objects so final values can be amended
     :type original_components: list(Components_list)
-    :param predictive: The predictive value, typically the total for the current period.
+    :param predictive: The predictive value, typically the total.
     :type predictive: float
     :param precision: Precision is not a decimal point indicator, it is instead used to adjust our error margins.
     :type precision: Optional[int]
@@ -733,7 +717,6 @@ def calculate_percent_thresholds(
 
 def totals_and_components(
     identifier: str,  # unique identifier, e.g Business Reporting Unit SG-should this be optional?
-    period: Optional[str],
     total: float,
     components: List[float],
     amend_total: bool,
@@ -764,8 +747,6 @@ def totals_and_components(
 
     :param identifier: Unique identifier for the calculation.
     :type identifier: str
-    :param period: Not used in initial Proof of Concept (PoC). Assumes current period.
-    :type period: Optional[str]
     :param total: Original value returned for the total.
     :type total: float
     :param components: List of components that should equal the total or predictive value.
@@ -773,7 +754,7 @@ def totals_and_components(
     :param amend_total: Specifies whether the total or components should be corrected when
                         an error is detected.
     :type amend_total:bool
-    :param predictive: The predictive value, typically the total for the current period.
+    :param predictive: The predictive value, typically the total.
     :type predictive: Optional[float]
     :param precision: Precision is not a decimal point indicator, it is instead used to adjust our error margins.
     :type precision: Optional[int]
@@ -791,8 +772,6 @@ def totals_and_components(
     :return: TotalsAndComponentsOutput: An object containing the
                                        following attributes:
              - identifier (str, optional): Unique identifier (default: None).
-             - period (str, optional): Not used in initial PoC, always assume current period
-             (default: None).
              - absolute_difference (float): The absolute value showing the difference between
              the input components and
                the predictive total.
@@ -817,7 +796,6 @@ def totals_and_components(
     """
     print_input_table(
         identifier=identifier,
-        period=period,
         total=total,
         components=components,
         amend_total=amend_total,
@@ -830,7 +808,6 @@ def totals_and_components(
     try:
         output_list = {
             "identifier": identifier,
-            "period": period,
             "final_total": total,
             "final_components": components,
             "absolute_difference": None,
@@ -842,7 +819,6 @@ def totals_and_components(
             total,
             components_list,
             amend_total,
-            period,
             predictive,
             precision,
             auxiliary,
