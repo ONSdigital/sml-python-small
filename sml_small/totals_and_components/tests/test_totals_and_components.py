@@ -3,14 +3,22 @@ from decimal import Decimal, getcontext
 
 import pytest
 
-from sml_small.totals_and_components.totals_and_components import (ComponentPair, TACException,
-                                                                   check_absolute_difference_threshold,
-                                                                   check_percentage_difference_threshold,
-                                                                   check_sum_components_predictive, check_zero_errors,
-                                                                   correct_components, correct_total,
-                                                                   determine_error_detection, error_correction,
-                                                                   set_predictive_value, sum_components,
-                                                                   totals_and_components, validate_input)
+from sml_small.totals_and_components.totals_and_components import (
+    ComponentPair,
+    TACException,
+    check_absolute_difference_threshold,
+    check_percentage_difference_threshold,
+    check_sum_components_predictive,
+    check_zero_errors,
+    correct_components,
+    correct_total,
+    determine_error_detection,
+    error_correction,
+    set_predictive_value,
+    sum_components,
+    totals_and_components,
+    validate_input,
+)
 
 EXCEPTION_FAIL_MESSAGE = (
     "{test_id} : Expected no exception, but got {exception_type}: {exception_msg}"
@@ -2176,9 +2184,9 @@ class TestTotalsAndComponents:
                     "C",
                 ),
                 "Test 51 - total is used when predictive and auxiliary is none",
-                # When total value is present, predictive value is None and 
-                # Auxiliary value is None then the decision whether an automatic 
-                # correction can be made will be based off of the total value 
+                # When total value is present, predictive value is None and
+                # Auxiliary value is None then the decision whether an automatic
+                # correction can be made will be based off of the total value
                 # and any recalculation of the components will use the total value.
             ),
             (
@@ -2207,9 +2215,9 @@ class TestTotalsAndComponents:
                     "C",
                 ),
                 "Test 52 - predictive value is used when predictive, auxiliary is none and total exist",
-                # When total value is present, predictive value is present and Auxiliary value 
-                # is None then the decision whether an automatic correction can be made 
-                # will be based off of the predictive value and any recalculation of the 
+                # When total value is present, predictive value is present and Auxiliary value
+                # is None then the decision whether an automatic correction can be made
+                # will be based off of the predictive value and any recalculation of the
                 # components will use the total value.
             ),
             (
@@ -2238,9 +2246,9 @@ class TestTotalsAndComponents:
                     "C",
                 ),
                 "Test 53 - predictive value is used when predictive and total is none, auxiliary exists",
-                # When total value is present and predictive value is None 
-                # and Auxiliary value is present then the decision whether 
-                # an automatic correction can be made will be based off of the auxiliary value 
+                # When total value is present and predictive value is None
+                # and Auxiliary value is present then the decision whether
+                # an automatic correction can be made will be based off of the auxiliary value
                 # and any recalculation of the components will use the total value.
             ),
             (
@@ -2269,9 +2277,9 @@ class TestTotalsAndComponents:
                     "C",
                 ),
                 "Test 54 - predictive value is used when predictive and total is none, auxiliary exists",
-                # When total value is present and predictive value is None 
-                # and Auxiliary value is present then the decision whether 
-                # an automatic correction can be made will be based off of the auxiliary value 
+                # When total value is present and predictive value is None
+                # and Auxiliary value is present then the decision whether
+                # an automatic correction can be made will be based off of the auxiliary value
                 # and any recalculation of the components will use the total value.
             ),
         ],

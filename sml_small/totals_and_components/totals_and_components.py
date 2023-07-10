@@ -2,7 +2,6 @@
 For Copyright information, please see LICENCE.
 """
 
-import datetime
 from decimal import Decimal, getcontext
 from enum import Enum
 from typing import List, Optional, Tuple
