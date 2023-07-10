@@ -2176,6 +2176,103 @@ class TestTotalsAndComponents:
                     "C",
                 ),
                 "Test 51 - total is used when predictive and auxiliary is none",
+                # When total value is present, predictive value is None and 
+                # Auxiliary value is None then the decision whether an automatic 
+                # correction can be made will be based off of the total value 
+                # and any recalculation of the components will use the total value.
+            ),
+            (
+                "BA",
+                90,
+                [
+                    (90),
+                    (0),
+                    (4),
+                    (6),
+                ],
+                False,
+                95,
+                28,
+                None,
+                None,
+                0.1,
+                (
+                    "BA",
+                    5,
+                    90,
+                    110,
+                    28,
+                    90,
+                    [81, 0, 3.6, 5.4],
+                    "C",
+                ),
+                "Test 52 - predictive value is used when predictive, auxiliary is none and total exist",
+                # When total value is present, predictive value is present and Auxiliary value 
+                # is None then the decision whether an automatic correction can be made 
+                # will be based off of the predictive value and any recalculation of the 
+                # components will use the total value.
+            ),
+            (
+                "BC",
+                90,
+                [
+                    (90),
+                    (0),
+                    (4),
+                    (6),
+                ],
+                False,
+                95,
+                28,
+                None,
+                None,
+                0.1,
+                (
+                    "BC",
+                    5,
+                    90,
+                    110,
+                    28,
+                    90,
+                    [81, 0, 3.6, 5.4],
+                    "C",
+                ),
+                "Test 53 - predictive value is used when predictive and total is none, auxiliary exists",
+                # When total value is present and predictive value is None 
+                # and Auxiliary value is present then the decision whether 
+                # an automatic correction can be made will be based off of the auxiliary value 
+                # and any recalculation of the components will use the total value.
+            ),
+            (
+                "BD",
+                90,
+                [
+                    (90),
+                    (0),
+                    (4),
+                    (6),
+                ],
+                False,
+                None,
+                28,
+                95,
+                None,
+                0.1,
+                (
+                    "BD",
+                    5,
+                    90,
+                    110,
+                    28,
+                    90,
+                    [81, 0, 3.6, 5.4],
+                    "C",
+                ),
+                "Test 54 - predictive value is used when predictive and total is none, auxiliary exists",
+                # When total value is present and predictive value is None 
+                # and Auxiliary value is present then the decision whether 
+                # an automatic correction can be made will be based off of the auxiliary value 
+                # and any recalculation of the components will use the total value.
             ),
         ],
     )
