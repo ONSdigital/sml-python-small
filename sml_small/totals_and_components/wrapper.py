@@ -3,7 +3,7 @@
 # be displayed in a formatted table on the command line
 
 # Importing the totals_and_components method from the totals_and_components.py file
-from totals_and_components import totals_and_components, ComponentPair
+from totals_and_components import totals_and_components
 import csv
 
 # Importing tabulate function from tabulate to pretty print the input and output results
@@ -112,31 +112,11 @@ def invoke_process_in_memory_data_example():
     # The input data is here as a list below but this isn't needed to work with the T&C method
     # The List[] data below is used to keep track of the original data to display on the command line
     # in a table format
-    data = [
-        "F",
-        "202301",
-        11,
-        [0, 0, 0, 0],
-        True,
-        11,
-        "202301",
-        None,
-        11,
-        None
-    ]
+    data = ["F", "202301", 11, [0, 0, 0, 0], True, 11, "202301", None, 11, None]
 
     # We pass in the input data to be processed and returned by the T&C method
     result = totals_and_components(
-        "F",
-        "202301",
-        11,
-        [0, 0, 0, 0],
-        True,
-        11,
-        "202301",
-        None,
-        11,
-        None
+        "F", "202301", 11, [0, 0, 0, 0], True, 11, "202301", None, 11, None
     )
 
     filter_data(result, data)
@@ -147,7 +127,7 @@ def invoke_process_in_memory_data_example_2():
 
     # The input data below once passed into the T&C method should return
     # a TCC Marker of C = Components corrected
-    data =  [
+    data = [
         "C",
         "202301",
         90,
@@ -383,7 +363,7 @@ def invoke_process_with_in_memory_csv():
     # Read the CSV file and extract the input data and pass into the
     # T&C method
     in_memory_csv_data = """reference,period,total,comp_1,comp_2,comp_3,comp_4,amend_total,predictive,auxiliary,abs_threshold,perc_threshold
-A,202301,1625,632,732,99,162,TRUE,1625,202301,,11"""
+A,202301,1625,632,732,99,162,TRUE,1625,202301,,11"""  # noqa: E501
 
     csv_reader = csv.DictReader(in_memory_csv_data.splitlines())
     print("CSV reader", csv_reader)
