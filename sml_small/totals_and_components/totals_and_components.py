@@ -234,7 +234,7 @@ def validate_input(
     :return: The tuple is a returned list of values converted to floats (if possible).
     :rtype: tuple[float |
             List[Component_list] | None, float | None, float | None, float | None,
-            float | None, float | None]
+            float | None, int | None]
     """
     if not identifier:
         raise ValueError("The identifier is not populated")
@@ -326,6 +326,7 @@ def is_number(value) -> bool:
 
     :param value: value is the parsed parameter which is to be converted to a float(if possible).
     :type value: float | optional
+    :return: This return a True boolean value if the value obtained can be converted to a float.
     :rtype: boolean to indicate if value is a number or not.
     """
     try:
@@ -397,6 +398,8 @@ def check_sum_components_predictive(
     :param precision: Precision is not a decimal point indicator, it is instead used to adjust our error margins.
     :type precision: Optional[int]
     ...
+    :param absolute_difference_threshold: Is the predefined threshold for the absolute difference
+    :type absolute_difference_threshold: Optional[float]
     :return: We will be returning a number for the absolute difference.
     :rtype: float
     """
@@ -478,8 +481,8 @@ def check_absolute_difference_threshold(
                                 the input components and the predictive total.
     :type absolute_difference: float
     ...
-    :return satisfied: a marker indicating if the threshold is satisfied
-    :rtype satisfied: bool
+    :return correct_error: a marker indicating if the threshold is satisfied
+    :rtype correct_error: bool
     """
     correct_error = False
     if absolute_difference <= absolute_difference_threshold:
@@ -506,8 +509,8 @@ def check_percentage_difference_threshold(
                        input components
     :type high_threshold: float
     ...
-    :return satisfied: a marker indicating if the threshold is satisfied
-    :rtype satisfied: bool
+    :return correct_error: a marker indicating if the threshold is satisfied
+    :rtype correct_error: bool
     """
     correct_error = False
     if low_threshold <= predictive <= high_threshold:
@@ -537,8 +540,6 @@ def error_correction(
     :type components_sum: float
     :param original_components: List of Components objects so final values can be amended
     :type original_components: list(ComponentPair)
-    :param predictive: The predictive value, typically the total.
-    :type predictive: float
     :param precision: Precision is not a decimal point indicator, it is instead used to adjust our error margins.
     :type precision: Optional[int]
     ...
@@ -608,8 +609,6 @@ def correct_components(
     :type components_sum: float
     :param original_components: List of Components objects so final values can be amended
     :type original_components: list(Components_list)
-    :param predictive: The predictive value, typically the total.
-    :type predictive: float
     :param precision: Precision is not a decimal point indicator, it is instead used to adjust our error margins.
     :type precision: Optional[int]
     :param total: current total
@@ -767,7 +766,7 @@ def totals_and_components(
                                             percentage of the sum of the components, the
                                             method will automatically correct.
     :type percentage_difference_threshold: Optional[float]
-    :raises: N/A Currently
+    :raises: We raise value errors when values do not meet our expectations.
     :return: TotalsAndComponentsOutput: An object containing the
                                        following attributes:
              - identifier (str, optional): Unique identifier (default: None).
@@ -780,6 +779,7 @@ def totals_and_components(
              - high_percent_threshold (float, optional): The sum of the input components plus
              the absolute percentage
                difference (default: None).
+             - param precision (int): Precision value returned is either the entered or default. 
              - final_total (float): The output total, which may have been corrected based on
              the amend_total variable.
              - final_components (List[float]): The output components, which may have been
