@@ -205,9 +205,10 @@ def validate_input(
     int | None,
 ]:
     """
-    validate_input is to ensure that the dataset input record has all the values
-    we need in the correct format. To do this we check to see if the data exists and is a number.
-    If the data does not exist and is not a number we throw ValueError's as appropriate.
+    validate_input is to ensure that the dataset input record has values present and in
+    the data types we expect. To do this we check to see if the data exists and is a
+    number. If the data does not exist (if expected) or is not a the expected type we
+    throw ValueError's as appropriate.
 
     :param identifier: Unique identifier for the calculation.
     :type identifier: str
@@ -299,7 +300,7 @@ def validate_input(
 
 def validate_number(tag: str, value) -> bool:
     """
-    validate_number will take a parsed tag and value and check ot see if the value is a number.
+    validate_number will take a parsed tag and value and check to see if the value is a number.
     If this is not the case it returns a ValueError.
 
     :param tag: The tag is a way of identifying the value and type entered and is used if a
@@ -342,8 +343,8 @@ def set_predictive_value(
     total: float,
 ) -> float | None:
     """
-    Checks if predictive and auxiliary values are input, when predictive is None and auxiliary
-    is input set predictive to auxiliary
+    Checks if predictive and auxiliary values are input, when predictive is None but auxiliary
+    is input set predictive to auxiliary. If auxiliary is also None use the total value.
 
     :param predictive: The predictive value, typically the total.
     :type predictive: float, optional
@@ -779,7 +780,7 @@ def totals_and_components(
              - high_percent_threshold (float, optional): The sum of the input components plus
              the absolute percentage
                difference (default: None).
-             - param precision (int): Precision value returned is either the entered or default. 
+             - param precision (int): Precision value returned is either the entered or default.
              - final_total (float): The output total, which may have been corrected based on
              the amend_total variable.
              - final_components (List[float]): The output components, which may have been
