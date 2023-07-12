@@ -100,7 +100,7 @@ class TotalsAndComponentsOutput:
 
     identifier: Optional[
         str
-    ] = ""  # unique identifier, e.g Business Reporting Unit SG-should this be optional?
+    ] = ""  # unique identifier, e.g Business Reporting Unit
     absolute_difference: Optional[float]  # this is the absolute value showing the
     # difference between the components input and the predictive total
     low_percent_threshold: Optional[
