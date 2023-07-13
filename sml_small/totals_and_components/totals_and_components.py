@@ -158,7 +158,7 @@ def initialize_components_list(
 ) -> [list[ComponentPair]]:
     """
     Takes the list of components values and constructs Component_List objects from them
-    :param component_list: List of components that should equal the total or predictive value.
+    :param component_list: List of component values, the sum of which, should match the received total value.
     :type component_list: list(float)
     :return component_object_list: List of components stored within ComponentsList objects
     :rtype component_object_list: list(ComponentsList)
@@ -205,10 +205,10 @@ def validate_input(
     int | None,
 ]:
     """
-    validate_input is to ensure that the dataset input record has values present and in
-    the data types we expect. To do this we check to see if the data exists and is a
-    number. If the data does not exist (if expected) or is not a the expected type we
-    throw ValueError's as appropriate.
+    validate_input is used to validate the data passed to the totals_and_components
+    method ensuring that the values are present when expected and that they are of
+    the correct type. If invalid data is received the an appropriate exception is
+    raised.
 
     :param identifier: Unique identifier for the calculation.
     :type identifier: str
@@ -232,6 +232,13 @@ def validate_input(
     :type percentage_difference_threshold: Optional[float]
     :raises ValueError: ValueErrors are returned when data is missing or in the
                         incorrect type/format.
+    :raises Exception: Exception errors are returned in the following format
+                       'Expected no exception, but got {Exception}' these exception types can be any of the following
+                       IOException, NullPointerException, ArithmeticException,
+                       IllegalArgumentException, IllegalStateException, InterruptedException,
+                       ArgumentException, InvalidOperationException, RuntimeException,
+                       NullReferenceException, TimeoutException, FloatingPointException
+                       and OutOfMemoryException.
     :return: The tuple is a returned list of values converted to floats (if possible).
     :rtype: tuple[float |
             List[Component_list] | None, float | None, float | None, float | None,
@@ -242,7 +249,7 @@ def validate_input(
     str(identifier)
     if total is None:
         raise ValueError(
-            "We would always expect a current total to accompany the components"
+            "total is a mandatory parameter and must be specified"
         )
     if total:
         validate_number("total", total)
@@ -256,7 +263,7 @@ def validate_input(
             )
             float(component.original_value)
     if amend_total is None:
-        raise ValueError("Amend total needs to be True or False")
+        raise ValueError("amend_total is a mandatory parameter and must be specified as either True or False.")
     if predictive is not None:
         validate_number("predictive", predictive)
         float(predictive)
@@ -278,14 +285,11 @@ def validate_input(
             "percentage difference threshold", percentage_difference_threshold
         )
         float(percentage_difference_threshold)
-    if precision is None:
-        precision = 28
-    if precision is not None:
-        if not 0 < precision <= 28:
+    if not 0 < precision <= 28:
             raise ValueError(
                 "Precision range must be more than 0 and less than or equal to 28"
             )
-        validate_number("Precision", precision)
+    else: validate_number("Precision", precision)
 
     return (
         total,
@@ -301,15 +305,15 @@ def validate_input(
 def validate_number(tag: str, value) -> bool:
     """
     validate_number will take a parsed tag and value and check to see if the value is a number.
-    If this is not the case it returns a ValueError.
+    validate_number will raise a ValueError if expectations are not met.
 
     :param tag: The tag is a way of identifying the value and type entered and is used if a
                 ValueError is returned.
     :type tag: str
     :param value: value is what is parsed to the function it can be many different types.
     :type value: float | optional
-    :raises ValueError: ValueError is a means to raise error alerts.
-    :return: This return a True boolean value if the value obtained is a number.
+    :raises ValueError: ValueError is raised for missing numbers or improper data types.
+    :return: Returns True when a value can be converted to float.
     :rtype: boolean
     """
     if not is_number(value):
@@ -386,7 +390,7 @@ def check_zero_errors(predictive: float, components_sum: float) -> TccMarker:
 def check_sum_components_predictive(
     predictive: float,
     components_sum: float,
-    precision: Optional[int],
+    precision: int,
 ) -> float:
     """
     Calculates the absolute difference between the predictive value and the sum of the
@@ -396,12 +400,14 @@ def check_sum_components_predictive(
     :type predictive: float
     :param components_sum: total sum of all the components values entered.
     :type components_sum: float
-    :param precision: Precision is not a decimal point indicator, it is instead used to adjust our error margins.
-    :type precision: Optional[int]
+    :param precision: Precision is used by the decimal package to calculate the absolute difference
+                      to the specified accuracy.
+    :type precision: int
     ...
     :param absolute_difference_threshold: Is the predefined threshold for the absolute difference
     :type absolute_difference_threshold: Optional[float]
-    :return: We will be returning a number for the absolute difference.
+    :return: Returns the absolute difference between the received predictive value and the received
+             sum of the components as a float.
     :rtype: float
     """
     getcontext().prec = precision
@@ -482,7 +488,8 @@ def check_absolute_difference_threshold(
                                 the input components and the predictive total.
     :type absolute_difference: float
     ...
-    :return correct_error: a marker indicating if the threshold is satisfied
+    :return correct_error: a flag indicating if the threshold is satisfied and
+                           automatic correction can be applied
     :rtype correct_error: bool
     """
     correct_error = False
@@ -499,7 +506,10 @@ def check_percentage_difference_threshold(
     based on the calculated low and high threshold based on the received sum of
     components compared to the predictive value
 
-    :param predictive: The predictive value, typically the total.
+    :param predictive: The received predictive value, this could be based off
+                       of the current total, predictive total or auxiliary
+                       value dependant upon what values where passed to the
+                       top level totals_and_components function.
     :type predictive: float
     :param low_threshold: Low percentage threshold previously
                        calculated from the percentage_difference_threshold and
@@ -527,15 +537,17 @@ def error_correction(
     precision: Optional[int],
 ) -> tuple[float, list[float], TccMarker]:
     """
-    Function to run the relevant error correction method and output the final corrections
-    the method makes. Return a final total that is calculated from the sum of the received
-    components set the final components as the received components values and indicate the
-    total has been corrected
+    The error correction function will use the amend_total to either
+    correct the total or components. Correcting the total will set the final 
+    total as the sum of components. Correcting the components will return the
+    new adjusted components that have been adjusted by using the total.
 
     :param amend_total: Specifies whether the total or components should be corrected
                         when an error is detected.
     :type amend_total: bool
-    :param total: current total
+    :param total: Total value specified when the main totals_and_components method is
+                  called, this is typically the total value associated with the
+                  most current data received.
     :type total: float
     :param components_sum: Sum of original values of components list
     :type components_sum: float
@@ -596,41 +608,44 @@ def correct_total(
 
 def correct_components(
     components_sum: float,
-    original_components: List[ComponentPair],
+    components: List[ComponentPair],
     total: float,
     precision: int,
 ) -> tuple[float, list[ComponentPair], TccMarker]:
     """
-    Function to correct the components values to add up to the received predictive value,
-    set the final total as the received predictive total and indicate that the component
+    Function to correct the components values to add up to the received total value,
+    set the final total as the received total and indicate that the component
     have been corrected. Calculates each component value based on the original value so
     values are weighted instead of normalised
 
     :param components_sum: Sum of original values of components list
     :type components_sum: float
-    :param original_components: List of Components objects so final values can be amended
-    :type original_components: list(Components_list)
-    :param precision: Precision is not a decimal point indicator, it is instead used to adjust our error margins.
+    :param components: a list that includes the original component
+                       values received, these are used when calculating the
+                       amended component values to retain the original weighting.
+    :type components: list(Components_list)
+    :param precision: Precision is used by the decimal package to calculate the
+                      adjusted components to the specified accuracy.
     :type precision: Optional[int]
     :param total: current total
     :type total: float
     ...
     :return final_total: Final Total value to be output
     :rtype final_total: float
-    :return original_components: Input Component list with final values updated
-    :rtype original_components: list(Components_list)
+    :return components: Input Component list with final values updated
+    :rtype components: list(Components_list)
     :return tcc_marker: Returned Tcc_Marker (Components_corrected)
     :rtype tcc_marker: TccMarker
     """
     getcontext().prec = precision
     final_total = total
-    for component in original_components:
+    for component in components:
         component.final_value = (
             Decimal(str(component.original_value)) / Decimal(str(components_sum))
         ) * Decimal(str(total))
         component.final_value = float(component.final_value)
     tcc_marker = TccMarker.COMPONENTS_CORRECTED
-    return final_total, original_components, tcc_marker
+    return final_total, components, tcc_marker
 
 
 def sum_components(components: list[ComponentPair], precision: int) -> float:
@@ -748,14 +763,17 @@ def totals_and_components(
     :type identifier: str
     :param total: Original value returned for the total.
     :type total: float
-    :param components: List of components that should equal the total or predictive value.
+    :param components: List of component values, the sum of which, should match the received total value.
     :type components: List[float]
     :param amend_total: Specifies whether the total or components should be corrected when
                         an error is detected.
     :type amend_total:bool
-    :param predictive: The predictive value, typically the total.
+    :param predictive: The predictive value. When specified, this value is used to determine whether
+                       automatic error correction can be applied when comparing to the specified
+                       absolute difference or percentage difference thresholds. Typically the predictive
+                       value would be the total from an immediately prior period that has been
+                       verified as valid.
     :type predictive: Optional[float]
-    :param precision: Precision is not a decimal point indicator, it is instead used to adjust our error margins.
     :type precision: Optional[int]
     :param auxiliary: The value to be used in the absence of a predictive value.
     :type auxiliary: Optional[float]
@@ -767,10 +785,15 @@ def totals_and_components(
                                             percentage of the sum of the components, the
                                             method will automatically correct.
     :type percentage_difference_threshold: Optional[float]
-    :raises: We raise value errors when values do not meet our expectations.
+    :param precision: Precision is used by the decimal package when calculating whether
+                      error correction can take place and for the adjustment of either the
+                      total or components and ensures the calculations are performed to the
+                      specified accuracy. The default precision provides accuracy to 28
+                      decimal places.
+    :raisesTACException: If invalid values are passed to the function.
     :return: TotalsAndComponentsOutput: An object containing the
                                        following attributes:
-             - identifier (str, optional): Unique identifier (default: None).
+             - identifier (str): Unique identifier (default: None).
              - absolute_difference (float): The absolute value showing the difference between
              the input components and
                the predictive total.
@@ -780,7 +803,7 @@ def totals_and_components(
              - high_percent_threshold (float, optional): The sum of the input components plus
              the absolute percentage
                difference (default: None).
-             - param precision (int): Precision value returned is either the entered or default.
+             - param precision (int): The supplied precision value or a defaulted precision of 28 decimal places
              - final_total (float): The output total, which may have been corrected based on
              the amend_total variable.
              - final_components (List[float]): The output components, which may have been
@@ -792,7 +815,7 @@ def totals_and_components(
                     C (components corrected), N (no correction required),
                     M (manual correction required),
                     S (method stopped due to lack of data or zero values).
-     :rtype: Object[TotalsAndComponentsOutput]
+     :rtype: tuple(TotalsAndComponentsOutput)
     """
     print_input_table(
         identifier=identifier,
@@ -813,6 +836,12 @@ def totals_and_components(
             "absolute_difference": None,
         }
         components_list = initialize_components_list(components)
+
+        # Here we make sure that precision is not None.
+        # If it is we set a default of 28 
+        if precision is None:
+            precision = 28
+
         #  Check for invalid parameter values
         input_parameters = validate_input(
             identifier,
@@ -825,7 +854,8 @@ def totals_and_components(
             absolute_difference_threshold,
             percentage_difference_threshold,
         )
-        #  Ensure either the predictive or auxiliary parameter specified
+        #  Set the predictive as either the current value, total or auxiliary
+        # depending on what values exist from the data input.
         predictive = set_predictive_value(
             input_parameters[InputParameters.PREDICTIVE.value],
             input_parameters[InputParameters.AUXILIARY.value],
@@ -836,9 +866,11 @@ def totals_and_components(
             input_parameters[InputParameters.COMPONENTS.value],
             input_parameters[InputParameters.PRECISION.value],
         )
+
         #  Check for error scenarios where the sum of the components is zero and
         #  a positive predictive value has been received
         output_list["tcc_marker"] = check_zero_errors(predictive, component_total)
+
         absolute_difference = check_sum_components_predictive(
             predictive,
             component_total,
@@ -859,13 +891,13 @@ def totals_and_components(
             )
 
             # Absolute difference is output here as it would not change from this point
-            # it is not outputted sooner as a S marker could be returned
+            # it is not output sooner as a S marker could be returned
             # before this point and that would have no absolute difference value.
             output_list["absolute_difference"] = absolute_difference
 
-            # If the predictive value is not equal to the sum of components we
-            # return a no correction marker
-            if input_parameters[InputParameters.PREDICTIVE.value] == component_total:
+            # If the received total equals the sum of the received components
+            # then no correction needs to take place.
+            if input_parameters[InputParameters.TOTAL.value] == component_total:
                 output_list["tcc_marker"] = TccMarker.NO_CORRECTION
             else:
                 #  Determine if the difference error can be automatically corrected

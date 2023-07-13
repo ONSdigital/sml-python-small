@@ -943,7 +943,7 @@ class TestCorrectTotal:
 # Test to ensure the component is corrected and the expected marker is returned
 class TestCorrectComponents:
     @pytest.mark.parametrize(
-        "components_sum, original_components, total, precision,"
+        "components_sum, components, total, precision,"
         "expected_total, expected_component, test_id",
         [
             (
@@ -982,7 +982,7 @@ class TestCorrectComponents:
     def test_correct_components(
         self,
         components_sum,
-        original_components,
+        components,
         total,
         precision,
         expected_total,
@@ -992,7 +992,7 @@ class TestCorrectComponents:
         try:
             result = correct_components(
                 components_sum=components_sum,
-                original_components=original_components,
+                components=components,
                 total=total,
                 precision=precision,
             )
@@ -1902,7 +1902,7 @@ class TestTotalsAndComponents:
                 None,
                 11,
                 0.1,
-                TACException("Amend total needs to be True or False"),
+                TACException("amend_total is a mandatory parameter and must be specified as either True or False."),
                 "Test 36 - Missing Amend total",
                 # Test to ensure a TACException is thrown when a
                 # user does not enter a value for the amend value
@@ -2144,7 +2144,7 @@ class TestTotalsAndComponents:
                 11,
                 None,
                 TACException(
-                    "We would always expect a current total to accompany the components"
+                    "total is a mandatory parameter and must be specified"
                 ),
                 "Test 50 - Total is none value entered by user",
                 # Test to ensure a TACException is thrown when a
