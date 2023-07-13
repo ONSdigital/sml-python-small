@@ -22,32 +22,8 @@ in the command line.
 
 We can do this by running the function
 
-<details>
-
-<summary>def invoke_process_with_local_csv()</summary>
-
 ```python
-# In this function we pass in the in memory test data List[] into the totals_and_components function
-def invoke_process_in_memory_data_example():
-
-    # This list is used to keep track of the original data inputted, so we can display this
-    # on the command line on a table
-
-    # The input data below once passed into the T&C method should return
-    # a TCC Marker of N = No correction required, i.e., the total is equal to the components sum
-    # Meaning we have no correction and the method stops with an output written.
-
-    # The input data is here as a list below but this isn't needed to work with the T&C method
-    # The List[] data below is used to keep track of the original data to display on the command line
-    # in a table format
-    data = ["F", "202301", 11, [0, 0, 0, 0], True, 11, "202301", None, 11, None]
-
-    # We pass in the input data to be processed and returned by the T&C method
-    result = totals_and_components(
-        "F", "202301", 11, [0, 0, 0, 0], True, 11, "202301", None, 11, None
-    )
-
-    filter_data(result, data)
+def invoke_process_in_memory_data_example()
 ```
 
 </details>
