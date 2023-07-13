@@ -7,90 +7,78 @@ import csv
 # Importing tabulate function from tabulate to pretty print the input and output results
 # from the T&C method in a tabular format
 # This import isn't necessary to work with the T&C method
-from tabulate import tabulate
+# from tabulate import tabulate
 # Importing the totals_and_components method from the totals_and_components.py file
 from totals_and_components import totals_and_components
 
 test_data = [
     # [
     #   "A",
-    #   "202301",
     #   1625,
     #   [632, 732, 99, 162],
     #   True,
     #   1625,
     #   None,
-    #   "202301",
     #   None,
     #   11,
     #   None
     # ],
     # [
     #   "B",
-    #   "202301",
     #   10817,
     #   [9201, 866, 632, 112],
     #   True,
     #   10817,
     #   25,
-    #   "202301",
     #   None,
     #   11,
     #   None
     # ],
     # [
     #     "C",
-    #     "202301",
     #     90,
     #     [90, 0, 4, 6],
     #     False,
     #     90,
     #     28,
-    #     "202301",
     #     None,
     #     None,
     #     0.1,
     # ],
     # [
     #     "X",
-    #     "202301",
     #     41,
     #     [10,10,10,10],
     #     False,
     #     41,
     #     None,
-    #     "202301",
     #     None,
     #     None,
     #     0.1,
     # ],
     # [
     #   "D",
-    #   "202301",
     #   1964,
     #   [632, 732, 99, 162],
     #   True,
     #   1964,
     #   10,
-    #   "202301",
     #   None,
     #   25,
     #   0.1
     # ],
     # [
     #   "E",
-    #   "202301",
     #   306,
     #   [240, 0, 30, 10],
     #   True,
     #   306,
     #   17,
-    #   "202301",
     #   None,
     #   25,
     #   0.1
     # ],
-    ["F", "202301", 11, [0, 0, 0, 0], True, 11, None, "202301", None, 11, None],
+    ["F", 11, [0, 0, 0, 0], True, 11, None, None, 11, None],
 ]
 
 
@@ -109,13 +97,11 @@ def invoke_process_in_memory_data_example():
     # in a table format
     data = [
         "A",
-        "202301",
         10817,
         [632, 732, 99, 162],
         True,
         1625,
         30,
-        "202301",
         None,
         11,
         None,
@@ -124,13 +110,11 @@ def invoke_process_in_memory_data_example():
     # We pass in the input data to be processed and returned by the T&C method
     result = totals_and_components(
         "A",
-        "202301",
         10817,
         [632, 732, 99, 162],
         True,
         1625,
         30,
-        "202301",
         None,
         11,
         None,
@@ -146,12 +130,10 @@ def invoke_process_in_memory_data_example_2():
     # a TCC Marker of C = Components corrected
     data = [
         "C",
-        "202301",
         90,
         [90, 0, 4, 6],
         False,
         90,
-        "202301",
         None,
         None,
         0.1,
@@ -185,7 +167,6 @@ def filter_data(result, original_data):
     # it to a list
     new_result = [
         result.identifier,
-        result.period,
         result.absolute_difference,
         result.low_percent_threshold,
         result.high_percent_threshold,
@@ -230,19 +211,16 @@ def display_results(results):
     headers = {
         "Original Input": [
             "Identifier",
-            "Period",
             "Total",
             "Amend Total",
             "Predictive",
             "Precision",
-            "Predictive Period",
             "Auxiliary Variable",
             "Absolute Difference Threshold",
             "Percentage Difference Threshold",
         ],
         "Final Results": [
             "Identifier",
-            "Period",
             "Absolute Difference",
             "Low Percent Threshold",
             "High Percent Threshold",
@@ -296,7 +274,6 @@ def invoke_process_with_local_csv():
             print("Data type:::::::", type(row["comp_1"]))
             input_data = [
                 (row["\ufeffreference"]),
-                (row["period"]),
                 (row["total"]),
                 [
                     (row["comp_1"]),
@@ -306,7 +283,6 @@ def invoke_process_with_local_csv():
                 ],
                 True if not row["amend_total"] == "FALSE" else False,
                 (row["predictive"]),
-                (row["period"]),
                 None if not row["auxiliary"] else (row["auxiliary"]),
                 None if not row["abs_threshold"] else (row["abs_threshold"]),
                 None if not row["perc_threshold"] else (row["perc_threshold"]),
@@ -316,7 +292,6 @@ def invoke_process_with_local_csv():
 
             new_result = {
                 result.identifier: {
-                    "period": result.period,
                     "absolute_difference": result.absolute_difference,
                     "low_percent_threshold": result.low_percent_threshold,
                     "high_percent_threshold": result.high_percent_threshold,
@@ -334,7 +309,6 @@ def invoke_process_with_local_csv():
     with open("TCC_test_data_demo_processed.csv", mode="w") as csv_file:
         field_names = [
             "\ufeffreference",
-            "period",
             # "total",
             # "comp_1"
             # "comp_2",
@@ -364,7 +338,6 @@ def invoke_process_with_local_csv():
             writer.writerow(
                 {
                     "\ufeffreference": identifier,
-                    "period": results[identifier]["period"],
                     "abs_diff": results[identifier]["absolute_difference"],
                     "perc_low": results[identifier]["low_percent_threshold"],
                     "perc_high": results[identifier]["high_percent_threshold"],
@@ -381,8 +354,8 @@ def invoke_process_with_local_csv():
 def invoke_process_with_in_memory_csv():
     # Read the CSV file and extract the input data and pass into the
     # T&C method
-    in_memory_csv_data = """reference,period,total,comp_1,comp_2,comp_3,comp_4,amend_total,predictive,auxiliary,abs_threshold,perc_threshold
-A,202301,1625,632,732,99,162,TRUE,1625,202301,,11"""  # noqa: E501
+    in_memory_csv_data = """reference,total,comp_1,comp_2,comp_3,comp_4,amend_total,predictive,auxiliary,abs_threshold,perc_threshold
+A,1625,632,732,99,162,TRUE,1625,,11"""  # noqa: E501
 
     csv_reader = csv.DictReader(in_memory_csv_data.splitlines())
     print("CSV reader", csv_reader)
@@ -391,7 +364,6 @@ A,202301,1625,632,732,99,162,TRUE,1625,202301,,11"""  # noqa: E501
     for row in csv_reader:
         input_data = [
             (row["reference"]),
-            (row["period"]),
             (row["total"]),
             [
                 (row["comp_1"]),
@@ -401,7 +373,6 @@ A,202301,1625,632,732,99,162,TRUE,1625,202301,,11"""  # noqa: E501
             ],
             True if not row["amend_total"] == "FALSE" else False,
             (row["predictive"]),
-            (row["period"]),
             None if not row["auxiliary"] else (row["auxiliary"]),
             None if not row["abs_threshold"] else (row["abs_threshold"]),
             None if not row["perc_threshold"] else (row["perc_threshold"]),
@@ -411,7 +382,6 @@ A,202301,1625,632,732,99,162,TRUE,1625,202301,,11"""  # noqa: E501
 
         new_result = {
             result.identifier: {
-                "period": result.period,
                 "absolute_difference": result.absolute_difference,
                 "low_percent_threshold": result.low_percent_threshold,
                 "high_percent_threshold": result.high_percent_threshold,
@@ -430,7 +400,6 @@ A,202301,1625,632,732,99,162,TRUE,1625,202301,,11"""  # noqa: E501
     with open("TCC_test_data_demo_processed_in_memory.csv", mode="w") as csv_file:
         field_names = [
             "\ufeffreference",
-            "period",
             # "total",
             # "comp_1"
             # "comp_2",
@@ -459,7 +428,6 @@ A,202301,1625,632,732,99,162,TRUE,1625,202301,,11"""  # noqa: E501
             writer.writerow(
                 {
                     "\ufeffreference": identifier,
-                    "period": results[identifier]["period"],
                     "abs_diff": results[identifier]["absolute_difference"],
                     "perc_low": results[identifier]["low_percent_threshold"],
                     "perc_high": results[identifier]["high_percent_threshold"],

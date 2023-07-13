@@ -936,5 +936,7 @@ def totals_and_components(
         return output
 
     except Exception as error:
+        if identifier is None:
+            identifier = "N/A"
         print("Exception error detected:", error)
-        raise TACException(error)
+        raise TACException(f"identifier: {identifier}", error)
