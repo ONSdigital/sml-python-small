@@ -98,9 +98,7 @@ class TotalsAndComponentsOutput:
     A Class defining the output attributes of the totals and components method
     """
 
-    identifier: Optional[
-        str
-    ] = ""  # unique identifier, e.g Business Reporting Unit
+    identifier: Optional[str] = ""  # unique identifier, e.g Business Reporting Unit
     absolute_difference: Optional[float]  # this is the absolute value showing the
     # difference between the components input and the predictive total
     low_percent_threshold: Optional[
@@ -248,9 +246,7 @@ def validate_input(
         raise ValueError("The identifier is not populated")
     str(identifier)
     if total is None:
-        raise ValueError(
-            "total is a mandatory parameter and must be specified"
-        )
+        raise ValueError("total is a mandatory parameter and must be specified")
     if total:
         validate_number("total", total)
         total = float(total)
@@ -263,7 +259,9 @@ def validate_input(
             )
             float(component.original_value)
     if amend_total is None:
-        raise ValueError("amend_total is a mandatory parameter and must be specified as either True or False.")
+        raise ValueError(
+            "amend_total is a mandatory parameter and must be specified as either True or False."
+        )
     if predictive is not None:
         validate_number("predictive", predictive)
         float(predictive)
@@ -286,10 +284,11 @@ def validate_input(
         )
         float(percentage_difference_threshold)
     if not 0 < precision <= 28:
-            raise ValueError(
-                "Precision range must be more than 0 and less than or equal to 28"
-            )
-    else: validate_number("Precision", precision)
+        raise ValueError(
+            "Precision range must be more than 0 and less than or equal to 28"
+        )
+    elif 0 < precision <= 28:
+        validate_number("Precision", precision)
 
     return (
         total,
@@ -538,7 +537,7 @@ def error_correction(
 ) -> tuple[float, list[float], TccMarker]:
     """
     The error correction function will use the amend_total to either
-    correct the total or components. Correcting the total will set the final 
+    correct the total or components. Correcting the total will set the final
     total as the sum of components. Correcting the components will return the
     new adjusted components that have been adjusted by using the total.
 
@@ -838,7 +837,7 @@ def totals_and_components(
         components_list = initialize_components_list(components)
 
         # Here we make sure that precision is not None.
-        # If it is we set a default of 28 
+        # If it is we set a default of 28
         if precision is None:
             precision = 28
 
