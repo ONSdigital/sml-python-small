@@ -140,7 +140,7 @@ def invoke_process_in_memory_data_example_2():
     #     0.1
     # ]
 
-    # We use * to unpack the above list into separate arguments to pass to the T&C method
+    # We use * to unpack the above list into separate arguments to pass into the T&C method
     for data in test_data:
         result = totals_and_components(*data)
         filter_data(result, data)
@@ -267,7 +267,7 @@ def display_results(results):
         )
         print("\n")
 
-# In this function we read the CSV file and extract the input data and pass into the `totals_and_components` function.
+# In this function we read the CSV file and extract the input data and pass into the totals_and_components function.
 # Write the results returned by the T&C method into the CSV file.
 def invoke_process_with_local_csv():
     # Read the CSV file and extract the input data and pass into the
@@ -360,7 +360,8 @@ def invoke_process_with_local_csv():
                 }
             )
 
-
+# In this function we read the CSV file and extract the input data and pass into the totals_and_components function.
+# Write the results returned by the T&C method into the CSV file.
 def invoke_process_with_in_memory_csv():
     # Read the CSV file and extract the input data and pass into the
     # T&C method
