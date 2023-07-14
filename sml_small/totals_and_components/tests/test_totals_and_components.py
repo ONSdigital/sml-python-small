@@ -3,7 +3,7 @@ from decimal import Decimal, getcontext
 
 import pytest
 
-from sml_small.totals_and_components.totals_and_components import (ComponentPair, TACException,
+from sml_small.totals_and_components.totals_and_components import (ComponentPair, TACException, TccMarker,
                                                                    check_absolute_difference_threshold,
                                                                    check_percentage_difference_threshold,
                                                                    check_sum_components_predictive, check_zero_errors,
@@ -424,13 +424,12 @@ class TestValidateInput:
 
 class TestSetPredictiveValue:
     @pytest.mark.parametrize(
-        "predictive, auxiliary, total, expected_result, test_id",
+        "predictive, auxiliary, expected_result, test_id",
         [
             (
                 100.0,
                 None,
-                10,
-                100.0,
+                (100.0, TccMarker.METHOD_PROCEED),
                 "Test 1: Predictive Only",
                 # Test for when a predictive value is provided,
                 # we would expect the predictive value to remain unchanged
@@ -438,8 +437,7 @@ class TestSetPredictiveValue:
             (
                 None,
                 50.0,
-                10,
-                50.0,
+                (50.0, TccMarker.METHOD_PROCEED),
                 "Test 2: Auxiliary Only"
                 # Test for when a predictive value is not provided,
                 # we would expect the auxiliary value to be used in
@@ -448,18 +446,15 @@ class TestSetPredictiveValue:
             (
                 None,
                 None,
-                10,
-                10,
+                (None, TccMarker.STOP),
                 "Test 3: Predictive and auxiliary are None",
                 # Test for when a predictive and auxiliary value is not provided,
-                # we would expect the the total value to be used in
-                # place of the predictive value
+                # we would expect the method to stop
             ),
             (
                 150.0,
                 50.0,
-                10,
-                150.0,
+                (150.0, TccMarker.METHOD_PROCEED),
                 "Test 4: All Inputs"
                 # Test for when a all values is are provided,
                 # we would expect the predictive is not changed
@@ -470,7 +465,6 @@ class TestSetPredictiveValue:
         self,
         predictive,
         auxiliary,
-        total,
         expected_result,
         test_id,
     ):
@@ -478,7 +472,6 @@ class TestSetPredictiveValue:
             result = set_predictive_value(
                 predictive=predictive,
                 auxiliary=auxiliary,
-                total=total,
             )
             assert (
                 result == expected_result
@@ -1182,7 +1175,7 @@ class TestTotalsAndComponents:
                 None,
                 11,
                 0.1,
-                TACException("component=InvalidString is missing or not a number"),
+                TACException("('identifier: H', ValueError('component=InvalidString is missing or not a number'))"),
                 "Test 6 - Invalid component value entered by user",
                 # An invalid component is passed to the method which is not allowed
                 # hence we will throw an error
@@ -1202,7 +1195,7 @@ class TestTotalsAndComponents:
                 None,
                 11,
                 0.1,
-                TACException("predictive must not be a string"),
+                TACException("('identifier: I', ValueError('predictive must not be a string'))"),
                 # An invalid predictive is passed to the method which is not allowed
                 # hence we will throw an error
                 "Test 7 - Invalid predictive value entered by user",
@@ -1222,7 +1215,7 @@ class TestTotalsAndComponents:
                 "InvalidString",
                 11,
                 0.1,
-                TACException("auxiliary is missing or not a number"),
+                TACException("('identifier: J', ValueError('auxiliary is missing or not a number'))"),
                 # An invalid auxiliary is passed to the method which is not allowed
                 # hence we will throw an error
                 "Test 8 - Invalid auxiliary value entered by user",
@@ -1243,7 +1236,7 @@ class TestTotalsAndComponents:
                 None,
                 None,
                 TACException(
-                    "One or both of absolute/percentage difference thresholds must be specified and non-zero"
+                    "('identifier: K', ValueError('One or both of absolute/percentage difference thresholds must be specified and non-zero'))"
                 ),
                 # An invalid ADT or PDT is passed to the method which is not allowed
                 # hence we will throw an error
@@ -1466,7 +1459,7 @@ class TestTotalsAndComponents:
                 0,
                 0,
                 TACException(
-                    "One or both of absolute/percentage difference thresholds must be specified and non-zero"
+                    "('identifier: U', ValueError('One or both of absolute/percentage difference thresholds must be specified and non-zero'))"
                 ),
                 "Test 18 - Absolute and Percentage Difference Thresholds set to zero",
                 # Test checking for a error exception thrown when we provide
@@ -1488,7 +1481,7 @@ class TestTotalsAndComponents:
                 None,
                 None,
                 TACException(
-                    "One or both of absolute/percentage difference thresholds must be specified and non-zero"
+                    "('identifier: T', ValueError('One or both of absolute/percentage difference thresholds must be specified and non-zero'))"
                 ),
                 "Test 19 - Absolute and Percentage Difference Thresholds not specified",
                 # Test checking for a error exception thrown when we provide
@@ -1862,7 +1855,7 @@ class TestTotalsAndComponents:
                 0,
                 11,
                 None,
-                TACException("total is missing or not a number"),
+                TACException("('identifier: AH', ValueError('total is missing or not a number'))"),
                 "Test 33 - Invalid total value entered by user",
                 # Test to ensure a TACException is thrown when a
                 # user enters a None value for the total
@@ -1882,7 +1875,7 @@ class TestTotalsAndComponents:
                 None,
                 None,
                 0.1,
-                TACException("The identifier is not populated"),
+                TACException("('identifier: N/A', ValueError('The identifier is not populated'))"),
                 "Test 34 - Missing identifier value",
                 # Test to ensure a TACException is thrown when a
                 # user enters a None value for the identifier
@@ -1902,13 +1895,15 @@ class TestTotalsAndComponents:
                 None,
                 11,
                 0.1,
-                TACException("amend_total is a mandatory parameter and must be specified as either True or False."),
+                TACException(
+                    "('identifier: AJ', ValueError('amend_total is a mandatory parameter and must be specified as either True or False.'))"
+                ),
                 "Test 36 - Missing Amend total",
                 # Test to ensure a TACException is thrown when a
                 # user does not enter a value for the amend value
             ),
             (
-                "AP",
+                "AK",
                 90,
                 [
                     (90),
@@ -1923,7 +1918,7 @@ class TestTotalsAndComponents:
                 None,
                 0.1,
                 (
-                    "AP",
+                    "AK",
                     10,
                     90,
                     110,
@@ -1932,12 +1927,12 @@ class TestTotalsAndComponents:
                     [81, 0, 3.6, 5.4],
                     "C",
                 ),
-                "Test 42 - Testing precision value = 1",
+                "Test 37 - Testing precision value = 1",
                 # Testing the accuracy of the components returned
                 # when the entered precision value is equal to 1
             ),
             (
-                "AQ",
+                "AL",
                 10,
                 [
                     (2.4),
@@ -1952,7 +1947,7 @@ class TestTotalsAndComponents:
                 None,
                 0.1,
                 (
-                    "AQ",
+                    "AL",
                     0.9,
                     9.81,
                     11.99,
@@ -1966,12 +1961,12 @@ class TestTotalsAndComponents:
                     ],
                     "C",
                 ),
-                "Test 43 - Testing precision value = 28",
+                "Test 38 - Testing precision value = 28",
                 # Testing the accuracy of the components returned
                 # when the entered precision value is equal to 28
             ),
             (
-                "AR",
+                "AM",
                 2,
                 [
                     (2.4),
@@ -1986,14 +1981,14 @@ class TestTotalsAndComponents:
                 11,
                 None,
                 TACException(
-                    "Precision range must be more than 0 and less than or equal to 28"
+                    ('identifier: AM', ValueError('Precision range must be more than 0 and less than or equal to 28'))
                 ),
-                "Test 44 - Testing precision value = 29",
+                "Test 39 - Testing precision value = 29",
                 # Testing the accuracy of the components returned
                 # when the entered precision value is equal to 29
             ),
             (
-                "AS",
+                "AN",
                 2,
                 [
                     (2.4),
@@ -2008,14 +2003,19 @@ class TestTotalsAndComponents:
                 11,
                 None,
                 TACException(
-                    "Precision range must be more than 0 and less than or equal to 28"
+                    (
+                        "identifier: AN",
+                        ValueError(
+                            "Precision range must be more than 0 and less than or equal to 28"
+                        ),
+                    )
                 ),
-                "Test 45 - Testing precision value = 0",
+                "Test 40 - Testing precision value = 0",
                 # Testing the accuracy of the components returned
                 # when the entered precision value is equal to 0
             ),
             (
-                "AT",
+                "AO",
                 11,
                 [(1), (2), (3), (4)],
                 False,
@@ -2025,7 +2025,7 @@ class TestTotalsAndComponents:
                 None,
                 0.1,
                 (
-                    "AT",
+                    "AO",
                     1,
                     9,
                     11,
@@ -2034,14 +2034,14 @@ class TestTotalsAndComponents:
                     [1.1, 2.2, 3.3, 4.4],
                     "T",
                 ),
-                "Test 46 - Testing precision value = 2 with floating components sum to a floating total",
+                "Test 41 - Testing precision value = 2 with floating components sum to a floating total",
                 # Testing the accuracy of the components returned
                 # when the entered precision value is equal to 2
                 # This test also checks floating components sum to a
                 # floating total
             ),
             (
-                "AU",
+                "AP",
                 0.6,
                 [
                     (0.1),
@@ -2055,7 +2055,7 @@ class TestTotalsAndComponents:
                 None,
                 0.1,
                 (
-                    "AU",
+                    "AP",
                     0.1,
                     0.6,
                     0.8,
@@ -2064,14 +2064,14 @@ class TestTotalsAndComponents:
                     [0.1, 0.2, 0.4],
                     "T",
                 ),
-                "Test 47 - Testing precision value = 1 with floating components sum to a floating total",
+                "Test 42 - Testing precision value = 1 with floating components sum to a floating total",
                 # Testing the accuracy of the components returned
                 # when the entered precision value is equal to 1
                 # This test also checks floating components sum to a
                 # floating total
             ),
             (
-                "AW",
+                "AQ",
                 10.5,
                 [
                     (1),
@@ -2086,7 +2086,7 @@ class TestTotalsAndComponents:
                 None,
                 0.1,
                 (
-                    "AW",
+                    "AQ",
                     0.5,
                     9,
                     11,
@@ -2095,12 +2095,12 @@ class TestTotalsAndComponents:
                     [1, 2, 3, 4],
                     "T",
                 ),
-                "Test 48 - Missing precision value (defaults to 28)",
+                "Test 43 - Missing precision value (defaults to 28)",
                 # Testing the accuracy of the components returned
                 # when the precision value is missing and so defaults to 28
             ),
             (
-                "AX",
+                "AR",
                 90,
                 [
                     (90),
@@ -2115,7 +2115,7 @@ class TestTotalsAndComponents:
                 None,
                 0.1,
                 (
-                    "AX",
+                    "AR",
                     6,
                     90,
                     110,
@@ -2124,12 +2124,12 @@ class TestTotalsAndComponents:
                     [81, 0, 3.6, 5.4],
                     "C",
                 ),
-                "Test 49 - Auxiliary value is used  when predictive is none",
+                "Test 44 - Auxiliary value is used  when predictive is none",
                 # Predictive value is the Auxiliary value and is used to
                 # determine if automatic correction can take place
             ),
             (
-                "AY",
+                "AS",
                 None,
                 [
                     (0),
@@ -2144,14 +2144,19 @@ class TestTotalsAndComponents:
                 11,
                 None,
                 TACException(
-                    "total is a mandatory parameter and must be specified"
+                    (
+                        "identifier: AS",
+                        ValueError(
+                            "total is a mandatory parameter and must be specified"
+                        ),
+                    )
                 ),
-                "Test 50 - Total is none value entered by user",
+                "Test 45 - Total is none value entered by user",
                 # Test to ensure a TACException is thrown when a
                 # user enters a None value for the total
             ),
             (
-                "AZ",
+                "AT",
                 90,
                 [
                     (90),
@@ -2166,23 +2171,21 @@ class TestTotalsAndComponents:
                 None,
                 0.1,
                 (
-                    "AZ",
-                    10,
-                    90,
-                    110,
+                    "AT",
+                    None,
+                    None,
+                    None,
                     28,
                     90,
-                    [81, 0, 3.6, 5.4],
-                    "C",
+                    [90, 0, 4, 6],
+                    "S",
                 ),
-                "Test 51 - total is used when predictive and auxiliary is none",
+                "Test 46 - method stops when predictive and auxiliary is none",
                 # When total value is present, predictive value is None and
-                # Auxiliary value is None then the decision whether an automatic
-                # correction can be made will be based off of the total value
-                # and any recalculation of the components will use the total value.
+                # Auxiliary value is None then method stops
             ),
             (
-                "BA",
+                "AU",
                 90,
                 [
                     (90),
@@ -2193,11 +2196,11 @@ class TestTotalsAndComponents:
                 False,
                 95,
                 28,
-                None,
+                80,
                 None,
                 0.1,
                 (
-                    "BA",
+                    "AU",
                     5,
                     90,
                     110,
@@ -2206,14 +2209,14 @@ class TestTotalsAndComponents:
                     [81, 0, 3.6, 5.4],
                     "C",
                 ),
-                "Test 52 - predictive value is used when predictive, auxiliary is none and total exist",
+                "Test 47 - predictive value is used when predictive, auxiliary and total exist",
                 # When total value is present, predictive value is present and Auxiliary value
-                # is None then the decision whether an automatic correction can be made
+                # is present then the decision whether an automatic correction can be made
                 # will be based off of the predictive value and any recalculation of the
                 # components will use the total value.
             ),
             (
-                "BC",
+                "AV",
                 90,
                 [
                     (90),
@@ -2228,7 +2231,7 @@ class TestTotalsAndComponents:
                 None,
                 0.1,
                 (
-                    "BC",
+                    "AV",
                     5,
                     90,
                     110,
@@ -2237,14 +2240,14 @@ class TestTotalsAndComponents:
                     [81, 0, 3.6, 5.4],
                     "C",
                 ),
-                "Test 53 - predictive value is used when predictive and total is none, auxiliary exists",
-                # When total value is present and predictive value is None
-                # and Auxiliary value is present then the decision whether
-                # an automatic correction can be made will be based off of the auxiliary value
+                "Test 48 - predictive value is used when auxiliary and total is none, predictive exists",
+                # When total value is none and predictive value exists
+                # and Auxiliary value is none then the decision whether
+                # an automatic correction can be made will be based off of the predictive value
                 # and any recalculation of the components will use the total value.
             ),
             (
-                "BD",
+                "AW",
                 90,
                 [
                     (90),
@@ -2259,7 +2262,7 @@ class TestTotalsAndComponents:
                 None,
                 0.1,
                 (
-                    "BD",
+                    "AW",
                     5,
                     90,
                     110,
@@ -2268,7 +2271,7 @@ class TestTotalsAndComponents:
                     [81, 0, 3.6, 5.4],
                     "C",
                 ),
-                "Test 54 - predictive value is used when predictive and total is none, auxiliary exists",
+                "Test 49 - auxiliary value is used when predictive and total is none, auxiliary exists",
                 # When total value is present and predictive value is None
                 # and Auxiliary value is present then the decision whether
                 # an automatic correction can be made will be based off of the auxiliary value
