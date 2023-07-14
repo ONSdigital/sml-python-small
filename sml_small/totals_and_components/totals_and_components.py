@@ -98,7 +98,7 @@ class TotalsAndComponentsOutput:
     A Class defining the output attributes of the totals and components method
     """
 
-    identifier: Optional[str] = ""  # unique identifier, e.g Business Reporting Unit
+    identifier: Optional[str] = ""  # unique identifier
     absolute_difference: Optional[float]  # this is the absolute value showing the
     # difference between the components input and the predictive total
     low_percent_threshold: Optional[
@@ -243,7 +243,7 @@ def validate_input(
             float | None, int | None]
     """
     if not identifier:
-        raise ValueError("The identifier is not populated")
+        raise ValueError("identifier is a mandatory parameter and must be specified")
     str(identifier)
     if total is None:
         raise ValueError("total is a mandatory parameter and must be specified")
@@ -251,7 +251,7 @@ def validate_input(
         validate_number("total", total)
         total = float(total)
     if not components:
-        raise ValueError("The components are not populated")
+        raise ValueError("components is a mandatory parameter and must be specified")
     if components:
         for component in components:
             validate_number(
@@ -268,12 +268,9 @@ def validate_input(
     if auxiliary:
         validate_number("auxiliary", auxiliary)
         float(auxiliary)
-    if (
-        absolute_difference_threshold is None
-        and percentage_difference_threshold is None
-    ) or (absolute_difference_threshold == 0 and percentage_difference_threshold == 0):
+    if absolute_difference_threshold is None and percentage_difference_threshold is None:
         raise ValueError(
-            "One or both of absolute/percentage difference thresholds must be specified and non-zero"
+            "One or both of absolute/percentage difference thresholds must be specified"
         )
     if absolute_difference_threshold:
         validate_number("absolute difference threshold", absolute_difference_threshold)
@@ -590,8 +587,8 @@ def correct_total(
 
     :param components_sum: Sum of original values of components list
     :type components_sum: float
-    :param original_components: List of Components objects so final values can be amended
-    :type original_components: list(Components_list)
+    :param components: List of Components objects so final values can be amended
+    :type components: list(Components_list)
     ...
     :return final_total: Final Total value to be output
     :rtype final_total: float
@@ -732,15 +729,15 @@ def calculate_percent_thresholds(
 
 
 def totals_and_components(
-    identifier: str,  # unique identifier, e.g Business Reporting Unit SG-should this be optional?
+    identifier: str,
     total: float,
     components: List[float],
     amend_total: bool,
     predictive: Optional[float],
-    precision: Optional[int],
     auxiliary: Optional[float],
     absolute_difference_threshold: Optional[float],
     percentage_difference_threshold: Optional[float],
+    precision: Optional[int] = 28,
 ) -> TotalsAndComponentsOutput:
     """
     Determines whether a difference exists between a provided total value and the sum of
@@ -776,7 +773,6 @@ def totals_and_components(
                        value would be the total from an immediately prior period that has been
                        verified as valid.
     :type predictive: Optional[float]
-    :type precision: Optional[int]
     :param auxiliary: The value to be used in the absence of a predictive value.
     :type auxiliary: Optional[float]
     :param absolute_difference_threshold: Value used to check if the difference between
@@ -792,10 +788,11 @@ def totals_and_components(
                       total or components and ensures the calculations are performed to the
                       specified accuracy. The default precision provides accuracy to 28
                       decimal places.
+    :type precision: Optional[int]
     :raisesTACException: If invalid values are passed to the function.
     :return: TotalsAndComponentsOutput: An object containing the
                                        following attributes:
-             - identifier (str): Unique identifier (default: None).
+             - identifier (str): Unique identifier.
              - absolute_difference (float): The absolute value showing the difference between
              the input components and
                the predictive total.
@@ -839,11 +836,6 @@ def totals_and_components(
         }
         components_list = initialize_components_list(components)
 
-        # Here we make sure that precision is not None.
-        # If it is we set a default of 28
-        if precision is None:
-            precision = 28
-
         #  Check for invalid parameter values
         input_parameters = validate_input(
             identifier,
@@ -856,6 +848,7 @@ def totals_and_components(
             absolute_difference_threshold,
             percentage_difference_threshold,
         )
+
         #  Set the predictive as either the current value, total or auxiliary
         # depending on what values exist from the data input.
         (predictive, output_list["tcc_marker"]) = set_predictive_value(

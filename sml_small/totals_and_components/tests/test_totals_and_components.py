@@ -1236,7 +1236,7 @@ class TestTotalsAndComponents:
                 None,
                 None,
                 TACException(
-                    "('identifier: K', ValueError('One or both of absolute/percentage difference thresholds must be specified and non-zero'))"
+                    "('identifier: K', ValueError('One or both of absolute/percentage difference thresholds must be specified'))"
                 ),
                 # An invalid ADT or PDT is passed to the method which is not allowed
                 # hence we will throw an error
@@ -1458,8 +1458,15 @@ class TestTotalsAndComponents:
                 None,
                 0,
                 0,
-                TACException(
-                    "('identifier: U', ValueError('One or both of absolute/percentage difference thresholds must be specified and non-zero'))"
+                (
+                    "S",
+                    None,
+                    None,
+                    None,
+                    1,
+                    5,
+                    [1, 2, 3, 4],
+                    "M",
                 ),
                 "Test 18 - Absolute and Percentage Difference Thresholds set to zero",
                 # Test checking for a error exception thrown when we provide
@@ -1481,7 +1488,7 @@ class TestTotalsAndComponents:
                 None,
                 None,
                 TACException(
-                    "('identifier: T', ValueError('One or both of absolute/percentage difference thresholds must be specified and non-zero'))"
+                    "('identifier: T', ValueError('One or both of absolute/percentage difference thresholds must be specified'))"
                 ),
                 "Test 19 - Absolute and Percentage Difference Thresholds not specified",
                 # Test checking for a error exception thrown when we provide
@@ -1875,7 +1882,7 @@ class TestTotalsAndComponents:
                 None,
                 None,
                 0.1,
-                TACException("('identifier: N/A', ValueError('The identifier is not populated'))"),
+                TACException("('identifier: N/A', ValueError('identifier is a mandatory parameter and must be specified'))"),
                 "Test 34 - Missing identifier value",
                 # Test to ensure a TACException is thrown when a
                 # user enters a None value for the identifier
