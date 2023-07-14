@@ -12,30 +12,30 @@ import csv
 from tabulate import tabulate
 
 test_data = [
-    # [
-    #   "A",
-    #   "202301",
-    #   1625,
-    #   [632, 732, 99, 162],
-    #   True,
-    #   1625,
-    #   "202301",
-    #   None,
-    #   11,
-    #   None
-    # ],
-    # [
-    #   "B",
-    #   "202301",
-    #   10817,
-    #   [9201, 866, 632, 112],
-    #   True,
-    #   10817,
-    #   "202301",
-    #   None,
-    #   11,
-    #   None
-    # ],
+    [
+      "A",
+      "202301",
+      1625,
+      [632, 732, 99, 162],
+      True,
+      1625,
+      "202301",
+      None,
+      11,
+      None
+    ],
+    [
+      "B",
+      "202301",
+      10817,
+      [9201, 866, 632, 112],
+      True,
+      10817,
+      "202301",
+      None,
+      11,
+      None
+    ],
     [
         "C",
         "202301",
@@ -48,58 +48,58 @@ test_data = [
         None,
         0.1,
     ],
-    # [
-    #     "X",
-    #     "202301",
-    #     41,
-    #     [10,10,10,10],
-    #     False,
-    #     41,
-    #     "202301",
-    #     None,
-    #     None,
-    #     None,
-    # ],
-    # [
-    #   "D",
-    #   "202301",
-    #   1964,
-    #   [632, 732, 99, 162],
-    #   True,
-    #   1964,
-    #   "202301",
-    #   None,
-    #   25,
-    #   0.1
-    # ],
-    # [
-    #   "E",
-    #   "202301",
-    #   306,
-    #   [240, 0, 30, 10],
-    #   True,
-    #   306,
-    #   "202301",
-    #   None,
-    #   25,
-    #   0.1
-    # ],
-    # [
-    #   "F",
-    #   "202301",
-    #   11,
-    #   [0, 0, 0, 0],
-    #   True,
-    #   11,
-    #   "202301",
-    #   None,
-    #   11,
-    #   None
-    # ],
+    [
+        "X",
+        "202301",
+        41,
+        [10,10,10,10],
+        False,
+        41,
+        "202301",
+        None,
+        None,
+        None,
+    ],
+    [
+      "D",
+      "202301",
+      1964,
+      [632, 732, 99, 162],
+      True,
+      1964,
+      "202301",
+      None,
+      25,
+      0.1
+    ],
+    [
+      "E",
+      "202301",
+      306,
+      [240, 0, 30, 10],
+      True,
+      306,
+      "202301",
+      None,
+      25,
+      0.1
+    ],
+    [
+      "F",
+      "202301",
+      11,
+      [0, 0, 0, 0],
+      True,
+      11,
+      "202301",
+      None,
+      11,
+      None
+    ],
 ]
 
 
-# In this function we pass in the in memory test data List[] into the totals_and_components function
+# In this function we pass in the test data directly into the totals_and_components function
 def invoke_process_in_memory_data_example():
 
     # This list is used to keep track of the original data inputted, so we can display this
@@ -122,27 +122,28 @@ def invoke_process_in_memory_data_example():
     filter_data(result, data)
 
 
-# In this example we can pass in the data into the T&C method as a List[] by unpacking it into separate arguments
+# In this example we pass a dataset stored in a 2D List[] into the T&C method by unpacking it into separate arguments
 def invoke_process_in_memory_data_example_2():
 
     # The input data below once passed into the T&C method should return
     # a TCC Marker of C = Components corrected
-    data = [
-        "C",
-        "202301",
-        90,
-        [90, 0, 4, 6],
-        False,
-        90,
-        "202301",
-        None,
-        None,
-        0.1,
-    ]
+    # data = [
+    #     "C",
+    #     "202301",
+    #     90,
+    #     [90, 0, 4, 6],
+    #     False,
+    #     90,
+    #     "202301",
+    #     None,
+    #     None,
+    #     0.1
+    # ]
 
     # We use * to unpack the above list into separate arguments to pass to the T&C method
-    result = totals_and_components(*data)
-    filter_data(result, data)
+    for data in test_data:
+        result = totals_and_components(*data)
+        filter_data(result, data)
 
 
 # The two functions below are solely used to create a pretty table on the command line
@@ -266,7 +267,8 @@ def display_results(results):
         )
         print("\n")
 
-
+# In this function we read the CSV file and extract the input data and pass into the `totals_and_components` function.
+# Write the results returned by the T&C method into the CSV file.
 def invoke_process_with_local_csv():
     # Read the CSV file and extract the input data and pass into the
     # T&C method
