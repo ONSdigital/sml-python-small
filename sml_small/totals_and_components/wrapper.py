@@ -105,11 +105,29 @@ def invoke_process_in_memory_data_example():
     # The input data is here as a list below but this isn't needed to work with the T&C method
     # The List[] data below is used to keep track of the original data to display on the command line
     # in a table format
-    data = ["F", 11, [0, 0, 0, 0], True, 11, None, 11, None, None]
+    data = [
+        "C",
+        90,
+        [90, 0, 4, 6],
+        False,
+        90,
+        None,
+        None,
+        0.1,
+        None,
+    ]
 
     # We pass in the input data to be processed and returned by the T&C method
     result = totals_and_components(
-        "F", 11, [0, 0, 0, 0], True, 11, None, 11, None, None
+        "C",
+        90,
+        [90, 0, 4, 6],
+        False,
+        90,
+        None,
+        None,
+        0.1,
+        None,
     )
 
     filter_data(result, data)
@@ -296,6 +314,8 @@ def invoke_process_with_local_csv():
                 }
             }
 
+            print(new_result)
+
             new_result_comp = result.final_components
             new_result[result.identifier]["comp"] = new_result_comp
 
@@ -330,7 +350,7 @@ def invoke_process_with_local_csv():
 
         writer.writeheader()
         for identifier in results:
-            # print(results[identifier])
+            print(results[identifier])
             writer.writerow(
                 {
                     "reference": identifier,
@@ -439,7 +459,7 @@ A,1625,632,732,99,162,TRUE,1625,,11,,,"""  # noqa: E501
 
 
 # You can run the functions invoke_process_in_memory_data_example or invoke_process_in_memory_data_example_2 below
-invoke_process_with_local_csv()
+# invoke_process_with_local_csv()
 # invoke_process_with_in_memory_csv()
-# invoke_process_in_memory_data_example()
+invoke_process_in_memory_data_example()
 # invoke_process_in_memory_data_example_2()

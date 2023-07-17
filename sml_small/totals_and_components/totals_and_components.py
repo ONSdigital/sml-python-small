@@ -87,9 +87,10 @@ class ComponentPair:
             and self.final_value == other.final_value
         )
 
+
 class TACException(Exception):
-      "Totals and Components error"
-      pass
+    "Totals and Components error"
+    pass
 
 
 class DefaultPrecision:
@@ -152,7 +153,7 @@ class TotalsAndComponentsOutput:
         print(f"High Percent Threshold: {self.high_percent_threshold}")
         print(f"Precision: {self.precision}")
         print(f"Final Total: {self.final_total}")
-        print(f"Final Components: {self.final_components}")
+        print(f"Final Value: {self.final_components}")
         print(f"TCC Marker: {self.tcc_marker}")
 
 
@@ -287,7 +288,7 @@ def validate_input(
         validate_number(
             "percentage difference threshold", percentage_difference_threshold
         )
-        float(percentage_difference_threshold)
+        percentage_difference_threshold = float(percentage_difference_threshold)
     if precision is None:
         precision = DefaultPrecision.precision
     if not 0 < precision <= DefaultPrecision.precision:
@@ -672,10 +673,9 @@ def sum_components(components: list[ComponentPair], precision: int) -> float:
     :rtype total_sum: float
     """
     getcontext().prec = precision
-    total_sum = Decimal("0.0")
-
+    total_sum = 0
     for component in components:
-        total_sum += Decimal(component.original_value)
+        total_sum += Decimal(str(component.original_value))
 
     total_sum = float(total_sum)
     return total_sum
