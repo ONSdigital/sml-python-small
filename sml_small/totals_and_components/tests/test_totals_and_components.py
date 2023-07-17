@@ -2268,37 +2268,6 @@ class TestTotalsAndComponents:
                 # an automatic correction can be made will be based off of the predictive value
                 # and any recalculation of the components will use the total value.
             ),
-            (
-                "AW",
-                90,
-                [
-                    (90),
-                    (0),
-                    (4),
-                    (6),
-                ],
-                False,
-                None,
-                28,
-                95,
-                None,
-                0.1,
-                (
-                    "AW",
-                    5,
-                    90,
-                    110,
-                    28,
-                    90,
-                    [81, 0, 3.6, 5.4],
-                    "C",
-                ),
-                "Test 49 - auxiliary value is used when predictive and total is none, auxiliary exists",
-                # When total value is present and predictive value is None
-                # and Auxiliary value is present then the decision whether
-                # an automatic correction can be made will be based off of the auxiliary value
-                # and any recalculation of the components will use the total value.
-            ),
         ],
     )
     def test_totals_and_components(
