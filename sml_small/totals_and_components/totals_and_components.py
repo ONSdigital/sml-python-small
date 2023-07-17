@@ -452,22 +452,24 @@ def determine_error_detection(
     :return Tcc_Marker: Returned Tcc_Marker (either stop or continue)
     :rtype Tcc_Marker: TccMarker
     """
-
-    correct_error = False
-    if absolute_difference_threshold is not None:
-        correct_error = check_absolute_difference_threshold(
-            absolute_difference_threshold, absolute_difference
-        )
-    elif absolute_difference_threshold is None:
-        absolute_difference = None
-    if percentage_difference_threshold is not None and correct_error is False:
-        correct_error = check_percentage_difference_threshold(
-            predictive, low_threshold, high_threshold
-        )
-    if correct_error is False:
+    if absolute_difference_threshold == percentage_difference_threshold == 0:
         tcc_marker = TccMarker.MANUAL
     else:
-        tcc_marker = TccMarker.METHOD_PROCEED
+        correct_error = False
+        if absolute_difference_threshold is not None:
+            correct_error = check_absolute_difference_threshold(
+                absolute_difference_threshold, absolute_difference
+            )
+        elif absolute_difference_threshold is None:
+            absolute_difference = None
+        if percentage_difference_threshold is not None and correct_error is False:
+            correct_error = check_percentage_difference_threshold(
+                predictive, low_threshold, high_threshold
+            )
+        if correct_error is False:
+            tcc_marker = TccMarker.MANUAL
+        else:
+            tcc_marker = TccMarker.METHOD_PROCEED
     return tcc_marker
 
 
@@ -703,7 +705,7 @@ def calculate_percent_thresholds(
     :rtype output_list: dict
     """
     getcontext().prec = precision
-    if percentage_threshold is None:
+    if percentage_threshold is None or percentage_threshold == 0:
         low_percent_threshold = None
         high_percent_threshold = None
     else:
