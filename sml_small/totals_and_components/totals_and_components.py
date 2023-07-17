@@ -263,7 +263,6 @@ def validate_input(
                 f"component={component.original_value}", component.original_value
             )
             component.original_value = float(component.original_value)
-            print("Component original value", type(component.original_value))
     if amend_total is None:
         raise ValueError(
             "amend_total is a mandatory parameter and must be specified as either True or False."

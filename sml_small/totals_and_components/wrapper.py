@@ -14,86 +14,79 @@ from tabulate import tabulate
 test_data = [
     [
       "A",
-      "202301",
       1625,
       [632, 732, 99, 162],
       True,
       1625,
-      "202301",
       None,
       11,
+      None,
       None
     ],
     [
       "B",
-      "202301",
       10817,
       [9201, 866, 632, 112],
       True,
       10817,
-      "202301",
       None,
       11,
+      None,
       None
     ],
     [
         "C",
-        "202301",
         90,
         [90, 0, 4, 6],
         False,
         90,
-        "202301",
         None,
         None,
         0.1,
-    ],
-    [
-        "X",
-        "202301",
-        41,
-        [10,10,10,10],
-        False,
-        41,
-        "202301",
-        None,
-        None,
         None,
     ],
+    # [
+    #     "X",
+    #     41,
+    #     [10,10,10,10],
+    #     False,
+    #     41,
+    #     None,
+    #     None,
+    #     None,
+    #     None,
+    # ],
     [
       "D",
-      "202301",
       1964,
       [632, 732, 99, 162],
       True,
       1964,
-      "202301",
       None,
       25,
-      0.1
+      0.1,
+      None,
     ],
     [
       "E",
-      "202301",
       306,
       [240, 0, 30, 10],
       True,
       306,
-      "202301",
       None,
       25,
-      0.1
+      0.1,
+      None
     ],
     [
       "F",
-      "202301",
       11,
       [0, 0, 0, 0],
       True,
       11,
-      "202301",
       None,
       11,
+      None,
       None
     ],
 ]
@@ -112,11 +105,11 @@ def invoke_process_in_memory_data_example():
     # The input data is here as a list below but this isn't needed to work with the T&C method
     # The List[] data below is used to keep track of the original data to display on the command line
     # in a table format
-    data = ["F", "202301", 11, [0, 0, 0, 0], True, 11, "202301", None, 11, None]
+    data = ["F", 11, [0, 0, 0, 0], True, 11, None, 11, None, None]
 
     # We pass in the input data to be processed and returned by the T&C method
     result = totals_and_components(
-        "F", "202301", 11, [0, 0, 0, 0], True, 11, "202301", None, 11, None
+        "F", 11, [0, 0, 0, 0], True, 11, None, 11, None, None
     )
 
     filter_data(result, data)
@@ -168,19 +161,19 @@ def filter_data(result, original_data):
     # it to a list
     new_result = [
         result.identifier,
-        result.period,
         result.absolute_difference,
         result.low_percent_threshold,
         result.high_percent_threshold,
+        result.precision,
         result.final_total,
         result.tcc_marker,
     ]
 
     # We extract the components from the input data so we can use it later on to display
     # it on the command line in a table format
-    original_data_comp = original_data[3]
+    original_data_comp = original_data[2]
 
-    original_data.pop(3)
+    original_data.pop(2)
 
     # We extract the components from the results data returned from the so we can use it
     # the T&C method, so we can later on to display on the command line
@@ -208,26 +201,24 @@ def display_results(results):
     components data of original inputted data and components of the results that came back from the T&C method.
     :type results: A 2D List
     """
-
     # Headers to be passed into the tabulate function for the input and output tables
     headers = {
         "Original Input": [
             "Identifier",
-            "Period",
             "Total",
             "Amend Total",
             "Predictive",
-            "Predictive Period",
             "Auxiliary Variable",
             "Absolute Difference Threshold",
             "Percentage Difference Threshold",
+            "Precision",
         ],
         "Final Results": [
             "Identifier",
-            "Period",
             "Absolute Difference",
             "Low Percent Threshold",
             "High Percent Threshold",
+            "Precision",
             "Final Total",
             "TCC Marker",
         ],
@@ -460,5 +451,5 @@ A,202301,1625,632,732,99,162,TRUE,1625,202301,,11"""  # noqa: E501
 # You can run the functions invoke_process_in_memory_data_example or invoke_process_in_memory_data_example_2 below
 # invoke_process_with_local_csv()
 # invoke_process_with_in_memory_csv()
-invoke_process_in_memory_data_example()
-# invoke_process_in_memory_data_example_2()
+# invoke_process_in_memory_data_example()
+invoke_process_in_memory_data_example_2()
