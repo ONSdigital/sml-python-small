@@ -1175,7 +1175,9 @@ class TestTotalsAndComponents:
                 None,
                 11,
                 0.1,
-                TACException("('identifier: H', ValueError('component=InvalidString is missing or not a number'))"),
+                TACException(
+                    "('identifier: H', ValueError('component=InvalidString is missing or not a number'))"
+                ),
                 "Test 6 - Invalid component value entered by user",
                 # An invalid component is passed to the method which is not allowed
                 # hence we will throw an error
@@ -1195,7 +1197,9 @@ class TestTotalsAndComponents:
                 None,
                 11,
                 0.1,
-                TACException("('identifier: I', ValueError('predictive must not be a string'))"),
+                TACException(
+                    "('identifier: I', ValueError('predictive must not be a string'))"
+                ),
                 # An invalid predictive is passed to the method which is not allowed
                 # hence we will throw an error
                 "Test 7 - Invalid predictive value entered by user",
@@ -1215,7 +1219,9 @@ class TestTotalsAndComponents:
                 "InvalidString",
                 11,
                 0.1,
-                TACException("('identifier: J', ValueError('auxiliary is missing or not a number'))"),
+                TACException(
+                    "('identifier: J', ValueError('auxiliary is missing or not a number'))"
+                ),
                 # An invalid auxiliary is passed to the method which is not allowed
                 # hence we will throw an error
                 "Test 8 - Invalid auxiliary value entered by user",
@@ -1236,7 +1242,7 @@ class TestTotalsAndComponents:
                 None,
                 None,
                 TACException(
-                    "('identifier: K', ValueError('One or both of absolute/percentage difference thresholds must be specified'))"
+                    "('identifier: K', ValueError('One or both of absolute/percentage difference thresholds must be specified'))"  # noqa: E501
                 ),
                 # An invalid ADT or PDT is passed to the method which is not allowed
                 # hence we will throw an error
@@ -1488,7 +1494,7 @@ class TestTotalsAndComponents:
                 None,
                 None,
                 TACException(
-                    "('identifier: T', ValueError('One or both of absolute/percentage difference thresholds must be specified'))"
+                    "('identifier: T', ValueError('One or both of absolute/percentage difference thresholds must be specified'))"  # noqa: E501
                 ),
                 "Test 19 - Absolute and Percentage Difference Thresholds not specified",
                 # Test checking for a error exception thrown when we provide
@@ -1862,7 +1868,9 @@ class TestTotalsAndComponents:
                 0,
                 11,
                 None,
-                TACException("('identifier: AH', ValueError('total is missing or not a number'))"),
+                TACException(
+                    "('identifier: AH', ValueError('total is missing or not a number'))"
+                ),
                 "Test 33 - Invalid total value entered by user",
                 # Test to ensure a TACException is thrown when a
                 # user enters a None value for the total
@@ -1882,7 +1890,9 @@ class TestTotalsAndComponents:
                 None,
                 None,
                 0.1,
-                TACException("('identifier: N/A', ValueError('identifier is a mandatory parameter and must be specified'))"),
+                TACException(
+                    "('identifier: N/A', ValueError('identifier is a mandatory parameter and must be specified'))"
+                ),
                 "Test 34 - Missing identifier value",
                 # Test to ensure a TACException is thrown when a
                 # user enters a None value for the identifier
@@ -1903,7 +1913,7 @@ class TestTotalsAndComponents:
                 11,
                 0.1,
                 TACException(
-                    "('identifier: AJ', ValueError('amend_total is a mandatory parameter and must be specified as either True or False.'))"
+                    "('identifier: AJ', ValueError('amend_total is a mandatory parameter and must be specified as either True or False.'))"  # noqa: E501
                 ),
                 "Test 36 - Missing Amend total",
                 # Test to ensure a TACException is thrown when a
@@ -1988,7 +1998,12 @@ class TestTotalsAndComponents:
                 11,
                 None,
                 TACException(
-                    ('identifier: AM', ValueError('Precision range must be more than 0 and less than or equal to 28'))
+                    (
+                        "identifier: AM",
+                        ValueError(
+                            "Precision range must be more than 0 and less than or equal to 28"
+                        ),
+                    )
                 ),
                 "Test 39 - Testing precision value = 29",
                 # Testing the accuracy of the components returned
@@ -2088,7 +2103,7 @@ class TestTotalsAndComponents:
                 ],
                 True,
                 10.5,
-                "hello",
+                None,
                 None,
                 None,
                 0.1,
@@ -2247,8 +2262,8 @@ class TestTotalsAndComponents:
                     [81, 0, 3.6, 5.4],
                     "C",
                 ),
-                "Test 48 - predictive value is used when auxiliary and total is none, predictive exists",
-                # When total value is none and predictive value exists
+                "Test 48 - predictive value is used when auxiliary is none, predictive and total exists",
+                # When total and predictive value exists
                 # and Auxiliary value is none then the decision whether
                 # an automatic correction can be made will be based off of the predictive value
                 # and any recalculation of the components will use the total value.

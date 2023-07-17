@@ -93,6 +93,10 @@ class TACException(Exception):
     pass
 
 
+class DefaultPrecision:
+    precision = 28
+
+
 class TotalsAndComponentsOutput:
     """
     A Class defining the output attributes of the totals and components method
@@ -109,7 +113,9 @@ class TotalsAndComponentsOutput:
     ] = None  # the sum of the input components plus the absolute percentage difference
     precision: Optional[
         int
-    ] = None  # Precision is not a decimal point indicator, it is instead used to adjust our error margins
+    ] = (
+        DefaultPrecision.precision
+    )  # Precision is not a decimal point indicator, it is instead used to adjust our error margins
     final_total: Optional[
         float
     ] = None  # the output total which may have been corrected based on user input amend_
@@ -268,7 +274,10 @@ def validate_input(
     if auxiliary:
         validate_number("auxiliary", auxiliary)
         float(auxiliary)
-    if absolute_difference_threshold is None and percentage_difference_threshold is None:
+    if (
+        absolute_difference_threshold is None
+        and percentage_difference_threshold is None
+    ):
         raise ValueError(
             "One or both of absolute/percentage difference thresholds must be specified"
         )
@@ -280,11 +289,13 @@ def validate_input(
             "percentage difference threshold", percentage_difference_threshold
         )
         float(percentage_difference_threshold)
-    if not 0 < precision <= 28:
+    if precision is None:
+        precision = DefaultPrecision.precision
+    if not 0 < precision <= DefaultPrecision.precision:
         raise ValueError(
-            "Precision range must be more than 0 and less than or equal to 28"
+            f"Precision range must be more than 0 and less than or equal to {DefaultPrecision.precision}"
         )
-    elif 0 < precision <= 28:
+    elif 0 < precision <= DefaultPrecision.precision:
         validate_number("Precision", precision)
 
     return (
@@ -739,7 +750,7 @@ def totals_and_components(
     auxiliary: Optional[float],
     absolute_difference_threshold: Optional[float],
     percentage_difference_threshold: Optional[float],
-    precision: Optional[int] = 28,
+    precision: Optional[int] = DefaultPrecision.precision,
 ) -> TotalsAndComponentsOutput:
     """
     Determines whether a difference exists between a provided total value and the sum of
@@ -788,7 +799,7 @@ def totals_and_components(
     :param precision: Precision is used by the decimal package when calculating whether
                       error correction can take place and for the adjustment of either the
                       total or components and ensures the calculations are performed to the
-                      specified accuracy. The default precision provides accuracy to 28
+                      specified accuracy. The default precision provides accuracy to DefaultPrecision.precision
                       decimal places.
     :type precision: Optional[int]
     :raisesTACException: If invalid values are passed to the function.
@@ -804,7 +815,8 @@ def totals_and_components(
              - high_percent_threshold (float, optional): The sum of the input components plus
              the absolute percentage
                difference (default: None).
-             - param precision (int): The supplied precision value or a defaulted precision of 28 decimal places
+             - param precision (int): The supplied precision value or a defaulted precision
+                                      of DefaultPrecision.precision decimal places
              - final_total (float): The output total, which may have been corrected based on
              the amend_total variable.
              - final_components (List[float]): The output components, which may have been
@@ -818,6 +830,7 @@ def totals_and_components(
                     S (method stopped due to lack of data or zero values).
      :rtype: tuple(TotalsAndComponentsOutput)
     """
+
     print_input_table(
         identifier=identifier,
         total=total,
