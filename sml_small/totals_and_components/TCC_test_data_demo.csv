@@ -1,4 +1,4 @@
-﻿reference,period,total,comp_1,comp_2,comp_3,comp_4,comp_sum,amend_total,predictive,auxiliary,abs_threshold,perc_threshold,abs_diff,perc_low,perc_high,TCC_marker,final_total,final_comp_1,final_comp_2,final_comp_3,final_comp_4
+reference,period,total,comp_1,comp_2,comp_3,comp_4,comp_sum,amend_total,predictive,auxiliary,abs_threshold,perc_threshold,abs_diff,perc_low,perc_high,TCC_marker,final_total,final_comp_1,final_comp_2,final_comp_3,final_comp_4
 A,202301,1625,632,732,99,162,1625,TRUE,1625,,11,,0,,,N,1625,632,732,99,162
 B,202301,10817,9201,866,632,112,10811,TRUE,10817,,11,,6,,,T,10811,9201,866,632,112
 C,202301,90,90,0,4,6,100,FALSE,90,,,0.1,,90,110,C,90,81,0,3.6,5.4

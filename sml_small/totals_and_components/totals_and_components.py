@@ -2,6 +2,7 @@
 For Copyright information, please see LICENCE.
 """
 
+from decimal import Decimal, getcontext
 from enum import Enum
 from typing import List, Optional, Tuple
 
@@ -26,6 +27,7 @@ class InputParameters(Enum):
     AUXILIARY = 3
     ABSOLUTE_DIFFERENCE_THRESHOLD = 4
     PERCENTAGE_DIFFERENCE_THRESHOLD = 5
+    PRECISION = 6
 
 
 class TccMarker(Enum):
@@ -89,15 +91,17 @@ class TACException(Exception):
       "Totals and Components error"
       pass
 
+
+class DefaultPrecision:
+    precision = 28
+
+
 class TotalsAndComponentsOutput:
     """
     A Class defining the output attributes of the totals and components method
     """
 
-    identifier: Optional[
-        str
-    ] = ""  # unique identifier, e.g Business Reporting Unit SG-should this be optional?
-    period: [str] = ""  # not used in initial PoC always assume current period
+    identifier: Optional[str] = ""  # unique identifier
     absolute_difference: Optional[float]  # this is the absolute value showing the
     # difference between the components input and the predictive total
     low_percent_threshold: Optional[
@@ -106,6 +110,11 @@ class TotalsAndComponentsOutput:
     high_percent_threshold: Optional[
         float
     ] = None  # the sum of the input components plus the absolute percentage difference
+    precision: Optional[
+        int
+    ] = (
+        DefaultPrecision.precision
+    )  # Precision is not a decimal point indicator, it is instead used to adjust our error margins
     final_total: Optional[
         float
     ] = None  # the output total which may have been corrected based on user input amend_
@@ -138,10 +147,10 @@ class TotalsAndComponentsOutput:
         print("Totals and Components Output:")
         print("-----------------------------")
         print(f"Identifier: {self.identifier}")
-        print(f"Period: {self.period}")
         print(f"Absolute Difference: {self.absolute_difference}")
         print(f"Low Percent Threshold: {self.low_percent_threshold}")
         print(f"High Percent Threshold: {self.high_percent_threshold}")
+        print(f"Precision: {self.precision}")
         print(f"Final Total: {self.final_total}")
         print(f"Final Value: {self.final_components}")
         print(f"TCC Marker: {self.tcc_marker}")
@@ -152,7 +161,7 @@ def initialize_components_list(
 ) -> [list[ComponentPair]]:
     """
     Takes the list of components values and constructs Component_List objects from them
-    :param component_list: List of components that should equal the total or predictive value.
+    :param component_list: List of component values, the sum of which, should match the received total value.
     :type component_list: list(float)
     :return component_object_list: List of components stored within ComponentsList objects
     :rtype component_object_list: list(ComponentsList)
@@ -180,28 +189,33 @@ def print_input_table(**kwargs):
 
 
 def validate_input(
+    identifier: str,
     total: float,
     components: List[ComponentPair],
     amend_total: bool,
     predictive: Optional[float],
+    precision: Optional[int],
     auxiliary: Optional[float],
     absolute_difference_threshold: Optional[float],
     percentage_difference_threshold: Optional[float],
 ) -> tuple[
     float,
     List[ComponentPair],
-    bool,
     float | None,
     float | None,
     float | None,
     float | None,
+    int | None,
 ]:
     """
-    validate_input is to ensure that the dataset input record has all the values
-    we need in the correct format. To do this we check to see if the data exists and is a number.
-    If the data does not exist and is not a number we throw ValueError's as appropriate.
+    validate_input is used to validate the data passed to the totals_and_components
+    method ensuring that the values are present when expected and that they are of
+    the correct type. If invalid data is received the an appropriate exception is
+    raised.
 
-    :param total: Target period total, numeric – nulls allowed
+    :param identifier: Unique identifier for the calculation.
+    :type identifier: str
+    :param total: Target total, numeric – nulls allowed
     :type total: float
     :param components: Corresponding list of Total variable's components, numeric – nulls allowed
     :type components: List[ComponentPair]
@@ -209,9 +223,10 @@ def validate_input(
     :type bool
     :param predictive:A value used as a predictor for a contributor's target variable.
     :type predictive: Optional[float]
+    :param precision: Precision is not a decimal point indicator, it is instead used to adjust our error margins.
+    :type precision: Optional[int]
     :param auxiliary: The variable used as a predictor for a contributor’s target variable,
-                      where the predictive value is not available
-                      (e.g., where the contributor was not sampled in the predictive period).
+                      where the predictive value is not available.
     :type auxiliary: Optional[float]
     :param absolute_difference_threshold: Is the predefined threshold for the absolute difference
     :type absolute_difference_threshold: Optional[float]
@@ -220,19 +235,28 @@ def validate_input(
     :type percentage_difference_threshold: Optional[float]
     :raises ValueError: ValueErrors are returned when data is missing or in the
                         incorrect type/format.
+    :raises Exception: Exception errors are returned in the following format
+                       'Expected no exception, but got {Exception}' these exception types can be any of the following
+                       IOException, NullPointerException, ArithmeticException,
+                       IllegalArgumentException, IllegalStateException, InterruptedException,
+                       ArgumentException, InvalidOperationException, RuntimeException,
+                       NullReferenceException, TimeoutException, FloatingPointException
+                       and OutOfMemoryException.
     :return: The tuple is a returned list of values converted to floats (if possible).
     :rtype: tuple[float |
             List[Component_list] | None, float | None, float | None, float | None,
-            float | None, float | None]
+            float | None, int | None]
     """
-    print("Components debug", type(components[0].original_value), components[0].original_value)
-    print("Total 1", type(total))
+    if not identifier:
+        raise ValueError("identifier is a mandatory parameter and must be specified")
+    str(identifier)
+    if total is None:
+        raise ValueError("total is a mandatory parameter and must be specified")
     if total:
         validate_number("total", total)
         total = float(total)
-        print("Total 2", type(total))
     if not components:
-        raise ValueError("The components are not populated")
+        raise ValueError("components is a mandatory parameter and must be specified")
     if components:
         for component in components:
             validate_number(
@@ -241,20 +265,21 @@ def validate_input(
             component.original_value = float(component.original_value)
             print("Component original value", type(component.original_value))
     if amend_total is None:
-        raise ValueError("Amend total needs to be True or False")
-    if predictive:
+        raise ValueError(
+            "amend_total is a mandatory parameter and must be specified as either True or False."
+        )
+    if predictive is not None:
         validate_number("predictive", predictive)
         predictive = float(predictive)
     if auxiliary:
         validate_number("auxiliary", auxiliary)
         auxiliary = float(auxiliary)
     if (
-        (absolute_difference_threshold is None
-        and percentage_difference_threshold is None) or (absolute_difference_threshold == 0
-        and percentage_difference_threshold == 0)
+        absolute_difference_threshold is None
+        and percentage_difference_threshold is None
     ):
         raise ValueError(
-            "One or both of absolute/percentage difference thresholds must be specified and non-zero"
+            "One or both of absolute/percentage difference thresholds must be specified"
         )
     if absolute_difference_threshold:
         validate_number("absolute difference threshold", absolute_difference_threshold)
@@ -263,7 +288,16 @@ def validate_input(
         validate_number(
             "percentage difference threshold", percentage_difference_threshold
         )
-        percentage_difference_threshold = float(percentage_difference_threshold)
+        float(percentage_difference_threshold)
+    if precision is None:
+        precision = DefaultPrecision.precision
+    if not 0 < precision <= DefaultPrecision.precision:
+        raise ValueError(
+            f"Precision range must be more than 0 and less than or equal to {DefaultPrecision.precision}"
+        )
+    elif 0 < precision <= DefaultPrecision.precision:
+        validate_number("Precision", precision)
+
     return (
         total,
         components,
@@ -271,21 +305,22 @@ def validate_input(
         auxiliary,
         absolute_difference_threshold,
         percentage_difference_threshold,
+        precision,
     )
 
 
 def validate_number(tag: str, value) -> bool:
     """
-    validate_number will take a parsed tag and value and check ot see if the value is a number.
-    If this is not the case it returns a ValueError.
+    validate_number will take a parsed tag and value and check to see if the value is a number.
+    validate_number will raise a ValueError if expectations are not met.
 
     :param tag: The tag is a way of identifying the value and type entered and is used if a
                 ValueError is returned.
     :type tag: str
     :param value: value is what is parsed to the function it can be many different types.
     :type value: float | optional
-    :raises ValueError: ValueError is a means to raise error alerts.
-    :return: This return a True boolean value if the value obtained is a number.
+    :raises ValueError: ValueError is raised for missing numbers or improper data types.
+    :return: Returns True when a value can be converted to float.
     :rtype: boolean
     """
     if not is_number(value):
@@ -303,6 +338,7 @@ def is_number(value) -> bool:
 
     :param value: value is the parsed parameter which is to be converted to a float(if possible).
     :type value: float | optional
+    :return: This return a True boolean value if the value obtained can be converted to a float.
     :rtype: boolean to indicate if value is a number or not.
     """
     try:
@@ -312,31 +348,32 @@ def is_number(value) -> bool:
     return True
 
 
-def check_predictive_value(
-    predictive: Optional[float], auxiliary: Optional[float]
+def set_predictive_value(
+    predictive: Optional[float],
+    auxiliary: Optional[float],
 ) -> tuple[float | None, TccMarker]:
     """
-    Checks if predictive and auxiliary values are input, when predictive is None and auxiliary
-    is input set predictive to auxiliary, when both are None, set Tcc_Marker to S
-    and stop calculation
+    Checks if predictive and auxiliary values are input, when predictive is None but auxiliary
+    is input set predictive to auxiliary. If auxiliary is also None use the total value.
 
-    :param predictive: The predictive value, typically the total for the current period.
+    :param predictive: The predictive value, typically the total.
     :type predictive: float, optional
     :param auxiliary: The value to be used in the absence of a predictive value.
     :type auxiliary: float, optional
     ...
     :return predictive: updated predictive value
+    :return tcc_marker: updated tcc_marker value
     :rtype predictive: None | float
-    :return Tcc_Marker: Returned Tcc_Marker if all values are None
-    :rtype Tcc_Marker: TccMarker
+    :rtype TccMarker: TccMarker
     """
-    tcc_marker = TccMarker.METHOD_PROCEED
     if predictive is None:
-        if auxiliary is None:
-            tcc_marker = TccMarker.STOP
-        else:
-            tcc_marker = TccMarker.METHOD_PROCEED
+        if auxiliary is not None:
             predictive = auxiliary
+            tcc_marker = TccMarker.METHOD_PROCEED
+        else:
+            tcc_marker = TccMarker.STOP
+    else:
+        tcc_marker = TccMarker.METHOD_PROCEED
     return predictive, tcc_marker
 
 
@@ -345,7 +382,7 @@ def check_zero_errors(predictive: float, components_sum: float) -> TccMarker:
     Stop method processing when the predictive value is positive but the sum of components is zero.
     In these scenarios a correction is not possible.
 
-    :param predictive: The predictive value, typically the total for the current period.
+    :param predictive: The predictive value, typically the total.
     :type predictive: float
     :param components_sum: total sum of all the components values entered.
     :type components_sum: float
@@ -363,6 +400,7 @@ def check_zero_errors(predictive: float, components_sum: float) -> TccMarker:
 def check_sum_components_predictive(
     predictive: float,
     components_sum: float,
+    precision: int,
 ) -> float:
     """
     Calculates the absolute difference between the predictive value and the sum of the
@@ -372,12 +410,19 @@ def check_sum_components_predictive(
     :type predictive: float
     :param components_sum: total sum of all the components values entered.
     :type components_sum: float
+    :param precision: Precision is used by the decimal package to calculate the absolute difference
+                      to the specified accuracy.
+    :type precision: int
     ...
-    :return: We will be returning a number for the absolute difference.
+    :param absolute_difference_threshold: Is the predefined threshold for the absolute difference
+    :type absolute_difference_threshold: Optional[float]
+    :return: Returns the absolute difference between the received predictive value and the received
+             sum of the components as a float.
     :rtype: float
     """
-
-    absolute_difference = abs(predictive - components_sum)
+    getcontext().prec = precision
+    absolute_difference = abs(Decimal(str(predictive)) - Decimal(str(components_sum)))
+    absolute_difference = float(absolute_difference)
     return absolute_difference
 
 
@@ -404,8 +449,7 @@ def determine_error_detection(
     :param absolute_difference: The absolute value showing the difference between
                                 the input components and the predictive total.
     :type absolute_difference: Float
-    :param predictive: The predictive value, typically the total for the current
-                       period.
+    :param predictive: The predictive value, typically the total.
     :type predictive: float
     :param low_threshold: Low percentage threshold previously
                        calculated from the percentage_difference_threshold and
@@ -419,22 +463,24 @@ def determine_error_detection(
     :return Tcc_Marker: Returned Tcc_Marker (either stop or continue)
     :rtype Tcc_Marker: TccMarker
     """
-
-    correct_error = False
-    if absolute_difference_threshold is not None:
-        correct_error = check_absolute_difference_threshold(
-            absolute_difference_threshold, absolute_difference
-        )
-    elif absolute_difference_threshold is None:
-        absolute_difference = None
-    if percentage_difference_threshold is not None and correct_error is False:
-        correct_error = check_percentage_difference_threshold(
-            predictive, low_threshold, high_threshold
-        )
-    if correct_error is False:
+    if absolute_difference_threshold == percentage_difference_threshold == 0:
         tcc_marker = TccMarker.MANUAL
     else:
-        tcc_marker = TccMarker.METHOD_PROCEED
+        correct_error = False
+        if absolute_difference_threshold is not None:
+            correct_error = check_absolute_difference_threshold(
+                absolute_difference_threshold, absolute_difference
+            )
+        elif absolute_difference_threshold is None:
+            absolute_difference = None
+        if percentage_difference_threshold is not None and correct_error is False:
+            correct_error = check_percentage_difference_threshold(
+                predictive, low_threshold, high_threshold
+            )
+        if correct_error is False:
+            tcc_marker = TccMarker.MANUAL
+        else:
+            tcc_marker = TccMarker.METHOD_PROCEED
     return tcc_marker
 
 
@@ -454,8 +500,9 @@ def check_absolute_difference_threshold(
                                 the input components and the predictive total.
     :type absolute_difference: float
     ...
-    :return satisfied: a marker indicating if the threshold is satisfied
-    :rtype satisfied: bool
+    :return correct_error: a flag indicating if the threshold is satisfied and
+                           automatic correction can be applied
+    :rtype correct_error: bool
     """
     correct_error = False
     if absolute_difference <= absolute_difference_threshold:
@@ -471,7 +518,10 @@ def check_percentage_difference_threshold(
     based on the calculated low and high threshold based on the received sum of
     components compared to the predictive value
 
-    :param predictive: The predictive value, typically the total for the current period.
+    :param predictive: The received predictive value, this could be based off
+                       of the current total, predictive total or auxiliary
+                       value dependant upon what values where passed to the
+                       top level totals_and_components function.
     :type predictive: float
     :param low_threshold: Low percentage threshold previously
                        calculated from the percentage_difference_threshold and
@@ -482,8 +532,8 @@ def check_percentage_difference_threshold(
                        input components
     :type high_threshold: float
     ...
-    :return satisfied: a marker indicating if the threshold is satisfied
-    :rtype satisfied: bool
+    :return correct_error: a marker indicating if the threshold is satisfied
+    :rtype correct_error: bool
     """
     correct_error = False
     if low_threshold <= predictive <= high_threshold:
@@ -495,23 +545,28 @@ def error_correction(
     amend_total: bool,
     components_sum: float,
     original_components: List[ComponentPair],
-    predictive: float,
+    total: float,
+    precision: Optional[int],
 ) -> tuple[float, list[float], TccMarker]:
     """
-    Function to run the relevant error correction method and output the final corrections
-    the method makes. Return a final total that is calculated from the sum of the received
-    components set the final components as the received components values and indicate the
-    total has been corrected
+    The error correction function will use the amend_total to either
+    correct the total or components. Correcting the total will set the final
+    total as the sum of components. Correcting the components will return the
+    new adjusted components that have been adjusted by using the total.
 
     :param amend_total: Specifies whether the total or components should be corrected
                         when an error is detected.
     :type amend_total: bool
+    :param total: Total value specified when the main totals_and_components method is
+                  called, this is typically the total value associated with the
+                  most current data received.
+    :type total: float
     :param components_sum: Sum of original values of components list
     :type components_sum: float
     :param original_components: List of Components objects so final values can be amended
     :type original_components: list(ComponentPair)
-    :param predictive: The predictive value, typically the total for the current period.
-    :type predictive: float
+    :param precision: Precision is not a decimal point indicator, it is instead used to adjust our error margins.
+    :type precision: Optional[int]
     ...
     :return final_total: Final Total value to be output
     :rtype final total: float
@@ -526,7 +581,10 @@ def error_correction(
         )
     else:
         final_total, original_components, tcc_marker = correct_components(
-            components_sum, original_components, predictive
+            components_sum,
+            original_components,
+            total,
+            precision,
         )
     final_components = []
     for component in original_components:
@@ -542,8 +600,8 @@ def correct_total(
 
     :param components_sum: Sum of original values of components list
     :type components_sum: float
-    :param original_components: List of Components objects so final values can be amended
-    :type original_components: list(Components_list)
+    :param components: List of Components objects so final values can be amended
+    :type components: list(Components_list)
     ...
     :return final_total: Final Total value to be output
     :rtype final_total: float
@@ -561,55 +619,74 @@ def correct_total(
 
 
 def correct_components(
-    components_sum: float, original_components: List[ComponentPair], predictive: float
+    components_sum: float,
+    components: List[ComponentPair],
+    total: float,
+    precision: int,
 ) -> tuple[float, list[ComponentPair], TccMarker]:
     """
-    Function to correct the components values to add up to the received predictive value,
-    set the final total as the received predictive total and indicate that the component
+    Function to correct the components values to add up to the received total value,
+    set the final total as the received total and indicate that the component
     have been corrected. Calculates each component value based on the original value so
     values are weighted instead of normalised
 
     :param components_sum: Sum of original values of components list
     :type components_sum: float
-    :param original_components: List of Components objects so final values can be amended
-    :type original_components: list(Components_list)
-    :param predictive: The predictive value, typically the total for the current period.
-    :type predictive: float
+    :param components: a list that includes the original component
+                       values received, these are used when calculating the
+                       amended component values to retain the original weighting.
+    :type components: list(Components_list)
+    :param precision: Precision is used by the decimal package to calculate the
+                      adjusted components to the specified accuracy.
+    :type precision: Optional[int]
+    :param total: current total
+    :type total: float
     ...
     :return final_total: Final Total value to be output
     :rtype final_total: float
-    :return original_components: Input Component list with final values updated
-    :rtype original_components: list(Components_list)
+    :return components: Input Component list with final values updated
+    :rtype components: list(Components_list)
     :return tcc_marker: Returned Tcc_Marker (Components_corrected)
     :rtype tcc_marker: TccMarker
     """
-    final_total = predictive
-    for component in original_components:
-        component.final_value = (component.original_value / components_sum) * predictive
+    getcontext().prec = precision
+    final_total = total
+    for component in components:
+        component.final_value = (
+            Decimal(str(component.original_value)) / Decimal(str(components_sum))
+        ) * Decimal(str(total))
+        component.final_value = float(component.final_value)
     tcc_marker = TccMarker.COMPONENTS_CORRECTED
-    return final_total, original_components, tcc_marker
+    return final_total, components, tcc_marker
 
 
-def sum_components(components: list[ComponentPair]) -> float:
+def sum_components(components: list[ComponentPair], precision: int) -> float:
     """
     Returns the total sum of a received list of component values
 
     :param components: List of components to be summed together.
-    :type components liat(components_list)
+    :type components list(components_list)
+    :param precision: Precision is not a decimal point indicator, it is instead used to adjust our error margins.
+    :type precision: Optional[int]
     ...
     :return total_sum: Final total of summed components
     :rtype total_sum: float
     """
-    total_sum = 0.0
+    getcontext().prec = precision
+    total_sum = Decimal("0.0")
 
     for component in components:
-        total_sum += component.original_value
+        total_sum += Decimal(component.original_value)
 
+    total_sum = float(total_sum)
     return total_sum
 
 
 def calculate_percent_thresholds(
-    sum_of_components: float, percentage_threshold: float, output_list: dict
+    sum_of_components: float,
+    percentage_threshold: float,
+    output_list: dict,
+    precision: int,
 ) -> Tuple[float | None, float | None, dict]:
     """
     Calculate and return the low and high percentage thresholds based on the
@@ -625,6 +702,8 @@ def calculate_percent_thresholds(
     :param output_list: dictionary containing attributes output at the end of the totals and
     components function
     :type output_list: dict
+    :param precision: Precision is not a decimal point indicator, it is instead used to adjust our error margins.
+    :type precision: Optional[int]
     ...
     :return low_percent_threshold: The lower threshold calculated from the sum of components
                                     and percentage threshold
@@ -636,36 +715,42 @@ def calculate_percent_thresholds(
     components function
     :rtype output_list: dict
     """
-    if percentage_threshold is None:
+    getcontext().prec = precision
+    if percentage_threshold is None or percentage_threshold == 0:
         low_percent_threshold = None
         high_percent_threshold = None
     else:
         low_percent_threshold = (
-            abs(sum_of_components - (sum_of_components / percentage_threshold)) / 10
+            abs(
+                Decimal(str(sum_of_components))
+                - (Decimal(str(sum_of_components)) / Decimal(str(percentage_threshold)))
+            )
+            / 10
         )
+        low_percent_threshold = float(low_percent_threshold)
         high_percent_threshold = (
-            abs(sum_of_components + (sum_of_components / percentage_threshold)) / 10
+            abs(
+                Decimal(str(sum_of_components))
+                + (Decimal(str(sum_of_components)) / Decimal(str(percentage_threshold)))
+            )
+            / 10
         )
+        high_percent_threshold = float(high_percent_threshold)
     output_list["low_percent_threshold"] = low_percent_threshold
     output_list["high_percent_threshold"] = high_percent_threshold
     return low_percent_threshold, high_percent_threshold, output_list
 
 
 def totals_and_components(
-    identifier: Optional[
-        str
-    ],  # unique identifier, e.g Business Reporting Unit SG-should this be optional?
-    period: Optional[str],
+    identifier: str,
     total: float,
     components: List[float],
     amend_total: bool,
     predictive: Optional[float],
-    predictive_period: Optional[
-        str
-    ],  # not used in initial PoC always assume current period
     auxiliary: Optional[float],
     absolute_difference_threshold: Optional[float],
     percentage_difference_threshold: Optional[float],
+    precision: Optional[int] = DefaultPrecision.precision,
 ) -> TotalsAndComponentsOutput:
     """
     Determines whether a difference exists between a provided total value and the sum of
@@ -687,20 +772,20 @@ def totals_and_components(
     It is actually representative of a null value.
 
     :param identifier: Unique identifier for the calculation.
-    :type identifier: Optional[str]
-    :param period: Not used in initial Proof of Concept (PoC). Assumes current period.
-    :type period: Optional[str]
+    :type identifier: str
     :param total: Original value returned for the total.
     :type total: float
-    :param components: List of components that should equal the total or predictive value.
+    :param components: List of component values, the sum of which, should match the received total value.
     :type components: List[float]
     :param amend_total: Specifies whether the total or components should be corrected when
                         an error is detected.
     :type amend_total:bool
-    :param predictive: The predictive value, typically the total for the current period.
+    :param predictive: The predictive value. When specified, this value is used to determine whether
+                       automatic error correction can be applied when comparing to the specified
+                       absolute difference or percentage difference thresholds. Typically the predictive
+                       value would be the total from an immediately prior period that has been
+                       verified as valid.
     :type predictive: Optional[float]
-    :param predictive_period: Not used in initial PoC. Assumes current period.
-    :type predictive_period: Optional[str]
     :param auxiliary: The value to be used in the absence of a predictive value.
     :type auxiliary: Optional[float]
     :param absolute_difference_threshold: Value used to check if the difference between
@@ -711,12 +796,16 @@ def totals_and_components(
                                             percentage of the sum of the components, the
                                             method will automatically correct.
     :type percentage_difference_threshold: Optional[float]
-    :raises: N/A Currently
-    :return TotalsAndComponentsOutput: TotalsAndComponentsOutput: An object containing the
+    :param precision: Precision is used by the decimal package when calculating whether
+                      error correction can take place and for the adjustment of either the
+                      total or components and ensures the calculations are performed to the
+                      specified accuracy. The default precision provides accuracy to DefaultPrecision.precision
+                      decimal places.
+    :type precision: Optional[int]
+    :raisesTACException: If invalid values are passed to the function.
+    :return: TotalsAndComponentsOutput: An object containing the
                                        following attributes:
-             - identifier (str, optional): Unique identifier (default: None).
-             - period (str, optional): Not used in initial PoC, always assume current period
-             (default: None).
+             - identifier (str): Unique identifier.
              - absolute_difference (float): The absolute value showing the difference between
              the input components and
                the predictive total.
@@ -726,6 +815,8 @@ def totals_and_components(
              - high_percent_threshold (float, optional): The sum of the input components plus
              the absolute percentage
                difference (default: None).
+             - param precision (int): The supplied precision value or a defaulted precision
+                                      of DefaultPrecision.precision decimal places
              - final_total (float): The output total, which may have been corrected based on
              the amend_total variable.
              - final_components (List[float]): The output components, which may have been
@@ -737,58 +828,66 @@ def totals_and_components(
                     C (components corrected), N (no correction required),
                     M (manual correction required),
                     S (method stopped due to lack of data or zero values).
-     :rtype TotalsAndComponentsOutput: Object[TotalsAndComponentsOutput]
+     :rtype: tuple(TotalsAndComponentsOutput)
     """
 
     print_input_table(
         identifier=identifier,
-        period=period,
         total=total,
         components=components,
         amend_total=amend_total,
         predictive=predictive,
-        predictive_period=predictive_period,
+        precision=precision,
         auxiliary=auxiliary,
         absolute_difference_threshold=absolute_difference_threshold,
         percentage_difference_threshold=percentage_difference_threshold,
     )
-
     try:
         output_list = {
             "identifier": identifier,
-            "period": period,
             "final_total": total,
             "final_components": components,
             "absolute_difference": None,
         }
         components_list = initialize_components_list(components)
+
         #  Check for invalid parameter values
         input_parameters = validate_input(
+            identifier,
             total,
             components_list,
             amend_total,
             predictive,
+            precision,
             auxiliary,
             absolute_difference_threshold,
             percentage_difference_threshold,
         )
-        #  Ensure either the predictive or auxiliary parameter specified
-        predictive, output_list["tcc_marker"] = check_predictive_value(
+
+        #  Set the predictive as either the current value, total or auxiliary
+        # depending on what values exist from the data input.
+        (predictive, output_list["tcc_marker"]) = set_predictive_value(
             input_parameters[InputParameters.PREDICTIVE.value],
             input_parameters[InputParameters.AUXILIARY.value],
         )
 
+        component_total = sum_components(
+            input_parameters[InputParameters.COMPONENTS.value],
+            input_parameters[InputParameters.PRECISION.value],
+        )
+
         if output_list["tcc_marker"] == TccMarker.METHOD_PROCEED:
-            component_total = sum_components(
-                input_parameters[InputParameters.COMPONENTS.value]
-            )
+
             #  Check for error scenarios where the sum of the components is zero and
             #  a positive predictive value has been received
             output_list["tcc_marker"] = check_zero_errors(predictive, component_total)
+
             absolute_difference = check_sum_components_predictive(
                 predictive,
                 component_total,
+                input_parameters[InputParameters.PRECISION.value],
             )
+
             #  Determine if a correction is required
             if output_list["tcc_marker"] == TccMarker.METHOD_PROCEED:
                 (
@@ -801,14 +900,18 @@ def totals_and_components(
                         InputParameters.PERCENTAGE_DIFFERENCE_THRESHOLD.value
                     ],
                     output_list,
+                    input_parameters[InputParameters.PRECISION.value],
                 )
 
-                if (
-                    input_parameters[InputParameters.PREDICTIVE.value]
-                    == component_total
-                ):
+                # Absolute difference is output here as it would not change from this point
+                # it is not output sooner as a S marker could be returned
+                # before this point and that would have no absolute difference value.
+                output_list["absolute_difference"] = absolute_difference
+
+                # If the received total equals the sum of the received components
+                # then no correction needs to take place.
+                if input_parameters[InputParameters.TOTAL.value] == component_total:
                     output_list["tcc_marker"] = TccMarker.NO_CORRECTION
-                    output_list["absolute_difference"] = absolute_difference
                 else:
                     #  Determine if the difference error can be automatically corrected
                     output_list["tcc_marker"] = determine_error_detection(
@@ -834,15 +937,20 @@ def totals_and_components(
                             original_components=input_parameters[
                                 InputParameters.COMPONENTS.value
                             ],
-                            predictive=predictive,
+                            total=input_parameters[InputParameters.TOTAL.value],
+                            precision=input_parameters[InputParameters.PRECISION.value],
                         )
-                    output_list["absolute_difference"] = absolute_difference
+
+        # We return the raw string instead of the enum value
         output_list["tcc_marker"] = output_list["tcc_marker"].value
+        output_list["precision"] = input_parameters[InputParameters.PRECISION.value]
         output = TotalsAndComponentsOutput(output_list)
         output.print_output_table()
 
         return output
 
     except Exception as error:
+        if identifier is None:
+            identifier = "N/A"
         print("Exception error detected:", error)
-        raise TACException(error)
+        raise TACException(f"identifier: {identifier}", error)
