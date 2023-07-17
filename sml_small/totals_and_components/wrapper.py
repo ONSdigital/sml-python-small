@@ -269,8 +269,7 @@ def invoke_process_with_local_csv():
         for row in csv_reader:
             print("Data type:::::::", type(row["comp_1"]))
             input_data = [
-                (row["\ufeffreference"]),
-                (row["period"]),
+                (row["reference"]),
                 (row["total"]),
                 [
                     (row["comp_1"]),
@@ -280,7 +279,6 @@ def invoke_process_with_local_csv():
                 ],
                 True if not row["amend_total"] == "FALSE" else False,
                 (row["predictive"]),
-                (row["period"]),
                 None if not row["auxiliary"] else (row["auxiliary"]),
                 None if not row["abs_threshold"] else (row["abs_threshold"]),
                 None if not row["perc_threshold"] else (row["perc_threshold"]),
@@ -290,7 +288,6 @@ def invoke_process_with_local_csv():
 
             new_result = {
                 result.identifier: {
-                    "period": result.period,
                     "absolute_difference": result.absolute_difference,
                     "low_percent_threshold": result.low_percent_threshold,
                     "high_percent_threshold": result.high_percent_threshold,
@@ -307,8 +304,7 @@ def invoke_process_with_local_csv():
     # Write the results returned by the T&C into the CSV file
     with open("TCC_test_data_demo_processed.csv", mode="w") as csv_file:
         field_names = [
-            "\ufeffreference",
-            "period",
+            "reference",
             # "total",
             # "comp_1"
             # "comp_2",
@@ -337,8 +333,7 @@ def invoke_process_with_local_csv():
             # print(results[identifier])
             writer.writerow(
                 {
-                    "\ufeffreference": identifier,
-                    "period": results[identifier]["period"],
+                    "reference": identifier,
                     "abs_diff": results[identifier]["absolute_difference"],
                     "perc_low": results[identifier]["low_percent_threshold"],
                     "perc_high": results[identifier]["high_percent_threshold"],
@@ -356,8 +351,8 @@ def invoke_process_with_local_csv():
 def invoke_process_with_in_memory_csv():
     # Read the CSV file and extract the input data and pass into the
     # T&C method
-    in_memory_csv_data = """reference,period,total,comp_1,comp_2,comp_3,comp_4,amend_total,predictive,auxiliary,abs_threshold,perc_threshold
-A,202301,1625,632,732,99,162,TRUE,1625,202301,,11"""  # noqa: E501
+    in_memory_csv_data = """reference,total,comp_1,comp_2,comp_3,comp_4,amend_total,predictive,auxiliary,abs_threshold,perc_threshold
+A,1625,632,732,99,162,TRUE,1625,,11,,,"""  # noqa: E501
 
     csv_reader = csv.DictReader(in_memory_csv_data.splitlines())
     print("CSV reader", csv_reader)
@@ -366,7 +361,6 @@ A,202301,1625,632,732,99,162,TRUE,1625,202301,,11"""  # noqa: E501
     for row in csv_reader:
         input_data = [
             (row["reference"]),
-            (row["period"]),
             (row["total"]),
             [
                 (row["comp_1"]),
@@ -376,7 +370,6 @@ A,202301,1625,632,732,99,162,TRUE,1625,202301,,11"""  # noqa: E501
             ],
             True if not row["amend_total"] == "FALSE" else False,
             (row["predictive"]),
-            (row["period"]),
             None if not row["auxiliary"] else (row["auxiliary"]),
             None if not row["abs_threshold"] else (row["abs_threshold"]),
             None if not row["perc_threshold"] else (row["perc_threshold"]),
@@ -386,7 +379,6 @@ A,202301,1625,632,732,99,162,TRUE,1625,202301,,11"""  # noqa: E501
 
         new_result = {
             result.identifier: {
-                "period": result.period,
                 "absolute_difference": result.absolute_difference,
                 "low_percent_threshold": result.low_percent_threshold,
                 "high_percent_threshold": result.high_percent_threshold,
@@ -404,8 +396,7 @@ A,202301,1625,632,732,99,162,TRUE,1625,202301,,11"""  # noqa: E501
     # Write the results returned by the T&C into the CSV file
     with open("TCC_test_data_demo_processed_in_memory.csv", mode="w") as csv_file:
         field_names = [
-            "\ufeffreference",
-            "period",
+            "reference",
             # "total",
             # "comp_1"
             # "comp_2",
@@ -433,8 +424,7 @@ A,202301,1625,632,732,99,162,TRUE,1625,202301,,11"""  # noqa: E501
         for identifier in results:
             writer.writerow(
                 {
-                    "\ufeffreference": identifier,
-                    "period": results[identifier]["period"],
+                    "reference": identifier,
                     "abs_diff": results[identifier]["absolute_difference"],
                     "perc_low": results[identifier]["low_percent_threshold"],
                     "perc_high": results[identifier]["high_percent_threshold"],
@@ -450,6 +440,6 @@ A,202301,1625,632,732,99,162,TRUE,1625,202301,,11"""  # noqa: E501
 
 # You can run the functions invoke_process_in_memory_data_example or invoke_process_in_memory_data_example_2 below
 # invoke_process_with_local_csv()
-# invoke_process_with_in_memory_csv()
+invoke_process_with_in_memory_csv()
 # invoke_process_in_memory_data_example()
-invoke_process_in_memory_data_example_2()
+# invoke_process_in_memory_data_example_2()
