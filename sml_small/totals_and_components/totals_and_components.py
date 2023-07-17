@@ -152,7 +152,7 @@ class TotalsAndComponentsOutput:
         print(f"High Percent Threshold: {self.high_percent_threshold}")
         print(f"Precision: {self.precision}")
         print(f"Final Total: {self.final_total}")
-        print(f"Final Value: {self.final_components}")
+        print(f"Final Components: {self.final_components}")
         print(f"TCC Marker: {self.tcc_marker}")
 
 
