@@ -941,6 +941,10 @@ def totals_and_components(
                             precision=input_parameters[InputParameters.PRECISION.value],
                         )
 
+        if output_list["tcc_marker"] == TccMarker.COMPONENTS_CORRECTED or output_list["tcc_marker"] == TccMarker.TOTAL_CORRECTED:
+            if percentage_difference_threshold is not None and absolute_difference_threshold is None:
+                 output_list["absolute_difference"] = None
+
         # We return the raw string instead of the enum value
         output_list["tcc_marker"] = output_list["tcc_marker"].value
         output_list["precision"] = input_parameters[InputParameters.PRECISION.value]

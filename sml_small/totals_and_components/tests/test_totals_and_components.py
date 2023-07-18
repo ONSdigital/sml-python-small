@@ -1090,7 +1090,7 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "C",
-                    10,
+                    None,
                     90,
                     110,
                     2,
@@ -1369,7 +1369,7 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "P",
-                    1,
+                    None,
                     9,
                     11,
                     28,
@@ -1750,7 +1750,7 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "AC",
-                    0.5,
+                    None,
                     9,
                     11,
                     28,
@@ -1773,7 +1773,7 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "AD",
-                    1,
+                    None,
                     9,
                     11,
                     2,
@@ -1796,7 +1796,7 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "AE",
-                    0.9,
+                    None,
                     9,
                     11,
                     28,
@@ -1819,7 +1819,7 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "AF",
-                    1,
+                    None,
                     9,
                     11,
                     2,
@@ -1842,7 +1842,7 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "AG",
-                    2.0,
+                    2,
                     9,
                     11,
                     28,
@@ -1936,7 +1936,7 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "AK",
-                    10,
+                    None,
                     90,
                     110,
                     28,
@@ -1965,7 +1965,7 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "AL",
-                    0.9,
+                    None,
                     9.81,
                     11.99,
                     28,
@@ -2048,7 +2048,7 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "AO",
-                    1,
+                    None,
                     9,
                     11,
                     2,
@@ -2078,7 +2078,7 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "AP",
-                    0.1,
+                    None,
                     0.6,
                     0.8,
                     1,
@@ -2109,7 +2109,7 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "AQ",
-                    0.5,
+                    None,
                     9,
                     11,
                     28,
@@ -2138,7 +2138,7 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "AR",
-                    6,
+                    None,
                     90,
                     110,
                     28,
@@ -2223,7 +2223,7 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "AU",
-                    5,
+                    None,
                     90,
                     110,
                     28,
@@ -2254,7 +2254,7 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "AV",
-                    5,
+                    None,
                     90,
                     110,
                     28,
