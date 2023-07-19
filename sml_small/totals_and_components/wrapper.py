@@ -12,6 +12,9 @@ import csv
 from tabulate import tabulate
 
 test_data = [
+    # The input data below once passed into the T&C method should return
+    # a TCC Marker of N = No correction required, i.e., the total is equal to the components sum
+    # Meaning we have no correction and the method stops with an output written
     [
       "A",
       1625,
@@ -20,9 +23,9 @@ test_data = [
       1625,
       None,
       11,
-      None,
-      None
+      None    
     ],
+    # Should return a TCC Marker of T = Totals corrected
     [
       "B",
       10817,
@@ -31,9 +34,9 @@ test_data = [
       10817,
       None,
       11,
-      None,
       None
     ],
+    # Should return a TCC Marker of C = Components corrected
     [
         "C",
         90,
@@ -45,17 +48,9 @@ test_data = [
         0.1,
         None,
     ],
-    # [
-    #     "X",
-    #     41,
-    #     [10,10,10,10],
-    #     False,
-    #     41,
-    #     None,
-    #     None,
-    #     None,
-    #     None,
-    # ],
+    # Should return a TCC Marker of M = Manual editing required
+    # This marker will identify contributors where the discrepancy 
+    # between the total and component is deemed too large for automatic correction
     [
       "D",
       1964,
@@ -67,6 +62,7 @@ test_data = [
       0.1,
       None,
     ],
+    # Should return a TCC Marker of T = Totals corrected
     [
       "E",
       306,
@@ -78,6 +74,8 @@ test_data = [
       0.1,
       None
     ],
+    # Should return a TCC Marker of S = Method stops. This may be due
+    # to insufficient data to run the method, or one of the relevant zero cases
     [
       "F",
       11,
@@ -86,7 +84,6 @@ test_data = [
       11,
       None,
       11,
-      None,
       None
     ],
 ]
@@ -100,33 +97,31 @@ def invoke_process_in_memory_data_example():
 
     # The input data below once passed into the T&C method should return
     # a TCC Marker of N = No correction required, i.e., the total is equal to the components sum
-    # Meaning we have no correction and the method stops with an output written.
+    # Meaning we have no correction and the method stops with an output written
 
     # The input data is here as a list below but this isn't needed to work with the T&C method
     # The List[] data below is used to keep track of the original data to display on the command line
     # in a table format
     data = [
-        "C",
-        90,
-        [90, 0, 4, 6],
-        False,
-        90,
+        "A",
+        1625,
+        [632, 732, 99, 162],
+        True,
+        1625,
         None,
-        None,
-        0.1,
-        None
+        11,
+        None    
     ]
 
     # We pass in the input data to be processed and returned by the T&C method
     result = totals_and_components(
-        "C",
-        90,
-        [90, 0, 4, 6],
-        False,
-        90,
+        "A",
+        1625,
+        [632, 732, 99, 162],
+        True,
+        1625,
         None,
-        None,
-        0.1,
+        11,
         None
     )
 
