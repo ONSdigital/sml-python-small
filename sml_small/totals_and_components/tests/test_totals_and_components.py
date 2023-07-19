@@ -3,14 +3,23 @@ from decimal import Decimal, getcontext
 
 import pytest
 
-from sml_small.totals_and_components.totals_and_components import (ComponentPair, TACException, TccMarker,
-                                                                   check_absolute_difference_threshold,
-                                                                   check_percentage_difference_threshold,
-                                                                   check_sum_components_predictive, check_zero_errors,
-                                                                   correct_components, correct_total,
-                                                                   determine_error_detection, error_correction,
-                                                                   set_predictive_value, sum_components,
-                                                                   totals_and_components, validate_input)
+from sml_small.totals_and_components.totals_and_components import (
+    ComponentPair,
+    TACException,
+    TccMarker,
+    check_absolute_difference_threshold,
+    check_percentage_difference_threshold,
+    check_sum_components_predictive,
+    check_zero_errors,
+    correct_components,
+    correct_total,
+    determine_error_detection,
+    error_correction,
+    set_predictive_value,
+    sum_components,
+    totals_and_components,
+    validate_input,
+)
 
 EXCEPTION_FAIL_MESSAGE = (
     "{test_id} : Expected no exception, but got {exception_type}: {exception_msg}"
@@ -841,7 +850,9 @@ class TestCheckPercentageDifferenceThreshold:
 # Test to ensure the amend total determines the correct correction path and outputs the right tcc marker
 class TestErrorCorrection:
     @pytest.mark.parametrize(
-        "amend_total, components_sum, original_components, predictive, precision, absolute_difference_threshold, percentage_difference_threshold, absolute_difference, expected_result, test_id",
+        "amend_total, components_sum, original_components, predictive, precision, absolute_difference_threshold,"
+        "percentage_difference_threshold, absolute_difference,"
+        "expected_result, test_id",
         [
             (
                 True,
@@ -863,7 +874,7 @@ class TestErrorCorrection:
                 2,
                 None,
                 None,
-                None,     
+                None,
                 (100.0, [10.0] * 10, "C", None),
                 "Test 2: Amend components",
             ),
@@ -875,7 +886,7 @@ class TestErrorCorrection:
                 2,
                 None,
                 None,
-                25,     
+                25,
                 (100.0, [10.0] * 10, "C", 25),
                 "Test 3: Test absolute difference",
             ),

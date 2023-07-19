@@ -570,6 +570,17 @@ def error_correction(
     :type original_components: list(ComponentPair)
     :param precision: Precision is not a decimal point indicator, it is instead used to adjust our error margins.
     :type precision: Optional[int]
+    :param absolute_difference_threshold: Value used to check if the difference between
+                                          the predictive total and sum of components
+                                          requires an automatic update.
+    :type absolute_difference_threshold: float
+    :param percentage_difference_threshold: If the predictive total is within the specified
+                                            percentage of the sum of the components, the
+                                            method will automatically correct.
+    :type percentage_difference_threshold: float
+    :param absolute_difference: The absolute value showing the difference between the input components
+                                and the predictive total.
+    :type absolute_difference: float
     ...
     :return final_total: Final Total value to be output
     :rtype final total: float
@@ -577,6 +588,9 @@ def error_correction(
     :rtype original_components: list(float)
     :return tcc_marker: Returned Tcc_Marker (either total corrected or components corrected)
     :rtype tcc_marker: TccMarker
+    :return absolute_difference: The absolute value showing the difference between the input components
+                                and the predictive total.
+    :rtype absolute_difference: float
     """
     if amend_total:
         final_total, original_components, tcc_marker = correct_total(
@@ -590,7 +604,10 @@ def error_correction(
             precision,
         )
 
-    if percentage_difference_threshold is not None and absolute_difference_threshold is None:
+    if (
+        percentage_difference_threshold is not None
+        and absolute_difference_threshold is None
+    ):
         absolute_difference = None
 
     final_components = []
@@ -947,9 +964,13 @@ def totals_and_components(
                             ],
                             total=input_parameters[InputParameters.TOTAL.value],
                             precision=input_parameters[InputParameters.PRECISION.value],
-                            absolute_difference_threshold=input_parameters[InputParameters.ABSOLUTE_DIFFERENCE_THRESHOLD.value],
-                            percentage_difference_threshold=input_parameters[InputParameters.PERCENTAGE_DIFFERENCE_THRESHOLD.value],
-                            absolute_difference=absolute_difference
+                            absolute_difference_threshold=input_parameters[
+                                InputParameters.ABSOLUTE_DIFFERENCE_THRESHOLD.value
+                            ],
+                            percentage_difference_threshold=input_parameters[
+                                InputParameters.PERCENTAGE_DIFFERENCE_THRESHOLD.value
+                            ],
+                            absolute_difference=absolute_difference,
                         )
 
         # We return the raw string instead of the enum value
