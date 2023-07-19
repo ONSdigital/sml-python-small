@@ -455,6 +455,6 @@ A,1625,632,732,99,162,TRUE,1625,,11,,,"""  # noqa: E501
 
 # You can run the functions invoke_process_in_memory_data_example or invoke_process_in_memory_data_example_2 below
 # invoke_process_with_local_csv()
-# invoke_process_with_in_memory_csv()
+invoke_process_with_in_memory_csv()
 # invoke_process_in_memory_data_example()
-invoke_process_in_memory_data_example_2()
+# invoke_process_in_memory_data_example_2()
