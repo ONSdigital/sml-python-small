@@ -1204,7 +1204,7 @@ class TestTotalsAndComponents:
                     (0),
                 ],
                 True,
-                None,
+                11,
                 1,
                 None,
                 11,
