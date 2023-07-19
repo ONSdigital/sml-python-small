@@ -3,14 +3,23 @@ from decimal import Decimal, getcontext
 
 import pytest
 
-from sml_small.totals_and_components.totals_and_components import (ComponentPair, TACException, TccMarker,
-                                                                   check_absolute_difference_threshold,
-                                                                   check_percentage_difference_threshold,
-                                                                   check_sum_components_predictive, check_zero_errors,
-                                                                   correct_components, correct_total,
-                                                                   determine_error_detection, error_correction,
-                                                                   set_predictive_value, sum_components,
-                                                                   totals_and_components, validate_input)
+from sml_small.totals_and_components.totals_and_components import (
+    ComponentPair,
+    TACException,
+    TccMarker,
+    check_absolute_difference_threshold,
+    check_percentage_difference_threshold,
+    check_sum_components_predictive,
+    check_zero_errors,
+    correct_components,
+    correct_total,
+    determine_error_detection,
+    error_correction,
+    set_predictive_value,
+    sum_components,
+    totals_and_components,
+    validate_input,
+)
 
 EXCEPTION_FAIL_MESSAGE = (
     "{test_id} : Expected no exception, but got {exception_type}: {exception_msg}"
@@ -841,7 +850,9 @@ class TestCheckPercentageDifferenceThreshold:
 # Test to ensure the amend total determines the correct correction path and outputs the right tcc marker
 class TestErrorCorrection:
     @pytest.mark.parametrize(
-        "amend_total, components_sum, original_components, predictive, precision,  expected_result, test_id",
+        "amend_total, components_sum, original_components, predictive, precision, absolute_difference_threshold,"
+        "percentage_difference_threshold, absolute_difference,"
+        "expected_result, test_id",
         [
             (
                 True,
@@ -849,7 +860,10 @@ class TestErrorCorrection:
                 [ComponentPair(10.0, None)] * 10,
                 100.0,
                 16,
-                (100.0, [10.0] * 10, "T"),
+                None,
+                None,
+                None,
+                (100.0, [10.0] * 10, "T", None),
                 "Test 1: Amend total",
             ),
             (
@@ -858,8 +872,23 @@ class TestErrorCorrection:
                 [ComponentPair(8.2, None)] * 10,
                 100.0,
                 2,
-                (100.0, [10.0] * 10, "C"),
+                None,
+                None,
+                None,
+                (100.0, [10.0] * 10, "C", None),
                 "Test 2: Amend components",
+            ),
+            (
+                False,
+                82.0,
+                [ComponentPair(8.2, None)] * 10,
+                100.0,
+                2,
+                None,
+                None,
+                25,
+                (100.0, [10.0] * 10, "C", 25),
+                "Test 3: Test absolute difference",
             ),
         ],
     )
@@ -870,6 +899,9 @@ class TestErrorCorrection:
         original_components,
         predictive,
         precision,
+        absolute_difference_threshold,
+        percentage_difference_threshold,
+        absolute_difference,
         expected_result,
         test_id,
     ):
@@ -880,6 +912,9 @@ class TestErrorCorrection:
                 original_components,
                 predictive,
                 precision,
+                absolute_difference_threshold,
+                percentage_difference_threshold,
+                absolute_difference,
             )
             assert result == expected_result, f"{test_id} - Unexpected result"
 
@@ -1090,7 +1125,7 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "C",
-                    10,
+                    None,
                     90,
                     110,
                     2,
@@ -1115,7 +1150,7 @@ class TestTotalsAndComponents:
                 1964,
                 28,
                 None,
-                1,
+                25,
                 0.1,
                 (
                     "D",
@@ -1130,6 +1165,34 @@ class TestTotalsAndComponents:
                 "Test 4 - Manual correction required TCC Marker M ",
                 # This test that if the predictive is not within the threshold limits
                 # then we get M tcc marker
+            ),
+            (
+                "E",
+                306,
+                [
+                    (240),
+                    (0),
+                    (30),
+                    (10),
+                ],
+                True,
+                306,
+                28,
+                None,
+                25,
+                0.1,
+                (
+                    "E",
+                    26,
+                    252,
+                    308,
+                    28,
+                    280,
+                    [240, 0, 30, 10],
+                    "T",
+                ),
+                "Test 5 - Totals Corrected",
+                # This test checks if totals gets corrected
             ),
             (
                 "F",
@@ -1156,7 +1219,7 @@ class TestTotalsAndComponents:
                     [0, 0, 0, 0],
                     "S",
                 ),
-                "Test 5 - Predictive variable is None and sum of components is 0 (zero case)",
+                "Test 6 - Predictive variable is None and sum of components is 0 (zero case)",
                 # If the predictive is passed as a None and auxiliary is also None so total is
                 # used with but sum of components = 0 so we have S tcc marker
             ),
@@ -1178,7 +1241,7 @@ class TestTotalsAndComponents:
                 TACException(
                     "('identifier: H', ValueError('component=InvalidString is missing or not a number'))"
                 ),
-                "Test 6 - Invalid component value entered by user",
+                "Test 7 - Invalid component value entered by user",
                 # An invalid component is passed to the method which is not allowed
                 # hence we will throw an error
             ),
@@ -1202,7 +1265,7 @@ class TestTotalsAndComponents:
                 ),
                 # An invalid predictive is passed to the method which is not allowed
                 # hence we will throw an error
-                "Test 7 - Invalid predictive value entered by user",
+                "Test 8 - Invalid predictive value entered by user",
             ),
             (
                 "J",
@@ -1224,7 +1287,7 @@ class TestTotalsAndComponents:
                 ),
                 # An invalid auxiliary is passed to the method which is not allowed
                 # hence we will throw an error
-                "Test 8 - Invalid auxiliary value entered by user",
+                "Test 9 - Invalid auxiliary value entered by user",
             ),
             (
                 "K",
@@ -1246,7 +1309,7 @@ class TestTotalsAndComponents:
                 ),
                 # An invalid ADT or PDT is passed to the method which is not allowed
                 # hence we will throw an error
-                "Test 9 - Absolute and percentage difference threshold None value entered by user",
+                "Test 10 - Absolute and percentage difference threshold None value entered by user",
             ),
             (
                 "L",
@@ -1273,7 +1336,7 @@ class TestTotalsAndComponents:
                     [9201, 866, 632, 112],
                     "T",
                 ),
-                "Test 10 - Auxiliary variable replaces the missing predictive variable",
+                "Test 11 - Auxiliary variable replaces the missing predictive variable",
                 # If the predictive is None we trigger the check_auxiliary_value function
                 # this will replace the predictive with the auxiliary
                 #  as the auxiliary is not none
@@ -1303,7 +1366,7 @@ class TestTotalsAndComponents:
                     [0, 0, 0, 0],
                     "N",
                 ),
-                "Test 11 - Predictive value is 0 and component sum is zero",
+                "Test 12 - Predictive value is 0 and component sum is zero",
                 # Special case where if both are zero we return N tcc marker
             ),
             (
@@ -1331,7 +1394,7 @@ class TestTotalsAndComponents:
                     [9201, 866, 632, 112],
                     "T",
                 ),
-                "Test 12 - Absolute Difference Threshold only specified and satisfied",
+                "Test 13 - Absolute Difference Threshold only specified and satisfied",
                 # Test checking ADT passes to totals correction and corrects the total
             ),
             (
@@ -1354,7 +1417,7 @@ class TestTotalsAndComponents:
                     [1, 2, 3, 4],
                     "M",
                 ),
-                "Test 13 - Absolute Difference Threshold only specified and not satisfied",
+                "Test 14 - Absolute Difference Threshold only specified and not satisfied",
                 # Test checking ADT fails to totals correction and returns M tcc marker
             ),
             (
@@ -1369,7 +1432,7 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "P",
-                    1,
+                    None,
                     9,
                     11,
                     28,
@@ -1377,7 +1440,7 @@ class TestTotalsAndComponents:
                     [1, 2, 3, 4],
                     "T",
                 ),
-                "Test 14 - Percentage Difference Threshold only specified and satisfied",
+                "Test 15 - Percentage Difference Threshold only specified and satisfied",
                 # Test checking PDT passes to component correction and corrects the components
             ),
             (
@@ -1400,7 +1463,7 @@ class TestTotalsAndComponents:
                     [1, 2, 3, 4],
                     "M",
                 ),
-                "Test 15 - Percentage Difference Threshold only specified and not satisfied",
+                "Test 16 - Percentage Difference Threshold only specified and not satisfied",
                 # Test checking PDT returns M marker
             ),
             (
@@ -1428,7 +1491,7 @@ class TestTotalsAndComponents:
                     [9201, 866, 632, 112],
                     "T",
                 ),
-                "Test 16 - ADT and PDT specified and ADT satisfied",
+                "Test 17 - ADT and PDT specified and ADT satisfied",
                 # Check that the T marker is returned when a happy path is provided
             ),
             (
@@ -1451,7 +1514,7 @@ class TestTotalsAndComponents:
                     [0.9, 1.8, 2.7, 3.6],
                     "C",
                 ),
-                "Test 17 - ADT and PDT specified and ADT not satisfied and PDT satisfied",
+                "Test 18 - ADT and PDT specified and ADT not satisfied and PDT satisfied",
                 # Test to check that PDT can still complete a component correction
             ),
             (
@@ -1474,7 +1537,7 @@ class TestTotalsAndComponents:
                     [1, 2, 3, 4],
                     "M",
                 ),
-                "Test 18 - Absolute and Percentage Difference Thresholds set to zero",
+                "Test 19 - Absolute and Percentage Difference Thresholds set to zero",
                 # Test checking for a error exception thrown when we provide
                 # zero values for ADT and PDT this is caught in validate input
             ),
@@ -1496,7 +1559,7 @@ class TestTotalsAndComponents:
                 TACException(
                     "('identifier: T', ValueError('One or both of absolute/percentage difference thresholds must be specified'))"  # noqa: E501
                 ),
-                "Test 19 - Absolute and Percentage Difference Thresholds not specified",
+                "Test 20 - Absolute and Percentage Difference Thresholds not specified",
                 # Test checking for a error exception thrown when we provide
                 # zero values for ADT or PDT this is caught in validate input
             ),
@@ -1525,7 +1588,7 @@ class TestTotalsAndComponents:
                     [0, 0, 0, 0],
                     "S",
                 ),
-                "Test 20 - Zero Case 1",
+                "Test 21 - Zero Case 1",
                 # If target total > 0 and
                 # components sum = 0 and amend total = TRUE:
                 # No correction should be applied in this case.
@@ -1552,7 +1615,7 @@ class TestTotalsAndComponents:
                     [0, 0, 0, 0],
                     "S",
                 ),
-                "Test 21 - Zero Case 2",
+                "Test 22 - Zero Case 2",
                 # If target total > 0 and components sum = 0 and
                 # amend total = FALSE: In this case, the proportions
                 # of the true components are unknown so the method
@@ -1583,7 +1646,7 @@ class TestTotalsAndComponents:
                     [9201, 866, 632, 112],
                     "M",
                 ),
-                "Test 22 - Zero Case 3",
+                "Test 23 - Zero Case 3",
                 # If target total = 0 and components sum > 0
                 # and amend total = TRUE: The total should be
                 # corrected if the difference observed is
@@ -1611,7 +1674,7 @@ class TestTotalsAndComponents:
                     [0, 0, 0, 0],
                     "C",
                 ),
-                "Test 23 - Zero Case 4 (where difference is within thresholds",
+                "Test 24 - Zero Case 4 (where difference is within thresholds",
                 # If target total = 0 and components > 0 and amend total = FALSE.
                 # Apply correction to override the components with zeros if the
                 # difference observed is within the tolerances determined by the
@@ -1643,7 +1706,7 @@ class TestTotalsAndComponents:
                     [1, 2, 3, 4],
                     "M",
                 ),
-                "Test 24 - Zero Case 4 (where difference are not within the threshold)",
+                "Test 25 - Zero Case 4 (where difference are not within the threshold)",
                 # If target total = 0 and components > 0 and amend total = FALSE.
                 # Apply correction to override the components with zeros if the
                 # difference observed is within the tolerances determined by the
@@ -1675,7 +1738,7 @@ class TestTotalsAndComponents:
                     [2.4, 2.6, 2.8, 3.1],
                     "T",
                 ),
-                "Test 25 - Amend Total True floating point components and floating point total",
+                "Test 26 - Amend Total True floating point components and floating point total",
                 # Test to check if the floating point
                 # components sum to equal a floating total value
                 # when amend total is true.
@@ -1710,7 +1773,7 @@ class TestTotalsAndComponents:
                     ],
                     "C",
                 ),
-                "Test 26 - Amend Total False floating point components and floating point total",
+                "Test 27 - Amend Total False floating point components and floating point total",
                 # Test to check if the floating point
                 # components sum to equal a floating total value
                 # when amend total is false.
@@ -1735,7 +1798,7 @@ class TestTotalsAndComponents:
                     [1, 2, 3, 4],
                     "M",
                 ),
-                "Test 27 - predictive is less than lower threshold",
+                "Test 28 - predictive is less than lower threshold",
                 # Test to check the margins for the thresholds of the lower limit
             ),
             (
@@ -1750,7 +1813,7 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "AC",
-                    0.5,
+                    None,
                     9,
                     11,
                     28,
@@ -1758,7 +1821,7 @@ class TestTotalsAndComponents:
                     [1, 2, 3, 4],
                     "T",
                 ),
-                "Test 28 - predictive is greater than lower threshold",
+                "Test 29 - predictive is greater than lower threshold",
                 # Test to check the margins for the thresholds of the lower limit
             ),
             (
@@ -1773,7 +1836,7 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "AD",
-                    1,
+                    None,
                     9,
                     11,
                     2,
@@ -1781,7 +1844,7 @@ class TestTotalsAndComponents:
                     [0.9, 1.8, 2.7, 3.6],
                     "T",
                 ),
-                "Test 29 - predictive is equal to lower threshold and amend value is false",
+                "Test 30 - predictive is equal to lower threshold and amend value is false",
                 # Test to check the margins for the thresholds of the lower limit
             ),
             (
@@ -1796,7 +1859,7 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "AE",
-                    0.9,
+                    None,
                     9,
                     11,
                     28,
@@ -1804,7 +1867,7 @@ class TestTotalsAndComponents:
                     [1, 2, 3, 4],
                     "T",
                 ),
-                "Test 30 - predictive is less than upper threshold",
+                "Test 31 - predictive is less than upper threshold",
                 # Test to check the margins for the thresholds of the upper limit
             ),
             (
@@ -1819,7 +1882,7 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "AF",
-                    1,
+                    None,
                     9,
                     11,
                     2,
@@ -1827,7 +1890,7 @@ class TestTotalsAndComponents:
                     [1.1, 2.2, 3.3, 4.4],
                     "T",
                 ),
-                "Test 31 - predictive is equal to than upper threshold",
+                "Test 32 - predictive is equal to than upper threshold",
                 # Test to check the margins for the thresholds of the upper limit
             ),
             (
@@ -1842,7 +1905,7 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "AG",
-                    2.0,
+                    2,
                     9,
                     11,
                     28,
@@ -1850,7 +1913,7 @@ class TestTotalsAndComponents:
                     [1, 2, 3, 4],
                     "M",
                 ),
-                "Test 32 - predictive is greater than upper threshold",
+                "Test 33 - predictive is greater than upper threshold",
                 # Test to check the margins for the thresholds of the upper limit
             ),
             (
@@ -1871,7 +1934,7 @@ class TestTotalsAndComponents:
                 TACException(
                     "('identifier: AH', ValueError('total is missing or not a number'))"
                 ),
-                "Test 33 - Invalid total value entered by user",
+                "Test 34 - Invalid total value entered by user",
                 # Test to ensure a TACException is thrown when a
                 # user enters a None value for the total
             ),
@@ -1893,7 +1956,7 @@ class TestTotalsAndComponents:
                 TACException(
                     "('identifier: N/A', ValueError('identifier is a mandatory parameter and must be specified'))"
                 ),
-                "Test 34 - Missing identifier value",
+                "Test 35 - Missing identifier value",
                 # Test to ensure a TACException is thrown when a
                 # user enters a None value for the identifier
             ),
@@ -1936,7 +1999,7 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "AK",
-                    10,
+                    None,
                     90,
                     110,
                     28,
@@ -1965,7 +2028,7 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "AL",
-                    0.9,
+                    None,
                     9.81,
                     11.99,
                     28,
@@ -2048,7 +2111,7 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "AO",
-                    1,
+                    None,
                     9,
                     11,
                     2,
@@ -2078,7 +2141,7 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "AP",
-                    0.1,
+                    None,
                     0.6,
                     0.8,
                     1,
@@ -2109,7 +2172,7 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "AQ",
-                    0.5,
+                    None,
                     9,
                     11,
                     28,
@@ -2138,7 +2201,7 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "AR",
-                    6,
+                    None,
                     90,
                     110,
                     28,
@@ -2223,7 +2286,7 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "AU",
-                    5,
+                    None,
                     90,
                     110,
                     28,
@@ -2254,7 +2317,7 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "AV",
-                    5,
+                    None,
                     90,
                     110,
                     28,
