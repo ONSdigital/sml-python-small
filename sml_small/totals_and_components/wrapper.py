@@ -114,7 +114,7 @@ def invoke_process_in_memory_data_example():
         None,
         None,
         0.1,
-        None,
+        None
     ]
 
     # We pass in the input data to be processed and returned by the T&C method
@@ -127,7 +127,7 @@ def invoke_process_in_memory_data_example():
         None,
         None,
         0.1,
-        None,
+        None
     )
 
     filter_data(result, data)

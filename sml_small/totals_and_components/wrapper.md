@@ -2,19 +2,23 @@
 
 To view the code of the python wrapper and run it, you can find the `wrapper.py` file within the `totals_and_components` directory.
 
+## Prerequisites
+
+In order to run some of the functions in the python wrapper, you will need to have `tabulate` installed.
+
+Tabulate is used to pretty-print tabular data in python on the command line.
+
+To install `tabulate`:
+
+```python
+pip install tabulate
+```
+
 To run the python wrapper:
 
 ```cmd
 python wrapper.py
 ```
-
-or in some cases it maybe
-
-```cmd
-python3 wrapper.py
-```
-
-in the command line.
 
 ## Input data examples
 
@@ -53,7 +57,35 @@ result = totals_and_components("C", "202301", 90, [90, 0, 4, 6], False, 90, "202
 
 ## Output data examples
 
-Write something here
+Input data example 1: `["F", "202301", 11, [0, 0, 0, 0], True, 11, "202301", None, 11, None]`
+
+Output data example 1:
+
+```bash
+Identifier: F
+Absolute Difference: None
+Low Percent Threshold: None
+High Percent Threshold: None
+Precision: 28
+Final Total: 11
+Final Value: [0, 0, 0, 0]
+TCC Marker: S
+```
+
+Input data example 2: `["C", "202301", 90, [90, 0, 4, 6], False, 90, "202301", None, None, 0.1]`
+
+Output data example 2:
+
+```bash
+Identifier: C
+Absolute Difference: None
+Low Percent Threshold: 90.0
+High Percent Threshold: 110.0
+Precision: 28
+Final Total: 90.0
+Final Value: [81.0, 0.0, 3.6, 5.4]
+TCC Marker: C
+```
 
 ## Functionalities the python wrapper offers
 
