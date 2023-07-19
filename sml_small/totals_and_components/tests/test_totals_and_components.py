@@ -1220,7 +1220,7 @@ class TestTotalsAndComponents:
                     "S",
                 ),
                 "Test 6 - Predictive variable is None and sum of components is 0 (zero case)",
-                # If the predictive is passed as a None and auxiliary is also None so total is
+                # If the predictive is passed as a 11 and auxiliary is also None so total is not
                 # used with but sum of components = 0 so we have S tcc marker
             ),
             (
