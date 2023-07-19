@@ -850,8 +850,7 @@ class TestCheckPercentageDifferenceThreshold:
 # Test to ensure the amend total determines the correct correction path and outputs the right tcc marker
 class TestErrorCorrection:
     @pytest.mark.parametrize(
-        "amend_total, components_sum, original_components, predictive, precision, absolute_difference_threshold,"
-        "percentage_difference_threshold, absolute_difference,"
+        "amend_total, components_sum, original_components, predictive, precision,"
         "expected_result, test_id",
         [
             (
@@ -860,10 +859,7 @@ class TestErrorCorrection:
                 [ComponentPair(10.0, None)] * 10,
                 100.0,
                 16,
-                None,
-                None,
-                None,
-                (100.0, [10.0] * 10, "T", None),
+                (100.0, [10.0] * 10, "T"),
                 "Test 1: Amend total",
             ),
             (
@@ -872,10 +868,7 @@ class TestErrorCorrection:
                 [ComponentPair(8.2, None)] * 10,
                 100.0,
                 2,
-                None,
-                None,
-                None,
-                (100.0, [10.0] * 10, "C", None),
+                (100.0, [10.0] * 10, "C"),
                 "Test 2: Amend components",
             ),
             (
@@ -884,10 +877,7 @@ class TestErrorCorrection:
                 [ComponentPair(8.2, None)] * 10,
                 100.0,
                 2,
-                None,
-                None,
-                25,
-                (100.0, [10.0] * 10, "C", 25),
+                (100.0, [10.0] * 10, "C"),
                 "Test 3: Test absolute difference",
             ),
         ],
@@ -899,9 +889,6 @@ class TestErrorCorrection:
         original_components,
         predictive,
         precision,
-        absolute_difference_threshold,
-        percentage_difference_threshold,
-        absolute_difference,
         expected_result,
         test_id,
     ):
@@ -911,10 +898,7 @@ class TestErrorCorrection:
                 components_sum,
                 original_components,
                 predictive,
-                precision,
-                absolute_difference_threshold,
-                percentage_difference_threshold,
-                absolute_difference,
+                precision
             )
             assert result == expected_result, f"{test_id} - Unexpected result"
 
@@ -1455,7 +1439,7 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "Q",
-                    5,
+                    None,
                     9,
                     11,
                     28,
@@ -1698,7 +1682,7 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "Y",
-                    10,
+                    None,
                     9,
                     11,
                     28,
@@ -1790,7 +1774,7 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "AB",
-                    3,
+                    None,
                     9,
                     11,
                     28,
@@ -1905,7 +1889,7 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "AG",
-                    2,
+                    None,
                     9,
                     11,
                     28,
