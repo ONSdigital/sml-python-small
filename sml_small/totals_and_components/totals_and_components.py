@@ -547,7 +547,10 @@ def error_correction(
     original_components: List[ComponentPair],
     total: float,
     precision: Optional[int],
-) -> tuple[float, list[float], TccMarker]:
+    absolute_difference_threshold: float,
+    percentage_difference_threshold: float,
+    absolute_difference: float,
+) -> tuple[float, list[float], TccMarker, float]:
     """
     The error correction function will use the amend_total to either
     correct the total or components. Correcting the total will set the final
@@ -586,10 +589,14 @@ def error_correction(
             total,
             precision,
         )
+
+    if percentage_difference_threshold is not None and absolute_difference_threshold is None:
+        absolute_difference = None
+
     final_components = []
     for component in original_components:
         final_components.append(component.final_value)
-    return final_total, final_components, tcc_marker
+    return final_total, final_components, tcc_marker, absolute_difference
 
 
 def correct_total(
@@ -931,6 +938,7 @@ def totals_and_components(
                             output_list["final_total"],
                             output_list["final_components"],
                             output_list["tcc_marker"],
+                            output_list["absolute_difference"],
                         ) = error_correction(
                             amend_total=amend_total,
                             components_sum=component_total,
@@ -939,11 +947,10 @@ def totals_and_components(
                             ],
                             total=input_parameters[InputParameters.TOTAL.value],
                             precision=input_parameters[InputParameters.PRECISION.value],
+                            absolute_difference_threshold=input_parameters[InputParameters.ABSOLUTE_DIFFERENCE_THRESHOLD.value],
+                            percentage_difference_threshold=input_parameters[InputParameters.PERCENTAGE_DIFFERENCE_THRESHOLD.value],
+                            absolute_difference=absolute_difference
                         )
-
-        if output_list["tcc_marker"] == TccMarker.COMPONENTS_CORRECTED or output_list["tcc_marker"] == TccMarker.TOTAL_CORRECTED:
-            if percentage_difference_threshold is not None and absolute_difference_threshold is None:
-                 output_list["absolute_difference"] = None
 
         # We return the raw string instead of the enum value
         output_list["tcc_marker"] = output_list["tcc_marker"].value
