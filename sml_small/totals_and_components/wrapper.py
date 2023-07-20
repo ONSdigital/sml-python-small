@@ -110,7 +110,7 @@ def invoke_process_in_memory_data_example():
         1625,
         None,
         11,
-        None    
+        None
     ]
 
     # We pass in the input data to be processed and returned by the T&C method
