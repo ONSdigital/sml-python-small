@@ -2570,7 +2570,7 @@ class TestTotalsAndComponents:
 
                 getcontext().prec = results.precision
                 if results.tcc_marker == "T" or results.tcc_marker == "C":
-                    sum_of_components = Decimal("0")
+                    sum_of_components = 0
                     for component in results.final_components:
                         sum_of_components += Decimal(str(component))
 
