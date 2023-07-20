@@ -2,40 +2,22 @@
 # test data to be processed by the T&C method and return the result to
 # be displayed in a formatted table on the command line
 
-# Importing the totals_and_components method from the totals_and_components.py file
-from totals_and_components import totals_and_components
 import csv
 
 # Importing tabulate function from tabulate to pretty print the input and output results
 # from the T&C method in a tabular format
 # This import isn't necessary to work with the T&C method
 from tabulate import tabulate
+# Importing the totals_and_components method from the totals_and_components.py file
+from totals_and_components import totals_and_components
 
 test_data = [
     # The input data below once passed into the T&C method should return
     # a TCC Marker of N = No correction required, i.e., the total is equal to the components sum
     # Meaning we have no correction and the method stops with an output written
-    [
-      "A",
-      1625,
-      [632, 732, 99, 162],
-      True,
-      1625,
-      None,
-      11,
-      None    
-    ],
+    ["A", 1625, [632, 732, 99, 162], True, 1625, None, 11, None],
     # Should return a TCC Marker of T = Totals corrected
-    [
-      "B",
-      10817,
-      [9201, 866, 632, 112],
-      True,
-      10817,
-      None,
-      11,
-      None
-    ],
+    ["B", 10817, [9201, 866, 632, 112], True, 10817, None, 11, None],
     # Should return a TCC Marker of C = Components corrected
     [
         "C",
@@ -48,44 +30,25 @@ test_data = [
         0.1,
         2,
     ],
-    # Should return a TCC Marker of M = Manual editing required
-    # This marker will identify contributors where the discrepancy 
+    # Should return a TCC Marker of M = Manual editing required
+    # This marker will identify contributors where the discrepancy
     # between the total and component is deemed too large for automatic correction
     [
-      "D",
-      1964,
-      [632, 732, 99, 162],
-      True,
-      1964,
-      None,
-      25,
-      0.1,
-      None,
+        "D",
+        1964,
+        [632, 732, 99, 162],
+        True,
+        1964,
+        None,
+        25,
+        0.1,
+        None,
     ],
     # Should return a TCC Marker of T = Totals corrected
-    [
-      "E",
-      306,
-      [240, 0, 30, 10],
-      True,
-      306,
-      None,
-      25,
-      0.1,
-      None
-    ],
+    ["E", 306, [240, 0, 30, 10], True, 306, None, 25, 0.1, None],
     # Should return a TCC Marker of S = Method stops. This may be due
     # to insufficient data to run the method, or one of the relevant zero cases
-    [
-      "F",
-      11,
-      [0, 0, 0, 0],
-      True,
-      11,
-      None,
-      11,
-      None
-    ],
+    ["F", 11, [0, 0, 0, 0], True, 11, None, 11, None],
 ]
 
 
@@ -102,27 +65,11 @@ def invoke_process_in_memory_data_example():
     # The input data is here as a list below but this isn't needed to work with the T&C method
     # The List[] data below is used to keep track of the original data to display on the command line
     # in a table format
-    data = [
-        "A",
-        1625,
-        [632, 732, 99, 162],
-        True,
-        1625,
-        None,
-        11,
-        None
-    ]
+    data = ["A", 1625, [632, 732, 99, 162], True, 1625, None, 11, None]
 
     # We pass in the input data to be processed and returned by the T&C method
     result = totals_and_components(
-        "A",
-        1625,
-        [632, 732, 99, 162],
-        True,
-        1625,
-        None,
-        11,
-        None
+        "A", 1625, [632, 732, 99, 162], True, 1625, None, 11, None
     )
 
     filter_data(result, data)
@@ -271,8 +218,9 @@ def display_results(results):
         )
         print("\n")
 
-# In this function we read the CSV file and extract the input data and pass into the totals_and_components function.
-# Write the results returned by the T&C method into the CSV file.
+
+# In this function we read the CSV file and extract the input data and pass into the totals_and_components function.
+# Write the results returned by the T&C method into the CSV file.
 def invoke_process_with_local_csv():
     # Read the CSV file and extract the input data and pass into the
     # T&C method
@@ -360,6 +308,7 @@ def invoke_process_with_local_csv():
                     "TCC_marker": results[identifier]["tcc_marker"],
                 }
             )
+
 
 # In this function we read the CSV file and extract the input data and pass into the totals_and_components function.
 # Write the results returned by the T&C method into the CSV file.
@@ -455,6 +404,6 @@ A,1625,632,732,99,162,TRUE,1625,,11,,,"""  # noqa: E501
 
 # You can run the functions invoke_process_in_memory_data_example or invoke_process_in_memory_data_example_2 below
 # invoke_process_with_local_csv()
-invoke_process_with_in_memory_csv()
-# invoke_process_in_memory_data_example()
+# invoke_process_with_in_memory_csv()
+invoke_process_in_memory_data_example()
 # invoke_process_in_memory_data_example_2()
