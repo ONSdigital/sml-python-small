@@ -2,133 +2,42 @@
 # test data to be processed by the T&C method and return the result to
 # be displayed in a formatted table on the command line
 
+# Importing the totals_and_components method from the totals_and_components.py file
+from totals_and_components import totals_and_components
 import csv
 
 # Importing tabulate function from tabulate to pretty print the input and output results
 # from the T&C method in a tabular format
 # This import isn't necessary to work with the T&C method
 from tabulate import tabulate
-# Importing the totals_and_components method from the totals_and_components.py file
-from totals_and_components import totals_and_components
 
 test_data = [
-    # [
-    #   "A",
-    #   1625,
-    #   [632, 732, 99, 162],
-    #   True,
-    #   1625,
-    #   None,
-    #   None,
-    #   11,
-    #   None
-    # ],
-    # [
-    #   "B",
-    #   10817,
-    #   [9201, 866, 632, 112],
-    #   True,
-    #   10817,
-    #   25,
-    #   None,
-    #   11,
-    #   None
-    # ],
-    # [
-    #     "C",
-    #     90,
-    #     [90, 0, 4, 6],
-    #     False,
-    #     90,
-    #     28,
-    #     None,
-    #     None,
-    #     0.1,
-    # ],
-    # [
-    #     "X",
-    #     41,
-    #     [10,10,10,10],
-    #     False,
-    #     41,
-    #     None,
-    #     None,
-    #     None,
-    #     0.1,
-    # ],
-    # [
-    #   "D",
-    #   1964,
-    #   [632, 732, 99, 162],
-    #   True,
-    #   1964,
-    #   10,
-    #   None,
-    #   25,
-    #   0.1
-    # ],
-    # [
-    #   "E",
-    #   306,
-    #   [240, 0, 30, 10],
-    #   True,
-    #   306,
-    #   17,
-    #   None,
-    #   25,
-    #   0.1
-    # ],
-    ["F", 11, [0, 0, 0, 0], True, 11, None, None, 11, None],
-]
-
-
-# In this function we pass in the in memory test data List[] into the totals_and_components function
-def invoke_process_in_memory_data_example():
-
-    # This list is used to keep track of the original data inputted, so we can display this
-    # on the command line on a table
-
     # The input data below once passed into the T&C method should return
     # a TCC Marker of N = No correction required, i.e., the total is equal to the components sum
-    # Meaning we have no correction and the method stops with an output written.
-
-    # The input data is here as a list below but this isn't needed to work with the T&C method
-    # The List[] data below is used to keep track of the original data to display on the command line
-    # in a table format
-    data = [
-        "A",
-        10817,
-        [632, 732, 99, 162],
-        True,
-        1625,
-        30,
-        None,
-        11,
-        None,
-    ]
-
-    # We pass in the input data to be processed and returned by the T&C method
-    result = totals_and_components(
-        "A",
-        10817,
-        [632, 732, 99, 162],
-        True,
-        1625,
-        30,
-        None,
-        11,
-        None,
-    )
-
-    filter_data(result, data)
-
-
-# In this example we can pass in the data into the T&C method as a List[] by unpacking it into separate arguments
-def invoke_process_in_memory_data_example_2():
-
-    # The input data below once passed into the T&C method should return
-    # a TCC Marker of C = Components corrected
-    data = [
+    # Meaning we have no correction and the method stops with an output written
+    [
+      "A",
+      1625,
+      [632, 732, 99, 162],
+      True,
+      1625,
+      None,
+      11,
+      None    
+    ],
+    # Should return a TCC Marker of T = Totals corrected
+    [
+      "B",
+      10817,
+      [9201, 866, 632, 112],
+      True,
+      10817,
+      None,
+      11,
+      None
+    ],
+    # Should return a TCC Marker of C = Components corrected
+    [
         "C",
         90,
         [90, 0, 4, 6],
@@ -137,9 +46,107 @@ def invoke_process_in_memory_data_example_2():
         None,
         None,
         0.1,
+        2,
+    ],
+    # Should return a TCC Marker of M = Manual editing required
+    # This marker will identify contributors where the discrepancy 
+    # between the total and component is deemed too large for automatic correction
+    [
+      "D",
+      1964,
+      [632, 732, 99, 162],
+      True,
+      1964,
+      None,
+      25,
+      0.1,
+      None,
+    ],
+    # Should return a TCC Marker of T = Totals corrected
+    [
+      "E",
+      306,
+      [240, 0, 30, 10],
+      True,
+      306,
+      None,
+      25,
+      0.1,
+      None
+    ],
+    # Should return a TCC Marker of S = Method stops. This may be due
+    # to insufficient data to run the method, or one of the relevant zero cases
+    [
+      "F",
+      11,
+      [0, 0, 0, 0],
+      True,
+      11,
+      None,
+      11,
+      None
+    ],
+]
+
+
+# In this function we pass in the test data directly into the totals_and_components function
+def invoke_process_in_memory_data_example():
+
+    # This list is used to keep track of the original data inputted, so we can display this
+    # on the command line on a table
+
+    # The input data below once passed into the T&C method should return
+    # a TCC Marker of N = No correction required, i.e., the total is equal to the components sum
+    # Meaning we have no correction and the method stops with an output written
+
+    # The input data is here as a list below but this isn't needed to work with the T&C method
+    # The List[] data below is used to keep track of the original data to display on the command line
+    # in a table format
+    data = [
+        "A",
+        1625,
+        [632, 732, 99, 162],
+        True,
+        1625,
+        None,
+        11,
+        None
     ]
 
-    # We use * to unpack the above list into separate arguments to pass to the T&C method
+    # We pass in the input data to be processed and returned by the T&C method
+    result = totals_and_components(
+        "A",
+        1625,
+        [632, 732, 99, 162],
+        True,
+        1625,
+        None,
+        11,
+        None
+    )
+
+    filter_data(result, data)
+
+
+# In this example we pass a dataset stored in a 2D List[] into the T&C method by unpacking it into separate arguments
+def invoke_process_in_memory_data_example_2():
+
+    # The input data below once passed into the T&C method should return
+    # a TCC Marker of C = Components corrected
+    # data = [
+    #     "C",
+    #     "202301",
+    #     90,
+    #     [90, 0, 4, 6],
+    #     False,
+    #     90,
+    #     "202301",
+    #     None,
+    #     None,
+    #     0.1
+    # ]
+
+    # We use * to unpack the above list into separate arguments to pass into the T&C method
     for data in test_data:
         result = totals_and_components(*data)
         filter_data(result, data)
@@ -170,15 +177,16 @@ def filter_data(result, original_data):
         result.absolute_difference,
         result.low_percent_threshold,
         result.high_percent_threshold,
+        result.precision,
         result.final_total,
         result.tcc_marker,
     ]
 
     # We extract the components from the input data so we can use it later on to display
     # it on the command line in a table format
-    original_data_comp = original_data[3]
+    original_data_comp = original_data[2]
 
-    original_data.pop(3)
+    original_data.pop(2)
 
     # We extract the components from the results data returned from the so we can use it
     # the T&C method, so we can later on to display on the command line
@@ -206,7 +214,6 @@ def display_results(results):
     components data of original inputted data and components of the results that came back from the T&C method.
     :type results: A 2D List
     """
-
     # Headers to be passed into the tabulate function for the input and output tables
     headers = {
         "Original Input": [
@@ -214,16 +221,17 @@ def display_results(results):
             "Total",
             "Amend Total",
             "Predictive",
-            "Precision",
             "Auxiliary Variable",
             "Absolute Difference Threshold",
             "Percentage Difference Threshold",
+            "Precision",
         ],
         "Final Results": [
             "Identifier",
             "Absolute Difference",
             "Low Percent Threshold",
             "High Percent Threshold",
+            "Precision",
             "Final Total",
             "TCC Marker",
         ],
@@ -263,7 +271,8 @@ def display_results(results):
         )
         print("\n")
 
-
+# In this function we read the CSV file and extract the input data and pass into the totals_and_components function.
+# Write the results returned by the T&C method into the CSV file.
 def invoke_process_with_local_csv():
     # Read the CSV file and extract the input data and pass into the
     # T&C method
@@ -273,7 +282,7 @@ def invoke_process_with_local_csv():
         for row in csv_reader:
             print("Data type:::::::", type(row["comp_1"]))
             input_data = [
-                (row["\ufeffreference"]),
+                (row["reference"]),
                 (row["total"]),
                 [
                     (row["comp_1"]),
@@ -300,6 +309,8 @@ def invoke_process_with_local_csv():
                 }
             }
 
+            print(new_result)
+
             new_result_comp = result.final_components
             new_result[result.identifier]["comp"] = new_result_comp
 
@@ -308,7 +319,7 @@ def invoke_process_with_local_csv():
     # Write the results returned by the T&C into the CSV file
     with open("TCC_test_data_demo_processed.csv", mode="w") as csv_file:
         field_names = [
-            "\ufeffreference",
+            "reference",
             # "total",
             # "comp_1"
             # "comp_2",
@@ -334,10 +345,10 @@ def invoke_process_with_local_csv():
 
         writer.writeheader()
         for identifier in results:
-            # print(results[identifier])
+            print(results[identifier])
             writer.writerow(
                 {
-                    "\ufeffreference": identifier,
+                    "reference": identifier,
                     "abs_diff": results[identifier]["absolute_difference"],
                     "perc_low": results[identifier]["low_percent_threshold"],
                     "perc_high": results[identifier]["high_percent_threshold"],
@@ -350,12 +361,13 @@ def invoke_process_with_local_csv():
                 }
             )
 
-
+# In this function we read the CSV file and extract the input data and pass into the totals_and_components function.
+# Write the results returned by the T&C method into the CSV file.
 def invoke_process_with_in_memory_csv():
     # Read the CSV file and extract the input data and pass into the
     # T&C method
     in_memory_csv_data = """reference,total,comp_1,comp_2,comp_3,comp_4,amend_total,predictive,auxiliary,abs_threshold,perc_threshold
-A,1625,632,732,99,162,TRUE,1625,,11"""  # noqa: E501
+A,1625,632,732,99,162,TRUE,1625,,11,,,"""  # noqa: E501
 
     csv_reader = csv.DictReader(in_memory_csv_data.splitlines())
     print("CSV reader", csv_reader)
@@ -399,7 +411,7 @@ A,1625,632,732,99,162,TRUE,1625,,11"""  # noqa: E501
     # Write the results returned by the T&C into the CSV file
     with open("TCC_test_data_demo_processed_in_memory.csv", mode="w") as csv_file:
         field_names = [
-            "\ufeffreference",
+            "reference",
             # "total",
             # "comp_1"
             # "comp_2",
@@ -427,7 +439,7 @@ A,1625,632,732,99,162,TRUE,1625,,11"""  # noqa: E501
         for identifier in results:
             writer.writerow(
                 {
-                    "\ufeffreference": identifier,
+                    "reference": identifier,
                     "abs_diff": results[identifier]["absolute_difference"],
                     "perc_low": results[identifier]["low_percent_threshold"],
                     "perc_high": results[identifier]["high_percent_threshold"],
@@ -443,6 +455,6 @@ A,1625,632,732,99,162,TRUE,1625,,11"""  # noqa: E501
 
 # You can run the functions invoke_process_in_memory_data_example or invoke_process_in_memory_data_example_2 below
 # invoke_process_with_local_csv()
-# invoke_process_with_in_memory_csv()
-invoke_process_in_memory_data_example()
+invoke_process_with_in_memory_csv()
+# invoke_process_in_memory_data_example()
 # invoke_process_in_memory_data_example_2()

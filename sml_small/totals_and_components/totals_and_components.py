@@ -262,9 +262,8 @@ def validate_input(
             validate_number(
                 f"component={component.original_value}", component.original_value
             )
-            is True
         ):
-            component.original_value = float(component.original_value)
+            float(component.original_value)
     if amend_total is None:
         raise ValueError(
             "amend_total is a mandatory parameter and must be specified as either True or False."
@@ -678,10 +677,9 @@ def sum_components(components: list[ComponentPair], precision: int) -> float:
     :rtype total_sum: float
     """
     getcontext().prec = precision
-    total_sum = Decimal("0.0")
-
+    total_sum = 0
     for component in components:
-        total_sum += Decimal(component.original_value)
+        total_sum += Decimal(str(component.original_value))
 
     total_sum = float(total_sum)
     return total_sum
