@@ -110,7 +110,7 @@ def invoke_process_in_memory_data_example():
         1625,
         None,
         11,
-        None
+        None,
     ]
 
     # We pass in the input data to be processed and returned by the T&C method
@@ -122,7 +122,7 @@ def invoke_process_in_memory_data_example():
         1625,
         None,
         11,
-        None
+        None,
     )
 
     filter_data(result, data)
@@ -315,7 +315,7 @@ def invoke_process_with_local_csv():
             new_result[result.identifier]["input_data"] = input_data
 
             results.update(new_result)
-            print(results)
+        print(results)
 
 
     # Write the results returned by the T&C into the CSV file
@@ -327,7 +327,6 @@ def invoke_process_with_local_csv():
             "comp_2",
             "comp_3",
             "comp_4",
-            "comp_sum",
             "amend_total",
             "predictive",
             "auxiliary",
@@ -357,7 +356,6 @@ def invoke_process_with_local_csv():
                     "comp_2": results[identifier]["input_data"][2][1],
                     "comp_3": results[identifier]["input_data"][2][2],
                     "comp_4": results[identifier]["input_data"][2][3],
-                    # "comp_sum": results[identifier]["input_data"][4],
                     "amend_total": results[identifier]["input_data"][3],
                     "predictive": results[identifier]["input_data"][4],
                     "auxiliary": results[identifier]["input_data"][5],
@@ -418,6 +416,7 @@ A,1625,632,732,99,162,TRUE,1625,,11,,,"""  # noqa: E501
 
         new_result_comp = result.final_components
         new_result[result.identifier]["comp"] = new_result_comp
+        new_result[result.identifier]["input_data"] = input_data
 
         results.update(new_result)
     print(results)
@@ -426,16 +425,16 @@ A,1625,632,732,99,162,TRUE,1625,,11,,,"""  # noqa: E501
     with open("TCC_test_data_demo_processed_in_memory.csv", mode="w") as csv_file:
         field_names = [
             "reference",
-            # "total",
-            # "comp_1"
-            # "comp_2",
-            # "comp_3",
-            # "comp_4",
-            # "comp_sum",
-            # "amend_total",
-            # "predictive",
-            # "auxiliary",
-            # "abs_threshold",
+            "total",
+            "comp_1",
+            "comp_2",
+            "comp_3",
+            "comp_4",
+            "amend_total",
+            "predictive",
+            "auxiliary",
+            "abs_threshold",
+            "perc_threshold",
             "abs_diff",
             "perc_low",
             "perc_high",
@@ -454,6 +453,16 @@ A,1625,632,732,99,162,TRUE,1625,,11,,,"""  # noqa: E501
             writer.writerow(
                 {
                     "reference": identifier,
+                    "total": results[identifier]["input_data"][1],
+                    "comp_1": results[identifier]["input_data"][2][0],
+                    "comp_2": results[identifier]["input_data"][2][1],
+                    "comp_3": results[identifier]["input_data"][2][2],
+                    "comp_4": results[identifier]["input_data"][2][3],
+                    "amend_total": results[identifier]["input_data"][3],
+                    "predictive": results[identifier]["input_data"][4],
+                    "auxiliary": results[identifier]["input_data"][5],
+                    "abs_threshold": results[identifier]["input_data"][6],
+                    "perc_threshold": results[identifier]["input_data"][7],
                     "abs_diff": results[identifier]["absolute_difference"],
                     "perc_low": results[identifier]["low_percent_threshold"],
                     "perc_high": results[identifier]["high_percent_threshold"],
@@ -470,5 +479,5 @@ A,1625,632,732,99,162,TRUE,1625,,11,,,"""  # noqa: E501
 # You can run the functions invoke_process_in_memory_data_example or invoke_process_in_memory_data_example_2 below
 # invoke_process_with_local_csv()
 # invoke_process_with_in_memory_csv()
-# invoke_process_in_memory_data_example()
-invoke_process_in_memory_data_example_2()
+invoke_process_in_memory_data_example()
+# invoke_process_in_memory_data_example_2()
