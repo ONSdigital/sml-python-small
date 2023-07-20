@@ -253,27 +253,23 @@ def validate_input(
     str(identifier)
     if total is None:
         raise ValueError("total is a mandatory parameter and must be specified")
-    if total:
-        validate_number("total", total)
+    if validate_number("total", total) == True:
         total = float(total)
     if not components:
         raise ValueError("components is a mandatory parameter and must be specified")
-    if components:
-        for component in components:
-            validate_number(
-                f"component={component.original_value}", component.original_value
-            )
-            float(component.original_value)
+    for component in components:
+        if validate_number(
+            f"component={component.original_value}", component.original_value
+        ) == True:
+            component.original_value = float(component.original_value)
     if amend_total is None:
         raise ValueError(
             "amend_total is a mandatory parameter and must be specified as either True or False."
         )
-    if predictive is not None:
-        validate_number("predictive", predictive)
-        float(predictive)
-    if auxiliary:
-        validate_number("auxiliary", auxiliary)
-        float(auxiliary)
+    if predictive is not None and validate_number("predictive", predictive) == True:
+            predictive = float(predictive)
+    if auxiliary is not None and validate_number("auxiliary", auxiliary) == True:
+        auxiliary = float(auxiliary)
     if (
         absolute_difference_threshold is None
         and percentage_difference_threshold is None
@@ -281,22 +277,21 @@ def validate_input(
         raise ValueError(
             "One or both of absolute/percentage difference thresholds must be specified"
         )
-    if absolute_difference_threshold:
-        validate_number("absolute difference threshold", absolute_difference_threshold)
-        float(absolute_difference_threshold)
-    if percentage_difference_threshold:
-        validate_number(
+    if absolute_difference_threshold is not None and validate_number("absolute difference threshold", absolute_difference_threshold) == True:
+        absolute_difference_threshold = float(absolute_difference_threshold)
+    if percentage_difference_threshold is not None and validate_number(
             "percentage difference threshold", percentage_difference_threshold
-        )
-        float(percentage_difference_threshold)
+        ):
+        percentage_difference_threshold = float(percentage_difference_threshold)
     if precision is None:
         precision = DefaultPrecision.precision
-    if not 0 < precision <= DefaultPrecision.precision:
-        raise ValueError(
-            f"Precision range must be more than 0 and less than or equal to {DefaultPrecision.precision}"
-        )
-    elif 0 < precision <= DefaultPrecision.precision:
-        validate_number("Precision", precision)
+    else:
+        if validate_number("precision", precision) == True:
+            precision = int(precision)
+            if not 0 < precision <= DefaultPrecision.precision:
+                raise ValueError(
+                    f"Precision range must be more than 0 and less than or equal to {DefaultPrecision.precision}"
+                )
 
     return (
         total,
