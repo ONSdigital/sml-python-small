@@ -942,6 +942,8 @@ def totals_and_components(
                             precision=input_parameters[InputParameters.PRECISION.value]
                         )
 
+        # If the absolute difference threshold is not specified the output should
+        # not return absolute difference
         if absolute_difference_threshold is None:
             output_list["absolute_difference"] = None
 
