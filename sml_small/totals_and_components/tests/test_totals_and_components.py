@@ -1086,11 +1086,7 @@ class TestErrorCorrection:
     ):
         try:
             result = error_correction(
-                amend_total,
-                components_sum,
-                original_components,
-                predictive,
-                precision
+                amend_total, components_sum, original_components, predictive, precision
             )
             assert result == expected_result, f"{test_id} - Unexpected result"
 
