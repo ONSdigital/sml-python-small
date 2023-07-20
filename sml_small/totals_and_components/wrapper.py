@@ -46,7 +46,7 @@ test_data = [
         None,
         None,
         0.1,
-        2,
+        None
     ],
     # Should return a TCC Marker of M = Manual editing required
     # This marker will identify contributors where the discrepancy 
@@ -60,7 +60,7 @@ test_data = [
       None,
       25,
       0.1,
-      None,
+      None
     ],
     # Should return a TCC Marker of T = Totals corrected
     [
@@ -298,7 +298,6 @@ def invoke_process_with_local_csv():
             ]
 
             result = totals_and_components(*input_data)
-
             new_result = {
                 result.identifier: {
                     "absolute_difference": result.absolute_difference,
@@ -309,27 +308,31 @@ def invoke_process_with_local_csv():
                 }
             }
 
-            print(new_result)
+            # print(new_result)
 
             new_result_comp = result.final_components
             new_result[result.identifier]["comp"] = new_result_comp
+            new_result[result.identifier]["input_data"] = input_data
 
             results.update(new_result)
+            print(results)
+
 
     # Write the results returned by the T&C into the CSV file
     with open("TCC_test_data_demo_processed.csv", mode="w") as csv_file:
         field_names = [
             "reference",
-            # "total",
-            # "comp_1"
-            # "comp_2",
-            # "comp_3",
-            # "comp_4",
-            # "comp_sum",
-            # "amend_total",
-            # "predictive",
-            # "auxiliary",
-            # "abs_threshold",
+            "total",
+            "comp_1",
+            "comp_2",
+            "comp_3",
+            "comp_4",
+            "comp_sum",
+            "amend_total",
+            "predictive",
+            "auxiliary",
+            "abs_threshold",
+            "perc_threshold",
             "abs_diff",
             "perc_low",
             "perc_high",
@@ -345,10 +348,21 @@ def invoke_process_with_local_csv():
 
         writer.writeheader()
         for identifier in results:
-            print(results[identifier])
+            # print(results[identifier])
             writer.writerow(
                 {
                     "reference": identifier,
+                    "total": results[identifier]["input_data"][1],
+                    "comp_1": results[identifier]["input_data"][2][0],
+                    "comp_2": results[identifier]["input_data"][2][1],
+                    "comp_3": results[identifier]["input_data"][2][2],
+                    "comp_4": results[identifier]["input_data"][2][3],
+                    # "comp_sum": results[identifier]["input_data"][4],
+                    "amend_total": results[identifier]["input_data"][3],
+                    "predictive": results[identifier]["input_data"][4],
+                    "auxiliary": results[identifier]["input_data"][5],
+                    "abs_threshold": results[identifier]["input_data"][6],
+                    "perc_threshold": results[identifier]["input_data"][7],
                     "abs_diff": results[identifier]["absolute_difference"],
                     "perc_low": results[identifier]["low_percent_threshold"],
                     "perc_high": results[identifier]["high_percent_threshold"],
@@ -455,6 +469,6 @@ A,1625,632,732,99,162,TRUE,1625,,11,,,"""  # noqa: E501
 
 # You can run the functions invoke_process_in_memory_data_example or invoke_process_in_memory_data_example_2 below
 # invoke_process_with_local_csv()
-invoke_process_with_in_memory_csv()
+# invoke_process_with_in_memory_csv()
 # invoke_process_in_memory_data_example()
-# invoke_process_in_memory_data_example_2()
+invoke_process_in_memory_data_example_2()
