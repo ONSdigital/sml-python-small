@@ -144,7 +144,7 @@ def wrapper(
         lambda row: run_method(row, row.name, components_list_columns, input_dict),
         axis=1,
     )
-    output_dataframe = pd.concat([r for r in output_dataframe], ignore_index=True)
+    output_dataframe = pd.concat(list(output_dataframe), ignore_index=True)
     frames = [input_frame, output_dataframe]
     # concatenate the two dataframes together and output
     output_dataframe = pd.concat([df.stack() for df in frames]).unstack()
