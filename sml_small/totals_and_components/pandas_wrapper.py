@@ -18,8 +18,7 @@ def run_method(row, index_number, components_list, inputs_dictionary):
     and input together.
     :type index_number: int
     :param components_list: list containing the names of each component's column so
-     the data can be merged together
-    before running method.
+    the data can be merged together before running method.
     :type components_list: list[String]
     :param inputs_dictionary: dictionary containing all columns passed to original
     method.
