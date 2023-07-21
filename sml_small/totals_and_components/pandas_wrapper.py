@@ -1,5 +1,10 @@
+"""
+For Copyright information, please see LICENCE.
+"""
+
 import pandas as pd
 from numpy import where
+
 from sml_small.totals_and_components import totals_and_components
 
 
@@ -9,15 +14,19 @@ def run_method(row, index_number, components_list, inputs_dictionary):
     ...
     :param row: Current row of data from the dataframe.
     :type row: Series
-    :param index_number: Current index from the dataframe, used to join the output and input together.
+    :param index_number: Current index from the dataframe, used to join the output
+    and input together.
     :type index_number: int
-    :param components_list: list containing the names of each component's column so the data can be merged together
+    :param components_list: list containing the names of each component's column so
+     the data can be merged together
     before running method.
     :type components_list: list[String]
-    :param inputs_dictionary: dictionary containing all columns passed to original method.
+    :param inputs_dictionary: dictionary containing all columns passed to original
+    method.
     :type inputs_dictionary: dictionary
     ...
-    :return: totals_and_components_output, a dataframe containing the output of the totals and components method.
+    :return: totals_and_components_output, a dataframe containing the output of the
+     totals and components method.
     """
     new_list = []
     # loop through the components columns and create a single input
@@ -64,8 +73,9 @@ def wrapper(
     amend_predictive=False,
 ):
     """
-    Wrapper function to run Totals & Components over a pandas dataframe structure. Takes a Dataframe and relevant
-    column names as input and outputs an amended dataframe with the results of Totals & Components appended to each
+    Wrapper function to run Totals & Components over a pandas dataframe structure.
+    Takes a Dataframe and relevant column names as input and outputs an amended
+    dataframe with the results of Totals & Components appended to each
     row.
     ...
     :param input_frame: Pandas Dataframe to run method against.
@@ -74,7 +84,8 @@ def wrapper(
     :type unique_identifier_column: String
     :param total_column: Name of Total column.
     :type total_column: String
-    :param components_list_columns: List containing the names of all Components columns.
+    :param components_list_columns: List containing the names of all
+    Components columns.
     :type components_list_columns list[String]
     :param amend_total_column: Name of Amend Total column.
     :type amend_total_column: String
@@ -84,18 +95,20 @@ def wrapper(
     :type auxiliary_column: String
     :param absolute_threshold_column: Name of Absolute Threshold column.
     :type absolute_threshold_column: String
-    :param percentage_threshold_column: Name of Percentage Threshold column.
+    :param percentage_threshold_column: Name of Percentage Threshold
+    column.
     :type percentage_threshold_column: String
     :param precision_column: Name of Precision column.
     :type precision_column: String
-    :param identifier_range: A range of identifiers to filter the input frame against before running method.
+    :param identifier_range: A range of identifiers to filter the input
+    frame against before running method.
     :type identifier_range: list[String]
-    :param amend_predictive: If True will replace predictive in rows with total value when both predictive and
-    auxiliary are missing.
+    :param amend_predictive: If True will replace predictive in rows with
+    total value when both predictive and auxiliary are missing.
     :type amend_predictive: bool
     ...
-    :return: output_dataframe, the amended input frame containing both original input and Totals & Components
-    output for each row run.
+    :return: output_dataframe, the amended input frame containing both
+    original input and Totals & Components output for each row run.
     """
     input_dict = {
         "identifier": unique_identifier_column,
@@ -120,7 +133,8 @@ def wrapper(
             input_frame[total_column],
             input_frame[predictive_column],
         )
-    # replace nan with None as float version of nan will pass validation it should fail, for components list use "Nan"
+    # replace nan with None as float version of nan will pass validation it should fail,
+    # for components list use "Nan"
     input_frame[components_list_columns] = input_frame[components_list_columns].fillna(
         "Nan"
     )
@@ -130,11 +144,12 @@ def wrapper(
         lambda row: run_method(row, row.name, components_list_columns, input_dict),
         axis=1,
     )
-    df_stacked = pd.concat([r for r in output_dataframe], ignore_index=True)
-    frames = [input_frame, df_stacked]
+    output_dataframe = pd.concat([r for r in output_dataframe], ignore_index=True)
+    frames = [input_frame, output_dataframe]
     # concatenate the two dataframes together and output
     output_dataframe = pd.concat([df.stack() for df in frames]).unstack()
-    # during concat above the two dataframes become unordered, the below reorders them into input followed by output
+    # during concat above the two dataframes become unordered, the below reorders them
+    # into input followed by output
     column_order = [
         unique_identifier_column,
         total_column,
