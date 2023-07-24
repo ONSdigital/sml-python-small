@@ -746,10 +746,10 @@ def totals_and_components(
     total: float,
     components: List[float],
     amend_total: bool,
-    predictive: Optional[float],
-    auxiliary: Optional[float],
-    absolute_difference_threshold: Optional[float],
-    percentage_difference_threshold: Optional[float],
+    predictive: Optional[float] = None,
+    auxiliary: Optional[float] = None,
+    absolute_difference_threshold: Optional[float] = None,
+    percentage_difference_threshold: Optional[float] = None,
     precision: Optional[int] = DefaultPrecision.precision,
 ) -> TotalsAndComponentsOutput:
     """
@@ -943,7 +943,6 @@ def totals_and_components(
 
         # We return the raw string instead of the enum value
         output_list["tcc_marker"] = output_list["tcc_marker"].value
-        output_list["precision"] = input_parameters[InputParameters.PRECISION.value]
         output = TotalsAndComponentsOutput(output_list)
         output.print_output_table()
 

@@ -1035,7 +1035,6 @@ class TestTotalsAndComponents:
                     0,
                     None,
                     None,
-                    28,
                     1625,
                     [632, 732, 99, 162],
                     "N",
@@ -1064,7 +1063,6 @@ class TestTotalsAndComponents:
                     6,
                     None,
                     None,
-                    28,
                     10811,
                     [9201, 866, 632, 112],
                     "T",
@@ -1093,7 +1091,6 @@ class TestTotalsAndComponents:
                     10,
                     90,
                     110,
-                    2,
                     90,
                     [81, 0, 3.6, 5.4],
                     "C",
@@ -1122,7 +1119,6 @@ class TestTotalsAndComponents:
                     339,
                     1462.5,
                     1787.5,
-                    28,
                     1964,
                     [632, 732, 99, 162],
                     "M",
@@ -1151,7 +1147,6 @@ class TestTotalsAndComponents:
                     None,
                     None,
                     None,
-                    1,
                     11,
                     [0, 0, 0, 0],
                     "S",
@@ -1268,7 +1263,6 @@ class TestTotalsAndComponents:
                     6,
                     None,
                     None,
-                    28,
                     10811,
                     [9201, 866, 632, 112],
                     "T",
@@ -1298,7 +1292,6 @@ class TestTotalsAndComponents:
                     0,
                     None,
                     None,
-                    28,
                     0,
                     [0, 0, 0, 0],
                     "N",
@@ -1326,7 +1319,6 @@ class TestTotalsAndComponents:
                     6,
                     None,
                     None,
-                    28,
                     10811,
                     [9201, 866, 632, 112],
                     "T",
@@ -1349,7 +1341,6 @@ class TestTotalsAndComponents:
                     5,
                     None,
                     None,
-                    1,
                     5,
                     [1, 2, 3, 4],
                     "M",
@@ -1372,7 +1363,6 @@ class TestTotalsAndComponents:
                     1,
                     9,
                     11,
-                    28,
                     10,
                     [1, 2, 3, 4],
                     "T",
@@ -1395,7 +1385,6 @@ class TestTotalsAndComponents:
                     5,
                     9,
                     11,
-                    28,
                     5,
                     [1, 2, 3, 4],
                     "M",
@@ -1423,7 +1412,6 @@ class TestTotalsAndComponents:
                     6,
                     9729.9,
                     11892.1,
-                    28,
                     10811,
                     [9201, 866, 632, 112],
                     "T",
@@ -1446,7 +1434,6 @@ class TestTotalsAndComponents:
                     1,
                     9,
                     11,
-                    2,
                     9,
                     [0.9, 1.8, 2.7, 3.6],
                     "C",
@@ -1469,7 +1456,6 @@ class TestTotalsAndComponents:
                     5,
                     None,
                     None,
-                    1,
                     5,
                     [1, 2, 3, 4],
                     "M",
@@ -1520,7 +1506,6 @@ class TestTotalsAndComponents:
                     None,
                     None,
                     None,
-                    1,
                     10817,
                     [0, 0, 0, 0],
                     "S",
@@ -1547,7 +1532,6 @@ class TestTotalsAndComponents:
                     None,
                     None,
                     None,
-                    1,
                     10817,
                     [0, 0, 0, 0],
                     "S",
@@ -1578,7 +1562,6 @@ class TestTotalsAndComponents:
                     10811,
                     None,
                     None,
-                    28,
                     0,
                     [9201, 866, 632, 112],
                     "M",
@@ -1606,7 +1589,6 @@ class TestTotalsAndComponents:
                     40,
                     None,
                     None,
-                    1,
                     0,
                     [0, 0, 0, 0],
                     "C",
@@ -1638,7 +1620,6 @@ class TestTotalsAndComponents:
                     10,
                     9,
                     11,
-                    28,
                     0,
                     [1, 2, 3, 4],
                     "M",
@@ -1670,7 +1651,6 @@ class TestTotalsAndComponents:
                     7.9,
                     None,
                     None,
-                    28,
                     10.9,
                     [2.4, 2.6, 2.8, 3.1],
                     "T",
@@ -1700,7 +1680,6 @@ class TestTotalsAndComponents:
                     8.9,
                     None,
                     None,
-                    28,
                     2,
                     [
                         0.44036697247706424,
@@ -1730,7 +1709,6 @@ class TestTotalsAndComponents:
                     3,
                     9,
                     11,
-                    28,
                     7,
                     [1, 2, 3, 4],
                     "M",
@@ -1753,7 +1731,6 @@ class TestTotalsAndComponents:
                     0.5,
                     9,
                     11,
-                    28,
                     10,
                     [1, 2, 3, 4],
                     "T",
@@ -1776,7 +1753,6 @@ class TestTotalsAndComponents:
                     1,
                     9,
                     11,
-                    2,
                     9,
                     [0.9, 1.8, 2.7, 3.6],
                     "T",
@@ -1799,7 +1775,6 @@ class TestTotalsAndComponents:
                     0.9,
                     9,
                     11,
-                    28,
                     10.0,
                     [1, 2, 3, 4],
                     "T",
@@ -1822,7 +1797,6 @@ class TestTotalsAndComponents:
                     1,
                     9,
                     11,
-                    2,
                     11,
                     [1.1, 2.2, 3.3, 4.4],
                     "T",
@@ -1845,7 +1819,6 @@ class TestTotalsAndComponents:
                     2.0,
                     9,
                     11,
-                    28,
                     12,
                     [1, 2, 3, 4],
                     "M",
@@ -1939,7 +1912,6 @@ class TestTotalsAndComponents:
                     10,
                     90,
                     110,
-                    28,
                     90,
                     [81, 0, 3.6, 5.4],
                     "C",
@@ -1968,7 +1940,6 @@ class TestTotalsAndComponents:
                     0.9,
                     9.81,
                     11.99,
-                    28,
                     10,
                     [
                         2.2018348623853212,
@@ -2051,7 +2022,6 @@ class TestTotalsAndComponents:
                     1,
                     9,
                     11,
-                    2,
                     11,
                     [1.1, 2.2, 3.3, 4.4],
                     "T",
@@ -2081,7 +2051,6 @@ class TestTotalsAndComponents:
                     0.1,
                     0.6,
                     0.8,
-                    1,
                     0.7,
                     [0.1, 0.2, 0.4],
                     "T",
@@ -2112,7 +2081,6 @@ class TestTotalsAndComponents:
                     0.5,
                     9,
                     11,
-                    28,
                     10,
                     [1, 2, 3, 4],
                     "T",
@@ -2141,7 +2109,6 @@ class TestTotalsAndComponents:
                     6,
                     90,
                     110,
-                    28,
                     90,
                     [81, 0, 3.6, 5.4],
                     "C",
@@ -2197,7 +2164,6 @@ class TestTotalsAndComponents:
                     None,
                     None,
                     None,
-                    28,
                     90,
                     [90, 0, 4, 6],
                     "S",
@@ -2226,7 +2192,6 @@ class TestTotalsAndComponents:
                     5,
                     90,
                     110,
-                    28,
                     90,
                     [81, 0, 3.6, 5.4],
                     "C",
@@ -2257,7 +2222,6 @@ class TestTotalsAndComponents:
                     5,
                     90,
                     110,
-                    28,
                     90,
                     [81, 0, 3.6, 5.4],
                     "C",
@@ -2309,9 +2273,8 @@ class TestTotalsAndComponents:
                 assert results.absolute_difference == expected_result[1]
                 assert results.low_percent_threshold == expected_result[2]
                 assert results.high_percent_threshold == expected_result[3]
-                assert results.precision == expected_result[4]
-                assert results.final_total == expected_result[5]
-                assert results.final_components == expected_result[6]
+                assert results.final_total == expected_result[4]
+                assert results.final_components == expected_result[5]
 
                 getcontext().prec = results.precision
                 if results.tcc_marker == "T" or results.tcc_marker == "C":
@@ -2320,7 +2283,7 @@ class TestTotalsAndComponents:
                         sum_of_components += Decimal(str(component))
 
                     sum_of_components = float(sum_of_components)
-                    assert sum_of_components == expected_result[5]
+                    assert sum_of_components == expected_result[4]
 
             except Exception as e:
                 pytest.fail(
@@ -2343,5 +2306,4 @@ class TestTotalsAndComponents:
                     absolute_difference_threshold=absolute_difference_threshold,
                     percentage_difference_threshold=percentage_difference_threshold,
                 )
-                print(str(exc_info.value))
             assert (str(exc_info.value)) == str(expected_result)
