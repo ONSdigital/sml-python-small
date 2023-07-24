@@ -1,5 +1,5 @@
 import random
-from decimal import Decimal, getcontext
+from decimal import Decimal
 
 import pytest
 

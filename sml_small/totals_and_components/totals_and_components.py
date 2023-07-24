@@ -540,7 +540,7 @@ def error_correction(
     components_sum: float,
     original_components: List[ComponentPair],
     total: float,
-    precision: Optional[int],
+    precision: int,
 ) -> tuple[float, list[float], TccMarker]:
     """
     The error correction function will use the amend_total to either
