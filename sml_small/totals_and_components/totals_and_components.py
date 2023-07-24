@@ -188,8 +188,8 @@ def validate_input(
     total: float,
     components: List[ComponentPair],
     amend_total: bool,
+    precision: int,
     predictive: Optional[float],
-    precision: Optional[int],
     auxiliary: Optional[float],
     absolute_difference_threshold: Optional[float],
     percentage_difference_threshold: Optional[float],
@@ -218,8 +218,8 @@ def validate_input(
     :type bool
     :param predictive:A value used as a predictor for a contributor's target variable.
     :type predictive: Optional[float]
-    :param precision: Precision is not a decimal point indicator, it is instead used to adjust our error margins.
-    :type precision: Optional[int]
+    :param precision: Precision is used by the decimal package to perform calculations to the specified accuracy.
+    :type precision: int
     :param auxiliary: The variable used as a predictor for a contributor’s target variable,
                       where the predictive value is not available.
     :type auxiliary: Optional[float]
@@ -559,7 +559,7 @@ def error_correction(
     :type components_sum: float
     :param original_components: List of Components objects so final values can be amended
     :type original_components: list(ComponentPair)
-    :param precision: Precision is not a decimal point indicator, it is instead used to adjust our error margins.
+    :param precision: Precision is used by the decimal package to perform calculations to the specified accuracy.
     :type precision: int
     ...
     :return final_total: Final Total value to be output
@@ -660,7 +660,7 @@ def sum_components(components: list[ComponentPair], precision: int) -> float:
 
     :param components: List of components to be summed together.
     :type components list(components_list)
-    :param precision: Precision is not a decimal point indicator, it is instead used to adjust our error margins.
+    :param precision: Precision is used by the decimal package to perform calculations to the specified accuracy.
     :type precision: int
     ...
     :return total_sum: Final total of summed components
@@ -696,7 +696,7 @@ def calculate_percent_thresholds(
     :param output_list: dictionary containing attributes output at the end of the totals and
     components function
     :type output_list: dict
-    :param precision: Precision is not a decimal point indicator, it is instead used to adjust our error margins.
+    :param precision: Precision is used by the decimal package to perform calculations to the specified accuracy.
     :type precision: int
     ...
     :return low_percent_threshold: The lower threshold calculated from the sum of components
