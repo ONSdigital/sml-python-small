@@ -222,7 +222,7 @@ def validate_input(
     :type components: List[ComponentPair]
     :param amend_total: amend total is used for error correction
     :type bool
-    :param predictive:A value used as a predictor for a contributor's target variable.
+    :param predictive: A value used as a predictor for a contributor's target variable.
     :type predictive: Optional[float]
     :param precision: Precision is not a decimal point indicator, it is instead used to adjust our error margins.
     :type precision: Optional[int]
@@ -259,23 +259,20 @@ def validate_input(
     :rtype: int | None is returned as a converted integer
     """
     if not identifier:
-        validate_input_raise_value_error("validate_input", "identifier")
-    str(identifier)
+        raise_value_error("validate_input", "identifier")
     if total is None:
-        validate_input_raise_value_error("validate_input", "total")
+        raise_value_error("validate_input", "total")
     if validate_number("total", total) is True:
         total = float(total)
     if not components:
-        validate_input_raise_value_error("validate_input", "components")
+        raise_value_error("validate_input", "components")
     for component in components:
-        if (
-            validate_number(
-                f"component={component.original_value}", component.original_value
-            )
+        if validate_number(
+            f"component={component.original_value}", component.original_value
         ):
-            float(component.original_value)
+            component.original_value = float(component.original_value)
     if amend_total is None:
-        validate_input_raise_value_error("validate_input", "amend_total")
+        raise_value_error("validate_input", "amend_total")
     if predictive is not None and validate_number("predictive", predictive) is True:
         predictive = float(predictive)
     if auxiliary is not None and validate_number("auxiliary", auxiliary) is True:
@@ -284,7 +281,7 @@ def validate_input(
         absolute_difference_threshold is None
         and percentage_difference_threshold is None
     ):
-        validate_input_raise_value_error("validate_input", "absolute/percentage")
+        raise_value_error("validate_input", "absolute/percentage")
     if (
         absolute_difference_threshold is not None
         and validate_number(
@@ -303,7 +300,7 @@ def validate_input(
         if validate_number("precision", precision) is True:
             precision = int(precision)
             if not 0 < precision <= DefaultPrecision.precision:
-                validate_input_raise_value_error('validate_input', DefaultPrecision.precision)
+                raise_value_error("validate_input", DefaultPrecision.precision)
     return (
         total,
         components,
@@ -330,19 +327,34 @@ def validate_number(tag: str, value: str) -> bool:
     :rtype: boolean
     """
     if not is_number(value):
-        validate_input_raise_value_error('NaN', tag)
+        raise_value_error("NaN", tag)
     return True
 
-def validate_input_raise_value_error(tag: str, value: int | str):
-    if tag == 'NaN':
+
+def raise_value_error(tag: str, value: int | str):
+    """
+    raise_value_error is a simpler way of raising a ValueError.
+    Instead of code duplication we can instead feed tags and values into this function
+    to raise a specific ValueError.
+
+    :param tag: A tag is used to differentiate between different areas of the method where
+                a value error can be raised
+    :type tag: str
+    :param value: The value is used to make the value error more specific to the error case.
+    :type value: int | str
+    :raises ValueError: The value error is raised depending on what input information is invalid.
+    """
+    if tag == "NaN":
         raise ValueError(f"{value} is not a number")
     else:
-        if value == 'absolute/percentage':
-            raise ValueError('One or both of absolute/percentage difference thresholds must be specified')
-        elif type(value) == int:    
+        if value == "absolute/percentage":
             raise ValueError(
-                        f"Precision range must be more than 0 and less than or equal to {value}"
-                    )
+                "One or both of absolute/percentage difference thresholds must be specified"
+            )
+        elif type(value) == int:
+            raise ValueError(
+                f"Precision range must be more than 0 and less than or equal to {value}"
+            )
         else:
             raise ValueError(f"{value} is a mandatory parameter and must be specified")
 

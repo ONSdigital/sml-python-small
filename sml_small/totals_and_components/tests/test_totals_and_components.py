@@ -2094,9 +2094,7 @@ class TestTotalsAndComponents:
                 0,
                 11,
                 None,
-                TACException(
-                    "('identifier: AH', ValueError('total is not a number'))"
-                ),
+                TACException("('identifier: AH', ValueError('total is not a number'))"),
                 "Test 34 - Invalid total value entered by user",
                 # Test to ensure a TACException is thrown when a
                 # user enters a None value for the total
