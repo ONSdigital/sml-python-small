@@ -111,11 +111,6 @@ class TotalsAndComponentsOutput:
     high_percent_threshold: Optional[
         float
     ] = None  # the sum of the input components plus the absolute percentage difference
-    precision: Optional[
-        int
-    ] = (
-        DefaultPrecision.precision
-    )  # Precision is not a decimal point indicator, it is instead used to adjust our error margins
     final_total: Optional[
         float
     ] = None  # the output total which may have been corrected based on user input amend_
@@ -151,7 +146,6 @@ class TotalsAndComponentsOutput:
         print(f"Absolute Difference: {self.absolute_difference}")
         print(f"Low Percent Threshold: {self.low_percent_threshold}")
         print(f"High Percent Threshold: {self.high_percent_threshold}")
-        print(f"Precision: {self.precision}")
         print(f"Final Total: {self.final_total}")
         print(f"Final Value: {self.final_components}")
         print(f"TCC Marker: {self.tcc_marker}")
@@ -194,8 +188,8 @@ def validate_input(
     total: float,
     components: List[ComponentPair],
     amend_total: bool,
+    precision: int,
     predictive: Optional[float],
-    precision: Optional[int],
     auxiliary: Optional[float],
     absolute_difference_threshold: Optional[float],
     percentage_difference_threshold: Optional[float],
@@ -224,8 +218,8 @@ def validate_input(
     :type bool
     :param predictive:A value used as a predictor for a contributor's target variable.
     :type predictive: Optional[float]
-    :param precision: Precision is not a decimal point indicator, it is instead used to adjust our error margins.
-    :type precision: Optional[int]
+    :param precision: Precision is used by the decimal package to perform calculations to the specified accuracy.
+    :type precision: int
     :param auxiliary: The variable used as a predictor for a contributor’s target variable,
                       where the predictive value is not available.
     :type auxiliary: Optional[float]
@@ -549,7 +543,7 @@ def error_correction(
     components_sum: float,
     original_components: List[ComponentPair],
     total: float,
-    precision: Optional[int],
+    precision: int,
 ) -> tuple[float, list[float], TccMarker]:
     """
     The error correction function will use the amend_total to either
@@ -568,8 +562,8 @@ def error_correction(
     :type components_sum: float
     :param original_components: List of Components objects so final values can be amended
     :type original_components: list(ComponentPair)
-    :param precision: Precision is not a decimal point indicator, it is instead used to adjust our error margins.
-    :type precision: Optional[int]
+    :param precision: Precision is used by the decimal package to perform calculations to the specified accuracy.
+    :type precision: int
     ...
     :return final_total: Final Total value to be output
     :rtype final total: float
@@ -642,7 +636,7 @@ def correct_components(
     :type components: list(Components_list)
     :param precision: Precision is used by the decimal package to calculate the
                       adjusted components to the specified accuracy.
-    :type precision: Optional[int]
+    :type precision: int
     :param total: current total
     :type total: float
     ...
@@ -670,8 +664,8 @@ def sum_components(components: list[ComponentPair], precision: int) -> float:
 
     :param components: List of components to be summed together.
     :type components list(components_list)
-    :param precision: Precision is not a decimal point indicator, it is instead used to adjust our error margins.
-    :type precision: Optional[int]
+    :param precision: Precision is used by the decimal package to perform calculations to the specified accuracy.
+    :type precision: int
     ...
     :return total_sum: Final total of summed components
     :rtype total_sum: float
@@ -705,8 +699,8 @@ def calculate_percent_thresholds(
     :param output_list: dictionary containing attributes output at the end of the totals and
     components function
     :type output_list: dict
-    :param precision: Precision is not a decimal point indicator, it is instead used to adjust our error margins.
-    :type precision: Optional[int]
+    :param precision: Precision is used by the decimal package to perform calculations to the specified accuracy.
+    :type precision: int
     ...
     :return low_percent_threshold: The lower threshold calculated from the sum of components
                                     and percentage threshold
@@ -749,10 +743,10 @@ def totals_and_components(
     total: float,
     components: List[float],
     amend_total: bool,
-    predictive: Optional[float],
-    auxiliary: Optional[float],
-    absolute_difference_threshold: Optional[float],
-    percentage_difference_threshold: Optional[float],
+    predictive: Optional[float] = None,
+    auxiliary: Optional[float] = None,
+    absolute_difference_threshold: Optional[float] = None,
+    percentage_difference_threshold: Optional[float] = None,
     precision: Optional[int] = DefaultPrecision.precision,
 ) -> TotalsAndComponentsOutput:
     """
@@ -818,8 +812,6 @@ def totals_and_components(
              - high_percent_threshold (float, optional): The sum of the input components plus
              the absolute percentage
                difference (default: None).
-             - param precision (int): The supplied precision value or a defaulted precision
-                                      of DefaultPrecision.precision decimal places
              - final_total (float): The output total, which may have been corrected based on
              the amend_total variable.
              - final_components (List[float]): The output components, which may have been
@@ -840,7 +832,6 @@ def totals_and_components(
         components=components,
         amend_total=amend_total,
         predictive=predictive,
-        precision=precision,
         auxiliary=auxiliary,
         absolute_difference_threshold=absolute_difference_threshold,
         percentage_difference_threshold=percentage_difference_threshold,
@@ -951,7 +942,6 @@ def totals_and_components(
 
         # We return the raw string instead of the enum value
         output_list["tcc_marker"] = output_list["tcc_marker"].value
-        output_list["precision"] = input_parameters[InputParameters.PRECISION.value]
         output = TotalsAndComponentsOutput(output_list)
         output.print_output_table()
 
