@@ -1402,7 +1402,7 @@ class TestTotalsAndComponents:
                 11,
                 0.1,
                 TACException(
-                    "('identifier: H', ValueError('component=InvalidString is missing or not a number'))"
+                    "('identifier: H', ValueError('component=InvalidString is not a number'))"
                 ),
                 "Test 7 - Invalid component value entered by user",
                 # An invalid component is passed to the method which is not allowed
@@ -1424,7 +1424,7 @@ class TestTotalsAndComponents:
                 11,
                 0.1,
                 TACException(
-                    "('identifier: I', ValueError('predictive must not be a string'))"
+                    "('identifier: I', ValueError('predictive is not a number'))"
                 ),
                 # An invalid predictive is passed to the method which is not allowed
                 # hence we will throw an error
@@ -1446,7 +1446,7 @@ class TestTotalsAndComponents:
                 11,
                 0.1,
                 TACException(
-                    "('identifier: J', ValueError('auxiliary is missing or not a number'))"
+                    "('identifier: J', ValueError('auxiliary is not a number'))"
                 ),
                 # An invalid auxiliary is passed to the method which is not allowed
                 # hence we will throw an error
@@ -2095,7 +2095,7 @@ class TestTotalsAndComponents:
                 11,
                 None,
                 TACException(
-                    "('identifier: AH', ValueError('total is missing or not a number'))"
+                    "('identifier: AH', ValueError('total is not a number'))"
                 ),
                 "Test 34 - Invalid total value entered by user",
                 # Test to ensure a TACException is thrown when a
@@ -2139,7 +2139,7 @@ class TestTotalsAndComponents:
                 11,
                 0.1,
                 TACException(
-                    "('identifier: AJ', ValueError('amend_total is a mandatory parameter and must be specified as either True or False.'))"  # noqa: E501
+                    "('identifier: AJ', ValueError('amend_total is a mandatory parameter and must be specified'))"  # noqa: E501
                 ),
                 "Test 36 - Missing Amend total",
                 # Test to ensure a TACException is thrown when a
