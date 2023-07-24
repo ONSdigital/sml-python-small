@@ -560,7 +560,7 @@ def error_correction(
     :param original_components: List of Components objects so final values can be amended
     :type original_components: list(ComponentPair)
     :param precision: Precision is not a decimal point indicator, it is instead used to adjust our error margins.
-    :type precision: Optional[int]
+    :type precision: int
     ...
     :return final_total: Final Total value to be output
     :rtype final total: float
@@ -632,7 +632,7 @@ def correct_components(
     :type components: list(Components_list)
     :param precision: Precision is used by the decimal package to calculate the
                       adjusted components to the specified accuracy.
-    :type precision: Optional[int]
+    :type precision: int
     :param total: current total
     :type total: float
     ...
@@ -661,7 +661,7 @@ def sum_components(components: list[ComponentPair], precision: int) -> float:
     :param components: List of components to be summed together.
     :type components list(components_list)
     :param precision: Precision is not a decimal point indicator, it is instead used to adjust our error margins.
-    :type precision: Optional[int]
+    :type precision: int
     ...
     :return total_sum: Final total of summed components
     :rtype total_sum: float
@@ -697,7 +697,7 @@ def calculate_percent_thresholds(
     components function
     :type output_list: dict
     :param precision: Precision is not a decimal point indicator, it is instead used to adjust our error margins.
-    :type precision: Optional[int]
+    :type precision: int
     ...
     :return low_percent_threshold: The lower threshold calculated from the sum of components
                                     and percentage threshold
