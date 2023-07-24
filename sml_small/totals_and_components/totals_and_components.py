@@ -111,11 +111,6 @@ class TotalsAndComponentsOutput:
     high_percent_threshold: Optional[
         float
     ] = None  # the sum of the input components plus the absolute percentage difference
-    precision: Optional[
-        int
-    ] = (
-        DefaultPrecision.precision
-    )  # Precision is not a decimal point indicator, it is instead used to adjust our error margins
     final_total: Optional[
         float
     ] = None  # the output total which may have been corrected based on user input amend_
@@ -151,7 +146,6 @@ class TotalsAndComponentsOutput:
         print(f"Absolute Difference: {self.absolute_difference}")
         print(f"Low Percent Threshold: {self.low_percent_threshold}")
         print(f"High Percent Threshold: {self.high_percent_threshold}")
-        print(f"Precision: {self.precision}")
         print(f"Final Total: {self.final_total}")
         print(f"Final Value: {self.final_components}")
         print(f"TCC Marker: {self.tcc_marker}")
@@ -815,8 +809,6 @@ def totals_and_components(
              - high_percent_threshold (float, optional): The sum of the input components plus
              the absolute percentage
                difference (default: None).
-             - param precision (int): The supplied precision value or a defaulted precision
-                                      of DefaultPrecision.precision decimal places
              - final_total (float): The output total, which may have been corrected based on
              the amend_total variable.
              - final_components (List[float]): The output components, which may have been
@@ -837,7 +829,6 @@ def totals_and_components(
         components=components,
         amend_total=amend_total,
         predictive=predictive,
-        precision=precision,
         auxiliary=auxiliary,
         absolute_difference_threshold=absolute_difference_threshold,
         percentage_difference_threshold=percentage_difference_threshold,

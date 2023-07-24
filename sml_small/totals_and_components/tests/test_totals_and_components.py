@@ -2276,7 +2276,6 @@ class TestTotalsAndComponents:
                 assert results.final_total == expected_result[4]
                 assert results.final_components == expected_result[5]
 
-                getcontext().prec = results.precision
                 if results.tcc_marker == "T" or results.tcc_marker == "C":
                     sum_of_components = Decimal("0")
                     for component in results.final_components:
