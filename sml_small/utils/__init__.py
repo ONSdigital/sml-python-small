@@ -6,7 +6,7 @@
 def get_mandatory_param_error(param_name) -> str:
     """
     get_mandatory_param_error This function will take an input parameter
-    name and return an error message that states the parameter must be 
+    name and return an error message that states the parameter must be
     specified.
 
     :param param_name: Input parameter name
@@ -17,6 +17,7 @@ def get_mandatory_param_error(param_name) -> str:
 
     return f"{param_name} is a mandatory parameter and must be specified"
 
+
 def get_params_is_not_a_number(param_name) -> str:
     """
     get_params_is_not_a_number This function will take an input parameter
@@ -26,7 +27,7 @@ def get_params_is_not_a_number(param_name) -> str:
     :type param_name: Any
     :return: Error message telling the user the parameter is not a number
     :rtype: str
-    """    
+    """
 
     return f"{param_name} is not a number"
 
@@ -42,7 +43,7 @@ def get_one_of_the_params_mandatory(param_list) -> str:
     :return: Error string which contains the parameters and highlights the parameter
              that must be specified
     :rtype: str
-    """    
+    """
 
     separator = " or "
     param_list_text = separator.join(param_list)
@@ -65,7 +66,7 @@ def get_param_more_than_lower_threshold_less_than_or_equal_to_higher_threshold(t
     :return: Error highlighting that the parameter has broken
              the boundary rules
     :rtype: str
-    """    
+    """
 
     separator = " and less than or equal to "
     param_list_text = separator.join(param_list)

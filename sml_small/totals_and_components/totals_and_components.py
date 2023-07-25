@@ -6,12 +6,9 @@ from decimal import Decimal, getcontext
 from enum import Enum
 from typing import List, Optional, Tuple
 
-from sml_small.utils import (
-    get_params_is_not_a_number,
-    get_mandatory_param_error,
-    get_one_of_the_params_mandatory,
-    get_param_more_than_lower_threshold_less_than_or_equal_to_higher_threshold,
-)
+from sml_small.utils import (get_mandatory_param_error, get_one_of_the_params_mandatory,
+                             get_param_more_than_lower_threshold_less_than_or_equal_to_higher_threshold,
+                             get_params_is_not_a_number)
 
 
 class Index(Enum):
