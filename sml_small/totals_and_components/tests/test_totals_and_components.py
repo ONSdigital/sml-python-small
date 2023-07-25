@@ -2225,7 +2225,7 @@ class TestTotalsAndComponents:
                     (
                         "identifier: AM",
                         ValueError(
-                            "precision range must be more than 0 and less than or equal to 28"
+                            "precision is outside of range 1 to 28"
                         ),
                     )
                 ),
@@ -2252,7 +2252,7 @@ class TestTotalsAndComponents:
                     (
                         "identifier: AN",
                         ValueError(
-                            "precision range must be more than 0 and less than or equal to 28"
+                            "precision is outside of range 1 to 28"
                         ),
                     )
                 ),
