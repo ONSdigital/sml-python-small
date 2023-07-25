@@ -1468,7 +1468,7 @@ class TestTotalsAndComponents:
                 None,
                 None,
                 TACException(
-                    "('identifier: K', ValueError('One or both of absolute/percentage difference thresholds must be specified'))"  # noqa: E501
+                    "('identifier: K', ValueError('one of absolute_difference_threshold or percentage_difference_threshold must be specified'))"  # noqa: E501
                 ),
                 # An invalid ADT or PDT is passed to the method which is not allowed
                 # hence we will throw an error
@@ -1720,7 +1720,7 @@ class TestTotalsAndComponents:
                 None,
                 None,
                 TACException(
-                    "('identifier: T', ValueError('One or both of absolute/percentage difference thresholds must be specified'))"  # noqa: E501
+                    "('identifier: T', ValueError('one of absolute_difference_threshold or percentage_difference_threshold must be specified'))"  # noqa: E501
                 ),
                 "Test 20 - Absolute and Percentage Difference Thresholds not specified",
                 # Test checking for a error exception thrown when we provide
@@ -2225,7 +2225,7 @@ class TestTotalsAndComponents:
                     (
                         "identifier: AM",
                         ValueError(
-                            "Precision range must be more than 0 and less than or equal to 28"
+                            "precision range must be more than 0 and less than or equal to 28"
                         ),
                     )
                 ),
@@ -2252,7 +2252,7 @@ class TestTotalsAndComponents:
                     (
                         "identifier: AN",
                         ValueError(
-                            "Precision range must be more than 0 and less than or equal to 28"
+                            "precision range must be more than 0 and less than or equal to 28"
                         ),
                     )
                 ),
