@@ -3,14 +3,16 @@ from decimal import Decimal
 
 import pytest
 
-from sml_small.totals_and_components.totals_and_components import (ComponentPair, TACException, TccMarker,
-                                                                   check_absolute_difference_threshold,
+from sml_small.totals_and_components.totals_and_components import (ComponentPair, DefaultPrecision, TACException,
+                                                                   TccMarker, check_absolute_difference_threshold,
                                                                    check_percentage_difference_threshold,
                                                                    check_sum_components_predictive, check_zero_errors,
                                                                    correct_components, correct_total,
                                                                    determine_error_detection, error_correction,
                                                                    set_predictive_value, sum_components,
                                                                    totals_and_components, validate_input)
+from sml_small.utils.error_utils import (get_mandatory_param_error, get_one_of_params_mandatory_error,
+                                         get_param_outside_range_error, get_params_is_not_a_number_error)
 
 EXCEPTION_FAIL_MESSAGE = (
     "{test_id} : Expected no exception, but got {exception_type}: {exception_msg}"
@@ -174,7 +176,7 @@ class TestValidateInput:
                 20,
                 0.1,
                 28,
-                ValueError,
+                ValueError(get_mandatory_param_error("components")),
                 "Test 5: Empty component list",
                 # Test to see what happens when no component list is provided
                 # we expect the appropriate value error to be raised.
@@ -183,7 +185,7 @@ class TestValidateInput:
                 "F",
                 100.0,
                 [
-                    ComponentPair(original_value=None, final_value=None),
+                    ComponentPair(original_value="InvalidString", final_value=None),
                     ComponentPair(original_value=2, final_value=None),
                     ComponentPair(original_value=3, final_value=None),
                     ComponentPair(original_value=4, final_value=None),
@@ -194,9 +196,9 @@ class TestValidateInput:
                 20,
                 0.1,
                 28,
-                ValueError,
-                "Test 6: None in component list",
-                # Test to see what happens when none value is within the
+                ValueError(get_params_is_not_a_number_error("component=InvalidString")),
+                "Test 6: Invalid string in component list",
+                # Test to see what happens when an invalid string value is within the
                 # component list we expect the appropriate value error to be raised.
             ),
             (
@@ -214,7 +216,7 @@ class TestValidateInput:
                 20,
                 0.1,
                 28,
-                ValueError,
+                ValueError(get_params_is_not_a_number_error("total")),
                 "Test 7: Invalid Total",
                 # Test to see what happens when an invalid total
                 # string value is provided
@@ -235,7 +237,7 @@ class TestValidateInput:
                 20,
                 0.1,
                 28,
-                ValueError,
+                ValueError(get_params_is_not_a_number_error("predictive")),
                 "Test 8: Invalid predictive test",
                 # Test to see what happens when an invalid predictive
                 # string value is provided
@@ -256,7 +258,7 @@ class TestValidateInput:
                 20,
                 0.1,
                 28,
-                ValueError,
+                ValueError(get_params_is_not_a_number_error("auxiliary")),
                 "Test 9: Invalid auxiliary",
                 # Test to see what happens when an invalid auxiliary
                 # string value is provided
@@ -277,7 +279,9 @@ class TestValidateInput:
                 {20},
                 0.1,
                 28,
-                ValueError,
+                ValueError(
+                    get_params_is_not_a_number_error("absolute difference threshold")
+                ),
                 "Test 10: Invalid absolute difference threshold",
                 # Test to see what happens when an invalid ABT
                 # tuple value is provided
@@ -298,7 +302,9 @@ class TestValidateInput:
                 20,
                 {2},
                 28,
-                ValueError,
+                ValueError(
+                    get_params_is_not_a_number_error("percentage difference threshold")
+                ),
                 "Test 11: Invalid percentage difference threshold",
                 # Test to see what happens when an invalid PDT
                 # value is provided
@@ -319,7 +325,14 @@ class TestValidateInput:
                 None,
                 None,
                 28,
-                ValueError,
+                ValueError(
+                    get_one_of_params_mandatory_error(
+                        [
+                            "absolute_difference_threshold",
+                            "percentage_difference_threshold",
+                        ]
+                    )
+                ),
                 "Test 12: None value for percentage and absolute difference threshold",
                 # Test to see what happens when an invalid PDT and ABT
                 # values are provided
@@ -340,7 +353,7 @@ class TestValidateInput:
                 11,
                 0.1,
                 28,
-                ValueError,
+                ValueError(get_mandatory_param_error("amend_total")),
                 "Test 13: None value for amend value",
                 # Test to see what happens when an none amend total
                 # value is provided
@@ -361,7 +374,7 @@ class TestValidateInput:
                 11,
                 0.1,
                 28,
-                ValueError,
+                ValueError(get_mandatory_param_error("total")),
                 "Test 14: None value for total",
                 # Test to see what happens when an none
                 # value for total value is provided
@@ -598,7 +611,7 @@ class TestValidateInput:
                     )
                 )
         else:
-            with pytest.raises(expected_result) as exc_info:
+            with pytest.raises(Exception) as exc_info:
                 validate_input(
                     identifier=identifier,
                     total=total,
@@ -611,7 +624,7 @@ class TestValidateInput:
                     precision=precision,
                 )
                 print(exc_info.value)
-            assert exc_info.type == expected_result
+            assert (str(exc_info.value)) == str(expected_result)
 
 
 class TestSetPredictiveValue:
@@ -1396,7 +1409,10 @@ class TestTotalsAndComponents:
                 11,
                 0.1,
                 TACException(
-                    "('identifier: H', ValueError('component=InvalidString is missing or not a number'))"
+                    "identifier: H",
+                    ValueError(
+                        get_params_is_not_a_number_error("component=InvalidString")
+                    ),
                 ),
                 "Test 7 - Invalid component value entered by user",
                 # An invalid component is passed to the method which is not allowed
@@ -1418,7 +1434,8 @@ class TestTotalsAndComponents:
                 11,
                 0.1,
                 TACException(
-                    "('identifier: I', ValueError('predictive must not be a string'))"
+                    "identifier: I",
+                    ValueError(get_params_is_not_a_number_error("predictive")),
                 ),
                 # An invalid predictive is passed to the method which is not allowed
                 # hence we will throw an error
@@ -1440,7 +1457,8 @@ class TestTotalsAndComponents:
                 11,
                 0.1,
                 TACException(
-                    "('identifier: J', ValueError('auxiliary is missing or not a number'))"
+                    "identifier: J",
+                    ValueError(get_params_is_not_a_number_error("auxiliary")),
                 ),
                 # An invalid auxiliary is passed to the method which is not allowed
                 # hence we will throw an error
@@ -1462,7 +1480,15 @@ class TestTotalsAndComponents:
                 None,
                 None,
                 TACException(
-                    "('identifier: K', ValueError('One or both of absolute/percentage difference thresholds must be specified'))"  # noqa: E501
+                    "identifier: K",
+                    ValueError(
+                        get_one_of_params_mandatory_error(
+                            [
+                                "absolute_difference_threshold",
+                                "percentage_difference_threshold",
+                            ]
+                        )
+                    ),
                 ),
                 # An invalid ADT or PDT is passed to the method which is not allowed
                 # hence we will throw an error
@@ -1705,7 +1731,15 @@ class TestTotalsAndComponents:
                 None,
                 None,
                 TACException(
-                    "('identifier: T', ValueError('One or both of absolute/percentage difference thresholds must be specified'))"  # noqa: E501
+                    "identifier: T",
+                    ValueError(
+                        get_one_of_params_mandatory_error(
+                            [
+                                "absolute_difference_threshold",
+                                "percentage_difference_threshold",
+                            ]
+                        )
+                    ),
                 ),
                 "Test 20 - Absolute and Percentage Difference Thresholds not specified",
                 # Test checking for a error exception thrown when we provide
@@ -2067,7 +2101,8 @@ class TestTotalsAndComponents:
                 11,
                 None,
                 TACException(
-                    "('identifier: AH', ValueError('total is missing or not a number'))"
+                    "identifier: AH",
+                    ValueError(get_params_is_not_a_number_error("total")),
                 ),
                 "Test 34 - Invalid total value entered by user",
                 # Test to ensure a TACException is thrown when a
@@ -2089,7 +2124,8 @@ class TestTotalsAndComponents:
                 None,
                 0.1,
                 TACException(
-                    "('identifier: N/A', ValueError('identifier is a mandatory parameter and must be specified'))"
+                    "identifier: N/A",
+                    ValueError(get_mandatory_param_error("identifier")),
                 ),
                 "Test 35 - Missing identifier value",
                 # Test to ensure a TACException is thrown when a
@@ -2111,7 +2147,8 @@ class TestTotalsAndComponents:
                 11,
                 0.1,
                 TACException(
-                    "('identifier: AJ', ValueError('amend_total is a mandatory parameter and must be specified as either True or False.'))"  # noqa: E501
+                    "identifier: AJ",
+                    ValueError(get_mandatory_param_error("amend_total")),
                 ),
                 "Test 36 - Missing Amend total",
                 # Test to ensure a TACException is thrown when a
@@ -2194,12 +2231,16 @@ class TestTotalsAndComponents:
                 11,
                 None,
                 TACException(
-                    (
-                        "identifier: AM",
-                        ValueError(
-                            "Precision range must be more than 0 and less than or equal to 28"
-                        ),
-                    )
+                    "identifier: AM",
+                    ValueError(
+                        get_param_outside_range_error(
+                            "precision",
+                            [
+                                str(DefaultPrecision.lower_precision_threshold),
+                                str(DefaultPrecision.upper_precision_threshold),
+                            ],
+                        )
+                    ),
                 ),
                 "Test 39 - Testing precision value = 29",
                 # Testing the accuracy of the components returned
@@ -2221,12 +2262,16 @@ class TestTotalsAndComponents:
                 11,
                 None,
                 TACException(
-                    (
-                        "identifier: AN",
-                        ValueError(
-                            "Precision range must be more than 0 and less than or equal to 28"
-                        ),
-                    )
+                    "identifier: AN",
+                    ValueError(
+                        get_param_outside_range_error(
+                            "precision",
+                            [
+                                str(DefaultPrecision.lower_precision_threshold),
+                                str(DefaultPrecision.upper_precision_threshold),
+                            ],
+                        )
+                    ),
                 ),
                 "Test 40 - Testing precision value = 0",
                 # Testing the accuracy of the components returned
@@ -2358,12 +2403,7 @@ class TestTotalsAndComponents:
                 11,
                 None,
                 TACException(
-                    (
-                        "identifier: AS",
-                        ValueError(
-                            "total is a mandatory parameter and must be specified"
-                        ),
-                    )
+                    "identifier: AS", ValueError(get_mandatory_param_error("total"))
                 ),
                 "Test 45 - Total is none value entered by user",
                 # Test to ensure a TACException is thrown when a

@@ -281,7 +281,6 @@ def invoke_process_with_local_csv():
             results.update(new_result)
         print(results)
 
-
     # Write the results returned by the T&C into the CSV file
     with open("TCC_test_data_demo_processed.csv", mode="w") as csv_file:
         field_names = [

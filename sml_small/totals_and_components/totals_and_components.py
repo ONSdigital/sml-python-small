@@ -6,6 +6,9 @@ from decimal import Decimal, getcontext
 from enum import Enum
 from typing import List, Optional, Tuple
 
+from sml_small.utils.error_utils import (get_mandatory_param_error, get_one_of_params_mandatory_error,
+                                         get_param_outside_range_error, get_params_is_not_a_number_error)
+
 
 class Index(Enum):
     """
@@ -94,7 +97,8 @@ class TACException(Exception):
 
 
 class DefaultPrecision:
-    precision = 28
+    lower_precision_threshold = 1
+    upper_precision_threshold = 28
 
 
 class TotalsAndComponentsOutput:
@@ -111,6 +115,11 @@ class TotalsAndComponentsOutput:
     high_percent_threshold: Optional[
         float
     ] = None  # the sum of the input components plus the absolute percentage difference
+    precision: Optional[
+        int
+    ] = (
+        DefaultPrecision.upper_precision_threshold
+    )  # Precision is not a decimal point indicator, it is instead used to adjust our error margins
     final_total: Optional[
         float
     ] = None  # the output total which may have been corrected based on user input amend_
@@ -203,9 +212,9 @@ def validate_input(
     int | None,
 ]:
     """
-    validate_input is used to validate the data passed to the totals_and_components
+    This function is used to validate the data passed to the totals_and_components
     method ensuring that the values are present when expected and that they are of
-    the correct type. If invalid data is received the an appropriate exception is
+    the correct type. If invalid data is received then an appropriate exception is
     raised.
 
     :param identifier: Unique identifier for the calculation.
@@ -216,7 +225,7 @@ def validate_input(
     :type components: List[ComponentPair]
     :param amend_total: amend total is used for error correction
     :type bool
-    :param predictive:A value used as a predictor for a contributor's target variable.
+    :param predictive: A value used as a predictor for a contributor's target variable.
     :type predictive: Optional[float]
     :param precision: Precision is used by the decimal package to perform calculations to the specified accuracy.
     :type precision: int
@@ -228,7 +237,7 @@ def validate_input(
     :param percentage_difference_threshold: Is the predefined percentage threshold
                                             represented as a decimal
     :type percentage_difference_threshold: Optional[float]
-    :raises ValueError: ValueErrors are returned when data is missing or in the
+    :raises ValueError: ValueErrors are returned when required data is missing or in the
                         incorrect type/format.
     :raises Exception: Exception errors are returned in the following format
                        'Expected no exception, but got {Exception}' these exception types can be any of the following
@@ -237,42 +246,59 @@ def validate_input(
                        ArgumentException, InvalidOperationException, RuntimeException,
                        NullReferenceException, TimeoutException, FloatingPointException
                        and OutOfMemoryException.
-    :return: The tuple is a returned list of values converted to floats (if possible).
-    :rtype: tuple[float |
-            List[Component_list] | None, float | None, float | None, float | None,
-            float | None, int | None]
+    :return: total is returned as a converted float
+    :rtype: float
+    :return: components are returned as a list of converted floats
+    :rtype: List[ComponentPair]
+    :return: predictive is returned as a converted float
+    :rtype: float | None
+    :return: auxiliary is returned as a converted float
+    :rtype: float | None
+    :return: absolute_difference_threshold is returned as a converted float
+    :rtype: float | None
+    :return: percentage_difference_threshold is returned as a converted float
+    :rtype: float | None
+    :return: precision
+    :rtype: int | None is returned as a converted integer
     """
-    if not identifier:
-        raise ValueError("identifier is a mandatory parameter and must be specified")
-    str(identifier)
+
+    if identifier is None:
+        raise ValueError(get_mandatory_param_error("identifier"))
+
     if total is None:
-        raise ValueError("total is a mandatory parameter and must be specified")
+        raise ValueError(get_mandatory_param_error("total"))
+
     if validate_number("total", total) is True:
         total = float(total)
+
     if not components:
-        raise ValueError("components is a mandatory parameter and must be specified")
+        raise ValueError(get_mandatory_param_error("components"))
+
     for component in components:
-        if (
-            validate_number(
-                f"component={component.original_value}", component.original_value
-            )
+        if validate_number(
+            f"component={component.original_value}", component.original_value
         ):
-            float(component.original_value)
+            component.original_value = float(component.original_value)
+
     if amend_total is None:
-        raise ValueError(
-            "amend_total is a mandatory parameter and must be specified as either True or False."
-        )
+        raise ValueError(get_mandatory_param_error("amend_total"))
+
     if predictive is not None and validate_number("predictive", predictive) is True:
         predictive = float(predictive)
+
     if auxiliary is not None and validate_number("auxiliary", auxiliary) is True:
         auxiliary = float(auxiliary)
+
     if (
         absolute_difference_threshold is None
         and percentage_difference_threshold is None
     ):
         raise ValueError(
-            "One or both of absolute/percentage difference thresholds must be specified"
+            get_one_of_params_mandatory_error(
+                ["absolute_difference_threshold", "percentage_difference_threshold"]
+            )
         )
+
     if (
         absolute_difference_threshold is not None
         and validate_number(
@@ -281,18 +307,27 @@ def validate_input(
         is True
     ):
         absolute_difference_threshold = float(absolute_difference_threshold)
+
     if percentage_difference_threshold is not None and validate_number(
         "percentage difference threshold", percentage_difference_threshold
     ):
         percentage_difference_threshold = float(percentage_difference_threshold)
+
     if precision is None:
-        precision = DefaultPrecision.precision
+        precision = DefaultPrecision.upper_precision_threshold
+
     else:
         if validate_number("precision", precision) is True:
             precision = int(precision)
-            if not 0 < precision <= DefaultPrecision.precision:
+            if not 0 < precision <= DefaultPrecision.upper_precision_threshold:
                 raise ValueError(
-                    f"Precision range must be more than 0 and less than or equal to {DefaultPrecision.precision}"
+                    get_param_outside_range_error(
+                        "precision",
+                        [
+                            str(DefaultPrecision.lower_precision_threshold),
+                            str(DefaultPrecision.upper_precision_threshold),
+                        ],
+                    )
                 )
 
     return (
@@ -306,9 +341,9 @@ def validate_input(
     )
 
 
-def validate_number(tag: str, value) -> bool:
+def validate_number(tag: str, value: str) -> bool:
     """
-    validate_number will take a parsed tag and value and check to see if the value is a number.
+    This function will take a parsed tag and value and check to see if the value is a number.
     validate_number will raise a ValueError if expectations are not met.
 
     :param tag: The tag is a way of identifying the value and type entered and is used if a
@@ -321,16 +356,13 @@ def validate_number(tag: str, value) -> bool:
     :rtype: boolean
     """
     if not is_number(value):
-        if tag != "predictive":
-            raise ValueError(f"{tag} is missing or not a number")
-        elif type(tag) == str:
-            raise ValueError(f"{tag} must not be a string")
+        raise ValueError(get_params_is_not_a_number_error(tag))
     return True
 
 
 def is_number(value) -> bool:
     """
-    is_number is a function which attempts to convert a entered type into a float.
+    This function attempts to convert a entered type into a float.
     It will return a boolean dependent on whether it can or can't be converted.
 
     :param value: value is the parsed parameter which is to be converted to a float(if possible).
@@ -743,11 +775,11 @@ def totals_and_components(
     total: float,
     components: List[float],
     amend_total: bool,
-    predictive: Optional[float] = None,
-    auxiliary: Optional[float] = None,
-    absolute_difference_threshold: Optional[float] = None,
-    percentage_difference_threshold: Optional[float] = None,
-    precision: Optional[int] = DefaultPrecision.precision,
+    predictive: Optional[float],
+    auxiliary: Optional[float],
+    absolute_difference_threshold: Optional[float],
+    percentage_difference_threshold: Optional[float],
+    precision: Optional[int] = DefaultPrecision.upper_precision_threshold,
 ) -> TotalsAndComponentsOutput:
     """
     Determines whether a difference exists between a provided total value and the sum of
@@ -796,7 +828,8 @@ def totals_and_components(
     :param precision: Precision is used by the decimal package when calculating whether
                       error correction can take place and for the adjustment of either the
                       total or components and ensures the calculations are performed to the
-                      specified accuracy. The default precision provides accuracy to DefaultPrecision.precision
+                      specified accuracy. The default precision provides accuracy to
+                      DefaultPrecision.upper_precision_threshold.
                       decimal places.
     :type precision: Optional[int]
     :raisesTACException: If invalid values are passed to the function.
@@ -812,6 +845,8 @@ def totals_and_components(
              - high_percent_threshold (float, optional): The sum of the input components plus
              the absolute percentage
                difference (default: None).
+             - param precision (int): The supplied precision value or a defaulted precision
+                                      of DefaultPrecision.upper_precision_threshold decimal places
              - final_total (float): The output total, which may have been corrected based on
              the amend_total variable.
              - final_components (List[float]): The output components, which may have been
