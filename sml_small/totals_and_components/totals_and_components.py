@@ -97,8 +97,8 @@ class TACException(Exception):
 
 
 class DefaultPrecision:
-    lower_precision = 1
-    upper_precision = 28
+    lower_precision_threshold = 1
+    upper_precision_threshold = 28
 
 
 class TotalsAndComponentsOutput:
@@ -118,7 +118,7 @@ class TotalsAndComponentsOutput:
     precision: Optional[
         int
     ] = (
-        DefaultPrecision.upper_precision
+        DefaultPrecision.upper_precision_threshold
     )  # Precision is not a decimal point indicator, it is instead used to adjust our error margins
     final_total: Optional[
         float
@@ -315,18 +315,18 @@ def validate_input(
         percentage_difference_threshold = float(percentage_difference_threshold)
 
     if precision is None:
-        precision = DefaultPrecision.upper_precision
+        precision = DefaultPrecision.upper_precision_threshold
 
     else:
         if validate_number("precision", precision) is True:
             precision = int(precision)
-            if not 0 < precision <= DefaultPrecision.upper_precision:
+            if not 0 < precision <= DefaultPrecision.upper_precision_threshold:
                 raise ValueError(
                     get_param_outside_range_error(
                         "precision",
                         [
-                            str(DefaultPrecision.lower_precision),
-                            str(DefaultPrecision.upper_precision),
+                            str(DefaultPrecision.lower_precision_threshold),
+                            str(DefaultPrecision.upper_precision_threshold),
                         ],
                     )
                 )
@@ -780,7 +780,7 @@ def totals_and_components(
     auxiliary: Optional[float],
     absolute_difference_threshold: Optional[float],
     percentage_difference_threshold: Optional[float],
-    precision: Optional[int] = DefaultPrecision.upper_precision,
+    precision: Optional[int] = DefaultPrecision.upper_precision_threshold,
 ) -> TotalsAndComponentsOutput:
     """
     Determines whether a difference exists between a provided total value and the sum of
@@ -829,7 +829,7 @@ def totals_and_components(
     :param precision: Precision is used by the decimal package when calculating whether
                       error correction can take place and for the adjustment of either the
                       total or components and ensures the calculations are performed to the
-                      specified accuracy. The default precision provides accuracy to DefaultPrecision.upper_precision
+                      specified accuracy. The default precision provides accuracy to DefaultPrecision.upper_precision_threshold
                       decimal places.
     :type precision: Optional[int]
     :raisesTACException: If invalid values are passed to the function.
@@ -846,7 +846,7 @@ def totals_and_components(
              the absolute percentage
                difference (default: None).
              - param precision (int): The supplied precision value or a defaulted precision
-                                      of DefaultPrecision.upper_precision decimal places
+                                      of DefaultPrecision.upper_precision_threshold decimal places
              - final_total (float): The output total, which may have been corrected based on
              the amend_total variable.
              - final_components (List[float]): The output components, which may have been

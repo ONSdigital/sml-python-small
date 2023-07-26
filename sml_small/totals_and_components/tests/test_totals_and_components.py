@@ -2255,8 +2255,8 @@ class TestTotalsAndComponents:
                         get_param_outside_range_error(
                             "precision",
                             [
-                                str(DefaultPrecision.lower_precision),
-                                str(DefaultPrecision.upper_precision),
+                                str(DefaultPrecision.lower_precision_threshold),
+                                str(DefaultPrecision.upper_precision_threshold),
                             ],
                         )
                     ),
@@ -2286,8 +2286,8 @@ class TestTotalsAndComponents:
                         get_param_outside_range_error(
                             "precision",
                             [
-                                str(DefaultPrecision.lower_precision),
-                                str(DefaultPrecision.upper_precision),
+                                str(DefaultPrecision.lower_precision_threshold),
+                                str(DefaultPrecision.upper_precision_threshold),
                             ],
                         )
                     ),
