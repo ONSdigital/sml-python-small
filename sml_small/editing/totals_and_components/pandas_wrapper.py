@@ -5,7 +5,7 @@ For Copyright information, please see LICENCE.
 import pandas as pd
 from numpy import where
 
-from sml_small.totals_and_components import totals_and_components
+from sml_small.editing.totals_and_components import totals_and_components
 
 
 def run_method(row, index_number, components_list, inputs_dictionary):

@@ -3,8 +3,8 @@ from decimal import Decimal
 
 import pytest
 
-from sml_small.totals_and_components.totals_and_components import (ComponentPair, DefaultPrecision, TACException,
-                                                                   TccMarker, check_absolute_difference_threshold,
+from sml_small.editing.totals_and_components.totals_and_components import (ComponentPair, DefaultPrecision, TACException,
+                                                                           TccMarker, check_absolute_difference_threshold,
                                                                    check_percentage_difference_threshold,
                                                                    check_sum_components_predictive, check_zero_errors,
                                                                    correct_components, correct_total,
