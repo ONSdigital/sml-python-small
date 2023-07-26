@@ -600,7 +600,7 @@ class TestValidateInput:
                     )
                 )
         else:
-            with pytest.raises(expected_result) as exc_info:
+            with pytest.raises(Exception) as exc_info:
                 validate_input(
                     identifier=identifier,
                     total=total,
@@ -613,7 +613,7 @@ class TestValidateInput:
                     precision=precision,
                 )
                 print(exc_info.value)
-            assert exc_info.type == expected_result
+            assert (str(exc_info.value)) == str(expected_result)
 
 
 class TestSetPredictiveValue:
