@@ -176,7 +176,7 @@ class TestValidateInput:
                 20,
                 0.1,
                 28,
-                ValueError,
+                ValueError(get_mandatory_param_error("components")),
                 "Test 5: Empty component list",
                 # Test to see what happens when no component list is provided
                 # we expect the appropriate value error to be raised.
@@ -185,7 +185,7 @@ class TestValidateInput:
                 "F",
                 100.0,
                 [
-                    ComponentPair(original_value=None, final_value=None),
+                    ComponentPair(original_value="InvalidString", final_value=None),
                     ComponentPair(original_value=2, final_value=None),
                     ComponentPair(original_value=3, final_value=None),
                     ComponentPair(original_value=4, final_value=None),
@@ -196,9 +196,9 @@ class TestValidateInput:
                 20,
                 0.1,
                 28,
-                ValueError,
-                "Test 6: None in component list",
-                # Test to see what happens when none value is within the
+                ValueError(get_params_is_not_a_number_error("component=InvalidString")),
+                "Test 6: Invalid string in component list",
+                # Test to see what happens when an invalid string value is within the
                 # component list we expect the appropriate value error to be raised.
             ),
             (
@@ -216,7 +216,7 @@ class TestValidateInput:
                 20,
                 0.1,
                 28,
-                ValueError,
+                ValueError(get_params_is_not_a_number_error("total")),
                 "Test 7: Invalid Total",
                 # Test to see what happens when an invalid total
                 # string value is provided
@@ -237,7 +237,7 @@ class TestValidateInput:
                 20,
                 0.1,
                 28,
-                ValueError,
+                ValueError(get_params_is_not_a_number_error("predictive")),
                 "Test 8: Invalid predictive test",
                 # Test to see what happens when an invalid predictive
                 # string value is provided
@@ -258,7 +258,7 @@ class TestValidateInput:
                 20,
                 0.1,
                 28,
-                ValueError,
+                ValueError(get_params_is_not_a_number_error("auxiliary")),
                 "Test 9: Invalid auxiliary",
                 # Test to see what happens when an invalid auxiliary
                 # string value is provided
@@ -279,7 +279,9 @@ class TestValidateInput:
                 {20},
                 0.1,
                 28,
-                ValueError,
+                ValueError(
+                    get_params_is_not_a_number_error("absolute difference threshold")
+                ),
                 "Test 10: Invalid absolute difference threshold",
                 # Test to see what happens when an invalid ABT
                 # tuple value is provided
@@ -300,7 +302,9 @@ class TestValidateInput:
                 20,
                 {2},
                 28,
-                ValueError,
+                ValueError(
+                    get_params_is_not_a_number_error("percentage difference threshold")
+                ),
                 "Test 11: Invalid percentage difference threshold",
                 # Test to see what happens when an invalid PDT
                 # value is provided
@@ -321,7 +325,14 @@ class TestValidateInput:
                 None,
                 None,
                 28,
-                ValueError,
+                ValueError(
+                    get_one_of_params_mandatory_error(
+                        [
+                            "absolute_difference_threshold",
+                            "percentage_difference_threshold",
+                        ]
+                    )
+                ),
                 "Test 12: None value for percentage and absolute difference threshold",
                 # Test to see what happens when an invalid PDT and ABT
                 # values are provided
@@ -342,7 +353,7 @@ class TestValidateInput:
                 11,
                 0.1,
                 28,
-                ValueError,
+                ValueError(get_mandatory_param_error("amend_total")),
                 "Test 13: None value for amend value",
                 # Test to see what happens when an none amend total
                 # value is provided
