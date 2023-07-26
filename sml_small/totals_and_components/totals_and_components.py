@@ -829,7 +829,8 @@ def totals_and_components(
     :param precision: Precision is used by the decimal package when calculating whether
                       error correction can take place and for the adjustment of either the
                       total or components and ensures the calculations are performed to the
-                      specified accuracy. The default precision provides accuracy to DefaultPrecision.upper_precision_threshold
+                      specified accuracy. The default precision provides accuracy to
+                      DefaultPrecision.upper_precision_threshold.
                       decimal places.
     :type precision: Optional[int]
     :raisesTACException: If invalid values are passed to the function.
