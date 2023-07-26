@@ -263,7 +263,7 @@ def validate_input(
     :rtype: int | None is returned as a converted integer
     """
 
-    if not identifier:
+    if identifier is None:
         raise ValueError(get_mandatory_param_error("identifier"))
 
     if total is None:
