@@ -363,7 +363,7 @@ class TestValidateInput:
                 11,
                 0.1,
                 28,
-                ValueError,
+                ValueError(get_mandatory_param_error("total")),
                 "Test 14: None value for total",
                 # Test to see what happens when an none
                 # value for total value is provided
