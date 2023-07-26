@@ -3,14 +3,14 @@ from decimal import Decimal
 
 import pytest
 
-from sml_small.totals_and_components.totals_and_components import (ComponentPair, TACException, TccMarker,
-                                                                   check_absolute_difference_threshold,
-                                                                   check_percentage_difference_threshold,
-                                                                   check_sum_components_predictive, check_zero_errors,
-                                                                   correct_components, correct_total,
-                                                                   determine_error_detection, error_correction,
-                                                                   set_predictive_value, sum_components,
-                                                                   totals_and_components, validate_input)
+from sml_small.editing.totals_and_components.totals_and_components import (ComponentPair, TACException, TccMarker,
+                                                                           check_absolute_difference_threshold,
+                                                                           check_percentage_difference_threshold,
+                                                                           check_sum_components_predictive, check_zero_errors,
+                                                                           correct_components, correct_total,
+                                                                           determine_error_detection, error_correction,
+                                                                           set_predictive_value, sum_components,
+                                                                           totals_and_components, validate_input)
 
 EXCEPTION_FAIL_MESSAGE = (
     "{test_id} : Expected no exception, but got {exception_type}: {exception_msg}"
