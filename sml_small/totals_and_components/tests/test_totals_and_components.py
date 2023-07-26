@@ -3,14 +3,16 @@ from decimal import Decimal, getcontext
 
 import pytest
 
-from sml_small.totals_and_components.totals_and_components import (ComponentPair, TACException, TccMarker,
-                                                                   check_absolute_difference_threshold,
+from sml_small.totals_and_components.totals_and_components import (ComponentPair, DefaultPrecision, TACException,
+                                                                   TccMarker, check_absolute_difference_threshold,
                                                                    check_percentage_difference_threshold,
                                                                    check_sum_components_predictive, check_zero_errors,
                                                                    correct_components, correct_total,
                                                                    determine_error_detection, error_correction,
                                                                    set_predictive_value, sum_components,
                                                                    totals_and_components, validate_input)
+from sml_small.utils.error_utils import (get_mandatory_param_error, get_one_of_params_mandatory_error,
+                                         get_param_outside_range_error, get_params_is_not_a_number_error)
 
 EXCEPTION_FAIL_MESSAGE = (
     "{test_id} : Expected no exception, but got {exception_type}: {exception_msg}"
@@ -1402,7 +1404,10 @@ class TestTotalsAndComponents:
                 11,
                 0.1,
                 TACException(
-                    "('identifier: H', ValueError('component=InvalidString is not a number'))"
+                    "identifier: H",
+                    ValueError(
+                        get_params_is_not_a_number_error("component=InvalidString")
+                    ),
                 ),
                 "Test 7 - Invalid component value entered by user",
                 # An invalid component is passed to the method which is not allowed
@@ -1424,7 +1429,8 @@ class TestTotalsAndComponents:
                 11,
                 0.1,
                 TACException(
-                    "('identifier: I', ValueError('predictive is not a number'))"
+                    "identifier: I",
+                    ValueError(get_params_is_not_a_number_error("predictive")),
                 ),
                 # An invalid predictive is passed to the method which is not allowed
                 # hence we will throw an error
@@ -1446,7 +1452,8 @@ class TestTotalsAndComponents:
                 11,
                 0.1,
                 TACException(
-                    "('identifier: J', ValueError('auxiliary is not a number'))"
+                    "identifier: J",
+                    ValueError(get_params_is_not_a_number_error("auxiliary")),
                 ),
                 # An invalid auxiliary is passed to the method which is not allowed
                 # hence we will throw an error
@@ -1468,7 +1475,15 @@ class TestTotalsAndComponents:
                 None,
                 None,
                 TACException(
-                    "('identifier: K', ValueError('one of absolute_difference_threshold or percentage_difference_threshold must be specified'))"  # noqa: E501
+                    "identifier: K",
+                    ValueError(
+                        get_one_of_params_mandatory_error(
+                            [
+                                "absolute_difference_threshold",
+                                "percentage_difference_threshold",
+                            ]
+                        )
+                    ),
                 ),
                 # An invalid ADT or PDT is passed to the method which is not allowed
                 # hence we will throw an error
@@ -1720,7 +1735,15 @@ class TestTotalsAndComponents:
                 None,
                 None,
                 TACException(
-                    "('identifier: T', ValueError('one of absolute_difference_threshold or percentage_difference_threshold must be specified'))"  # noqa: E501
+                    "identifier: T",
+                    ValueError(
+                        get_one_of_params_mandatory_error(
+                            [
+                                "absolute_difference_threshold",
+                                "percentage_difference_threshold",
+                            ]
+                        )
+                    ),
                 ),
                 "Test 20 - Absolute and Percentage Difference Thresholds not specified",
                 # Test checking for a error exception thrown when we provide
@@ -2094,7 +2117,10 @@ class TestTotalsAndComponents:
                 0,
                 11,
                 None,
-                TACException("('identifier: AH', ValueError('total is not a number'))"),
+                TACException(
+                    "identifier: AH",
+                    ValueError(get_params_is_not_a_number_error("total")),
+                ),
                 "Test 34 - Invalid total value entered by user",
                 # Test to ensure a TACException is thrown when a
                 # user enters a None value for the total
@@ -2115,7 +2141,8 @@ class TestTotalsAndComponents:
                 None,
                 0.1,
                 TACException(
-                    "('identifier: N/A', ValueError('identifier is a mandatory parameter and must be specified'))"
+                    "identifier: N/A",
+                    ValueError(get_mandatory_param_error("identifier")),
                 ),
                 "Test 35 - Missing identifier value",
                 # Test to ensure a TACException is thrown when a
@@ -2137,7 +2164,8 @@ class TestTotalsAndComponents:
                 11,
                 0.1,
                 TACException(
-                    "('identifier: AJ', ValueError('amend_total is a mandatory parameter and must be specified'))"  # noqa: E501
+                    "identifier: AJ",
+                    ValueError(get_mandatory_param_error("amend_total")),
                 ),
                 "Test 36 - Missing Amend total",
                 # Test to ensure a TACException is thrown when a
@@ -2222,12 +2250,16 @@ class TestTotalsAndComponents:
                 11,
                 None,
                 TACException(
-                    (
-                        "identifier: AM",
-                        ValueError(
-                            "precision is outside of range 1 to 28"
-                        ),
-                    )
+                    "identifier: AM",
+                    ValueError(
+                        get_param_outside_range_error(
+                            "precision",
+                            [
+                                str(DefaultPrecision.lower_precision),
+                                str(DefaultPrecision.upper_precision),
+                            ],
+                        )
+                    ),
                 ),
                 "Test 39 - Testing precision value = 29",
                 # Testing the accuracy of the components returned
@@ -2249,12 +2281,16 @@ class TestTotalsAndComponents:
                 11,
                 None,
                 TACException(
-                    (
-                        "identifier: AN",
-                        ValueError(
-                            "precision is outside of range 1 to 28"
-                        ),
-                    )
+                    "identifier: AN",
+                    ValueError(
+                        get_param_outside_range_error(
+                            "precision",
+                            [
+                                str(DefaultPrecision.lower_precision),
+                                str(DefaultPrecision.upper_precision),
+                            ],
+                        )
+                    ),
                 ),
                 "Test 40 - Testing precision value = 0",
                 # Testing the accuracy of the components returned
@@ -2390,12 +2426,7 @@ class TestTotalsAndComponents:
                 11,
                 None,
                 TACException(
-                    (
-                        "identifier: AS",
-                        ValueError(
-                            "total is a mandatory parameter and must be specified"
-                        ),
-                    )
+                    "identifier: AS", ValueError(get_mandatory_param_error("total"))
                 ),
                 "Test 45 - Total is none value entered by user",
                 # Test to ensure a TACException is thrown when a
