@@ -241,7 +241,7 @@ def invoke_process_with_local_csv():
     # Read the CSV file and extract the input data and pass into the
     # T&C method
     results = {}
-    with open("../../../tests/editing/totals_and_components/wrapper_fixtures/TCC_test_data_demo.csv", mode="r") as csv_file:
+    with open("../../../tests/editing/totals_and_components/example_data/TCC_test_data_demo.csv", mode="r") as csv_file:
         csv_reader = csv.DictReader(csv_file)
         for row in csv_reader:
             print("Data type:::::::", type(row["comp_1"]))
@@ -283,7 +283,7 @@ def invoke_process_with_local_csv():
 
 
     # Write the results returned by the T&C into the CSV file
-    with open("../../../tests/editing/totals_and_components/wrapper_fixtures/TCC_test_data_demo_processed.csv", mode="w") as csv_file:
+    with open("../../../tests/editing/totals_and_components/example_data/TCC_test_data_demo_processed.csv", mode="w") as csv_file:
         field_names = [
             "reference",
             "total",
@@ -388,7 +388,7 @@ A,1625,632,732,99,162,TRUE,1625,,11,,,"""  # noqa: E501
 
     # Write the results returned by the T&C into the CSV file
     with open(
-            "../../../tests/editing/totals_and_components/wrapper_fixtures/TCC_test_data_demo_processed_in_memory.csv", mode="w") as csv_file:
+            "../../../tests/editing/totals_and_components/example_data/TCC_test_data_demo_processed_in_memory.csv", mode="w") as csv_file:
         field_names = [
             "reference",
             "total",

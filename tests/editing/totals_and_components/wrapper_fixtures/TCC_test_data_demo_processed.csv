@@ -1,7 +1,0 @@
-reference,total,comp_1,comp_2,comp_3,comp_4,amend_total,predictive,auxiliary,abs_threshold,perc_threshold,abs_diff,perc_low,perc_high,TCC_marker,final_total,final_comp_1,final_comp_2,final_comp_3,final_comp_4
-A,1625,632,732,99,162,True,1625,,11,,0.0,,,N,1625,632,732,99,162
-B,10817,9201,866,632,112,True,10817,,11,,6.0,,,T,10811.0,9201,866,632,112
-C,90,90,0,4,6,False,90,,,0.1,,90.0,110.0,C,90.0,81.0,0.0,3.6,5.4
-D,1964,632,732,99,162,True,1964,,25,0.1,339.0,1462.5,1787.5,M,1964,632,732,99,162
-E,306,240,0,30,10,True,306,,25,0.1,26.0,252.0,308.0,T,280.0,240,0,30,10
-F,11,0,0,0,0,True,11,,11,,,,,S,11,0,0,0,0
