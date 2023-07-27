@@ -7,8 +7,11 @@ from enum import Enum
 from typing import List, Optional, Tuple
 
 from sml_small.utils.common_utils import print_table, validate_number
-from sml_small.utils.error_utils import (get_mandatory_param_error, get_one_of_params_mandatory_error,
-                                         get_param_outside_range_error)
+from sml_small.utils.error_utils import (
+    get_mandatory_param_error,
+    get_one_of_params_mandatory_error,
+    get_param_outside_range_error,
+)
 
 
 class Index(Enum):
