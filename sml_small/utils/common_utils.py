@@ -29,7 +29,7 @@ def print_table(table_name: str, **kwargs):
     # if your variable name is longer than this value
     # then the table would misshapen. If this occurs
     # increase the value.
-    table_spacer = 32
+    table_padding = 32
 
     # Print table of variable names and values
     print("\n")
@@ -41,7 +41,7 @@ def print_table(table_name: str, **kwargs):
     print("--------------------------------|---------")
 
     for var_name, var_value in kwargs.items():
-        print(f"{var_name:<{table_spacer}}|   {var_value}")
+        print(f"{var_name:<{table_padding}}|   {var_value}")
 
 
 # This is a function to validate an input is a number.
