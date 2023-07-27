@@ -5,10 +5,13 @@ For Copyright information, please see LICENCE.
 from decimal import Decimal, getcontext
 from enum import Enum
 from typing import List, Optional, Tuple
-from sml_small.utils.common_utils import print_table
 
-from sml_small.utils.error_utils import (get_mandatory_param_error, get_one_of_params_mandatory_error,
-                                         get_param_outside_range_error, get_params_is_not_a_number_error)
+from sml_small.utils.common_utils import print_table, validate_number
+from sml_small.utils.error_utils import (
+    get_mandatory_param_error,
+    get_one_of_params_mandatory_error,
+    get_param_outside_range_error,
+)
 
 
 class Index(Enum):
@@ -162,6 +165,7 @@ def initialize_components_list(
         component_object_list.append(ComponentPair(component))
     return component_object_list
 
+
 def validate_input(
     identifier: str,
     total: float,
@@ -309,42 +313,6 @@ def validate_input(
         percentage_difference_threshold,
         precision,
     )
-
-
-def validate_number(tag: str, value: str) -> bool:
-    """
-    This function will take a parsed tag and value and check to see if the value is a number.
-    validate_number will raise a ValueError if expectations are not met.
-
-    :param tag: The tag is a way of identifying the value and type entered and is used if a
-                ValueError is returned.
-    :type tag: str
-    :param value: value is what is parsed to the function it can be many different types.
-    :type value: float | optional
-    :raises ValueError: ValueError is raised for missing numbers or improper data types.
-    :return: Returns True when a value can be converted to float.
-    :rtype: boolean
-    """
-    if not is_number(value):
-        raise ValueError(get_params_is_not_a_number_error(tag))
-    return True
-
-
-def is_number(value) -> bool:
-    """
-    This function attempts to convert a entered type into a float.
-    It will return a boolean dependent on whether it can or can't be converted.
-
-    :param value: value is the parsed parameter which is to be converted to a float(if possible).
-    :type value: float | optional
-    :return: This return a True boolean value if the value obtained can be converted to a float.
-    :rtype: boolean to indicate if value is a number or not.
-    """
-    try:
-        float(value)
-    except Exception:
-        return False
-    return True
 
 
 def set_predictive_value(
@@ -831,6 +799,7 @@ def totals_and_components(
      :rtype: tuple(TotalsAndComponentsOutput)
     """
 
+    # we print a table of the input record values
     print_table(
         "Input Table Function",
         identifier=identifier,
@@ -842,7 +811,7 @@ def totals_and_components(
         absolute_difference_threshold=absolute_difference_threshold,
         percentage_difference_threshold=percentage_difference_threshold,
     )
-    
+
     try:
         output_list = {
             "identifier": identifier,
@@ -906,10 +875,6 @@ def totals_and_components(
                     input_parameters[InputParameters.PRECISION.value],
                 )
 
-                # set the low and high percentage thresholds for the output table
-                output_list["low_percent_threshold"] = low_threshold
-                output_list["high_percent_threshold"] = high_threshold
-
                 # Absolute difference is output here as it would not change from this point
                 # it is not output sooner as a S marker could be returned
                 # before this point and that would have no absolute difference value.
@@ -957,6 +922,7 @@ def totals_and_components(
         output_list["tcc_marker"] = output_list["tcc_marker"].value
         output = TotalsAndComponentsOutput(output_list)
 
+        # here we print the output table with the final values
         print_table(
             "Totals and Components Output",
             identifier=output_list["identifier"],

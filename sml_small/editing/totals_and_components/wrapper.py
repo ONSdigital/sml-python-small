@@ -282,7 +282,7 @@ def invoke_process_with_local_csv():
         print(results)
 
     # Write the results returned by the T&C into the CSV file
-    with open("../../../tests/editing/totals_and_components/example_data/TCC_test_data_demo_processed.csv", mode="w") as csv_file:
+    with open("../../../tests/editing/totals_and_components/example_data/TCC_test_data_demo_processed.csv", mode="w") as csv_file:  # noqa: E501
         field_names = [
             "reference",
             "total",
@@ -387,7 +387,7 @@ A,1625,632,732,99,162,TRUE,1625,,11,,,"""  # noqa: E501
 
     # Write the results returned by the T&C into the CSV file
     with open(
-            "../../../tests/editing/totals_and_components/example_data/TCC_test_data_demo_processed_in_memory.csv", mode="w") as csv_file:
+            "../../../tests/editing/totals_and_components/example_data/TCC_test_data_demo_processed_in_memory.csv", mode="w") as csv_file:  # noqa: E501
         field_names = [
             "reference",
             "total",
