@@ -24,17 +24,24 @@ def print_table(table_name: str, **kwargs):
     :type kwargs: kwargs
     :return: N/A (this is a console output)
     """
+
+    # This constant is used to space out the columns
+    # if your variable name is longer than this value
+    # then the table would misshapen. If this occurs
+    # increase the value.
+    table_spacer = 32
+
     # Print table of variable names and values
     print("\n")
 
     print(table_name)
 
-    print("Variable Name   |   Value")
+    print("Variable Name                   |   Value")
 
-    print("----------------|---------")
+    print("--------------------------------|---------")
 
     for var_name, var_value in kwargs.items():
-        print(f"{var_name:<15}|   {var_value}")
+        print(f"{var_name:<{table_spacer}}|   {var_value}")
 
 
 # This is a function to validate an input is a number.
