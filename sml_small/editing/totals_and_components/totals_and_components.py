@@ -5,6 +5,7 @@ For Copyright information, please see LICENCE.
 from decimal import Decimal, getcontext
 from enum import Enum
 from typing import List, Optional, Tuple
+from sml_small.utils.common_utils import print_table
 
 from sml_small.utils.error_utils import (get_mandatory_param_error, get_one_of_params_mandatory_error,
                                          get_param_outside_range_error, get_params_is_not_a_number_error)
@@ -145,20 +146,6 @@ class TotalsAndComponentsOutput:
             for key in dictionary:
                 setattr(self, key, dictionary[key])
 
-    def print_output_table(self):
-        """
-        print method
-        """
-        print("Totals and Components Output:")
-        print("-----------------------------")
-        print(f"Identifier: {self.identifier}")
-        print(f"Absolute Difference: {self.absolute_difference}")
-        print(f"Low Percent Threshold: {self.low_percent_threshold}")
-        print(f"High Percent Threshold: {self.high_percent_threshold}")
-        print(f"Final Total: {self.final_total}")
-        print(f"Final Value: {self.final_components}")
-        print(f"TCC Marker: {self.tcc_marker}")
-
 
 def initialize_components_list(
     component_list: list[float],
@@ -174,23 +161,6 @@ def initialize_components_list(
     for component in component_list:
         component_object_list.append(ComponentPair(component))
     return component_object_list
-
-
-def print_input_table(**kwargs):
-    """
-    Prints the attributes input
-
-    :param kwargs:
-    :type kwargs: kwargs
-    :return: N/A
-    """
-    # Print table of variable names and values
-    print("Input Table Function")
-    print("Variable Name   |   Value")
-    print("----------------|---------")
-    for var_name, var_value in kwargs.items():
-        print(f"{var_name:<15}|   {var_value}")
-
 
 def validate_input(
     identifier: str,
@@ -861,7 +831,8 @@ def totals_and_components(
      :rtype: tuple(TotalsAndComponentsOutput)
     """
 
-    print_input_table(
+    print_table(
+        "Input Table Function",
         identifier=identifier,
         total=total,
         components=components,
@@ -871,11 +842,14 @@ def totals_and_components(
         absolute_difference_threshold=absolute_difference_threshold,
         percentage_difference_threshold=percentage_difference_threshold,
     )
+    
     try:
         output_list = {
             "identifier": identifier,
             "final_total": total,
             "final_components": components,
+            "low_percent_threshold": None,
+            "high_percent_threshold": None,
             "absolute_difference": None,
         }
         components_list = initialize_components_list(components)
@@ -932,6 +906,10 @@ def totals_and_components(
                     input_parameters[InputParameters.PRECISION.value],
                 )
 
+                # set the low and high percentage thresholds for the output table
+                output_list["low_percent_threshold"] = low_threshold
+                output_list["high_percent_threshold"] = high_threshold
+
                 # Absolute difference is output here as it would not change from this point
                 # it is not output sooner as a S marker could be returned
                 # before this point and that would have no absolute difference value.
@@ -978,7 +956,17 @@ def totals_and_components(
         # We return the raw string instead of the enum value
         output_list["tcc_marker"] = output_list["tcc_marker"].value
         output = TotalsAndComponentsOutput(output_list)
-        output.print_output_table()
+
+        print_table(
+            "Totals and Components Output",
+            identifier=output_list["identifier"],
+            absolute_difference=output_list["absolute_difference"],
+            low_percent_threshold=output_list["low_percent_threshold"],
+            high_percent_threshold=output_list["high_percent_threshold"],
+            final_total=output_list["final_total"],
+            final_components=output_list["final_components"],
+            tcc_marker=output_list["tcc_marker"],
+        )
 
         return output
 
