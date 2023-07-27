@@ -1,10 +1,10 @@
-# Python Wrapper for the Total and Components Method (T&C)
+# Calling Total and Components Method (T&C) Example and Pandas Wrapper Usage
 
-To view the code of the python wrapper and run it, you can find the `wrapper.py` file within the `totals_and_components` directory.
+To view the code of the python `example.py` and run it, you can find the `example.py` file within the `totals_and_components` directory.
 
-## Prerequisites
+## Prerequisites: Python example
 
-In order to run some of the functions in the python wrapper, you will need to have `tabulate` installed.
+In order to run some of the functions in the python `example.py`, you will need to have `tabulate` installed.
 
 Tabulate is used to pretty-print tabular data in python on the command line.
 
@@ -14,10 +14,10 @@ To install `tabulate`:
 pip install tabulate
 ```
 
-To run the python wrapper:
+To run the python `example.py`:
 
 ```cmd
-python wrapper.py
+python example.py
 ```
 
 ## Input data examples
@@ -40,7 +40,7 @@ data = ["F", "202301", 11, [0, 0, 0, 0], True, 11, "202301", None, 11, None]
 result = totals_and_components(*data)
 ```
 
-The function *`def invoke_process_in_memory_data_example()`* in the `wrapper.py` file shows how you can pass in a whole dataset stored in a 2D list into the *`totals_and_components`* function,  get the returned result and display it nicely on the command line in a tabular format.
+The function *`def invoke_process_in_memory_data_example()`* in the `example.py` file shows how you can pass in a whole dataset stored in a 2D list into the *`totals_and_components`* function,  get the returned result and display it nicely on the command line in a tabular format.
 
 ### Method 2: Passing data directly into the T&C method
 
@@ -87,7 +87,7 @@ Final Value: [81.0, 0.0, 3.6, 5.4]
 TCC Marker: C
 ```
 
-## Functionalities the python wrapper offers
+## Functionalities the python `example.py` offers
 
 ### Running T&C method directly using explicitly specified input parameters
 
@@ -160,3 +160,33 @@ You can run the desired function by calling the function at the end of the file 
 # invoke_process_in_memory_data_example()
 invoke_process_in_memory_data_example_2()
 ```
+
+## Pandas Wrapper
+
+To view the code of the pandas wrapper you can find the `pandas_wrapper.py` file within the `totals_and_components` directory.
+
+### Prerequisites: Pandas Wrapper
+
+In order to run some of the functions in the python `pandas_wrapper.py`, you will need to have `pandas` and `numpy` installed.
+
+Tabulate is used to pretty-print tabular data in python on the command line.
+
+To install `pandas`:
+
+```python
+pip install pandas
+```
+
+To install `numpy`:
+
+```python
+pip install numpy
+```
+
+## Pandas Wrapper Usage
+
+- You will have to create a new python file importing in the `pandas_wrapper.py`.
+- Where you will have to have to write functions to read a CSV file and pass in the data as a DataFrame into the *`wrapper`* function from the `pandas_wrapper.py` file.
+
+We have an example of how to do this in the `pandas_example.py` file within the `totals_and_components` directory.
+

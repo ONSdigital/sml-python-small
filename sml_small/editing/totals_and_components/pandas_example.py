@@ -10,7 +10,7 @@ def load_csv(filepath):
 
 # The code below calls the load_csv function
 # with the filename as an argument
-input_dataframe = load_csv("TCC_test_data_demo.csv")
+input_dataframe = load_csv("../../../tests/editing/totals_and_components/example_data/example_test_data.csv")
 components = [
     "comp_1",
     "comp_2",
@@ -19,7 +19,8 @@ components = [
 ]
 
 # We call the wrapper function from pandas_wrapper python file
-# passing in the required arguments
+# passing in the required arguments, which in this case are
+# column names
 test = wrapper(
     input_dataframe,
     "reference",
@@ -37,4 +38,4 @@ test = wrapper(
 # is then saved to a new CSV file
 # The index=False argument ensures that the row indices are not written
 # to the CSV file
-test.to_csv("full_output.csv", index=False)
+test.to_csv("../../../tests/editing/totals_and_components/example_data/example_test_data_pandas_output.csv", index=False)
