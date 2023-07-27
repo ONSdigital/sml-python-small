@@ -39,8 +39,7 @@ def print_table(table_name: str, **kwargs):
 
 # This is a function to validate an input is a number.
 # Example of usage is as follows:
-# if validate_number("total", total) is True:
-#     then do something
+# if validate_number("variable_name", variable_value) is True:
 def validate_number(tag: str, value: str) -> bool:
     """
     This function will take a parsed tag and a value.
