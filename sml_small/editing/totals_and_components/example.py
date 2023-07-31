@@ -8,6 +8,7 @@ import csv
 # from the T&C method in a tabular format
 # This import isn't necessary to work with the T&C method
 from tabulate import tabulate
+
 # Importing the totals_and_components method from the totals_and_components.py file
 from totals_and_components import totals_and_components
 
@@ -19,31 +20,11 @@ test_data = [
     # Should return a TCC Marker of T = Totals corrected
     ["B", 10817, [9201, 866, 632, 112], True, 10817, None, 11, None],
     # Should return a TCC Marker of C = Components corrected
-    [
-        "C",
-        90,
-        [90, 0, 4, 6],
-        False,
-        90,
-        None,
-        None,
-        0.1,
-        None
-    ],
+    ["C", 90, [90, 0, 4, 6], False, 90, None, None, 0.1, None],
     # Should return a TCC Marker of M = Manual editing required
     # This marker will identify contributors where the discrepancy
     # between the total and component is deemed too large for automatic correction
-    [
-      "D",
-      1964,
-      [632, 732, 99, 162],
-      True,
-      1964,
-      None,
-      25,
-      0.1,
-      None
-    ],
+    ["D", 1964, [632, 732, 99, 162], True, 1964, None, 25, 0.1, None],
     # Should return a TCC Marker of T = Totals corrected
     ["E", 306, [240, 0, 30, 10], True, 306, None, 25, 0.1, None],
     # Should return a TCC Marker of S = Method stops. This may be due
@@ -241,7 +222,10 @@ def invoke_process_with_local_csv():
     # Read the CSV file and extract the input data and pass into the
     # T&C method
     results = {}
-    with open("../../../tests/editing/totals_and_components/example_data/example_test_data.csv", mode="r") as csv_file:
+    with open(
+        "../../../tests/editing/totals_and_components/example_data/example_test_data.csv",
+        mode="r",
+    ) as csv_file:
         csv_reader = csv.DictReader(csv_file)
         for row in csv_reader:
             print("Data type:::::::", type(row["comp_1"]))
@@ -282,7 +266,10 @@ def invoke_process_with_local_csv():
         print(results)
 
     # Write the results returned by the T&C into the CSV file
-    with open("../../../tests/editing/totals_and_components/example_data/example_test_data_scenario_1_output.csv", mode="w") as csv_file:
+    with open(
+        "../../../tests/editing/totals_and_components/example_data/example_test_data_scenario_1_output.csv",
+        mode="w",
+    ) as csv_file:
         field_names = [
             "reference",
             "total",
@@ -387,7 +374,9 @@ A,1625,632,732,99,162,TRUE,1625,,11,,,"""  # noqa: E501
 
     # Write the results returned by the T&C into the CSV file
     with open(
-            "../../../tests/editing/totals_and_components/example_data/example_test_data_scenario_2_output.csv", mode="w") as csv_file:
+        "../../../tests/editing/totals_and_components/example_data/example_test_data_scenario_2_output.csv",
+        mode="w",
+    ) as csv_file:
         field_names = [
             "reference",
             "total",
