@@ -182,18 +182,26 @@ class TestValidateInput:
             ),
             (
                 "E",
-                100.0,
+                100,
                 [],
-                True,
-                101.0,
-                103.0,
+                False,
+                100,
+                100.0,
                 20,
                 0.1,
                 28,
-                ValueError(get_mandatory_param_error("components")),
+                (
+                    100,
+                    [],
+                    100,
+                    100.0,
+                    20,
+                    0.1,
+                    28,
+                ),
                 "Test 5: Empty component list",
                 # Test to see what happens when no component list is provided
-                # we expect the appropriate value error to be raised.
+                # we expect the method to return the values
             ),
             (
                 "F",
@@ -1389,7 +1397,7 @@ class TestTotalsAndComponents:
                     (0),
                 ],
                 True,
-                11,
+                None,
                 1,
                 None,
                 11,
@@ -2538,6 +2546,163 @@ class TestTotalsAndComponents:
                 "Test 49 - test when components are string values",
                 # When components are strings, we would expect
                 # the method to still work
+            ),
+            (
+                "AX",
+                9,
+                [
+                    (0),
+                    (0),
+                    (0),
+                    (0),
+                ],
+                True,
+                9,
+                1,
+                None,
+                11,
+                None,
+                (
+                    "AX",
+                    None,
+                    None,
+                    None,
+                    9,
+                    [0, 0, 0, 0],
+                    "S",
+                ),
+                "Test 50 - AD <= ADT and component sum is 0 and amend total is true",
+                # If the absolute difference is less than or equal to 
+                # the absolve difference threshold, the component sum
+                # is 0 and the amend total is false then the method stops
+            ),
+            (
+                "AY",
+                8,
+                [],
+                True,
+                8,
+                2,
+                None,
+                10,
+                None,
+                (
+                    "AY",
+                    None,
+                    None,
+                    None,
+                    8,
+                    [],
+                    "S",
+                ),
+                "Test 51 - AD <= ADT and component sum is missing and amend total is true",
+                # If the absolute difference is less than or equal to 
+                # the absolve difference threshold, the component sum
+                # is missing and the amend total is true then the method stops
+            ),
+            (
+                "AZ",
+                10,
+                [
+                    (0),
+                    (0),
+                    (0),
+                    (0),
+                ],
+                False,
+                10,
+                4,
+                None,
+                11,
+                None,
+                (
+                    "AZ",
+                    None,
+                    None,
+                    None,
+                    10,
+                    [0, 0, 0, 0],
+                    "S",
+                ),
+                "Test 52 - AD <= ADT and component sum is 0 and amend total is false",
+                # If the absolute difference is less than or equal to 
+                # the absolve difference threshold, the component sum
+                # is 0 and the amend total is false then the method stops
+            ),
+            (
+                "BA",
+                6,
+                [],
+                False,
+                6,
+                2,
+                None,
+                11,
+                None,
+                (
+                    "BA",
+                    None,
+                    None,
+                    None,
+                    6,
+                    [],
+                    "S",
+                ),
+                "Test 53 - AD <= ADT and component sum is missing and amend total is false",
+                # If the absolute difference is less than or equal to 
+                # the absolve difference threshold, the component sum
+                # is missing and the amend total is false then the method stops
+            ),
+            (
+                "BB",
+                6,
+                [
+                    (0),
+                    (0),
+                    (0),
+                    (0),
+                ],
+                False,
+                6,
+                1,
+                None,
+                None,
+                0.1,
+                (
+                    "BB",
+                    None,
+                    None,
+                    None,
+                    6,
+                    [0, 0, 0, 0],
+                    "S",
+                ),
+                "Test 54 - PD > 0 and component sum is 0 and amend total is false",
+                # If the percentage difference is greater than 0, the component sum
+                # is 0 and the amend total is false then the method stops
+            ),
+            (
+                "BC",
+                9,
+                [],
+                False,
+                9,
+                1,
+                None,
+                None,
+                0.1,
+                (
+                    "BC",
+                    None,
+                    None,
+                    None,
+                    9,
+                    [],
+                    "S",
+                ),
+                "Test 55 - PD > 0 and component sum is missing and amend total is false",
+                # If the percentage difference is greater than 0, the component sum
+                # is missing and the amend total is false then the method stops
             ),
         ],
     )

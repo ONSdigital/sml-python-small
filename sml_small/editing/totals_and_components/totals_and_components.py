@@ -245,7 +245,7 @@ def validate_input(
     if validate_number("total", total) is True:
         total = float(total)
 
-    if not components:
+    if components is None:
         raise ValueError(get_mandatory_param_error("components"))
 
     for component in components:
@@ -516,10 +516,13 @@ def error_correction(
     precision: int,
 ) -> tuple[float, list[float], TccMarker]:
     """
-    The error correction function will use the amend_total to either
-    correct the total or components. Correcting the total will set the final
-    total as the sum of components. Correcting the components will return the
-    new adjusted components that have been adjusted by using the total.
+    This function will first determine if a total or component correction
+    is required. This is decided by whether the sum of components is equal to zero
+    if this is the case then we stop the method. Otherwise we will use the 
+    amend_total to either correct the total or components. 
+    Correcting the total will set the final total as the sum of components.
+    Correcting the components will return the new adjusted components that
+    have been adjusted by using the total.
 
     :param amend_total: Specifies whether the total or components should be corrected
                         when an error is detected.
@@ -542,10 +545,16 @@ def error_correction(
     :return tcc_marker: Returned Tcc_Marker (either total corrected or components corrected)
     :rtype tcc_marker: TccMarker
     """
-    if amend_total:
+
+    if components_sum == 0:
+        final_total = total
+        tcc_marker = TccMarker.STOP
+
+    elif amend_total:
         final_total, original_components, tcc_marker = correct_total(
             components_sum, original_components
         )
+
     else:
         final_total, original_components, tcc_marker = correct_components(
             components_sum,
@@ -555,8 +564,10 @@ def error_correction(
         )
 
     final_components = []
+
     for component in original_components:
         final_components.append(component.final_value)
+
     return final_total, final_components, tcc_marker
 
 
