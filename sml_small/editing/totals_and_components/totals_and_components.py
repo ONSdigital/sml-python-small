@@ -547,11 +547,7 @@ def error_correction(
     :rtype tcc_marker: TccMarker
     """
 
-    if components_sum == 0:
-        final_total = total
-        tcc_marker = TccMarker.STOP
-
-    elif amend_total:
+    if amend_total:
         final_total, original_components, tcc_marker = correct_total(
             components_sum, original_components
         )
