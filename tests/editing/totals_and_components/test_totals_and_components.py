@@ -2573,7 +2573,7 @@ class TestTotalsAndComponents:
                 ),
                 "Test 50 - AD <= ADT and component sum is 0 and amend total is true",
                 # If the absolute difference is less than or equal to
-                # the absolve difference threshold and > 0, the component sum
+                # the absolute difference threshold and > 0, the component sum
                 # is 0 and the amend total is false then the method stops
             ),
             (
@@ -2597,7 +2597,7 @@ class TestTotalsAndComponents:
                 ),
                 "Test 51 - AD <= ADT and component sum is missing and amend total is true",
                 # If the absolute difference is less than or equal to
-                # the absolve difference threshold and > 0, the component sum
+                # the absolute difference threshold and > 0, the component sum
                 # is missing and the amend total is true then the method stops
             ),
             (
@@ -2626,7 +2626,7 @@ class TestTotalsAndComponents:
                 ),
                 "Test 52 - AD <= ADT and component sum is 0 and amend total is false",
                 # If the absolute difference is less than or equal to
-                # the absolve difference threshold and > 0, the component sum
+                # the absolute difference threshold and > 0, the component sum
                 # is 0 and the amend total is false then the method stops
             ),
             (
@@ -2650,7 +2650,7 @@ class TestTotalsAndComponents:
                 ),
                 "Test 53 - AD <= ADT and component sum is missing and amend total is false",
                 # If the absolute difference is less than or equal to
-                # the absolve difference threshold and > 0, the component sum
+                # the absolute difference threshold and > 0, the component sum
                 # is missing and the amend total is false then the method stops
             ),
             (
