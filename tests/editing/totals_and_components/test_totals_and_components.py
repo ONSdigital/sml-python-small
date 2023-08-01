@@ -2755,6 +2755,62 @@ class TestTotalsAndComponents:
                 # If the percentage difference is greater than 0, the component sum
                 # is missing and the amend total is false then the method stops
             ),
+            (
+                "UAT-ABS-1",
+                10811,
+                [
+                    (9201),
+                    (866),
+                    (632),
+                    (112),
+                ],
+                True,
+                10811,
+                28,
+                None,
+                11,
+                None,
+                (
+                    "UAT-ABS-1",
+                    0,
+                    None,
+                    None,
+                    10811,
+                    [9201, 866, 632, 112],
+                    "N",
+                ),
+                "Test 58 - If D = 0 then no correction is applied",
+                # Sheet TCC_test_data_case_a1, reference  1002
+                #  If the absolute difference is 0 then no correction is applied
+            ),
+            (
+                "UAT-ABS-2",
+                1603,
+                [
+                    (632),
+                    (732),
+                    (99),
+                    (162),
+                ],
+                True,
+                1603,
+                28,
+                None,
+                11,
+                None,
+                (
+                    "UAT-ABS-2",
+                    22,
+                    None,
+                    None,
+                    1603,
+                    [632, 732, 99, 162],
+                    "M",
+                ),
+                "Test 59 - If D > 11 then manual editing is required",
+                # Sheet TCC_test_data_case_a2, reference 2001
+                # If the absolute difference > ABT then no correction is applied
+            ),
         ],
     )
     def test_totals_and_components(
