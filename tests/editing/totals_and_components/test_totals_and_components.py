@@ -2737,9 +2737,9 @@ class TestTotalsAndComponents:
                 9,
                 [],
                 False,
-                9,
-                1,
                 None,
+                1,
+                9,
                 None,
                 0.1,
                 (
