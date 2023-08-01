@@ -2573,7 +2573,7 @@ class TestTotalsAndComponents:
                 ),
                 "Test 50 - AD <= ADT and component sum is 0 and amend total is true",
                 # If the absolute difference is less than or equal to
-                # the absolve difference threshold, the component sum
+                # the absolve difference threshold and > 0, the component sum
                 # is 0 and the amend total is false then the method stops
             ),
             (
@@ -2584,7 +2584,7 @@ class TestTotalsAndComponents:
                 8,
                 2,
                 None,
-                10,
+                11,
                 None,
                 (
                     "AY",
@@ -2597,7 +2597,7 @@ class TestTotalsAndComponents:
                 ),
                 "Test 51 - AD <= ADT and component sum is missing and amend total is true",
                 # If the absolute difference is less than or equal to
-                # the absolve difference threshold, the component sum
+                # the absolve difference threshold and > 0, the component sum
                 # is missing and the amend total is true then the method stops
             ),
             (
@@ -2626,7 +2626,7 @@ class TestTotalsAndComponents:
                 ),
                 "Test 52 - AD <= ADT and component sum is 0 and amend total is false",
                 # If the absolute difference is less than or equal to
-                # the absolve difference threshold, the component sum
+                # the absolve difference threshold and > 0, the component sum
                 # is 0 and the amend total is false then the method stops
             ),
             (
@@ -2650,7 +2650,7 @@ class TestTotalsAndComponents:
                 ),
                 "Test 53 - AD <= ADT and component sum is missing and amend total is false",
                 # If the absolute difference is less than or equal to
-                # the absolve difference threshold, the component sum
+                # the absolve difference threshold and > 0, the component sum
                 # is missing and the amend total is false then the method stops
             ),
             (
@@ -2662,7 +2662,7 @@ class TestTotalsAndComponents:
                     (0),
                     (0),
                 ],
-                False,
+                True,
                 6,
                 1,
                 None,
@@ -2677,15 +2677,15 @@ class TestTotalsAndComponents:
                     [0, 0, 0, 0],
                     "S",
                 ),
-                "Test 54 - PD > 0 and component sum is 0 and amend total is false",
+                "Test 54 - PD > 0 and component sum is 0 and amend total is true",
                 # If the percentage difference is greater than 0, the component sum
-                # is 0 and the amend total is false then the method stops
+                # is 0 and the amend total is true then the method stops
             ),
             (
                 "BC",
                 9,
                 [],
-                False,
+                True,
                 9,
                 1,
                 None,
@@ -2700,7 +2700,58 @@ class TestTotalsAndComponents:
                     [],
                     "S",
                 ),
-                "Test 55 - PD > 0 and component sum is missing and amend total is false",
+                "Test 55 - PD > 0 and component sum is missing and amend total is true",
+                # If the percentage difference is greater than 0, the component sum
+                # is missing and the amend total is true then the method stops
+            ),
+            (
+                "BD",
+                6,
+                [
+                    (0),
+                    (0),
+                    (0),
+                    (0),
+                ],
+                False,
+                6,
+                1,
+                None,
+                None,
+                0.1,
+                (
+                    "BD",
+                    None,
+                    None,
+                    None,
+                    6,
+                    [0, 0, 0, 0],
+                    "S",
+                ),
+                "Test 56 - PD > 0 and component sum is 0 and amend total is false",
+                # If the percentage difference is greater than 0, the component sum
+                # is 0 and the amend total is false then the method stops
+            ),
+            (
+                "BE",
+                9,
+                [],
+                False,
+                9,
+                1,
+                None,
+                None,
+                0.1,
+                (
+                    "BE",
+                    None,
+                    None,
+                    None,
+                    9,
+                    [],
+                    "S",
+                ),
+                "Test 57 - PD > 0 and component sum is missing and amend total is false",
                 # If the percentage difference is greater than 0, the component sum
                 # is missing and the amend total is false then the method stops
             ),

@@ -518,8 +518,8 @@ def error_correction(
     """
     This function will first determine if a total or component correction
     is required. This is decided by whether the sum of components is equal to zero
-    if this is the case then we stop the method. Otherwise we will use the 
-    amend_total to either correct the total or components. 
+    if this is the case then we stop the method. Otherwise we will use the
+    amend_total to either correct the total or components.
     Correcting the total will set the final total as the sum of components.
     Correcting the components will return the new adjusted components that
     have been adjusted by using the total.
