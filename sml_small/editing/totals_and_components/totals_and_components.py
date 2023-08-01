@@ -245,6 +245,7 @@ def validate_input(
     if validate_number("total", total) is True:
         total = float(total)
 
+    # A list of empty components is not considered an error condition.
     if components is None:
         raise ValueError(get_mandatory_param_error("components"))
 
