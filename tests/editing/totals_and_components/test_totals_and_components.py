@@ -2779,8 +2779,8 @@ class TestTotalsAndComponents:
                     [9201, 866, 632, 112],
                     "N",
                 ),
-                "Test 58 - If D = 0 then no correction is applied",
-                # Sheet TCC_test_data_case_a1, reference  1002
+                "Test 58 - If absolute difference = 0 then no correction is applied",
+                # Sheet TCC_test_data_case_a1
                 #  If the absolute difference is 0 then no correction is applied
             ),
             (
@@ -2807,9 +2807,241 @@ class TestTotalsAndComponents:
                     [632, 732, 99, 162],
                     "M",
                 ),
-                "Test 59 - If D > 11 then manual editing is required",
-                # Sheet TCC_test_data_case_a2, reference 2001
-                # If the absolute difference > ABT then no correction is applied
+                "Test 59 - If absolute difference > 11 then manual editing is required",
+                # Sheet TCC_test_data_case_a2
+                # If the absolute difference > ABT no correction is applied
+            ),
+            (
+                "UAT-ABS-3",
+                119,
+                [
+                    (98),
+                    (0),
+                    (4),
+                    (6),
+                ],
+                True,
+                119,
+                28,
+                None,
+                11,
+                None,
+                (
+                    "UAT-ABS-3",
+                    11,
+                    None,
+                    None,
+                    108,
+                    [98, 0, 4, 6],
+                    "T",
+                ),
+                "Test 60 - If absolute difference = 11 and amend total is true then we correct the total",
+                # Sheet TCC_test_data_case_a3
+                # If the absolute difference = ABT and the amend total is true
+                # then the total is corrected
+            ),
+            (
+                "UAT-ABS-4",
+                119,
+                [
+                    (98),
+                    (0),
+                    (4),
+                    (6),
+                ],
+                False,
+                119,
+                28,
+                None,
+                11,
+                None,
+                (
+                    "UAT-ABS-4",
+                    11,
+                    None,
+                    None,
+                    119,
+                    [107.98148148148148, 0, 4.407407407407407, 6.611111111111111],
+                    "C",
+                ),
+                "Test 61 - If absolute difference = 11 and amend total is false then we correct the components",
+                # Sheet TCC_test_data_case_a4
+                # If the absolute difference = ABT and the amend total is false
+                # then the components is corrected.
+            ),
+            (
+                "UAT-ABS-5",
+                1621,
+                [
+                    (632),
+                    (732),
+                    (99),
+                    (162),
+                ],
+                True,
+                1621,
+                28,
+                None,
+                11,
+                None,
+                (
+                    "UAT-ABS-5",
+                    4,
+                    None,
+                    None,
+                    1625,
+                    [632, 732, 99, 162],
+                    "T",
+                ),
+                "Test 62 - If absolute difference < 11 and amend total is true then we correct the components",
+                # Sheet TCC_test_data_case_a5
+                # If the absolute difference < ABT and the amend total is true
+                # then the total is corrected.
+            ),
+            (
+                "UAT-ABS-6",
+                1621,
+                [
+                    (632),
+                    (732),
+                    (99),
+                    (162),
+                ],
+                False,
+                1621,
+                28,
+                None,
+                11,
+                None,
+                (
+                    "UAT-ABS-6",
+                    4,
+                    None,
+                    None,
+                    1621,
+                    [630.4443076923077, 730.1981538461539, 98.75630769230769, 161.60123076923077],
+                    "C",
+                ),
+                "Test 63 - If absolute difference < 11 and amend total is false then we correct the components",
+                # Sheet TCC_test_data_case_a6
+                # If the absolute difference < ABT and the amend total is false
+                # then the components is corrected.
+            ),
+            (
+                "UAT-ABS-7",
+                9,
+                [
+                    (0),
+                    (0),
+                    (0),
+                    (0),
+                ],
+                True,
+                9,
+                28,
+                None,
+                11,
+                None,
+                (
+                    "UAT-ABS-7",
+                    None,
+                    None,
+                    None,
+                    9,
+                    [0, 0, 0, 0],
+                    "S",
+                ),
+                "Test 63 - If absolute difference < 11 and amend total is true then we correct the components",
+                # Sheet TCC_test_data_case_a7
+                # If the absolute difference < ABT and the amend total is true
+                # then no correction is applied.
+            ),
+            (
+                "UAT-ABS-8",
+                9,
+                [
+                    (0),
+                    (0),
+                    (0),
+                    (0),
+                ],
+                False,
+                9,
+                28,
+                None,
+                11,
+                None,
+                (
+                    "UAT-ABS-8",
+                    None,
+                    None,
+                    None,
+                    9,
+                    [0, 0, 0, 0],
+                    "S",
+                ),
+                "Test 64 - If absolute difference <= 11 and amend total is false then we correct the components",
+                # Sheet TCC_test_data_case_a8
+                # If the absolute difference <= ABT and the amend total is false
+                # then no correction is applied.
+            ),
+            (
+                "UAT-ABS-9",
+                0,
+                [
+                    (7),
+                    (0),
+                    (2),
+                    (2),
+                ],
+                True,
+                0,
+                28,
+                None,
+                11,
+                None,
+                (
+                    "UAT-ABS-9",
+                    11,
+                    None,
+                    None,
+                    11,
+                    [7, 0, 2, 2],
+                    "T",
+                ),
+                "Test 65 - If the total is 0, sum of components is > 0, amend total is true then we correct the total",
+                # Sheet TCC_test_data_case_a9
+                # If the total is 0, sum of components is > 0 and the amend total is true
+                # then a total correction is applied.
+            ),
+            (
+                "UAT-ABS-10",
+                0,
+                [
+                    (2),
+                    (4),
+                    (3),
+                    (1),
+                ],
+                False,
+                0,
+                28,
+                None,
+                11,
+                None,
+                (
+                    "UAT-ABS-10",
+                    10,
+                    None,
+                    None,
+                    0,
+                    [0.0, 0.0, 0.0, 0.0],
+                    "C",
+                ),
+                "Test 66 - If the total is 0, sum of components is > 0, amend total is false then we correct the component",
+                # Sheet TCC_test_data_case_a10
+                # If the total is 0, sum of components is > 0 and the amend total is false
+                # then a component correction is applied.
             ),
         ],
     )
