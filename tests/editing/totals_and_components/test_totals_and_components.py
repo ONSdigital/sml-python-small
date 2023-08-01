@@ -2574,7 +2574,7 @@ class TestTotalsAndComponents:
                 "Test 50 - AD <= ADT and component sum is 0 and amend total is true",
                 # If the absolute difference is less than or equal to
                 # the absolute difference threshold and > 0, the component sum
-                # is 0 and the amend total is false then the method stops
+                # is 0 and the amend total is true then the method stops
             ),
             (
                 "AY",
