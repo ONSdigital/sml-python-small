@@ -516,13 +516,10 @@ def error_correction(
     precision: int,
 ) -> tuple[float, list[float], TccMarker]:
     """
-    This function will first determine if a total or component correction
-    is required. This is decided by whether the sum of components is equal to zero
-    if this is the case then we stop the method. Otherwise we will use the
-    amend_total to either correct the total or components.
-    Correcting the total will set the final total as the sum of components.
-    Correcting the components will return the new adjusted components that
-    have been adjusted by using the total.
+    The error correction function will use the amend_total to either
+    correct the total or components. Correcting the total will set the final
+    total as the sum of components. Correcting the components will return the
+    new adjusted components that have been adjusted by using the total.
 
     :param amend_total: Specifies whether the total or components should be corrected
                         when an error is detected.
@@ -546,11 +543,7 @@ def error_correction(
     :rtype tcc_marker: TccMarker
     """
 
-    if components_sum == 0:
-        final_total = total
-        tcc_marker = TccMarker.STOP
-
-    elif amend_total:
+    if amend_total:
         final_total, original_components, tcc_marker = correct_total(
             components_sum, original_components
         )

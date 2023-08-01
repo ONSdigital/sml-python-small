@@ -2573,8 +2573,8 @@ class TestTotalsAndComponents:
                 ),
                 "Test 50 - AD <= ADT and component sum is 0 and amend total is true",
                 # If the absolute difference is less than or equal to
-                # the absolve difference threshold and > 0, the component sum
-                # is 0 and the amend total is false then the method stops
+                # the absolute difference threshold and > 0, the component sum
+                # is 0 and the amend total is true then the method stops
             ),
             (
                 "AY",
@@ -2597,7 +2597,7 @@ class TestTotalsAndComponents:
                 ),
                 "Test 51 - AD <= ADT and component sum is missing and amend total is true",
                 # If the absolute difference is less than or equal to
-                # the absolve difference threshold and > 0, the component sum
+                # the absolute difference threshold and > 0, the component sum
                 # is missing and the amend total is true then the method stops
             ),
             (
@@ -2626,7 +2626,7 @@ class TestTotalsAndComponents:
                 ),
                 "Test 52 - AD <= ADT and component sum is 0 and amend total is false",
                 # If the absolute difference is less than or equal to
-                # the absolve difference threshold and > 0, the component sum
+                # the absolute difference threshold and > 0, the component sum
                 # is 0 and the amend total is false then the method stops
             ),
             (
@@ -2650,7 +2650,7 @@ class TestTotalsAndComponents:
                 ),
                 "Test 53 - AD <= ADT and component sum is missing and amend total is false",
                 # If the absolute difference is less than or equal to
-                # the absolve difference threshold and > 0, the component sum
+                # the absolute difference threshold and > 0, the component sum
                 # is missing and the amend total is false then the method stops
             ),
             (
@@ -3042,6 +3042,156 @@ class TestTotalsAndComponents:
                 # Sheet TCC_test_data_case_a10
                 # If the total is 0, sum of components is > 0 and the amend total is false
                 # then a component correction is applied.
+            ),
+            (
+                "UAT-ABS-11",
+                103,
+                [
+                    (98),
+                    (0),
+                    (4),
+                    (6),
+                ],
+                True,
+                None,
+                28,
+                107,
+                11,
+                None,
+                (
+                    "UAT-ABS-11",
+                    1,
+                    None,
+                    None,
+                    108.0,
+                    [98, 0, 4, 6],
+                    "T",
+                ),
+                "Test 67 - If absolute difference <= 11 and the auxiliary is used as the predictive then we correct the total",
+                # Sheet TCC_test_data_case_a11
+                # If the absolute difference <= ABT, the auxiliary
+                # is used as the predictive
+                # and the amend total is true
+                # then total correction is applied.
+            ),
+            (
+                "UAT-ABS-11-b",
+                103,
+                [
+                    (98),
+                    (0),
+                    (4),
+                    (6),
+                ],
+                False,
+                None,
+                28,
+                107,
+                11,
+                None,
+                (
+                    "UAT-ABS-11-b",
+                    1,
+                    None,
+                    None,
+                    103,
+                    [93.46296296296296, 0.0, 3.814814814814815, 5.722222222222222],
+                    "C",
+                ),
+                "Test 68 - If absolute difference <= 11 and the auxiliary is used as the predictive then we correct the components",
+                # Sheet TCC_test_data_case_a11
+                # If the absolute difference <= ABT, the auxiliary
+                # is used as the predictive
+                # and the amend total is false
+                # then component correction is applied.
+            ),
+            (
+                "UAT-ABS-12",
+                10817,
+                [
+                    (9201),
+                    (866),
+                    (632),
+                    (112),
+                ],
+                False,
+                10817,
+                28,
+                None,
+                0,
+                None,
+                (
+                    "UAT-ABS-12",
+                    6,
+                    None,
+                    None,
+                    10817,
+                    [9201, 866, 632, 112],
+                    "M",
+                ),
+                "Test 69 - If AD > 0 then we require manual editing",
+                # Sheet TCC_test_data_case_a12
+                # If the absolute difference > 0 then we need
+                # manual editing.
+            ),
+            (
+                "UAT-ABS-13",
+                10817,
+                [
+                    (9201),
+                    (866),
+                    (632),
+                    (112),
+                ],
+                True,
+                10821,
+                28,
+                None,
+                11,
+                None,
+                (
+                    "UAT-ABS-13",
+                    10,
+                    None,
+                    None,
+                    10811,
+                    [9201, 866, 632, 112],
+                    "C",
+                ),
+                "Test 70 - If AD <= ABT but the predictive total is different to current total then we get a total correction",
+                # Sheet TCC_test_data_case_a12
+                # If the absolute difference is less than or equal to the threshold
+                # and the predictive is different to the total. Then we get
+                # a total correction.
+            ),
+            (
+                "UAT-ABS-14",
+                10705,
+                [
+                    (9201),
+                    (866),
+                    (632),
+                ],
+                False,
+                10705,
+                28,
+                None,
+                11,
+                None,
+                (
+                    "UAT-ABS-14",
+                    6,
+                    None,
+                    None,
+                    10705,
+                    [9206.15992148799, 866.4856528647537, 632.3544256472568],
+                    "C",
+                ),
+                "Test 70 - If AD < ABT amend total is false and some components are missing",
+                # Sheet TCC_test_data_case_a12
+                # If the absolute difference is less than the threshold
+                # amend total is false and some components are missing
+                # then we get a components correction.
             ),
         ],
     )
