@@ -245,7 +245,8 @@ def validate_input(
     if validate_number("total", total) is True:
         total = float(total)
 
-    if not components:
+    # A list of empty components is not considered an error condition.
+    if components is None:
         raise ValueError(get_mandatory_param_error("components"))
 
     for component in components:
@@ -542,10 +543,12 @@ def error_correction(
     :return tcc_marker: Returned Tcc_Marker (either total corrected or components corrected)
     :rtype tcc_marker: TccMarker
     """
+
     if amend_total:
         final_total, original_components, tcc_marker = correct_total(
             components_sum, original_components
         )
+
     else:
         final_total, original_components, tcc_marker = correct_components(
             components_sum,
@@ -555,8 +558,10 @@ def error_correction(
         )
 
     final_components = []
+
     for component in original_components:
         final_components.append(component.final_value)
+
     return final_total, final_components, tcc_marker
 
 
