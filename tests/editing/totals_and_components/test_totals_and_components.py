@@ -1727,8 +1727,8 @@ class TestTotalsAndComponents:
                 (
                     "U",
                     5,
-                    None,
-                    None,
+                    10.0,
+                    10.0,
                     5,
                     [1, 2, 3, 4],
                     "M",
@@ -2756,7 +2756,7 @@ class TestTotalsAndComponents:
                 # is missing and the amend total is false then the method stops
             ),
             (
-                "UAT-ABS-1",
+                "UAT-ABD-DIFF-1",
                 10811,
                 [
                     (9201),
@@ -2771,7 +2771,7 @@ class TestTotalsAndComponents:
                 11,
                 None,
                 (
-                    "UAT-ABS-1",
+                    "UAT-ABD-DIFF-1",
                     0,
                     None,
                     None,
@@ -2784,7 +2784,7 @@ class TestTotalsAndComponents:
                 #  If the absolute difference is 0 then no correction is applied
             ),
             (
-                "UAT-ABS-2",
+                "UAT-ABD-DIFF-2",
                 1603,
                 [
                     (632),
@@ -2799,7 +2799,7 @@ class TestTotalsAndComponents:
                 11,
                 None,
                 (
-                    "UAT-ABS-2",
+                    "UAT-ABD-DIFF-2",
                     22,
                     None,
                     None,
@@ -2812,7 +2812,7 @@ class TestTotalsAndComponents:
                 # If the absolute difference > ABT no correction is applied
             ),
             (
-                "UAT-ABS-3",
+                "UAT-ABD-DIFF-3",
                 119,
                 [
                     (98),
@@ -2827,7 +2827,7 @@ class TestTotalsAndComponents:
                 11,
                 None,
                 (
-                    "UAT-ABS-3",
+                    "UAT-ABD-DIFF-3",
                     11,
                     None,
                     None,
@@ -2841,7 +2841,7 @@ class TestTotalsAndComponents:
                 # then the total is corrected
             ),
             (
-                "UAT-ABS-4",
+                "UAT-ABD-DIFF-4",
                 119,
                 [
                     (98),
@@ -2856,7 +2856,7 @@ class TestTotalsAndComponents:
                 11,
                 None,
                 (
-                    "UAT-ABS-4",
+                    "UAT-ABD-DIFF-4",
                     11,
                     None,
                     None,
@@ -2870,7 +2870,7 @@ class TestTotalsAndComponents:
                 # then the components is corrected.
             ),
             (
-                "UAT-ABS-5",
+                "UAT-ABD-DIFF-5",
                 1621,
                 [
                     (632),
@@ -2885,7 +2885,7 @@ class TestTotalsAndComponents:
                 11,
                 None,
                 (
-                    "UAT-ABS-5",
+                    "UAT-ABD-DIFF-5",
                     4,
                     None,
                     None,
@@ -2899,7 +2899,7 @@ class TestTotalsAndComponents:
                 # then the total is corrected.
             ),
             (
-                "UAT-ABS-6",
+                "UAT-ABD-DIFF-6",
                 1621,
                 [
                     (632),
@@ -2914,7 +2914,7 @@ class TestTotalsAndComponents:
                 11,
                 None,
                 (
-                    "UAT-ABS-6",
+                    "UAT-ABD-DIFF-6",
                     4,
                     None,
                     None,
@@ -2928,7 +2928,7 @@ class TestTotalsAndComponents:
                 # then the components is corrected.
             ),
             (
-                "UAT-ABS-7",
+                "UAT-ABD-DIFF-7",
                 9,
                 [
                     (0),
@@ -2943,7 +2943,7 @@ class TestTotalsAndComponents:
                 11,
                 None,
                 (
-                    "UAT-ABS-7",
+                    "UAT-ABD-DIFF-7",
                     None,
                     None,
                     None,
@@ -2957,7 +2957,7 @@ class TestTotalsAndComponents:
                 # then no correction is applied.
             ),
             (
-                "UAT-ABS-8",
+                "UAT-ABD-DIFF-8",
                 9,
                 [
                     (0),
@@ -2972,7 +2972,7 @@ class TestTotalsAndComponents:
                 11,
                 None,
                 (
-                    "UAT-ABS-8",
+                    "UAT-ABD-DIFF-8",
                     None,
                     None,
                     None,
@@ -2986,7 +2986,7 @@ class TestTotalsAndComponents:
                 # then no correction is applied.
             ),
             (
-                "UAT-ABS-9",
+                "UAT-ABD-DIFF-9",
                 0,
                 [
                     (7),
@@ -3001,7 +3001,7 @@ class TestTotalsAndComponents:
                 11,
                 None,
                 (
-                    "UAT-ABS-9",
+                    "UAT-ABD-DIFF-9",
                     11,
                     None,
                     None,
@@ -3015,7 +3015,7 @@ class TestTotalsAndComponents:
                 # then a total correction is applied.
             ),
             (
-                "UAT-ABS-10",
+                "UAT-ABD-DIFF-10",
                 0,
                 [
                     (2),
@@ -3030,7 +3030,7 @@ class TestTotalsAndComponents:
                 11,
                 None,
                 (
-                    "UAT-ABS-10",
+                    "UAT-ABD-DIFF-10",
                     10,
                     None,
                     None,
@@ -3044,7 +3044,7 @@ class TestTotalsAndComponents:
                 # then a component correction is applied.
             ),
             (
-                "UAT-ABS-11",
+                "UAT-ABD-DIFF-11",
                 103,
                 [
                     (98),
@@ -3059,7 +3059,7 @@ class TestTotalsAndComponents:
                 11,
                 None,
                 (
-                    "UAT-ABS-11",
+                    "UAT-ABD-DIFF-11",
                     1,
                     None,
                     None,
@@ -3075,7 +3075,7 @@ class TestTotalsAndComponents:
                 # then total correction is applied.
             ),
             (
-                "UAT-ABS-11-b",
+                "UAT-ABD-DIFF-11-b",
                 103,
                 [
                     (98),
@@ -3090,7 +3090,7 @@ class TestTotalsAndComponents:
                 11,
                 None,
                 (
-                    "UAT-ABS-11-b",
+                    "UAT-ABD-DIFF-11-b",
                     1,
                     None,
                     None,
@@ -3106,7 +3106,7 @@ class TestTotalsAndComponents:
                 # then component correction is applied.
             ),
             (
-                "UAT-ABS-12",
+                "UAT-ABD-DIFF-12",
                 10817,
                 [
                     (9201),
@@ -3121,7 +3121,7 @@ class TestTotalsAndComponents:
                 0,
                 None,
                 (
-                    "UAT-ABS-12",
+                    "UAT-ABD-DIFF-12",
                     6,
                     None,
                     None,
@@ -3135,7 +3135,7 @@ class TestTotalsAndComponents:
                 # manual editing.
             ),
             (
-                "UAT-ABS-13",
+                "UAT-ABD-DIFF-13",
                 10817,
                 [
                     (9201),
@@ -3150,7 +3150,7 @@ class TestTotalsAndComponents:
                 11,
                 None,
                 (
-                    "UAT-ABS-13",
+                    "UAT-ABD-DIFF-13",
                     10,
                     None,
                     None,
@@ -3165,7 +3165,7 @@ class TestTotalsAndComponents:
                 # a total correction.
             ),
             (
-                "UAT-ABS-14",
+                "UAT-ABD-DIFF-14",
                 10705,
                 [
                     (9201),
@@ -3179,7 +3179,7 @@ class TestTotalsAndComponents:
                 11,
                 None,
                 (
-                    "UAT-ABS-14",
+                    "UAT-ABD-DIFF-14",
                     6,
                     None,
                     None,
@@ -3192,6 +3192,297 @@ class TestTotalsAndComponents:
                 # If the absolute difference is less than the threshold
                 # amend total is false and some components are missing
                 # then we get a components correction.
+            ),
+            (
+                "UAT-PERC-DIFF-1",
+                1625,
+                [
+                    (632),
+                    (732),
+                    (99),
+                    (162),
+                ],
+                True,
+                1625,
+                28,
+                None,
+                None,
+                0.1,
+                (
+                    "UAT-PERC-DIFF-1",
+                    None,
+                    1462.5,
+                    1787.5,
+                    1625,
+                    [632, 732, 99, 162],
+                    "N",
+                ),
+                "Test 71 - AD between the total and components sum = 0, then no correction is applied.",
+                # Sheet TCC_test_data_case_b1
+                # initial absolute difference between the total and components sum = 0,
+                # then no correction is applied.
+            ),
+            (
+                "UAT-PERC-DIFF-2",
+                12492,
+                [
+                    (9201),
+                    (866),
+                    (632),
+                    (112),
+                ],
+                True,
+                12492,
+                28,
+                None,
+                None,
+                0.1,
+                (
+                    "UAT-PERC-DIFF-2",
+                    None,
+                    9729.9,
+                    11892.1,
+                    12492,
+                    [9201, 866, 632, 112],
+                    "M",
+                ),
+                "Test 72 - If P > 10 then manual editing is required",
+                # Sheet TCC_test_data_case_b2
+                # If P > 10, then no correction is applied, and
+                # marker shows manual editing required. TCC = M
+            ),
+            (
+                "UAT-PERC-DIFF-3",
+                90,
+                [
+                    (90),
+                    (0),
+                    (4),
+                    (6),
+                ],
+                True,
+                90,
+                28,
+                None,
+                None,
+                0.1,
+                (
+                    "UAT-PERC-DIFF-3",
+                    None,
+                    90,
+                    110,
+                    100,
+                    [90, 0, 4, 6],
+                    "T",
+                ),
+                "Test 73 - If P = 10 and amend total = TRUE, then the total is corrected",
+                # Sheet TCC_test_data_case_b3
+                # If P = 10 and amend total = TRUE, then correction applied
+                # and total corrected. TCC = T
+            ),
+            (
+                "UAT-PERC-DIFF-4",
+                90,
+                [
+                    (90),
+                    (0),
+                    (4),
+                    (6),
+                ],
+                False,
+                90,
+                28,
+                None,
+                None,
+                0.1,
+                (
+                    "UAT-PERC-DIFF-4",
+                    None,
+                    90,
+                    110,
+                    90,
+                    [81, 0, 3.6, 5.4],
+                    "C",
+                ),
+                "Test 74 - If P = 10 and amend total = FALSE, then component correction is applied",
+                # Sheet TCC_test_data_case_b4
+                # If P = 10 and amend total = FALSE, then correction applied,
+                # and components rescaled. TCC = C
+            ),
+            (
+                "UAT-PERC-DIFF-5",
+                1621,
+                [
+                    (632),
+                    (732),
+                    (99),
+                    (162),
+                ],
+                True,
+                1621,
+                28,
+                None,
+                None,
+                0.1,
+                (
+                    "UAT-PERC-DIFF-5",
+                    None,
+                    1462.5,
+                    1787.5,
+                    1625,
+                    [632, 732, 99, 162],
+                    "T",
+                ),
+                "Test 75 - If P < 10 and amend total = TRUE, then total is corrected",
+                # Sheet TCC_test_data_case_b5
+                # If P < 10 and amend total = TRUE, then correction applied
+                # and total corrected. TCC = T
+            ),
+            (
+                "UAT-PERC-DIFF-6",
+                1621,
+                [
+                    (632),
+                    (732),
+                    (99),
+                    (162),
+                ],
+                False,
+                1621,
+                28,
+                None,
+                None,
+                0.1,
+                (
+                    "UAT-PERC-DIFF-6",
+                    None,
+                    1462.5,
+                    1787.5,
+                    1621,
+                    [630.4443076923077, 730.1981538461539, 98.75630769230769, 161.60123076923077],
+                    "C",
+                ),
+                "Test 76 - If P < 10 and amend total = FALSE, then component correction is applied",
+                # Sheet TCC_test_data_case_b6
+                # If P < 10 and amend total = FALSE, then correction applied,
+                # and components rescaled. TCC = C
+            ),
+            (
+                "UAT-PERC-DIFF-7",
+                1621,
+                [
+                    (0),
+                    (0),
+                    (0),
+                    (0),
+                ],
+                True,
+                1621,
+                1,
+                None,
+                None,
+                0.1,
+                (
+                    "UAT-PERC-DIFF-7",
+                    None,
+                    None,
+                    None,
+                    1621,
+                    [0, 0, 0, 0],
+                    "S",
+                ),
+                "Test 77 - PD > 0 and component sum is 0 and amend total is true",
+                # Sheet TCC_test_data_case_b7
+                # If the percentage difference is greater than 0, the component sum
+                # is 0 and the amend total is true then the method stops
+            ),
+            (
+                "UAT-PERC-DIFF-8",
+                1621,
+                [
+                    (0),
+                    (0),
+                    (0),
+                    (0),
+                ],
+                True,
+                1621,
+                1,
+                None,
+                None,
+                0.1,
+                (
+                    "UAT-PERC-DIFF-8",
+                    None,
+                    None,
+                    None,
+                    1621,
+                    [0, 0, 0, 0],
+                    "S",
+                ),
+                "Test 78 - If P > 0 but components sum = 0 or missing, amend total = FALSE, then the method stops",
+                # Sheet TCC_test_data_case_b8
+                # If P > 0 but components sum = 0 or missing, amend total = FALSE,
+                # TCC Marker = S
+            ),
+            (
+                "UAT-PERC-DIFF-9",
+                10817,
+                [
+                    (9201),
+                    (866),
+                    (632),
+                    (112),
+                ],
+                True,
+                None,
+                28,
+                10695,
+                None,
+                0.1,
+                (
+                    "UAT-PERC-DIFF-9",
+                    None,
+                    9729.9,
+                    11892.1,
+                    10811,
+                    [9201, 866, 632, 112],
+                    "T",
+                ),
+                "Test 79 - If P <= 10 and > 0 but P is calculated with auxiliary",
+                # Sheet TCC_test_data_case_b9
+                # If P <= 10 and > 0 but P is calculated with auxiliary
+                # (I.e., should only be used if populated and predictive value
+                # is missing). TCC = T/C depending on Amend Total (see input data)
+            ),
+            (
+                "UAT-PERC-DIFF-10",
+                103,
+                [
+                    (98),
+                    (0),
+                    (4),
+                    (6),
+                ],
+                True,
+                103,
+                28,
+                None,
+                None,
+                0,
+                (
+                    "UAT-PERC-DIFF-10",
+                    None,
+                    108,
+                    108,
+                    103,
+                    [98, 0, 4, 6],
+                    "M",
+                ),
+                "Test 80 - If P > percentage difference threshold, where threshold = 0 we require manual editing",
+                # Sheet TCC_test_data_case_b10
+                # If P > percentage difference threshold, where threshold = 0. TCC Marker = M
+
             ),
         ],
     )

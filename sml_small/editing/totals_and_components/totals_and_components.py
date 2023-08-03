@@ -430,7 +430,7 @@ def determine_error_detection(
     :return Tcc_Marker: Returned Tcc_Marker (either stop or continue)
     :rtype Tcc_Marker: TccMarker
     """
-    if absolute_difference_threshold == percentage_difference_threshold == 0:
+    if absolute_difference_threshold == 0 or percentage_difference_threshold == 0:
         tcc_marker = TccMarker.MANUAL
     else:
         correct_error = False
@@ -687,24 +687,22 @@ def calculate_percent_thresholds(
     :rtype output_list: dict
     """
     getcontext().prec = precision
-    if percentage_threshold is None or percentage_threshold == 0:
+    if percentage_threshold is None:
         low_percent_threshold = None
         high_percent_threshold = None
     else:
         low_percent_threshold = (
             abs(
                 Decimal(str(sum_of_components))
-                - (Decimal(str(sum_of_components)) / Decimal(str(percentage_threshold)))
+                - (Decimal(str(sum_of_components)) * Decimal(str(percentage_threshold)))
             )
-            / 10
         )
         low_percent_threshold = float(low_percent_threshold)
         high_percent_threshold = (
             abs(
                 Decimal(str(sum_of_components))
-                + (Decimal(str(sum_of_components)) / Decimal(str(percentage_threshold)))
+                + (Decimal(str(sum_of_components)) * Decimal(str(percentage_threshold)))
             )
-            / 10
         )
         high_percent_threshold = float(high_percent_threshold)
     output_list["low_percent_threshold"] = low_percent_threshold
