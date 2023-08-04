@@ -16,7 +16,6 @@ log_file_path = path.join(path.dirname(path.abspath(__file__)), "../../logging.c
 logging.config.fileConfig(log_file_path)
 # create logger
 logger = logging.getLogger("totalsAndComponents")
-logger.setLevel(logging.INFO)
 
 
 class Index(Enum):
@@ -947,5 +946,5 @@ def totals_and_components(
     except Exception as error:
         if identifier is None:
             identifier = "N/A"
-        logger.error(f"Exception error detected: {error}")
+        logger.error(f'Exception full traceback: {error}',  exc_info=True)
         raise TACException(f"identifier: {identifier}", error)

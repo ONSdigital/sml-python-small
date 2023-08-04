@@ -12,8 +12,6 @@ log_file_path = path.join(path.dirname(path.abspath(__file__)), "../logging.conf
 logging.config.fileConfig(log_file_path)
 # create logger
 logger = logging.getLogger("commonUtils")
-logger.setLevel(logging.INFO)
-
 
 # This is a function to print a table.
 # An example input would look like the following:
