@@ -8,6 +8,8 @@ from enum import Enum
 from os import path
 from typing import List, Optional, Tuple
 
+from watchpoints import watch
+
 from sml_small.utils.common_utils import log_table, validate_number
 from sml_small.utils.error_utils import (get_mandatory_param_error, get_one_of_params_mandatory_error,
                                          get_param_outside_range_error)
@@ -828,6 +830,7 @@ def totals_and_components(
             "low_percent_threshold": None,
             "high_percent_threshold": None,
             "absolute_difference": None,
+            "tcc_marker": None,
         }
         components_list = initialize_components_list(components)
 
@@ -843,14 +846,18 @@ def totals_and_components(
             absolute_difference_threshold,
             percentage_difference_threshold,
         )
-
+        if logger.level <= 30:
+            watch(
+                output_list["tcc_marker"],
+                when=lambda x: x == TccMarker.STOP,
+                file=logger.handlers[0].baseFilename,
+            )
         #  Set the predictive as either the current value, total or auxiliary
         # depending on what values exist from the data input.
         (predictive, output_list["tcc_marker"]) = set_predictive_value(
             input_parameters[InputParameters.PREDICTIVE.value],
             input_parameters[InputParameters.AUXILIARY.value],
         )
-
         component_total = sum_components(
             input_parameters[InputParameters.COMPONENTS.value],
             input_parameters[InputParameters.PRECISION.value],
@@ -946,5 +953,5 @@ def totals_and_components(
     except Exception as error:
         if identifier is None:
             identifier = "N/A"
-        logger.error(f'Exception full traceback: {error}',  exc_info=True)
+        logger.error(f"Exception full traceback: {error}", exc_info=True)
         raise TACException(f"identifier: {identifier}", error)
