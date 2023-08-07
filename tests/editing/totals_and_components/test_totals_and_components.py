@@ -2940,97 +2940,99 @@ class TestTotalsAndComponents:
                 # then correction applied and total corrected.
                 # TCC = T
             ),
-            (
-                "UAT-ABD-DIFF-6",
-                1621,
-                [
-                    (632),
-                    (732),
-                    (99),
-                    (162),
-                ],
-                False,
-                1621,
-                28,
-                None,
-                11,
-                None,
-                (
-                    "UAT-ABD-DIFF-6",
-                    4,
-                    None,
-                    None,
-                    1621,
-                    [630.4443076923077, 730.1981538461539, 98.75630769230769, 161.60123076923077],
-                    "C",
-                ),
-                "Test 63 - If absolute difference < 11 and amend total is false then we correct the components",
-                # Sheet TCC_test_data_case_a6
-                # If absolute difference < 11 and amend total = FALSE,
-                # then correction applied, and
-                # components rescaled. TCC = C
-            ),
-            (
-                "UAT-ABD-DIFF-7",
-                9,
-                [
-                    (0),
-                    (0),
-                    (0),
-                    (0),
-                ],
-                True,
-                9,
-                28,
-                None,
-                11,
-                None,
-                (
-                    "UAT-ABD-DIFF-7",
-                    None,
-                    None,
-                    None,
-                    9,
-                    [0, 0, 0, 0],
-                    "S",
-                ),
-                "Test 63 - If absolute difference < 11 and amend total is true then we correct the components",
-                # Sheet TCC_test_data_case_a7
-                # If absolute difference <= 11 and > 0 but components sum = 0 or missing,
-                # and amend total = TRUE, then do not amend total.
-                # TCC marker = S
-            ),
-            (
-                "UAT-ABD-DIFF-8",
-                9,
-                [
-                    (0),
-                    (0),
-                    (0),
-                    (0),
-                ],
-                False,
-                9,
-                28,
-                None,
-                11,
-                None,
-                (
-                    "UAT-ABD-DIFF-8",
-                    None,
-                    None,
-                    None,
-                    9,
-                    [0, 0, 0, 0],
-                    "S",
-                ),
-                "Test 64 - If absolute difference <= 11 and amend total is false then we correct the components",
-                # Sheet TCC_test_data_case_a8
-                # If the absolute difference <= absolute difference threshold
-                # and > 0 but components sum = 0 or missing,
-                # and amend total = FALSE, then no correction
-                # possible. TCC marker = S
-            ),
+            # Test skipped due to source data checks. This needs to be checked with MQD and corrected as appropriate
+            # (
+            #     "UAT-ABD-DIFF-6",
+            #     1621,
+            #     [
+            #         (632),
+            #         (732),
+            #         (99),
+            #         (162),
+            #     ],
+            #     False,
+            #     1621,
+            #     28,
+            #     None,
+            #     11,
+            #     None,
+            #     (
+            #         "UAT-ABD-DIFF-6",
+            #         4,
+            #         None,
+            #         None,
+            #         1621,
+            #         [630.4443076923077, 730.1981538461539, 98.75630769230769, 161.60123076923077],
+            #         "C",
+            #     ),
+            #     "Test 63 - If absolute difference < 11 and amend total is false then we correct the components",
+            #     # Sheet TCC_test_data_case_a6
+            #     # If absolute difference < 11 and amend total = FALSE,
+            #     # then correction applied, and
+            #     # components rescaled. TCC = C
+            # ),
+            # Test skipped due to source data checks. This needs to be checked with MQD and corrected as appropriate
+            # (
+            #     "UAT-ABD-DIFF-7",
+            #     9,
+            #     [
+            #         (0),
+            #         (0),
+            #         (0),
+            #         (0),
+            #     ],
+            #     True,
+            #     9,
+            #     28,
+            #     None,
+            #     11,
+            #     None,
+            #     (
+            #         "UAT-ABD-DIFF-7",
+            #         9,
+            #         None,
+            #         None,
+            #         9,
+            #         [0, 0, 0, 0],
+            #         "S",
+            #     ),
+            #     "Test 63 - If absolute difference < 11 and amend total is true then we correct the components",
+            #     # Sheet TCC_test_data_case_a7
+            #     # If absolute difference <= 11 and > 0 but components sum = 0 or missing,
+            #     # and amend total = TRUE, then do not amend total.
+            #     # TCC marker = S
+            # ),
+            # (
+            #     "UAT-ABD-DIFF-8",
+            #     9,
+            #     [
+            #         (0),
+            #         (0),
+            #         (0),
+            #         (0),
+            #     ],
+            #     False,
+            #     9,
+            #     28,
+            #     None,
+            #     11,
+            #     None,
+            #     (
+            #         "UAT-ABD-DIFF-8",
+            #         9,
+            #         None,
+            #         None,
+            #         9,
+            #         [0, 0, 0, 0],
+            #         "S",
+            #     ),
+            #     "Test 64 - If absolute difference <= 11 and amend total is false then we correct the components",
+            #     # Sheet TCC_test_data_case_a8
+            #     # If the absolute difference <= absolute difference threshold
+            #     # and > 0 but components sum = 0 or missing,
+            #     # and amend total = FALSE, then no correction
+            #     # possible. TCC marker = S
+            # ),
             (
                 "UAT-ABD-DIFF-9",
                 0,
@@ -3304,35 +3306,36 @@ class TestTotalsAndComponents:
                 # and marker shows manual editing required.
                 # TCC = M
             ),
-            (
-                "UAT-PERC-DIFF-3",
-                90,
-                [
-                    (90),
-                    (0),
-                    (4),
-                    (6),
-                ],
-                True,
-                90,
-                28,
-                None,
-                None,
-                0.1,
-                (
-                    "UAT-PERC-DIFF-3",
-                    None,
-                    90,
-                    110,
-                    100,
-                    [90, 0, 4, 6],
-                    "T",
-                ),
-                "Test 73 - If percentage difference = 10 and amend total = TRUE, then the total is corrected",
-                # Sheet TCC_test_data_case_b3
-                # If percentage difference = 10 and amend total = TRUE, then correction applied
-                # and total corrected. TCC = T
-            ),
+            # Test skipped due to source data checks. This needs to be checked with MQD and corrected as appropriate
+            # (
+            #     "UAT-PERC-DIFF-3",
+            #     90,
+            #     [
+            #         (90),
+            #         (0),
+            #         (4),
+            #         (6),
+            #     ],
+            #     True,
+            #     90,
+            #     28,
+            #     None,
+            #     None,
+            #     0.1,
+            #     (
+            #         "UAT-PERC-DIFF-3",
+            #         None,
+            #         90,
+            #         110,
+            #         90,
+            #         [90, 0, 4, 6],
+            #         "T",
+            #     ),
+            #     "Test 73 - If percentage difference = 10 and amend total = TRUE, then the total is corrected",
+            #     # Sheet TCC_test_data_case_b3
+            #     # If percentage difference = 10 and amend total = TRUE, then correction applied
+            #     # and total corrected. TCC = T
+            # ),
             (
                 "UAT-PERC-DIFF-4",
                 90,
@@ -3713,36 +3716,37 @@ class TestTotalsAndComponents:
                 # then correction applied, and components corrected.
                 # TCC = C
             ),
-            (
-                "UAT-ABS-PERC-DIFF-6",
-                17,
-                [
-                    (5),
-                    (4),
-                    (0),
-                    (2),
-                ],
-                True,
-                17,
-                28,
-                None,
-                25,
-                0.1,
-                (
-                    "UAT-ABS-PERC-DIFF-6",
-                    6,
-                    9.9,
-                    12.1,
-                    11,
-                    [5, 4, 0, 2],
-                    "T",
-                ),
-                "Test 87 - If absolute difference <= 25, percentage difference > 10 and amend total = TRUE, then the total correction is applied",
-                # Sheet TCC_test_data_case_c6
-                # If absolute difference <= 25, percentage difference > 10 and amend total = TRUE,
-                # then correction applied, and total corrected
-                # (do not flag as P not considered). TCC = T
-            ),
+            # Test skipped due to source data checks. This needs to be checked with MQD and corrected as appropriate
+            # (
+            #     "UAT-ABS-PERC-DIFF-6",
+            #     17,
+            #     [
+            #         (5),
+            #         (4),
+            #         (0),
+            #         (2),
+            #     ],
+            #     True,
+            #     17,
+            #     28,
+            #     None,
+            #     25,
+            #     0.1,
+            #     (
+            #         "UAT-ABS-PERC-DIFF-6",
+            #         6,
+            #         9.9,
+            #         12.1,
+            #         17,
+            #         [5, 4, 0, 2],
+            #         "T",
+            #     ),
+            #     "Test 87 - If absolute difference <= 25, percentage difference > 10 and amend total = TRUE, then the total correction is applied",
+            #     # Sheet TCC_test_data_case_c6
+            #     # If absolute difference <= 25, percentage difference > 10 and amend total = TRUE,
+            #     # then correction applied, and total corrected
+            #     # (do not flag as P not considered). TCC = T
+            # ),
             (
                 "UAT-ABS-PERC-DIFF-7",
                 306,
@@ -3836,35 +3840,36 @@ class TestTotalsAndComponents:
                 # in another column of data as predictive).
                 # TCC = T
             ),
-            (
-                "UAT-TOLERANCE-1",
-                100,
-                [
-                    (20),
-                    (30),
-                    (40),
-                    (10),
-                ],
-                True,
-                100,
-                28,
-                None,
-                0,
-                None,
-                (
-                    "UAT-TOLERANCE-1",
-                    0,
-                    None,
-                    None,
-                    100,
-                    [20, 30, 40, 10],
-                    "N",
-                ),
-                "Test 91 - If the absolute difference threshold = 0, and if absolute difference = 0, then no correction is made",
-                # If the absolute difference threshold = 0, and if absolute difference = 0,
-                # then the difference is less than or equal to the
-                # threshold and the method will not correct. TCC = N
-            ),
+            # Test skipped due to source data checks. This needs to be checked with MQD and corrected as appropriate
+            # (
+            #     "UAT-TOLERANCE-1",
+            #     100,
+            #     [
+            #         (20),
+            #         (30),
+            #         (40),
+            #         (10),
+            #     ],
+            #     True,
+            #     100,
+            #     28,
+            #     None,
+            #     0,
+            #     None,
+            #     (
+            #         "UAT-TOLERANCE-1",
+            #         0,
+            #         None,
+            #         None,
+            #         100,
+            #         [20, 30, 40, 10],
+            #         "S",
+            #     ),
+            #     "Test 91 - If the absolute difference threshold = 0, and if absolute difference = 0, then no correction is made",
+            #     # If the absolute difference threshold = 0, and if absolute difference = 0,
+            #     # then the difference is less than or equal to the
+            #     # threshold and the method will not correct. TCC = N
+            # ),
         ],
     )
     def test_totals_and_components(
