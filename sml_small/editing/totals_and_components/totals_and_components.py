@@ -691,18 +691,14 @@ def calculate_percent_thresholds(
         low_percent_threshold = None
         high_percent_threshold = None
     else:
-        low_percent_threshold = (
-            abs(
-                Decimal(str(sum_of_components))
-                - (Decimal(str(sum_of_components)) * Decimal(str(percentage_threshold)))
-            )
+        low_percent_threshold = abs(
+            Decimal(str(sum_of_components))
+            - (Decimal(str(sum_of_components)) * Decimal(str(percentage_threshold)))
         )
         low_percent_threshold = float(low_percent_threshold)
-        high_percent_threshold = (
-            abs(
-                Decimal(str(sum_of_components))
-                + (Decimal(str(sum_of_components)) * Decimal(str(percentage_threshold)))
-            )
+        high_percent_threshold = abs(
+            Decimal(str(sum_of_components))
+            + (Decimal(str(sum_of_components)) * Decimal(str(percentage_threshold)))
         )
         high_percent_threshold = float(high_percent_threshold)
     output_list["low_percent_threshold"] = low_percent_threshold
