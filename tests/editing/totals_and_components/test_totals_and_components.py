@@ -2880,6 +2880,7 @@ class TestTotalsAndComponents:
                 # total = TRUE, then correction is applied
                 # and total corrected. TCC = T
             ),
+            # fixture need to be cleared with MQD
             # (
             #     "UAT-ABD-DIFF-4",
             #     119,
@@ -2940,6 +2941,7 @@ class TestTotalsAndComponents:
                 # then correction applied and total corrected.
                 # TCC = T
             ),
+            # fixture need to be cleared with MQD
             # (
             #     "UAT-ABD-DIFF-6",
             #     1621,
@@ -3127,6 +3129,7 @@ class TestTotalsAndComponents:
                 # (should only be used if populated and predictive value is missing).
                 # TCC = T/C depending on Amend Total
             ),
+            # fixture need to be cleared with MQD
             # (
             #     "UAT-ABD-DIFF-11-B",
             #     103,
@@ -3218,6 +3221,7 @@ class TestTotalsAndComponents:
                 # (I.e., user fed in another column of data as predictive).
                 # TCC = T/C depending on Amend Total
             ),
+            # fixture need to be cleared with MQD
             # (
             #     "UAT-ABD-DIFF-14",
             #     10705,
@@ -3395,6 +3399,7 @@ class TestTotalsAndComponents:
                 # If percentage difference < 10 and amend total = TRUE, then correction applied
                 # and total corrected. TCC = T
             ),
+            # fixture need to be cleared with MQD
             # (
             #     "UAT-PERC-DIFF-6",
             #     1621,
@@ -3696,6 +3701,7 @@ class TestTotalsAndComponents:
                 # percentage difference < 10 and amend total = TRUE,
                 # then correction applied, and total corrected. TCC = T
             ),
+            # fixture need to be cleared with MQD
             # (
             #     "UAT-ABS-PERC-DIFF-5",
             #     1689,
