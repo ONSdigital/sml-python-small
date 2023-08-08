@@ -3429,7 +3429,7 @@ class TestTotalsAndComponents:
             #         ],
             #         "C",
             #     ),
-            #     "Test 76 - If percentage difference < 10 and amend total = FALSE, then component correction is applied",
+            #     "Test 76 - If percentage difference < 10 and amend total = FALSE, then component correction is applied",  # noqa: E501
             #     # Sheet TCC_test_data_case_b6
             #     # If percentage difference < 10 and amend total = FALSE, then correction applied,
             #     # and components rescaled. TCC = C
