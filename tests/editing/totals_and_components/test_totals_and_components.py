@@ -2846,9 +2846,9 @@ class TestTotalsAndComponents:
                 ),
                 "Test 59 - If absolute difference > 11 then manual editing is required",
                 # Sheet TCC_test_data_case_a2
-                # If absolute difference > 11, then no correction
-                # is applied, and marker shows manual editing
-                # required. TCC = M
+                # If absolute difference > absolute difference threshold,
+                # then no correction is applied, and marker
+                # shows manual editing required. TCC = M
             ),
             (
                 "UAT-ABD-DIFF-3",
@@ -2876,8 +2876,8 @@ class TestTotalsAndComponents:
                 ),
                 "Test 60 - If absolute difference = 11 and amend total is true then we correct the total",
                 # Sheet TCC_test_data_case_a3
-                # If absolute difference = 11 and amend
-                # total = TRUE, then correction applied
+                # If absolute difference = absolute difference threshold and amend
+                # total = TRUE, then correction is applied
                 # and total corrected. TCC = T
             ),
             (
@@ -2906,8 +2906,8 @@ class TestTotalsAndComponents:
                 ),
                 "Test 61 - If absolute difference = 11 and amend total is false then we correct the components",
                 # Sheet TCC_test_data_case_a4
-                # If absolute difference = 11 and amend total = FALSE,
-                # then correction applied, and components
+                # If absolute difference = absolute difference threshold and amend total = FALSE,
+                # then correction is applied, and components
                 # rescaled. TCC = C
             ),
             (
@@ -2936,7 +2936,7 @@ class TestTotalsAndComponents:
                 ),
                 "Test 62 - If absolute difference < 11 and amend total is true then we correct the components",
                 # Sheet TCC_test_data_case_a5
-                # If absolute difference < 11 and amend total = TRUE,
+                # If absolute difference < absolute difference threshold and amend total = TRUE,
                 # then correction applied and total corrected.
                 # TCC = T
             ),
@@ -2967,7 +2967,7 @@ class TestTotalsAndComponents:
             #     ),
             #     "Test 63 - If absolute difference < 11 and amend total is false then we correct the components",
             #     # Sheet TCC_test_data_case_a6
-            #     # If absolute difference < 11 and amend total = FALSE,
+            #     # If absolute difference < absolute difference threshold and amend total = FALSE,
             #     # then correction applied, and
             #     # components rescaled. TCC = C
             # ),
@@ -2998,7 +2998,7 @@ class TestTotalsAndComponents:
             #     ),
             #     "Test 63 - If absolute difference < 11 and amend total is true then we correct the components",
             #     # Sheet TCC_test_data_case_a7
-            #     # If absolute difference <= 11 and > 0 but components sum = 0 or missing,
+            #     # If absolute difference <= absolute difference threshold and > 0 but components sum = 0 or missing,
             #     # and amend total = TRUE, then do not amend total.
             #     # TCC marker = S
             # ),
@@ -3084,7 +3084,7 @@ class TestTotalsAndComponents:
                     None,
                     None,
                     0,
-                    [0.0, 0.0, 0.0, 0.0],
+                    [0, 0, 0, 0],
                     "C",
                 ),
                 "Test 66 - If the total is 0, sum of components is > 0, amend total is false then we correct the component",  # noqa: E501
@@ -3119,7 +3119,7 @@ class TestTotalsAndComponents:
                 ),
                 "Test 67 - If absolute difference <= 11 and the auxiliary is used as the predictive then we correct the total",  # noqa: E501
                 # Sheet TCC_test_data_case_a11
-                # If the absolute difference <= 11 and > 0
+                # If the absolute difference <= absolute difference threshold and > 0
                 # but absolute difference is calculated with auxiliary
                 # (should only be used if populated and predictive value is missing).
                 # TCC = T/C depending on Amend Total
@@ -3149,8 +3149,7 @@ class TestTotalsAndComponents:
                     "C",
                 ),
                 "Test 68 - If absolute difference <= 11 and the auxiliary is used as the predictive then we correct the components",  # noqa: E501
-                # Sheet TCC_test_data_case_a11
-                # If the absolute difference <= 11 and > 0
+                # If the absolute difference <= absolute difference threshold and > 0
                 # but absolute difference is calculated with auxiliary
                 # (should only be used if populated and predictive value is missing).
                 # TCC = T/C depending on Amend Total
@@ -3164,7 +3163,7 @@ class TestTotalsAndComponents:
                     (632),
                     (112),
                 ],
-                False,
+                True,
                 10817,
                 28,
                 None,
@@ -3179,7 +3178,7 @@ class TestTotalsAndComponents:
                     [9201, 866, 632, 112],
                     "M",
                 ),
-                "Test 69 - If absolute difference <= absolute difference threshold but the predictive total is different to current total then we get a total correction",  # noqa: E501
+                "Test 69 - If absolute difference > absolute difference threshold but the predictive total is different to current total then we get a total correction",  # noqa: E501
                 # Sheet TCC_test_data_case_a12
                 # If absolute difference > absolute difference threshold,
                 # where threshold = 0.
@@ -3211,7 +3210,7 @@ class TestTotalsAndComponents:
                 ),
                 "Test 70 - If absolute difference <= 11 and > 0 but the predictive total is different to the current period total then we do a total correction",  # noqa: E501
                 # Sheet TCC_test_data_case_a13
-                # If absolute difference <= 11 and > 0 but the predictive total
+                # If absolute difference <= absolute difference threshold and > 0 but the predictive total
                 # is different to the current period total
                 # (I.e., user fed in another column of data as predictive).
                 # TCC = T/C depending on Amend Total
@@ -3241,41 +3240,42 @@ class TestTotalsAndComponents:
                 ),
                 "Test 70 - If absolute difference < absolute difference threshold amend total is false then we correct the components",  # noqa: E501
                 # Sheet TCC_test_data_case_a12
-                # If absolute difference < 11,
+                # If absolute difference < absolute difference threshold,
                 # amend total = FALSE, some
                 # components are missing. TCC = C
             ),
-            (
-                "UAT-PERC-DIFF-1",
-                1625,
-                [
-                    (632),
-                    (732),
-                    (99),
-                    (162),
-                ],
-                True,
-                1625,
-                28,
-                None,
-                None,
-                0.1,
-                (
-                    "UAT-PERC-DIFF-1",
-                    None,
-                    1462.5,
-                    1787.5,
-                    1625,
-                    [632, 732, 99, 162],
-                    "N",
-                ),
-                "Test 71 - Absolute difference = 0, then no correction is applied.",
-                # Sheet TCC_test_data_case_b1
-                # If initial absolute difference between
-                # the total and components sum = 0,
-                # then no correction is applied.
-                # TCC = N
-            ),
+            # Check with Ellie as excel data says AD = none but document says 0
+            # (
+            #     "UAT-PERC-DIFF-1",
+            #     1625,
+            #     [
+            #         (632),
+            #         (732),
+            #         (99),
+            #         (162),
+            #     ],
+            #     True,
+            #     1625,
+            #     28,
+            #     None,
+            #     None,
+            #     0.1,
+            #     (
+            #         "UAT-PERC-DIFF-1",
+            #         0,
+            #         1462.5,
+            #         1787.5,
+            #         1625,
+            #         [632, 732, 99, 162],
+            #         "N",
+            #     ),
+            #     "Test 71 - Absolute difference = 0, then no correction is applied.",
+            #     # Sheet TCC_test_data_case_b1
+            #     # If initial absolute difference between
+            #     # the total and components sum = 0,
+            #     # then no correction is applied.
+            #     # TCC = N
+            # ),
             (
                 "UAT-PERC-DIFF-2",
                 12492,
@@ -3601,7 +3601,8 @@ class TestTotalsAndComponents:
                 ),
                 "Test 82 - If absolute difference > 25 and percentage difference > 10, then manual editing is required",
                 # Sheet TCC_test_data_case_c1
-                # If absolute difference > 25 and percentage difference > 10, then no correction is applied,
+                # If absolute difference > absolute difference threshold
+                # and percentage difference > 10, then no correction is applied,
                 # the marker shows manual editing required. TCC = M
             ),
             (
@@ -3630,7 +3631,8 @@ class TestTotalsAndComponents:
                 ),
                 "Test 83 - If absolute difference > 25, percentage difference = 10 and amend total = TRUE, then the total correction is applied",  # noqa: E501
                 # Sheet TCC_test_data_case_c2
-                # If absolute difference > 25, percentage difference = 10 and amend total = TRUE,
+                # If absolute difference > absolute difference threshold,
+                # percentage difference = 10 and amend total = TRUE,
                 # then correction applied, and total corrected. TCC = T
             ),
             (
@@ -3659,7 +3661,8 @@ class TestTotalsAndComponents:
                 ),
                 "Test 84 - If absolute difference > 25, percentage difference = 10 and amend total = FALSE, then component correction is applied",  # noqa: E501
                 # Sheet TCC_test_data_case_c3
-                # If absolute difference > 25, percentage difference = 10 and amend total = FALSE,
+                # If absolute difference > absolute difference threshold,
+                # percentage difference = 10 and amend total = FALSE,
                 # then correction applied, and components corrected. TCC = C
             ),
             (
@@ -3688,7 +3691,8 @@ class TestTotalsAndComponents:
                 ),
                 "Test 85 - If absolute difference > 25, percentage difference < 10 and amend total = TRUE, then the total correction is applied",  # noqa: E501
                 # Sheet TCC_test_data_case_c4
-                # If absolute difference > 25, percentage difference < 10 and amend total = TRUE,
+                # If absolute difference > absolute difference threshold,
+                # percentage difference < 10 and amend total = TRUE,
                 # then correction applied, and total corrected. TCC = T
             ),
             (
@@ -3722,7 +3726,8 @@ class TestTotalsAndComponents:
                 ),
                 "Test 86 - If absolute difference > 25, percentage difference < 10 and amend total = FALSE, then the component correction is applied",  # noqa: E501
                 # Sheet TCC_test_data_case_c5
-                # If absolute difference > 25, percentage difference < 10 and amend total = FALSE,
+                # If absolute difference > absolute difference threshold,
+                # percentage difference < 10 and amend total = FALSE,
                 # then correction applied, and components corrected.
                 # TCC = C
             ),
@@ -3783,7 +3788,8 @@ class TestTotalsAndComponents:
                 ),
                 "Test 88 - If absolute difference > absolute difference threshold and percentage difference > percentage difference threshold, where both thresholds = 0. We would require manual editing",  # noqa: E501
                 # Sheet TCC_test_data_case_c7
-                # If absolute difference > absolute difference threshold and percentage difference > percentage
+                # If absolute difference > absolute difference threshold
+                # and percentage difference > percentage
                 # difference threshold, where both thresholds = 0.
                 # TCC Marker = M
             ),
@@ -3813,8 +3819,10 @@ class TestTotalsAndComponents:
                 ),
                 "Test 89 - If absolute difference > 25, percentage difference < 10 and amend total = TRUE and absolute difference and percentage difference are calculated with auxiliary then we correct the total",  # noqa: E501
                 # Sheet TCC_test_data_case_c8
-                # If absolute difference > 25, percentage difference < 10 and amend total = TRUE
-                # and absolute difference and percentage difference are calculated with auxiliary
+                # If absolute difference > absolute difference threshold,
+                # percentage difference < 10 and amend total = TRUE
+                # and absolute difference and percentage difference
+                # are calculated with auxiliary
                 # (I.e., should only be used if populated and
                 # predictive value is missing). TCC = T
             ),
@@ -3844,7 +3852,8 @@ class TestTotalsAndComponents:
                 ),
                 "Test 90 - If absolute difference > 25, percentage difference < 10 and amend total = TRUE but the predictive total is different to the current period total then we correct the total"  # noqa: E501
                 # Sheet TCC_test_data_case_c9
-                # If absolute difference > 25, percentage difference < 10 and amend total = TRUE
+                # If absolute difference > absolute difference threshold,
+                # percentage difference < 10 and amend total = TRUE
                 # but the predictive total is different to
                 # the current period total (I.e., user fed
                 # in another column of data as predictive).
