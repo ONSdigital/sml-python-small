@@ -3,12 +3,11 @@ For Copyright information, please see LICENCE.
 """
 
 import logging.config
+import sys
 from decimal import Decimal, getcontext
 from enum import Enum
 from os import path
 from typing import List, Optional, Tuple
-
-from watchpoints import watch
 
 from sml_small.utils.common_utils import log_table, validate_number
 from sml_small.utils.error_utils import (get_mandatory_param_error, get_one_of_params_mandatory_error,
@@ -351,6 +350,9 @@ def set_predictive_value(
             tcc_marker = TccMarker.METHOD_PROCEED
         else:
             tcc_marker = TccMarker.STOP
+            logger.warning(
+                f"TCCMarker = STOP at line:{sys._getframe().f_back.f_lineno}"
+            )
     else:
         tcc_marker = TccMarker.METHOD_PROCEED
     return predictive, tcc_marker
@@ -371,6 +373,7 @@ def check_zero_errors(predictive: float, components_sum: float) -> TccMarker:
     """
     if predictive > 0 and components_sum == 0:
         tcc_marker = TccMarker.STOP
+        logger.warning(f"TCCMarker = STOP at line:{sys._getframe().f_back.f_lineno}")
     else:
         tcc_marker = TccMarker.METHOD_PROCEED
     return tcc_marker
@@ -830,7 +833,6 @@ def totals_and_components(
             "low_percent_threshold": None,
             "high_percent_threshold": None,
             "absolute_difference": None,
-            "tcc_marker": None,
         }
         components_list = initialize_components_list(components)
 
@@ -846,12 +848,6 @@ def totals_and_components(
             absolute_difference_threshold,
             percentage_difference_threshold,
         )
-        if logger.level <= 30:
-            watch(
-                output_list["tcc_marker"],
-                when=lambda x: x == TccMarker.STOP,
-                file=logger.handlers[0].baseFilename,
-            )
         #  Set the predictive as either the current value, total or auxiliary
         # depending on what values exist from the data input.
         (predictive, output_list["tcc_marker"]) = set_predictive_value(
