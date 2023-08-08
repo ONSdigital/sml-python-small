@@ -430,7 +430,7 @@ def determine_error_detection(
     :return Tcc_Marker: Returned Tcc_Marker (either stop or continue)
     :rtype Tcc_Marker: TccMarker
     """
-    if absolute_difference_threshold == 0 or percentage_difference_threshold == 0:
+    if absolute_difference_threshold == 0 and percentage_difference_threshold == 0:
         tcc_marker = TccMarker.MANUAL
     else:
         correct_error = False
