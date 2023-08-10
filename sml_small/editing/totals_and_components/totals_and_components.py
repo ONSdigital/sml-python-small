@@ -13,8 +13,8 @@ from sml_small.utils.common_utils import log_table, validate_number
 from sml_small.utils.error_utils import (get_mandatory_param_error, get_one_of_params_mandatory_error,
                                          get_param_outside_range_error)
 
-log_file_path = path.join(path.dirname(path.abspath(__file__)), "../../logging.conf")
-logging.config.fileConfig(log_file_path)
+log_config_path = path.join(path.dirname(path.abspath(__file__)), "../../logging.conf")
+logging.config.fileConfig(log_config_path)
 # create logger
 logger = logging.getLogger("totalsAndComponents")
 
@@ -949,5 +949,5 @@ def totals_and_components(
     except Exception as error:
         if identifier is None:
             identifier = "N/A"
-        logger.error(f"Exception full traceback: {error}", exc_info=True)
+        logger.error(f"identifier: {identifier}, Exception full traceback: {error}", exc_info=True)
         raise TACException(f"identifier: {identifier}", error)
