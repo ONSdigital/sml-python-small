@@ -3,9 +3,15 @@ Common functionality that can be used by any SML method
 
 For Copyright information, please see LICENCE.
 """
+import logging.config
+from os import path
 
 from sml_small.utils.error_utils import get_params_is_not_a_number_error
 
+log_config_path = path.join(path.dirname(path.abspath(__file__)), "../logging.conf")
+logging.config.fileConfig(log_config_path)
+# create logger
+logger = logging.getLogger("commonUtils")
 
 # This is a function to print a table.
 # An example input would look like the following:
@@ -16,7 +22,7 @@ from sml_small.utils.error_utils import get_params_is_not_a_number_error
 #         ...
 #         variable_name_n=variable_value_n,
 #     )
-def print_table(table_name: str, **kwargs):
+def log_table(table_name: str, **kwargs):
     """
     Prints the parsed attributes.
 
@@ -32,16 +38,12 @@ def print_table(table_name: str, **kwargs):
     table_padding = 32
 
     # Print table of variable names and values
-    print("\n")
-
-    print(table_name)
-
-    print("Variable Name                   |   Value")
-
-    print("--------------------------------|---------")
-
+    logger.info("\n")
+    logger.info(table_name)
+    logger.info("Variable Name                   |   Value")
+    logger.info("--------------------------------|---------")
     for var_name, var_value in kwargs.items():
-        print(f"{var_name:<{table_padding}}|   {var_value}")
+        logger.info(f"{var_name:<{table_padding}}|   {var_value}")
 
 
 # This is a function to validate an input is a number.
