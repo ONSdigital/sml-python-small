@@ -163,6 +163,7 @@ class TACException(Exception):
     pass
 
 
+# ---- Method Definitions ----
 def totals_and_components(
     identifier: str,
     total: float,
@@ -225,7 +226,9 @@ def totals_and_components(
                       DefaultPrecision.upper_precision_threshold.
                       decimal places.
     :type precision: Optional[int]
+    ...
     :raisesTACException: If invalid values are passed to the function.
+    ...
     :return: TotalsAndComponentsOutput: An object containing the
                                        following attributes:
              - identifier (str): Unique identifier.
