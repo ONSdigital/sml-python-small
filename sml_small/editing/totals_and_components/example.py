@@ -1,6 +1,11 @@
-# In this python file, we are calling the T&C method and passing in the
-# test data to be processed by the T&C method and return the result to
-# be displayed in a formatted table on the command line
+"""
+Example code that shows the Totals and Components method being used with
+sample test data that may be passed to the method as parameters or accessed
+via CSV (file or in memory) and fed to the method.  Results are displayed
+in a tabulated format at the command line.
+
+For Copyright information, please see LICENCE.
+"""
 
 import csv
 

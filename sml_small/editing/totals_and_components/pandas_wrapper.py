@@ -1,4 +1,6 @@
 """
+Defines a wrapper to allow the Totals and Components method to be run with Pandas.
+
 For Copyright information, please see LICENCE.
 """
 
