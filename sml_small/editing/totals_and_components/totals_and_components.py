@@ -427,7 +427,7 @@ def validate_input(
     Union[float, None],
     Union[float, None],
     Union[float, None],
-    Union[int, None]
+    int
 ]:
     """
     This function is used to validate the data passed to the totals_and_components
@@ -532,7 +532,7 @@ def validate_input(
 
     # Default the precision value when not set
     if precision is None:
-        precision = PRECISION_MAX
+        precision = int(PRECISION_MAX)
     else:
         if validate_number("precision", precision) is True:
             precision = int(precision)
@@ -548,7 +548,7 @@ def validate_input(
                     )
                 )
         else:
-            precision = PRECISION_MAX
+            precision = int(PRECISION_MAX)
 
     return (
         total,
