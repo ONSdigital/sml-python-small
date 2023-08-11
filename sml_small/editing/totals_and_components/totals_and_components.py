@@ -427,7 +427,7 @@ def validate_input(
     float,
     float,
     float,
-    int,
+    int
 ]:
     """
     This function is used to validate the data passed to the totals_and_components
