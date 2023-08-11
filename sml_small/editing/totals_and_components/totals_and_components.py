@@ -393,8 +393,8 @@ def totals_and_components(
 
 
 def initialize_components_list(
-    component_list: list[float],
-) -> List[List[ComponentPair]]:
+    component_list: List[float],
+) -> List[ComponentPair]:
     """
     Takes the list of components values and constructs Component_List objects from them
 
