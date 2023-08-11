@@ -10,7 +10,7 @@ import sys
 from decimal import Decimal, getcontext
 from enum import Enum
 from os import path
-from typing import List, Optional, Tuple
+from typing import List, Optional, Tuple, Union
 
 from sml_small.utils.common_utils import log_table, validate_number
 from sml_small.utils.error_utils import (get_mandatory_param_error, get_one_of_params_mandatory_error,
@@ -423,11 +423,11 @@ def validate_input(
 ) -> tuple[
     float,
     List[ComponentPair],
-    float,
-    float,
-    float,
-    float,
-    int
+    Union[float, None],
+    Union[float, None],
+    Union[float, None],
+    Union[float, None],
+    Union[int, None]
 ]:
     """
     This function is used to validate the data passed to the totals_and_components
