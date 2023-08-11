@@ -1,32 +1,20 @@
 import random
+from decimal import Decimal, getcontext
+
 import pytest
 
-from decimal import Decimal
-
-from sml_small.editing.totals_and_components.totals_and_components import (
-    ComponentPair,
-    DefaultPrecision,
-    TACException,
-    TccMarker,
-    check_absolute_difference_threshold,
-    check_percentage_difference_threshold,
-    check_sum_components_predictive,
-    check_zero_errors,
-    correct_components,
-    correct_total,
-    determine_error_detection,
-    error_correction,
-    set_predictive_value,
-    sum_components,
-    totals_and_components,
-    validate_input,
-)
-from sml_small.utils.error_utils import (
-    get_mandatory_param_error,
-    get_one_of_params_mandatory_error,
-    get_param_outside_range_error,
-    get_params_is_not_a_number_error,
-)
+from sml_small.editing.totals_and_components.totals_and_components import (PRECISION_MAX, PRECISION_MIN, ComponentPair,
+                                                                           TACException, TccMarker,
+                                                                           check_absolute_difference_threshold,
+                                                                           check_percentage_difference_threshold,
+                                                                           check_sum_components_predictive,
+                                                                           check_zero_errors, correct_components,
+                                                                           correct_total, determine_error_detection,
+                                                                           error_correction, set_predictive_value,
+                                                                           sum_components, totals_and_components,
+                                                                           validate_input)
+from sml_small.utils.error_utils import (get_mandatory_param_error, get_one_of_params_mandatory_error,
+                                         get_param_outside_range_error, get_params_is_not_a_number_error)
 
 # ---- Constant Definitions ----
 EXCEPTION_FAIL_MESSAGE = "{test_id} : Expected no exception, but got {exception_type}: {exception_msg}"
@@ -1089,8 +1077,8 @@ class TestTotalsAndComponents:
                         get_param_outside_range_error(
                             "precision",
                             [
-                                str(DefaultPrecision.lower_precision_threshold),
-                                str(DefaultPrecision.upper_precision_threshold),
+                                str(PRECISION_MIN),
+                                str(PRECISION_MAX),
                             ],
                         )
                     ),
@@ -1120,8 +1108,8 @@ class TestTotalsAndComponents:
                         get_param_outside_range_error(
                             "precision",
                             [
-                                str(DefaultPrecision.lower_precision_threshold),
-                                str(DefaultPrecision.upper_precision_threshold),
+                                str(PRECISION_MIN),
+                                str(PRECISION_MAX),
                             ],
                         )
                     ),
@@ -3503,6 +3491,8 @@ class TestCheckZeroErrors:
     def test_check_zero_errors(
         self, test_components, predictive, precision, expected_result, test_id
     ):
+        getcontext().prec = precision
+
         if "RandomComponents" in test_id:
             for _ in range(12):
                 random_float = random.uniform(0, 12)
@@ -3510,7 +3500,7 @@ class TestCheckZeroErrors:
                 test_components.append(component)
 
         try:
-            components_sum = sum_components(test_components, precision)
+            components_sum = sum_components(test_components)
             marker = check_zero_errors(
                 predictive=predictive, components_sum=components_sum
             )
@@ -3587,12 +3577,14 @@ class TestCheckSumComponentsPredictive:
         expected_result,
         test_id,
     ):
+        getcontext().prec = precision
+
         try:
-            components_sum = sum_components(test_components, precision)
-            absolute_difference = check_sum_components_predictive(
-                predictive, components_sum, precision
-            )
+            components_sum = sum_components(test_components)
+            absolute_difference = check_sum_components_predictive(predictive, components_sum)
+
             assert absolute_difference == expected_result
+
         except Exception as e:
             pytest.fail(
                 EXCEPTION_FAIL_MESSAGE.format(
@@ -3869,9 +3861,12 @@ class TestErrorCorrection:
         expected_result,
         test_id,
     ):
+        # set the entered precision for Decimal calculations
+        getcontext().prec = precision
+
         try:
             result = error_correction(
-                amend_total, components_sum, original_components, predictive, precision
+                amend_total, components_sum, original_components, predictive
             )
             assert result == expected_result, f"{test_id} - Unexpected result"
 
@@ -3974,12 +3969,14 @@ class TestCorrectComponents:
         expected_component,
         test_id,
     ):
+        # set the precision for Decimal calculations
+        getcontext().prec = precision
+
         try:
             result = correct_components(
                 components_sum=components_sum,
                 components=components,
-                total=total,
-                precision=precision,
+                total=total
             )
 
             assert (

@@ -4,7 +4,6 @@ Example code that uses the pandas wrapper with the Totals and Components method.
 For Copyright information, please see LICENCE.
 """
 import pandas as pd
-
 # We import the wrapper function from the pandas_wrapper
 from pandas_wrapper import wrapper
 

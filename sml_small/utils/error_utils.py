@@ -4,9 +4,6 @@ Common functionality related to error handling that can be used by any SML metho
 For Copyright information, please see LICENCE.
 """
 
-# Error messages that can be incorporated across the board.
-
-
 from typing import List
 
 
@@ -18,6 +15,7 @@ def get_mandatory_param_error(param_name: str) -> str:
 
     :param param_name: Input parameter name
     :type param_name: str
+    ...
     :return: Error message telling the user the parameter must be specified
     :rtype: str
     """
@@ -32,6 +30,7 @@ def get_params_is_not_a_number_error(param_name: str) -> str:
 
     :param param_name: Input parameter name
     :type param_name: str
+    ...
     :return: Error message telling the user the parameter is not a number
     :rtype: str
     """
@@ -46,6 +45,7 @@ def get_one_of_params_mandatory_error(param_list: List[str]) -> str:
 
     :param param_list: List of parameters to be returned as part of the error message.
     :type param_list: List[str]
+    ...
     :return: Error string which contains the parameters and highlights the parameter
              that must be specified
     :rtype: str
@@ -67,6 +67,7 @@ def get_param_outside_range_error(tag: str, param_list: List[str]) -> str:
     :type tag: str
     :param param_list: List containing the lower and upper bounds
     :type param_list: List[str]
+    ...
     :return: Error highlighting that the parameter has broken
              the boundary rules
     :rtype: str

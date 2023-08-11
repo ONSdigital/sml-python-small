@@ -10,25 +10,17 @@ from sml_small.utils.error_utils import get_params_is_not_a_number_error
 
 log_config_path = path.join(path.dirname(path.abspath(__file__)), "../logging.conf")
 logging.config.fileConfig(log_config_path)
-# create logger
+
+# Create logger
 logger = logging.getLogger("commonUtils")
 
-# This is a function to print a table.
-# An example input would look like the following:
-# print_table(
-#         "Name of your table",
-#         variable_name_1=variable_value_1,
-#         variable_name_2=variable_value_2,
-#         ...
-#         variable_name_n=variable_value_n,
-#     )
+
 def log_table(table_name: str, **kwargs):
     """
-    Prints the parsed attributes.
+    Prints the passed attributes as a table to logging.
 
     :param kwargs:
     :type kwargs: kwargs
-    :return: N/A (this is a console output)
     """
 
     # This constant is used to space out the columns
@@ -46,13 +38,9 @@ def log_table(table_name: str, **kwargs):
         logger.info(f"{var_name:<{table_padding}}|   {var_value}")
 
 
-# This is a function to validate an input is a number.
-# Example of usage is as follows:
-# if validate_number("variable_name", variable_value) is True:
 def validate_number(tag: str, value: str) -> bool:
     """
-    This function will take a parsed tag and a value.
-    The function then checks to see if the value entered is a number.
+    The function checks to see if the value entered is a number.
     validate_number will raise a ValueError if expectations are not met.
 
     :param tag: The tag is a way of identifying the value and type entered and is used if a
@@ -60,7 +48,9 @@ def validate_number(tag: str, value: str) -> bool:
     :type tag: str
     :param value: value is what is parsed to the function it can be many different types.
     :type value: float | optional
+    ...
     :raises ValueError: ValueError is raised for missing numbers or improper data types.
+    ...
     :return: Returns True when a value can be converted to float.
     :rtype: boolean
     """
@@ -71,8 +61,6 @@ def validate_number(tag: str, value: str) -> bool:
     return True
 
 
-# This function is part of validate_number it will check if the value can
-# be converted to a float
 def is_number(value) -> bool:
     """
     This function attempts to convert an entered type into a float.
@@ -80,6 +68,7 @@ def is_number(value) -> bool:
 
     :param value: value is the parsed parameter which is to be converted to a float(if possible).
     :type value: float | optional
+    ...
     :return: This return a True boolean value if the value obtained can be converted to a float.
     :rtype: boolean to indicate if value is a number or not.
     """
