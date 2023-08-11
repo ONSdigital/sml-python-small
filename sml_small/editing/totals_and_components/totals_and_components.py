@@ -420,7 +420,7 @@ def validate_input(
     auxiliary: Optional[float],
     absolute_difference_threshold: Optional[float],
     percentage_difference_threshold: Optional[float],
-) -> tuple[
+) -> Tuple[
     float,
     List[ComponentPair],
     Union[float, None],
@@ -532,7 +532,7 @@ def validate_input(
 
     # Default the precision value when not set
     if precision is None:
-        precision = int(PRECISION_MAX)
+        precision = PRECISION_MAX
     else:
         if validate_number("precision", precision) is True:
             precision = int(precision)
@@ -547,8 +547,6 @@ def validate_input(
                         ],
                     )
                 )
-        else:
-            precision = int(PRECISION_MAX)
 
     return (
         total,
