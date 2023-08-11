@@ -247,7 +247,7 @@ def totals_and_components(
                     C (components corrected), N (no correction required),
                     M (manual correction required),
                     S (method stopped due to lack of data or zero values).
-     :rtype: tuple(TotalsAndComponentsOutput)
+     :rtype: Tuple(TotalsAndComponentsOutput)
     """
 
     # we log a table of the input record values
@@ -756,7 +756,7 @@ def error_correction(
     components_sum: float,
     original_components: List[ComponentPair],
     total: float
-) -> tuple[float, list[float], TccMarker]:
+) -> Tuple[float, list[float], TccMarker]:
     """
     The error correction function will use the amend_total to either
     correct the total or components. Correcting the total will set the final
@@ -807,7 +807,7 @@ def error_correction(
 
 def correct_total(
     components_sum: float, original_components: List[ComponentPair]
-) -> tuple[float, list[ComponentPair], TccMarker]:
+) -> Tuple[float, list[ComponentPair], TccMarker]:
     """
     Function to correct the total value
 
@@ -837,7 +837,7 @@ def correct_components(
     components_sum: float,
     components: List[ComponentPair],
     total: float,
-) -> tuple[float, list[ComponentPair], TccMarker]:
+) -> Tuple[float, list[ComponentPair], TccMarker]:
     """
     Function to correct the components values to add up to the received total value,
     set the final total as the received total and indicate that the component
