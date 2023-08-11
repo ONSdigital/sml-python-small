@@ -873,7 +873,7 @@ def correct_components(
     return final_total, components, tcc_marker
 
 
-def sum_components(components: list[ComponentPair]) -> float:
+def sum_components(components: List[ComponentPair]) -> float:
     """
     Returns the total sum of a received list of component values
 
