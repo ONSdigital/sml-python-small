@@ -472,7 +472,7 @@ def validate_input(
     :return: percentage_difference_threshold is returned as a converted float
     :rtype: float | None
     :return: precision
-    :rtype: int | None is returned as a converted integer
+    :rtype: int is returned as a converted integer
     """
 
     if identifier is None:
@@ -562,7 +562,7 @@ def validate_input(
 def set_predictive_value(
     predictive: Optional[float],
     auxiliary: Optional[float],
-) -> tuple[float | None, TccMarker]:
+) -> Tuple[Union[float, None], TccMarker]:
     """
     Checks if predictive and auxiliary values are input, when predictive is None but auxiliary
     is available set predictive to auxiliary. If auxiliary is also None use the total value.
@@ -894,7 +894,7 @@ def calculate_percent_thresholds(
     sum_of_components: float,
     percentage_threshold: float,
     output_list: dict,
-) -> Tuple[float | None, float | None, dict]:
+) -> Tuple[Union[float, None], Union[float, None], dict]:
     """
     Calculate and return the low and high percentage thresholds based on the
     sum of the received components and the specified percentage threshold factor
