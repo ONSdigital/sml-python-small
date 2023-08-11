@@ -423,11 +423,11 @@ def validate_input(
 ) -> tuple[
     float,
     List[ComponentPair],
-    float | None,
-    float | None,
-    float | None,
-    float | None,
-    int | None,
+    float,
+    float,
+    float,
+    float,
+    int,
 ]:
     """
     This function is used to validate the data passed to the totals_and_components
