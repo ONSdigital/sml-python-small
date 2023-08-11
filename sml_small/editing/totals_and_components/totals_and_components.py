@@ -547,6 +547,8 @@ def validate_input(
                         ],
                     )
                 )
+        else:
+            precision = PRECISION_MAX
 
     return (
         total,
