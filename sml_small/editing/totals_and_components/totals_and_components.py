@@ -756,7 +756,7 @@ def error_correction(
     components_sum: float,
     original_components: List[ComponentPair],
     total: float
-) -> Tuple[float, list[float], TccMarker]:
+) -> Tuple[float, List[float], TccMarker]:
     """
     The error correction function will use the amend_total to either
     correct the total or components. Correcting the total will set the final
@@ -807,7 +807,7 @@ def error_correction(
 
 def correct_total(
     components_sum: float, original_components: List[ComponentPair]
-) -> Tuple[float, list[ComponentPair], TccMarker]:
+) -> Tuple[float, List[ComponentPair], TccMarker]:
     """
     Function to correct the total value
 
@@ -837,7 +837,7 @@ def correct_components(
     components_sum: float,
     components: List[ComponentPair],
     total: float,
-) -> Tuple[float, list[ComponentPair], TccMarker]:
+) -> Tuple[float, List[ComponentPair], TccMarker]:
     """
     Function to correct the components values to add up to the received total value,
     set the final total as the received total and indicate that the component
