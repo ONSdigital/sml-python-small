@@ -1,0 +1,14 @@
+site_name: sml_small docs
+nav:
+  - Home: index.md
+  - Content: content.md
+theme: readthedocs
+plugins:
+- mkdocstrings:
+    handlers:
+      python:
+        paths: sys;sys.path.append('./sml_small')
+markdown_extensions:
+  - admonition
+  - codehilite
+  - mkautodoc
