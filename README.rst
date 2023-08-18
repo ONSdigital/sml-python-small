@@ -1,4 +1,8 @@
-SML Small
+README
 =========
 
-**SML small** is a python pandas library for statistical method implementations created by the ONS
+**Statistical Methods Library for Python Pandas methods used in the Statistical Production Platform (SPP).**
+
+This library contains pandas statistical methods that are only suitable for use on small datasets which can safely be processed in-memory.
+
+For documentation, please refer to the method-specific documentation in the docs directory.

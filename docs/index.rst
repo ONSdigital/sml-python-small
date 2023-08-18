@@ -10,7 +10,8 @@ Welcome to sml_small's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-
+   methoddocs
+   readme
 
 Indices and tables
 ==================
