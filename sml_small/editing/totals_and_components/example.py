@@ -13,9 +13,11 @@ import csv
 # from the T&C method in a tabular format
 # This import isn't necessary to work with the T&C method
 from tabulate import tabulate
+
 # Importing the totals_and_components method from the totals_and_components.py file
 from totals_and_components import totals_and_components
 
+# All the test data below doesn't have precision specified and will default to precision of 28
 test_data = [
     # The input data below once passed into the T&C method should return
     # a TCC Marker of N = No correction required, i.e., the total is equal to the components sum
@@ -79,21 +81,6 @@ def invoke_process_in_memory_data_example():
 # In this example we pass a dataset stored in a 2D List[] into the T&C method by unpacking it into separate arguments
 def invoke_process_in_memory_data_example_2():
 
-    # The input data below once passed into the T&C method should return
-    # a TCC Marker of C = Components corrected
-    # data = [
-    #     "C",
-    #     "202301",
-    #     90,
-    #     [90, 0, 4, 6],
-    #     False,
-    #     90,
-    #     "202301",
-    #     None,
-    #     None,
-    #     0.1
-    # ]
-
     # We use * to unpack the above list into separate arguments to pass into the T&C method
     for data in test_data:
         result = totals_and_components(*data)
@@ -125,7 +112,6 @@ def filter_data(result, original_data):
         result.absolute_difference,
         result.low_percent_threshold,
         result.high_percent_threshold,
-        result.precision,
         result.final_total,
         result.tcc_marker,
     ]
@@ -179,7 +165,6 @@ def display_results(results):
             "Absolute Difference",
             "Low Percent Threshold",
             "High Percent Threshold",
-            "Precision",
             "Final Total",
             "TCC Marker",
         ],
@@ -232,7 +217,6 @@ def invoke_process_with_local_csv():
     ) as csv_file:
         csv_reader = csv.DictReader(csv_file)
         for row in csv_reader:
-            print("Data type:::::::", type(row["comp_1"]))
             input_data = [
                 (row["reference"]),
                 (row["total"]),
@@ -259,8 +243,6 @@ def invoke_process_with_local_csv():
                     "tcc_marker": result.tcc_marker,
                 }
             }
-
-            # print(new_result)
 
             new_result_comp = result.final_components
             new_result[result.identifier]["comp"] = new_result_comp
@@ -301,7 +283,6 @@ def invoke_process_with_local_csv():
 
         writer.writeheader()
         for identifier in results:
-            # print(results[identifier])
             writer.writerow(
                 {
                     "reference": identifier,
@@ -337,7 +318,6 @@ def invoke_process_with_in_memory_csv():
 A,1625,632,732,99,162,TRUE,1625,,11,,,"""  # noqa: E501
 
     csv_reader = csv.DictReader(in_memory_csv_data.splitlines())
-    print("CSV reader", csv_reader)
 
     results = {}
     for row in csv_reader:
