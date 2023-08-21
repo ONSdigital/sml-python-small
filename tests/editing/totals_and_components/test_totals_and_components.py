@@ -1661,7 +1661,36 @@ class TotalsAndComponentsUatTests:
         "expected_result, test_id",
         [
             (
-                "UAT-ABD-DIFF-1",
+                "UAT-ABD-DIFF-1001",
+                1625,
+                [
+                    (632),
+                    (732),
+                    (99),
+                    (162),
+                ],
+                True,
+                1625,
+                28,
+                None,
+                11,
+                None,
+                (
+                    "UAT-ABD-DIFF-1001",
+                    0,
+                    None,
+                    None,
+                    1625,
+                    [632, 732, 99, 162],
+                    "N",
+                ),
+                "Test 1 - If absolute difference = 0 then no correction is applied",
+                # Sheet TCC_test_data_case_a1 reference 1001
+                # If absolute difference = 0, then no correction is applied.
+                # TCC = N
+            ),
+            (
+                "UAT-ABD-DIFF-1002",
                 10811,
                 [
                     (9201),
@@ -1676,7 +1705,7 @@ class TotalsAndComponentsUatTests:
                 11,
                 None,
                 (
-                    "UAT-ABD-DIFF-1",
+                    "UAT-ABD-DIFF-1002",
                     0,
                     None,
                     None,
@@ -1684,13 +1713,42 @@ class TotalsAndComponentsUatTests:
                     [9201, 866, 632, 112],
                     "N",
                 ),
-                "Test 58 - If absolute difference = 0 then no correction is applied",
-                # Sheet TCC_test_data_case_a1
+                "Test 2 - If absolute difference = 0 then no correction is applied",
+                # Sheet TCC_test_data_case_a1 reference 1002
                 # If absolute difference = 0, then no correction is applied.
                 # TCC = N
             ),
             (
-                "UAT-ABD-DIFF-2",
+                "UAT-ABD-DIFF-1003",
+                108,
+                [
+                    (98),
+                    (0),
+                    (4),
+                    (6),
+                ],
+                True,
+                108,
+                28,
+                None,
+                11,
+                None,
+                (
+                    "UAT-ABD-DIFF-1003",
+                    0,
+                    None,
+                    None,
+                    108,
+                    [98, 0, 4, 6],
+                    "N",
+                ),
+                "Test 3 - If absolute difference = 0 then no correction is applied",
+                # Sheet TCC_test_data_case_a1 reference 1003
+                # If absolute difference = 0, then no correction is applied.
+                # TCC = N
+            ),
+            (
+                "UAT-ABD-DIFF-2001",
                 1603,
                 [
                     (632),
@@ -1705,7 +1763,7 @@ class TotalsAndComponentsUatTests:
                 11,
                 None,
                 (
-                    "UAT-ABD-DIFF-2",
+                    "UAT-ABD-DIFF-2001",
                     22,
                     None,
                     None,
@@ -1713,8 +1771,38 @@ class TotalsAndComponentsUatTests:
                     [632, 732, 99, 162],
                     "M",
                 ),
-                "Test 59 - If absolute difference > 11 then manual editing is required",
-                # Sheet TCC_test_data_case_a2
+                "Test 4 - If absolute difference > 11 then manual editing is required",
+                # Sheet TCC_test_data_case_a2 reference 2001
+                # If absolute difference > absolute difference threshold,
+                # then no correction is applied, and marker
+                # shows manual editing required. TCC = M
+            ),
+            (
+                "UAT-ABD-DIFF-2002",
+                10745,
+                [
+                    (9201),
+                    (732),
+                    (632),
+                    (112),
+                ],
+                True,
+                10745,
+                28,
+                None,
+                11,
+                None,
+                (
+                    "UAT-ABD-DIFF-2002",
+                    66,
+                    None,
+                    None,
+                    10745,
+                    [9201, 732, 632, 112],
+                    "M",
+                ),
+                "Test 5 - If absolute difference > 11 then manual editing is required",
+                # Sheet TCC_test_data_case_a2 reference 2002
                 # If absolute difference > absolute difference threshold,
                 # then no correction is applied, and marker
                 # shows manual editing required. TCC = M
@@ -1743,7 +1831,7 @@ class TotalsAndComponentsUatTests:
                     [98, 0, 4, 6],
                     "T",
                 ),
-                "Test 60 - If absolute difference = 11 and amend total is true then we correct the total",
+                "Test 6 - If absolute difference = 11 and amend total is true then we correct the total",
                 # Sheet TCC_test_data_case_a3
                 # If absolute difference = absolute difference threshold and amend
                 # total = TRUE, then correction is applied
