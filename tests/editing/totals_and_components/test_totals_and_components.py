@@ -1808,7 +1808,97 @@ class TotalsAndComponentsUatTests:
                 # shows manual editing required. TCC = M
             ),
             (
-                "UAT-ABD-DIFF-3",
+                "UAT-ABD-DIFF-2003",
+                153,
+                [
+                    (98),
+                    (0),
+                    (4),
+                    (6),
+                ],
+                True,
+                153,
+                28,
+                None,
+                11,
+                None,
+                (
+                    "UAT-ABD-DIFF-2003",
+                    11,
+                    None,
+                    None,
+                    153,
+                    [98, 0, 4, 6],
+                    "M",
+                ),
+                "Test 6 - If absolute difference > 11 then manual editing is required",
+                # Sheet TCC_test_data_case_a2 reference 2003
+                # If absolute difference > absolute difference threshold,
+                # then no correction is applied, and marker
+                # shows manual editing required. TCC = M
+            ),
+            (
+                "UAT-ABD-DIFF-3001",
+                1614,
+                [
+                    (632),
+                    (732),
+                    (99),
+                    (6),
+                ],
+                True,
+                1614,
+                28,
+                None,
+                11,
+                None,
+                (
+                    "UAT-ABD-DIFF-3001",
+                    11,
+                    None,
+                    None,
+                    1625,
+                    [632, 732, 99, 162],
+                    "T",
+                ),
+                "Test 7 - If absolute difference = 11 and amend total is true then we correct the total",
+                # Sheet TCC_test_data_case_a3 reference 3003
+                # If absolute difference = absolute difference threshold and amend
+                # total = TRUE, then correction is applied
+                # and total corrected. TCC = T
+            ),
+            (
+                "UAT-ABD-DIFF-3002",
+                10822,
+                [
+                    (9201),
+                    (866),
+                    (4),
+                    (6),
+                ],
+                True,
+                10822,
+                28,
+                None,
+                11,
+                None,
+                (
+                    "UAT-ABD-DIFF-3002",
+                    11,
+                    None,
+                    None,
+                    108,
+                    [9201, 866, 632, 112],
+                    "T",
+                ),
+                "Test 8 - If absolute difference = 11 and amend total is true then we correct the total",
+                # Sheet TCC_test_data_case_a3 reference 3002
+                # If absolute difference = absolute difference threshold and amend
+                # total = TRUE, then correction is applied
+                # and total corrected. TCC = T
+            ),
+            (
+                "UAT-ABD-DIFF-3003",
                 119,
                 [
                     (98),
@@ -1823,7 +1913,7 @@ class TotalsAndComponentsUatTests:
                 11,
                 None,
                 (
-                    "UAT-ABD-DIFF-3",
+                    "UAT-ABD-DIFF-3003",
                     11,
                     None,
                     None,
@@ -1831,43 +1921,102 @@ class TotalsAndComponentsUatTests:
                     [98, 0, 4, 6],
                     "T",
                 ),
-                "Test 6 - If absolute difference = 11 and amend total is true then we correct the total",
-                # Sheet TCC_test_data_case_a3
+                "Test 9 - If absolute difference = 11 and amend total is true then we correct the total",
+                # Sheet TCC_test_data_case_a3 reference 3003
                 # If absolute difference = absolute difference threshold and amend
                 # total = TRUE, then correction is applied
                 # and total corrected. TCC = T
             ),
-            # fixture need to be cleared with MQD
-            # (
-            #     "UAT-ABD-DIFF-4",
-            #     119,
-            #     [
-            #         (98),
-            #         (0),
-            #         (4),
-            #         (6),
-            #     ],
-            #     False,
-            #     119,
-            #     5,
-            #     None,
-            #     11,
-            #     None,
-            #     (
-            #         "UAT-ABD-DIFF-4",
-            #         11,
-            #         None,
-            #         None,
-            #         119,
-            #         [107.98, 0, 4.4074, 6.6111],
-            #         "C",
-            #     ),
-            #     "Test 61 - If absolute difference = 11 and amend total is false then we correct the components",
-            #     # Sheet TCC_test_data_case_a4
-            #     # If absolute difference = absolute difference threshold and amend total = FALSE,
-            #     # then correction is applied, and components
-            #     # rescaled. TCC = C
-            # ),
+            (
+                "UAT-ABD-DIFF-4001",
+                1614,
+                [
+                    (632),
+                    (732),
+                    (99),
+                    (162),
+                ],
+                False,
+                1614,
+                28,
+                None,
+                11,
+                None,
+                (
+                    "UAT-ABD-DIFF-4001",
+                    11,
+                    None,
+                    None,
+                    1614,
+                    [107.98, 0, 4.4074, 6.6111],
+                    "C",
+                ),
+                "Test 10 - If absolute difference = 11 and amend total is false then we correct the components",
+                # Sheet TCC_test_data_case_a4 reference 4001
+                # If absolute difference = absolute difference threshold and amend total = FALSE,
+                # then correction is applied, and components
+                # rescaled. TCC = C
+            ),
+            (
+                "UAT-ABD-DIFF-4002",
+                10822,
+                [
+                    (9201),
+                    (866),
+                    (632),
+                    (112),
+                ],
+                False,
+                10822,
+                28,
+                None,
+                11,
+                None,
+                (
+                    "UAT-ABD-DIFF-4002",
+                    11,
+                    None,
+                    None,
+                    10822,
+                    [107.98, 0, 4.4074, 6.6111],
+                    "C",
+                ),
+                "Test 11 - If absolute difference = 11 and amend total is false then we correct the components",
+                # Sheet TCC_test_data_case_a4 reference 4002
+                # If absolute difference = absolute difference threshold and amend total = FALSE,
+                # then correction is applied, and components
+                # rescaled. TCC = C
+            ),
+            (
+                "UAT-ABD-DIFF-4003",
+                119,
+                [
+                    (98),
+                    (0),
+                    (4),
+                    (6),
+                ],
+                False,
+                119,
+                28,
+                None,
+                11,
+                None,
+                (
+                    "UAT-ABD-DIFF-4003",
+                    11,
+                    None,
+                    None,
+                    119,
+                    [107.98, 0, 4.4074, 6.6111],
+                    "C",
+                ),
+                "Test 12 - If absolute difference = 11 and amend total is false then we correct the components",
+                # Sheet TCC_test_data_case_a4 reference 4003
+                # If absolute difference = absolute difference threshold and amend total = FALSE,
+                # then correction is applied, and components
+                # rescaled. TCC = C
+            ),
             (
                 "UAT-ABD-DIFF-5",
                 1621,
