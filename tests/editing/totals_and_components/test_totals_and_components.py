@@ -1578,6 +1578,88 @@ class TestTotalsAndComponents:
                 # If the percentage difference is greater than 0, the component sum
                 # is missing and the amend total is false then the method stops
             ),
+        ],
+    )
+    def test_totals_and_components(
+        self,
+        capfd,
+        identifier,
+        total,
+        components,
+        amend_total,
+        predictive,
+        precision,
+        auxiliary,
+        absolute_difference_threshold,
+        percentage_difference_threshold,
+        expected_result,
+        test_id,
+    ):
+        if isinstance(expected_result, tuple):
+            try:
+                results = totals_and_components(
+                    identifier=identifier,
+                    total=total,
+                    components=components,
+                    amend_total=amend_total,
+                    predictive=predictive,
+                    precision=precision,
+                    auxiliary=auxiliary,
+                    absolute_difference_threshold=absolute_difference_threshold,
+                    percentage_difference_threshold=percentage_difference_threshold,
+                )
+
+                # Capture the printed output and remove any leading or trailing whitespace
+                captured = capfd.readouterr()
+                printed_output = captured.out.strip()
+
+                print(printed_output)
+
+                assert results.identifier == expected_result[0]
+                assert results.absolute_difference == expected_result[1]
+                assert results.low_percent_threshold == expected_result[2]
+                assert results.high_percent_threshold == expected_result[3]
+                assert results.final_total == expected_result[4]
+                assert results.final_components == expected_result[5]
+                assert results.tcc_marker == expected_result[6]
+
+                if results.tcc_marker == "T" or results.tcc_marker == "C":
+                    sum_of_components = 0
+                    for component in results.final_components:
+                        sum_of_components += Decimal(str(component))
+
+                    sum_of_components = float(sum_of_components)
+                    assert sum_of_components == expected_result[4]
+
+            except Exception as e:
+                pytest.fail(
+                    EXCEPTION_FAIL_MESSAGE.format(
+                        test_id=test_id,
+                        exception_type=type(e).__name__,
+                        exception_msg=str(e.args),
+                    )
+                )
+        else:
+            with pytest.raises(Exception) as exc_info:
+                totals_and_components(
+                    identifier=identifier,
+                    total=total,
+                    components=components,
+                    amend_total=amend_total,
+                    predictive=predictive,
+                    precision=precision,
+                    auxiliary=auxiliary,
+                    absolute_difference_threshold=absolute_difference_threshold,
+                    percentage_difference_threshold=percentage_difference_threshold,
+                )
+            assert (str(exc_info.value)) == str(expected_result)
+
+class TotalsAndComponentsUatTests:
+    @pytest.mark.parametrize(
+        "identifier, total, components, amend_total, predictive, precision,"
+        "auxiliary, absolute_difference_threshold, percentage_difference_threshold,"
+        "expected_result, test_id",
+        [
             (
                 "UAT-ABD-DIFF-1",
                 10811,
@@ -2785,7 +2867,6 @@ class TestTotalsAndComponents:
                     percentage_difference_threshold=percentage_difference_threshold,
                 )
             assert (str(exc_info.value)) == str(expected_result)
-
 
 class TestValidateInput:
     @pytest.mark.parametrize(
