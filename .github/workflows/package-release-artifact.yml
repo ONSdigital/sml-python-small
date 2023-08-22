@@ -17,8 +17,6 @@ jobs:
     environment:
       name: pypi
       url: https://pypi.org/p/sml-python-small-test#
-    outputs:
-
     permissions:
       id-token: write
     steps:
