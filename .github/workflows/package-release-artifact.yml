@@ -44,9 +44,7 @@ jobs:
     steps:
       # retrieve your distributions here
       - name: Publish package distributions to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-    name: pypi-publish
-    uses: pypa/gh-action-pypi-publish@v1.8.10
+        uses: pypa/gh-action-pypi-publish@v1.8.10
     environment:
       name: pypi
       url: https://pypi.org/p/sml-python-small-test
