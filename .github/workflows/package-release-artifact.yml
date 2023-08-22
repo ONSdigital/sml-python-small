@@ -13,7 +13,12 @@ jobs:
       max-parallel: 4
       matrix:
         python-version: [3.7]
-      fail-fast: false 
+      fail-fast: false
+    environment:
+      name: pypi
+      url: https://pypi.org/p/sml-python-small-test
+    permissions:
+      id-token: write
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python ${{ matrix.python-version }}
@@ -39,14 +44,5 @@ jobs:
             sml-python-small.version
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  pypi-publish:
-    runs-on: ubuntu-latest
-    steps:
-      # retrieve your distributions here
       - name: Publish package distributions to PyPI
         uses: pypa/gh-action-pypi-publish@v1.8.10
-    environment:
-      name: pypi
-      url: https://pypi.org/p/sml-python-small-test
-    permissions:
-      id-token: write
