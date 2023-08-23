@@ -1654,7 +1654,7 @@ class TestTotalsAndComponents:
                 )
             assert (str(exc_info.value)) == str(expected_result)
 
-class TotalsAndComponentsUatTests:
+class TestsTotalsAndComponentsUAT:
     @pytest.mark.parametrize(
         "identifier, total, components, amend_total, predictive, precision,"
         "auxiliary, absolute_difference_threshold, percentage_difference_threshold,"
@@ -1782,7 +1782,7 @@ class TotalsAndComponentsUatTests:
                 10745,
                 [
                     (9201),
-                    (732),
+                    (866),
                     (632),
                     (112),
                 ],
@@ -1798,7 +1798,7 @@ class TotalsAndComponentsUatTests:
                     None,
                     None,
                     10745,
-                    [9201, 732, 632, 112],
+                    [9201, 866, 632, 112],
                     "M",
                 ),
                 "Test 5 - If absolute difference > 11 then manual editing is required",
@@ -1824,7 +1824,7 @@ class TotalsAndComponentsUatTests:
                 None,
                 (
                     "UAT-ABD-DIFF-2003",
-                    11,
+                    45,
                     None,
                     None,
                     153,
@@ -1844,7 +1844,7 @@ class TotalsAndComponentsUatTests:
                     (632),
                     (732),
                     (99),
-                    (6),
+                    (162),
                 ],
                 True,
                 1614,
@@ -1873,8 +1873,8 @@ class TotalsAndComponentsUatTests:
                 [
                     (9201),
                     (866),
-                    (4),
-                    (6),
+                    (632),
+                    (112),
                 ],
                 True,
                 10822,
@@ -1887,7 +1887,7 @@ class TotalsAndComponentsUatTests:
                     11,
                     None,
                     None,
-                    108,
+                    10811,
                     [9201, 866, 632, 112],
                     "T",
                 ),
@@ -1948,7 +1948,7 @@ class TotalsAndComponentsUatTests:
                     None,
                     None,
                     1614,
-                    [107.98, 0, 4.4074, 6.6111],
+                    [627.7218461538462, 727.044923076923, 98.32984615384615, 160.90338461538462],
                     "C",
                 ),
                 "Test 10 - If absolute difference = 11 and amend total is false then we correct the components",
@@ -1978,7 +1978,7 @@ class TotalsAndComponentsUatTests:
                     None,
                     None,
                     10822,
-                    [107.98, 0, 4.4074, 6.6111],
+                    [9210.36185366756, 866.8811395800574, 632.643048746647, 112.1139580057349],
                     "C",
                 ),
                 "Test 11 - If absolute difference = 11 and amend total is false then we correct the components",
@@ -2008,7 +2008,7 @@ class TotalsAndComponentsUatTests:
                     None,
                     None,
                     119,
-                    [107.98, 0, 4.4074, 6.6111],
+                    [107.98148148148148, 0, 4.407407407407407, 6.611111111111111],
                     "C",
                 ),
                 "Test 12 - If absolute difference = 11 and amend total is false then we correct the components",
@@ -2018,7 +2018,7 @@ class TotalsAndComponentsUatTests:
                 # rescaled. TCC = C
             ),
             (
-                "UAT-ABD-DIFF-5",
+                "UAT-ABD-DIFF-5001",
                 1621,
                 [
                     (632),
@@ -2033,7 +2033,7 @@ class TotalsAndComponentsUatTests:
                 11,
                 None,
                 (
-                    "UAT-ABD-DIFF-5",
+                    "UAT-ABD-DIFF-5001",
                     4,
                     None,
                     None,
@@ -2041,50 +2041,173 @@ class TotalsAndComponentsUatTests:
                     [632, 732, 99, 162],
                     "T",
                 ),
-                "Test 62 - If absolute difference < 11 and amend total is true then we correct the components",
-                # Sheet TCC_test_data_case_a5
+                "Test 13 - If absolute difference < 11 and amend total is true then we correct the components",
+                # Sheet TCC_test_data_case_a5 reference 5001
                 # If absolute difference < absolute difference threshold and amend total = TRUE,
                 # then correction applied and total corrected.
                 # TCC = T
             ),
-            # fixture need to be cleared with MQD
+            (
+                "UAT-ABD-DIFF-5002",
+                10817,
+                [
+                    (9201),
+                    (866),
+                    (632),
+                    (112),
+                ],
+                True,
+                10817,
+                28,
+                None,
+                11,
+                None,
+                (
+                    "UAT-ABD-DIFF-5002",
+                    6,
+                    None,
+                    None,
+                    10811,
+                    [9201, 866, 632, 112],
+                    "T",
+                ),
+                "Test 14 - If absolute difference < 11 and amend total is true then we correct the components",
+                # Sheet TCC_test_data_case_a5 reference 5002
+                # If absolute difference < absolute difference threshold and amend total = TRUE,
+                # then correction applied and total corrected.
+                # TCC = T
+            ),
+            (
+                "UAT-ABD-DIFF-5003",
+                103,
+                [
+                    (98),
+                    (0),
+                    (4),
+                    (6),
+                ],
+                True,
+                103,
+                28,
+                None,
+                11,
+                None,
+                (
+                    "UAT-ABD-DIFF-5003",
+                    5,
+                    None,
+                    None,
+                    108,
+                    [98, 0, 4, 6],
+                    "T",
+                ),
+                "Test 15 - If absolute difference < 11 and amend total is true then we correct the components",
+                # Sheet TCC_test_data_case_a5 reference 5003
+                # If absolute difference < absolute difference threshold and amend total = TRUE,
+                # then correction applied and total corrected.
+                # TCC = T
+            ),
+            (
+                "UAT-ABD-DIFF-6001",
+                1621,
+                [
+                    (632),
+                    (732),
+                    (99),
+                    (162),
+                ],
+                False,
+                1621,
+                28,
+                None,
+                11,
+                None,
+                (
+                    "UAT-ABD-DIFF-6001",
+                    4,
+                    None,
+                    None,
+                    1621,
+                    [
+                        630.4443076923077, 730.1981538461539, 98.75630769230769, 161.60123076923077
+                    ],
+                    "C",
+                ),
+                "Test 63 - If absolute difference < 11 and amend total is false then we correct the components",
+                # Sheet TCC_test_data_case_a6 reference 6001
+                # If absolute difference < absolute difference threshold and amend total = FALSE,
+                # then correction applied, and
+                # components rescaled. TCC = C
+            ),
             # (
-            #     "UAT-ABD-DIFF-6",
-            #     1621,
+            #     "UAT-ABD-DIFF-6002",
+            #     10817,
             #     [
+            #         (9201),
+            #         (866),
             #         (632),
-            #         (732),
-            #         (99),
-            #         (162),
+            #         (112),
             #     ],
             #     False,
-            #     1621,
-            #     6,
+            #     10817,
+            #     28,
             #     None,
             #     11,
             #     None,
             #     (
-            #         "UAT-ABD-DIFF-6",
-            #         4,
+            #         "UAT-ABD-DIFF-6002",
+            #         6,
             #         None,
             #         None,
-            #         1621,
+            #         10817,
             #         [
-            #             630.444,
-            #             730.198,
-            #             98.7563,
-            #             161.601,
+            #             9206.10646563685, 866.4806215891222, 632.3507538618074, 112.06215891221903
             #         ],
             #         "C",
             #     ),
-            #     "Test 63 - If absolute difference < 11 and amend total is false then we correct the components",
-            #     # Sheet TCC_test_data_case_a6
+            #     "Test 17 - If absolute difference < 11 and amend total is false then we correct the components",
+            #     # Sheet TCC_test_data_case_a6 reference 6002
             #     # If absolute difference < absolute difference threshold and amend total = FALSE,
             #     # then correction applied, and
             #     # components rescaled. TCC = C
             # ),
             (
-                "UAT-ABD-DIFF-7",
+                "UAT-ABD-DIFF-6003",
+                103,
+                [
+                    (98),
+                    (0),
+                    (4),
+                    (6),
+                ],
+                False,
+                103,
+                28,
+                None,
+                11,
+                None,
+                (
+                    "UAT-ABD-DIFF-6003",
+                    5,
+                    None,
+                    None,
+                    103,
+                    [
+                        93.46296296296296,
+                        0,
+                        3.814814814814815,
+                        5.722222222222222
+                    ],
+                    "C",
+                ),
+                "Test 18 - If absolute difference < 11 and amend total is false then we correct the components",
+                # Sheet TCC_test_data_case_a6 reference 6003
+                # If absolute difference < absolute difference threshold and amend total = FALSE,
+                # then correction applied, and
+                # components rescaled. TCC = C
+            ),
+            (
+                "UAT-ABD-DIFF-7001",
                 9,
                 [
                     (0),
@@ -2099,7 +2222,7 @@ class TotalsAndComponentsUatTests:
                 11,
                 None,
                 (
-                    "UAT-ABD-DIFF-7",
+                    "UAT-ABD-DIFF-7001",
                     None,
                     None,
                     None,
@@ -2107,14 +2230,74 @@ class TotalsAndComponentsUatTests:
                     [0, 0, 0, 0],
                     "S",
                 ),
-                "Test 63 - If absolute difference < 11 and amend total is true then we correct the components",
-                # Sheet TCC_test_data_case_a7
+                "Test 19 - If absolute difference < 11 and amend total is true then we correct the components",
+                # Sheet TCC_test_data_case_a7 reference 7001
+                # If absolute difference <= absolute difference threshold and > 0 but components sum = 0 or missing,
+                # and amend total = TRUE, then do not amend total.
+                # TCC marker = S
+            ),
+            # (
+            #     "UAT-ABD-DIFF-7002",
+            #     4,
+            #     [
+            #         (),
+            #         (),
+            #         (),
+            #         (),
+            #     ],
+            #     True,
+            #     4,
+            #     28,
+            #     None,
+            #     11,
+            #     None,
+            #     (
+            #         "UAT-ABD-DIFF-7002",
+            #         None,
+            #         None,
+            #         None,
+            #         4,
+            #         [0, 0, 0, 0],
+            #         "S",
+            #     ),
+            #     "Test 20 - If absolute difference < 11 and amend total is true then we correct the components",
+            #     # Sheet TCC_test_data_case_a7 reference 7002
+            #     # If absolute difference <= absolute difference threshold and > 0 but components sum = 0 or missing,
+            #     # and amend total = TRUE, then do not amend total.
+            #     # TCC marker = S
+            # ),
+            (
+                "UAT-ABD-DIFF-7003",
+                11,
+                [
+                    (0),
+                    (0),
+                    (0),
+                    (0),
+                ],
+                True,
+                11,
+                28,
+                None,
+                11,
+                None,
+                (
+                    "UAT-ABD-DIFF-7003",
+                    None,
+                    None,
+                    None,
+                    11,
+                    [0, 0, 0, 0],
+                    "S",
+                ),
+                "Test 21 - If absolute difference < 11 and amend total is true then we correct the components",
+                # Sheet TCC_test_data_case_a7 reference 7003
                 # If absolute difference <= absolute difference threshold and > 0 but components sum = 0 or missing,
                 # and amend total = TRUE, then do not amend total.
                 # TCC marker = S
             ),
             (
-                "UAT-ABD-DIFF-8",
+                "UAT-ABD-DIFF-8001",
                 9,
                 [
                     (0),
@@ -2129,7 +2312,7 @@ class TotalsAndComponentsUatTests:
                 11,
                 None,
                 (
-                    "UAT-ABD-DIFF-8",
+                    "UAT-ABD-DIFF-8001",
                     None,
                     None,
                     None,
@@ -2137,15 +2320,74 @@ class TotalsAndComponentsUatTests:
                     [0, 0, 0, 0],
                     "S",
                 ),
-                "Test 64 - If absolute difference <= 11 and amend total is false then we correct the components",
-                # Sheet TCC_test_data_case_a8
-                # If the absolute difference <= absolute difference threshold
-                # and > 0 but components sum = 0 or missing,
-                # and amend total = FALSE, then no correction
-                # possible. TCC marker = S
+                "Test 22 - If absolute difference < 11 and amend total is false then we correct the components",
+                # Sheet TCC_test_data_case_a8 reference 8001
+                # If absolute difference <= absolute difference threshold and > 0 but components sum = 0 or missing,
+                # and amend total = False, then do not amend total.
+                # TCC marker = S
+            ),
+            # (
+            #     "UAT-ABD-DIFF-8002",
+            #     4,
+            #     [
+            #         (),
+            #         (),
+            #         (),
+            #         (),
+            #     ],
+            #     False,
+            #     4,
+            #     28,
+            #     None,
+            #     11,
+            #     None,
+            #     (
+            #         "UAT-ABD-DIFF-8002",
+            #         None,
+            #         None,
+            #         None,
+            #         4,
+            #         [0, 0, 0, 0],
+            #         "S",
+            #     ),
+            #     "Test 23 - If absolute difference < 11 and amend total is false then we correct the components",
+            #     # Sheet TCC_test_data_case_a8 reference 8002
+            #     # If absolute difference <= absolute difference threshold and > 0 but components sum = 0 or missing,
+            #     # and amend total = False, then do not amend total.
+            #     # TCC marker = S
+            # ),
+            (
+                "UAT-ABD-DIFF-8003",
+                11,
+                [
+                    (0),
+                    (0),
+                    (0),
+                    (0),
+                ],
+                False,
+                11,
+                28,
+                None,
+                11,
+                None,
+                (
+                    "UAT-ABD-DIFF-8003",
+                    None,
+                    None,
+                    None,
+                    11,
+                    [0, 0, 0, 0],
+                    "S",
+                ),
+                "Test 24 - If absolute difference < 11 and amend total is false then we correct the components",
+                # Sheet TCC_test_data_case_a8 reference 8003
+                # If absolute difference <= absolute difference threshold and > 0 but components sum = 0 or missing,
+                # and amend total = False, then do not amend total.
+                # TCC marker = S
             ),
             (
-                "UAT-ABD-DIFF-9",
+                "UAT-ABD-DIFF-9001",
                 0,
                 [
                     (7),
@@ -2160,7 +2402,7 @@ class TotalsAndComponentsUatTests:
                 11,
                 None,
                 (
-                    "UAT-ABD-DIFF-9",
+                    "UAT-ABD-DIFF-9001",
                     11,
                     None,
                     None,
@@ -2168,14 +2410,104 @@ class TotalsAndComponentsUatTests:
                     [7, 0, 2, 2],
                     "T",
                 ),
-                "Test 65 - If the total is 0, sum of components is > 0, amend total is true then we correct the total",
-                # Sheet TCC_test_data_case_a9
+                "Test 25 - If the total is 0, sum of components is > 0, amend total is true then we correct the total",
+                # Sheet TCC_test_data_case_a9 reference 9001
                 # If Total = 0 and comp sum > 0 and amend total = TRUE.
                 # Correct total if within tolerance, else flag for manual check.
                 # TCC = T or M, depending on IF
             ),
             (
-                "UAT-ABD-DIFF-10",
+                "UAT-ABD-DIFF-9002",
+                0,
+                [
+                    (2),
+                    (4),
+                    (3),
+                    (1),
+                ],
+                True,
+                0,
+                28,
+                None,
+                11,
+                None,
+                (
+                    "UAT-ABD-DIFF-9002",
+                    10,
+                    None,
+                    None,
+                    10,
+                    [2, 4, 3, 1],
+                    "T",
+                ),
+                "Test 26 - If the total is 0, sum of components is > 0, amend total is true then we correct the total",
+                # Sheet TCC_test_data_case_a9 reference 9002
+                # If Total = 0 and comp sum > 0 and amend total = TRUE.
+                # Correct total if within tolerance, else flag for manual check.
+                # TCC = T or M, depending on IF
+            ),
+            (
+                "UAT-ABD-DIFF-9003",
+                0,
+                [
+                    (6),
+                    (0),
+                    (0),
+                    (0),
+                ],
+                True,
+                0,
+                28,
+                None,
+                11,
+                None,
+                (
+                    "UAT-ABD-DIFF-9003",
+                    6,
+                    None,
+                    None,
+                    6,
+                    [6, 0, 0, 0],
+                    "T",
+                ),
+                "Test 27 - If the total is 0, sum of components is > 0, amend total is true then we correct the total",
+                # Sheet TCC_test_data_case_a9 reference 9003
+                # If Total = 0 and comp sum > 0 and amend total = TRUE.
+                # Correct total if within tolerance, else flag for manual check.
+                # TCC = T or M, depending on IF
+            ),
+            (
+                "UAT-ABD-DIFF-10001",
+                0,
+                [
+                    (7),
+                    (0),
+                    (2),
+                    (2),
+                ],
+                False,
+                0,
+                28,
+                None,
+                11,
+                None,
+                (
+                    "UAT-ABD-DIFF-10001",
+                    11,
+                    None,
+                    None,
+                    0,
+                    [0, 0, 0, 0],
+                    "C",
+                ),
+                "Test 28 - If the total is 0, sum of components is > 0, amend total is false then we correct the component",  # noqa: E501
+                # Sheet TCC_test_data_case_a10 reference 10001
+                # If Total = 0 and components > 0 and amend total = FALSE.
+                # Override comps with zeros, if within tolerance.
+                # TCC = C or M, depending on IF
+            ),
+            (
+                "UAT-ABD-DIFF-10002",
                 0,
                 [
                     (2),
@@ -2190,7 +2522,7 @@ class TotalsAndComponentsUatTests:
                 11,
                 None,
                 (
-                    "UAT-ABD-DIFF-10",
+                    "UAT-ABD-DIFF-10002",
                     10,
                     None,
                     None,
@@ -2198,14 +2530,106 @@ class TotalsAndComponentsUatTests:
                     [0, 0, 0, 0],
                     "C",
                 ),
-                "Test 66 - If the total is 0, sum of components is > 0, amend total is false then we correct the component",  # noqa: E501
-                # Sheet TCC_test_data_case_a10
+                "Test 29 - If the total is 0, sum of components is > 0, amend total is false then we correct the component",  # noqa: E501
+                # Sheet TCC_test_data_case_a10 reference 10002
                 # If Total = 0 and components > 0 and amend total = FALSE.
                 # Override comps with zeros, if within tolerance.
                 # TCC = C or M, depending on IF
             ),
             (
-                "UAT-ABD-DIFF-11",
+                "UAT-ABD-DIFF-10003",
+                0,
+                [
+                    (6),
+                    (0),
+                    (0),
+                    (0),
+                ],
+                False,
+                0,
+                28,
+                None,
+                11,
+                None,
+                (
+                    "UAT-ABD-DIFF-10003",
+                    6,
+                    None,
+                    None,
+                    0,
+                    [0, 0, 0, 0],
+                    "C",
+                ),
+                "Test 30 - If the total is 0, sum of components is > 0, amend total is false then we correct the component",  # noqa: E501
+                # Sheet TCC_test_data_case_a10 reference 10003
+                # If Total = 0 and components > 0 and amend total = FALSE.
+                # Override comps with zeros, if within tolerance.
+                # TCC = C or M, depending on IF
+            ),
+            (
+                "UAT-ABD-DIFF-11001",
+                1621,
+                [
+                    (632),
+                    (732),
+                    (99),
+                    (162),
+                ],
+                True,
+                None,
+                28,
+                1619,
+                11,
+                None,
+                (
+                    "UAT-ABD-DIFF-11001",
+                    6,
+                    None,
+                    None,
+                    1625,
+                    [632, 732, 99, 162],
+                    "T",
+                ),
+                "Test 31 - If absolute difference <= 11 and the auxiliary is used as the predictive then we correct the total",  # noqa: E501
+                # Sheet TCC_test_data_case_a11 reference 11001
+                # If the absolute difference <= absolute difference threshold and > 0
+                # but absolute difference is calculated with auxiliary
+                # (should only be used if populated and predictive value is missing).
+                # TCC = T/C depending on Amend Total
+            ),
+            (
+                "UAT-ABD-DIFF-11002",
+                10817,
+                [
+                    (9201),
+                    (866),
+                    (632),
+                    (112),
+                ],
+                True,
+                None,
+                28,
+                10821,
+                11,
+                None,
+                (
+                    "UAT-ABD-DIFF-11002",
+                    10,
+                    None,
+                    None,
+                    10811,
+                    [9201, 866, 632, 112],
+                    "T",
+                ),
+                "Test 32 - If absolute difference <= 11 and the auxiliary is used as the predictive then we correct the total",  # noqa: E501
+                # Sheet TCC_test_data_case_a11 reference 11002
+                # If the absolute difference <= absolute difference threshold and > 0
+                # but absolute difference is calculated with auxiliary
+                # (should only be used if populated and predictive value is missing).
+                # TCC = T/C depending on Amend Total
+            ),
+            (
+                "UAT-ABD-DIFF-11003",
                 103,
                 [
                     (98),
@@ -2220,54 +2644,53 @@ class TotalsAndComponentsUatTests:
                 11,
                 None,
                 (
-                    "UAT-ABD-DIFF-11",
+                    "UAT-ABD-DIFF-11003",
                     1,
                     None,
                     None,
-                    108.0,
+                    108,
                     [98, 0, 4, 6],
                     "T",
                 ),
-                "Test 67 - If absolute difference <= 11 and the auxiliary is used as the predictive then we correct the total",  # noqa: E501
-                # Sheet TCC_test_data_case_a11
+                "Test 33 - If absolute difference <= 11 and the auxiliary is used as the predictive then we correct the total",  # noqa: E501
+                # Sheet TCC_test_data_case_a11 reference 11003
                 # If the absolute difference <= absolute difference threshold and > 0
                 # but absolute difference is calculated with auxiliary
                 # (should only be used if populated and predictive value is missing).
                 # TCC = T/C depending on Amend Total
             ),
-            # fixture need to be cleared with MQD
-            # (
-            #     "UAT-ABD-DIFF-11-B",
-            #     103,
-            #     [
-            #         (98),
-            #         (0),
-            #         (4),
-            #         (6),
-            #     ],
-            #     False,
-            #     None,
-            #     7,
-            #     107,
-            #     11,
-            #     None,
-            #     (
-            #         "UAT-ABD-DIFF-11-B",
-            #         1,
-            #         None,
-            #         None,
-            #         103,
-            #         [93.46296, 0.0, 3.962963, 5.744444],
-            #         "C",
-            #     ),
-            #     "Test 68 - If absolute difference <= 11 and the auxiliary is used as the predictive then we correct the components",  # noqa: E501
-            #     # If the absolute difference <= absolute difference threshold and > 0
-            #     # but absolute difference is calculated with auxiliary
-            #     # (should only be used if populated and predictive value is missing).
-            #     # TCC = T/C depending on Amend Total
-            # ),
             (
-                "UAT-ABD-DIFF-12",
+                "UAT-ABD-DIFF-12001",
+                1621,
+                [
+                    (632),
+                    (732),
+                    (99),
+                    (162),
+                ],
+                True,
+                1621,
+                28,
+                None,
+                0,
+                None,
+                (
+                    "UAT-ABD-DIFF-12001",
+                    4,
+                    None,
+                    None,
+                    1621,
+                    [632, 732, 99, 162],
+                    "M",
+                ),
+                "Test 34 - If absolute difference > absolute difference threshold but the predictive total is different to current total then we get a total correction",  # noqa: E501
+                # Sheet TCC_test_data_case_a12 reference 12001
+                # If absolute difference > absolute difference threshold,
+                # where threshold = 0.
+                # TCC Marker = M
+            ),
+            (
+                "UAT-ABD-DIFF-12002",
                 10817,
                 [
                     (9201),
@@ -2282,7 +2705,7 @@ class TotalsAndComponentsUatTests:
                 0,
                 None,
                 (
-                    "UAT-ABD-DIFF-12",
+                    "UAT-ABD-DIFF-12002",
                     6,
                     None,
                     None,
@@ -2290,14 +2713,75 @@ class TotalsAndComponentsUatTests:
                     [9201, 866, 632, 112],
                     "M",
                 ),
-                "Test 69 - If absolute difference > absolute difference threshold but the predictive total is different to current total then we get a total correction",  # noqa: E501
-                # Sheet TCC_test_data_case_a12
+                "Test 35 - If absolute difference > absolute difference threshold but the predictive total is different to current total then we get a total correction",  # noqa: E501
+                # Sheet TCC_test_data_case_a12 reference 12002
                 # If absolute difference > absolute difference threshold,
                 # where threshold = 0.
                 # TCC Marker = M
             ),
             (
-                "UAT-ABD-DIFF-13",
+                "UAT-ABD-DIFF-12003",
+                103,
+                [
+                    (98),
+                    (0),
+                    (4),
+                    (6),
+                ],
+                True,
+                103,
+                28,
+                None,
+                0,
+                None,
+                (
+                    "UAT-ABD-DIFF-12003",
+                    5,
+                    None,
+                    None,
+                    103,
+                    [98, 0, 4, 6],
+                    "M",
+                ),
+                "Test 36 - If absolute difference > absolute difference threshold but the predictive total is different to current total then we get a total correction",  # noqa: E501
+                # Sheet TCC_test_data_case_a12 reference 12003
+                # If absolute difference > absolute difference threshold,
+                # where threshold = 0.
+                # TCC Marker = M
+            ),
+            (
+                "UAT-ABD-DIFF-13001",
+                1621,
+                [
+                    (632),
+                    (732),
+                    (99),
+                    (162),
+                ],
+                True,
+                1619,
+                28,
+                None,
+                11,
+                None,
+                (
+                    "UAT-ABD-DIFF-13001",
+                    6,
+                    None,
+                    None,
+                    1625,
+                    [632, 732, 99, 162],
+                    "T",
+                ),
+                "Test 37 - If absolute difference <= 11 and > 0 but the predictive total is different to the current period total then we do a total correction",  # noqa: E501
+                # Sheet TCC_test_data_case_a13 reference 13001
+                # If absolute difference <= absolute difference threshold and > 0 but the predictive total
+                # is different to the current period total
+                # (I.e., user fed in another column of data as predictive).
+                # TCC = T/C depending on Amend Total
+            ),
+            (
+                "UAT-ABD-DIFF-13002",
                 10817,
                 [
                     (9201),
@@ -2312,7 +2796,7 @@ class TotalsAndComponentsUatTests:
                 11,
                 None,
                 (
-                    "UAT-ABD-DIFF-13",
+                    "UAT-ABD-DIFF-13002",
                     10,
                     None,
                     None,
@@ -2320,21 +2804,82 @@ class TotalsAndComponentsUatTests:
                     [9201, 866, 632, 112],
                     "T",
                 ),
-                "Test 70 - If absolute difference <= 11 and > 0 but the predictive total is different to the current period total then we do a total correction",  # noqa: E501
-                # Sheet TCC_test_data_case_a13
+                "Test 38 - If absolute difference <= 11 and > 0 but the predictive total is different to the current period total then we do a total correction",  # noqa: E501
+                # Sheet TCC_test_data_case_a13 reference 13002
                 # If absolute difference <= absolute difference threshold and > 0 but the predictive total
                 # is different to the current period total
                 # (I.e., user fed in another column of data as predictive).
                 # TCC = T/C depending on Amend Total
             ),
-            # fixture need to be cleared with MQD
+            (
+                "UAT-ABD-DIFF-13003",
+                103,
+                [
+                    (98),
+                    (0),
+                    (4),
+                    (6),
+                ],
+                True,
+                107,
+                28,
+                None,
+                11,
+                None,
+                (
+                    "UAT-ABD-DIFF-13003",
+                    1,
+                    None,
+                    None,
+                    108,
+                    [98, 0, 4, 6],
+                    "T",
+                ),
+                "Test 39 - If absolute difference <= 11 and > 0 but the predictive total is different to the current period total then we do a total correction",  # noqa: E501
+                # Sheet TCC_test_data_case_a13 reference 13003
+                # If absolute difference <= absolute difference threshold and > 0 but the predictive total
+                # is different to the current period total
+                # (I.e., user fed in another column of data as predictive).
+                # TCC = T/C depending on Amend Total
+            ),
             # (
-            #     "UAT-ABD-DIFF-14",
+            #     "UAT-ABD-DIFF-14001",
+            #     1522,
+            #     [
+            #         (632),
+            #         (732),
+            #         (),
+            #         (162),
+            #     ],
+            #     False,
+            #     1522,
+            #     28,
+            #     None,
+            #     11,
+            #     None,
+            #     (
+            #         "UAT-ABD-DIFF-14001",
+            #         4,
+            #         None,
+            #         None,
+            #         1522,
+            #         [9206.1599, 866.48565, None, 632.35443],
+            #         "C",
+            #     ),
+            #     "Test 40 - If absolute difference < absolute difference threshold amend total is false then we correct the components",  # noqa: E501
+            #     # Sheet TCC_test_data_case_a14 reference 14001
+            #     # If absolute difference < absolute difference threshold,
+            #     # amend total = FALSE, some
+            #     # components are missing. TCC = C
+            # ),
+            # (
+            #     "UAT-ABD-DIFF-14002",
             #     10705,
             #     [
             #         (9201),
             #         (866),
             #         (632),
+            #         (),
             #     ],
             #     False,
             #     10705,
@@ -2343,22 +2888,52 @@ class TotalsAndComponentsUatTests:
             #     11,
             #     None,
             #     (
-            #         "UAT-ABD-DIFF-14",
+            #         "UAT-ABD-DIFF-14002",
             #         6,
             #         None,
             #         None,
             #         10705,
-            #         [9206.1599, 866.48565, 632.35443],
+            #         [9206.1599, 866.48565, 632.35443, None],
             #         "C",
             #     ),
-            #     "Test 70 - If absolute difference < absolute difference threshold amend total is false then we correct the components",  # noqa: E501
-            #     # Sheet TCC_test_data_case_a12
+            #     "Test 41 - If absolute difference < absolute difference threshold amend total is false then we correct the components",  # noqa: E501
+            #     # Sheet TCC_test_data_case_a14 reference 14002
+            #     # If absolute difference < absolute difference threshold,
+            #     # amend total = FALSE, some
+            #     # components are missing. TCC = C
+            # ),
+            # (
+            #     "UAT-ABD-DIFF-14003",
+            #     103,
+            #     [
+            #         (98),
+            #         (),
+            #         (4),
+            #         (6),
+            #     ],
+            #     False,
+            #     103,
+            #     8,
+            #     None,
+            #     11,
+            #     None,
+            #     (
+            #         "UAT-ABD-DIFF-14003",
+            #         6,
+            #         None,
+            #         None,
+            #         103,
+            #         [9206.1599, None, 866.48565, 632.35443],
+            #         "C",
+            #     ),
+            #     "Test 42 - If absolute difference < absolute difference threshold amend total is false then we correct the components",  # noqa: E501
+            #     # Sheet TCC_test_data_case_a14 reference 14003
             #     # If absolute difference < absolute difference threshold,
             #     # amend total = FALSE, some
             #     # components are missing. TCC = C
             # ),
             (
-                "UAT-PERC-DIFF-1",
+                "UAT-PERC-DIFF-1001",
                 1625,
                 [
                     (632),
@@ -2370,26 +2945,118 @@ class TotalsAndComponentsUatTests:
                 1625,
                 28,
                 None,
-                0,
+                None,
                 0.1,
                 (
-                    "UAT-PERC-DIFF-1",
-                    0,
+                    "UAT-PERC-DIFF-1001",
+                    None,
                     1462.5,
                     1787.5,
                     1625,
                     [632, 732, 99, 162],
                     "N",
                 ),
-                "Test 71 - Absolute difference = 0, then no correction is applied.",
-                # Sheet TCC_test_data_case_b1
+                "Test 43 - Absolute difference = 0, then no correction is applied.",
+                # Sheet TCC_test_data_case_b1 reference 1001
                 # If initial absolute difference between
                 # the total and components sum = 0,
                 # then no correction is applied.
                 # TCC = N
             ),
             (
-                "UAT-PERC-DIFF-2",
+                "UAT-PERC-DIFF-1002",
+                10811,
+                [
+                    (9201),
+                    (866),
+                    (632),
+                    (112),
+                ],
+                True,
+                10811,
+                28,
+                None,
+                None,
+                0.1,
+                (
+                    "UAT-PERC-DIFF-1002",
+                    None,
+                    9729.9,
+                    11892.1,
+                    10811,
+                    [9201, 866, 632, 112],
+                    "N",
+                ),
+                "Test 44 - Absolute difference = 0, then no correction is applied.",
+                # Sheet TCC_test_data_case_b1 reference 1002
+                # If initial absolute difference between
+                # the total and components sum = 0,
+                # then no correction is applied.
+                # TCC = N
+            ),
+            (
+                "UAT-PERC-DIFF-1003",
+                108,
+                [
+                    (98),
+                    (0),
+                    (4),
+                    (6),
+                ],
+                True,
+                108,
+                28,
+                None,
+                None,
+                0.1,
+                (
+                    "UAT-PERC-DIFF-1003",
+                    None,
+                    97.2,
+                    118.8,
+                    108,
+                    [98, 0, 4, 6],
+                    "N",
+                ),
+                "Test 45 - Absolute difference = 0, then no correction is applied.",
+                # Sheet TCC_test_data_case_b1 reference 1003
+                # If initial absolute difference between
+                # the total and components sum = 0,
+                # then no correction is applied.
+                # TCC = N
+            ),
+            (
+                "UAT-PERC-DIFF-2001",
+                1964,
+                [
+                    (632),
+                    (732),
+                    (99),
+                    (162),
+                ],
+                True,
+                1964,
+                28,
+                None,
+                None,
+                0.1,
+                (
+                    "UAT-PERC-DIFF-2001",
+                    None,
+                    1462.5,
+                    1787.5,
+                    1964,
+                    [632, 732, 99, 162],
+                    "M",
+                ),
+                "Test 46 - If percentage difference > 10 then manual editing is required",
+                # Sheet TCC_test_data_case_b2 reference 2001
+                # If percentage difference > 10, then no correction is applied,
+                # and marker shows manual editing required.
+                # TCC = M
+            ),
+            (
+                "UAT-PERC-DIFF-2002",
                 12492,
                 [
                     (9201),
@@ -2404,7 +3071,7 @@ class TotalsAndComponentsUatTests:
                 None,
                 0.1,
                 (
-                    "UAT-PERC-DIFF-2",
+                    "UAT-PERC-DIFF-2002",
                     None,
                     9729.9,
                     11892.1,
@@ -2412,14 +3079,102 @@ class TotalsAndComponentsUatTests:
                     [9201, 866, 632, 112],
                     "M",
                 ),
-                "Test 72 - If percentage difference > 10 then manual editing is required",
-                # Sheet TCC_test_data_case_b2
+                "Test 47 - If percentage difference > 10 then manual editing is required",
+                # Sheet TCC_test_data_case_b2 reference 2002
                 # If percentage difference > 10, then no correction is applied,
                 # and marker shows manual editing required.
                 # TCC = M
             ),
             (
-                "UAT-PERC-DIFF-3",
+                "UAT-PERC-DIFF-2003",
+                153,
+                [
+                    (98),
+                    (0),
+                    (4),
+                    (6),
+                ],
+                True,
+                153,
+                28,
+                None,
+                None,
+                0.1,
+                (
+                    "UAT-PERC-DIFF-2003",
+                    None,
+                    97.2,
+                    118.8,
+                    153,
+                    [98, 0, 4, 6],
+                    "M",
+                ),
+                "Test 48 - If percentage difference > 10 then manual editing is required",
+                # Sheet TCC_test_data_case_b2 reference 2003
+                # If percentage difference > 10, then no correction is applied,
+                # and marker shows manual editing required.
+                # TCC = M
+            ),
+            (
+                "UAT-PERC-DIFF-3001",
+                1458,
+                [
+                    (632),
+                    (732),
+                    (99),
+                    (157),
+                ],
+                True,
+                1458,
+                28,
+                None,
+                None,
+                0.1,
+                (
+                    "UAT-PERC-DIFF-3001",
+                    None,
+                    1458,
+                    1782,
+                    1620,
+                    [632, 732, 99, 157],
+                    "T",
+                ),
+                "Test 49 - If percentage difference = 10 and amend total = TRUE, then the total is corrected",
+                # Sheet TCC_test_data_case_b3 reference 3001
+                # If percentage difference = 10 and amend total = TRUE, then correction applied
+                # and total corrected. TCC = T
+            ),
+            (
+                "UAT-PERC-DIFF-3002",
+                11902,
+                [
+                    (9201),
+                    (866),
+                    (641),
+                    (112),
+                ],
+                True,
+                11902,
+                28,
+                None,
+                None,
+                0.1,
+                (
+                    "UAT-PERC-DIFF-3002",
+                    None,
+                    9738,
+                    11902,
+                    10820,
+                    [9201, 866, 641, 112],
+                    "T",
+                ),
+                "Test 50 - If percentage difference = 10 and amend total = TRUE, then the total is corrected",
+                # Sheet TCC_test_data_case_b3 reference 3002
+                # If percentage difference = 10 and amend total = TRUE, then correction applied
+                # and total corrected. TCC = T
+            ),
+            (
+                "UAT-PERC-DIFF-3003",
                 90,
                 [
                     (90),
@@ -2434,7 +3189,7 @@ class TotalsAndComponentsUatTests:
                 None,
                 0.1,
                 (
-                    "UAT-PERC-DIFF-3",
+                    "UAT-PERC-DIFF-3003",
                     None,
                     90,
                     110,
@@ -2442,13 +3197,71 @@ class TotalsAndComponentsUatTests:
                     [90, 0, 4, 6],
                     "T",
                 ),
-                "Test 73 - If percentage difference = 10 and amend total = TRUE, then the total is corrected",
-                # Sheet TCC_test_data_case_b3
+                "Test 51 - If percentage difference = 10 and amend total = TRUE, then the total is corrected",
+                # Sheet TCC_test_data_case_b3 reference 3003
                 # If percentage difference = 10 and amend total = TRUE, then correction applied
                 # and total corrected. TCC = T
             ),
             (
-                "UAT-PERC-DIFF-4",
+                "UAT-PERC-DIFF-4001",
+                1458,
+                [
+                    (632),
+                    (732),
+                    (99),
+                    (157),
+                ],
+                False,
+                1458,
+                28,
+                None,
+                None,
+                0.1,
+                (
+                    "UAT-PERC-DIFF-4001",
+                    None,
+                    1458,
+                    1782,
+                    1458,
+                    [568.8, 658.8, 89.1, 141.3],
+                    "C",
+                ),
+                "Test 52 - If percentage difference = 10 and amend total = FALSE, then component correction is applied",
+                # Sheet TCC_test_data_case_b4 reference 4001
+                # If percentage difference = 10 and amend total = FALSE, then correction applied,
+                # and components rescaled. TCC = C
+            ),
+            (
+                "UAT-PERC-DIFF-4002",
+                11902,
+                [
+                    (9201),
+                    (866),
+                    (641),
+                    (112),
+                ],
+                False,
+                11902,
+                28,
+                None,
+                None,
+                0.1,
+                (
+                    "UAT-PERC-DIFF-4002",
+                    None,
+                    9738,
+                    11902,
+                    11902,
+                    [10121.1, 952.6, 705.1, 123.2],
+                    "C",
+                ),
+                "Test 53 - If percentage difference = 10 and amend total = FALSE, then component correction is applied",
+                # Sheet TCC_test_data_case_b4 reference 4002
+                # If percentage difference = 10 and amend total = FALSE, then correction applied,
+                # and components rescaled. TCC = C
+            ),
+            (
+                "UAT-PERC-DIFF-4003",
                 90,
                 [
                     (90),
@@ -2463,7 +3276,7 @@ class TotalsAndComponentsUatTests:
                 None,
                 0.1,
                 (
-                    "UAT-PERC-DIFF-4",
+                    "UAT-PERC-DIFF-4003",
                     None,
                     90,
                     110,
@@ -2471,13 +3284,13 @@ class TotalsAndComponentsUatTests:
                     [81, 0, 3.6, 5.4],
                     "C",
                 ),
-                "Test 74 - If percentage difference = 10 and amend total = FALSE, then component correction is applied",
-                # Sheet TCC_test_data_case_b4
+                "Test 54 - If percentage difference = 10 and amend total = FALSE, then component correction is applied",
+                # Sheet TCC_test_data_case_b4 reference 4003
                 # If percentage difference = 10 and amend total = FALSE, then correction applied,
                 # and components rescaled. TCC = C
             ),
             (
-                "UAT-PERC-DIFF-5",
+                "UAT-PERC-DIFF-5001",
                 1621,
                 [
                     (632),
@@ -2492,7 +3305,7 @@ class TotalsAndComponentsUatTests:
                 None,
                 0.1,
                 (
-                    "UAT-PERC-DIFF-5",
+                    "UAT-PERC-DIFF-5001",
                     None,
                     1462.5,
                     1787.5,
@@ -2500,48 +3313,173 @@ class TotalsAndComponentsUatTests:
                     [632, 732, 99, 162],
                     "T",
                 ),
-                "Test 75 - If percentage difference < 10 and amend total = TRUE, then total is corrected",
-                # Sheet TCC_test_data_case_b5
+                "Test 55 - If percentage difference < 10 and amend total = TRUE, then total is corrected",
+                # Sheet TCC_test_data_case_b5 reference 5001
                 # If percentage difference < 10 and amend total = TRUE, then correction applied
                 # and total corrected. TCC = T
             ),
-            # fixture need to be cleared with MQD
+            (
+                "UAT-PERC-DIFF-5002",
+                10817,
+                [
+                    (9201),
+                    (866),
+                    (632),
+                    (112),
+                ],
+                True,
+                10817,
+                28,
+                None,
+                None,
+                0.1,
+                (
+                    "UAT-PERC-DIFF-5002",
+                    None,
+                    9729.9,
+                    11892.1,
+                    10811,
+                    [9201, 866, 632, 112],
+                    "T",
+                ),
+                "Test 56 - If percentage difference < 10 and amend total = TRUE, then total is corrected",
+                # Sheet TCC_test_data_case_b5 reference 5002
+                # If percentage difference < 10 and amend total = TRUE, then correction applied
+                # and total corrected. TCC = T
+            ),
+            (
+                "UAT-PERC-DIFF-5003",
+                103,
+                [
+                    (98),
+                    (0),
+                    (4),
+                    (6),
+                ],
+                True,
+                103,
+                28,
+                None,
+                None,
+                0.1,
+                (
+                    "UAT-PERC-DIFF-5003",
+                    None,
+                    97.2,
+                    118.8,
+                    108,
+                    [98, 0, 4, 6],
+                    "T",
+                ),
+                "Test 57 - If percentage difference < 10 and amend total = TRUE, then total is corrected",
+                # Sheet TCC_test_data_case_b5 reference 5003
+                # If percentage difference < 10 and amend total = TRUE, then correction applied
+                # and total corrected. TCC = T
+            ),
+            (
+                "UAT-PERC-DIFF-6001",
+                1621,
+                [
+                    (632),
+                    (732),
+                    (99),
+                    (162),
+                ],
+                False,
+                1621,
+                28,
+                None,
+                None,
+                0.1,
+                (
+                    "UAT-PERC-DIFF-6001",
+                    None,
+                    1462.5,
+                    1787.5,
+                    1621,
+                    [
+                        630.4443076923077,
+                        730.1981538461539,
+                        98.75630769230769,
+                        161.60123076923077,
+                    ],
+                    "C",
+                ),
+                "Test 58 - If percentage difference < 10 and amend total = FALSE, then component correction is applied",  # noqa: E501
+                # Sheet TCC_test_data_case_b6 reference 6001
+                # If percentage difference < 10 and amend total = FALSE, then correction applied,
+                # and components rescaled. TCC = C
+            ),
             # (
-            #     "UAT-PERC-DIFF-6",
-            #     1621,
+            #     "UAT-PERC-DIFF-6002",
+            #     10817,
             #     [
+            #         (9201),
+            #         (866),
             #         (632),
-            #         (732),
-            #         (99),
-            #         (162),
+            #         (112),
             #     ],
             #     False,
-            #     1621,
-            #     9,
+            #     10817,
+            #     28,
             #     None,
             #     None,
             #     0.1,
             #     (
-            #         "UAT-PERC-DIFF-6",
+            #         "UAT-PERC-DIFF-6002",
             #         None,
-            #         1462.5,
-            #         1787.5,
-            #         1621,
+            #         9729.9,
+            #         11892.1,
+            #         10817,
             #         [
-            #             630.444308,
-            #             730.198154,
-            #             98.7563077,
-            #             161.601231,
+            #             9206.10646563685,
+            #             866.4806215891222,
+            #             632.3507538618074,
+            #             112.06215891221903,
             #         ],
             #         "C",
             #     ),
-            #     "Test 76 - If percentage difference < 10 and amend total = FALSE, then component correction is applied",  # noqa: E501
-            #     # Sheet TCC_test_data_case_b6
+            #     "Test 59 - If percentage difference < 10 and amend total = FALSE, then component correction is applied",  # noqa: E501
+            #     # Sheet TCC_test_data_case_b6 reference 6002
             #     # If percentage difference < 10 and amend total = FALSE, then correction applied,
             #     # and components rescaled. TCC = C
             # ),
             (
-                "UAT-PERC-DIFF-7",
+                "UAT-PERC-DIFF-6003",
+                103,
+                [
+                    (98),
+                    (0),
+                    (4),
+                    (6),
+                ],
+                False,
+                103,
+                28,
+                None,
+                None,
+                0.1,
+                (
+                    "UAT-PERC-DIFF-6003",
+                    None,
+                    97.2,
+                    118.8,
+                    103,
+                    [
+                        93.46296296296296,
+                        0,
+                        3.814814814814815,
+                        5.722222222222222,
+                    ],
+                    "C",
+                ),
+                "Test 60 - If percentage difference < 10 and amend total = FALSE, then component correction is applied",  # noqa: E501
+                # Sheet TCC_test_data_case_b6 reference 6003
+                # If percentage difference < 10 and amend total = FALSE, then correction applied,
+                # and components rescaled. TCC = C
+            ),
+            (
+                "UAT-PERC-DIFF-7001",
                 1621,
                 [
                     (0),
@@ -2556,7 +3494,7 @@ class TotalsAndComponentsUatTests:
                 None,
                 0.1,
                 (
-                    "UAT-PERC-DIFF-7",
+                    "UAT-PERC-DIFF-7001",
                     None,
                     None,
                     None,
@@ -2564,14 +3502,14 @@ class TotalsAndComponentsUatTests:
                     [0, 0, 0, 0],
                     "S",
                 ),
-                "Test 77 - percentage difference > 0 and component sum is 0 and amend total is true",
-                # Sheet TCC_test_data_case_b7
+                "Test 61 - percentage difference > 0 and component sum is 0 and amend total is true",
+                # Sheet TCC_test_data_case_b7 reference 7001
                 # If the percentage difference is greater than 0, the component sum
                 # is 0 and the amend total is true then the method stops
             ),
             (
-                "UAT-PERC-DIFF-8",
-                1621,
+                "UAT-PERC-DIFF-7002",
+                10817,
                 [
                     (0),
                     (0),
@@ -2579,13 +3517,71 @@ class TotalsAndComponentsUatTests:
                     (0),
                 ],
                 True,
+                10817,
+                1,
+                None,
+                None,
+                0.1,
+                (
+                    "UAT-PERC-DIFF-7002",
+                    None,
+                    None,
+                    None,
+                    10817,
+                    [0, 0, 0, 0],
+                    "S",
+                ),
+                "Test 62 - percentage difference > 0 and component sum is 0 and amend total is true",
+                # Sheet TCC_test_data_case_b7 reference 7002
+                # If the percentage difference is greater than 0, the component sum
+                # is 0 and the amend total is true then the method stops
+            ),
+            (
+                "UAT-PERC-DIFF-7003",
+                103,
+                [
+                    (0),
+                    (0),
+                    (0),
+                    (0),
+                ],
+                True,
+                103,
+                1,
+                None,
+                None,
+                0.1,
+                (
+                    "UAT-PERC-DIFF-7003",
+                    None,
+                    None,
+                    None,
+                    103,
+                    [0, 0, 0, 0],
+                    "S",
+                ),
+                "Test 63 - percentage difference > 0 and component sum is 0 and amend total is true",
+                # Sheet TCC_test_data_case_b7 reference 7003
+                # If the percentage difference is greater than 0, the component sum
+                # is 0 and the amend total is true then the method stops
+            ),
+            (
+                "UAT-PERC-DIFF-8001",
+                1621,
+                [
+                    (0),
+                    (0),
+                    (0),
+                    (0),
+                ],
+                False,
                 1621,
                 1,
                 None,
                 None,
                 0.1,
                 (
-                    "UAT-PERC-DIFF-8",
+                    "UAT-PERC-DIFF-8001",
                     None,
                     None,
                     None,
@@ -2593,13 +3589,101 @@ class TotalsAndComponentsUatTests:
                     [0, 0, 0, 0],
                     "S",
                 ),
-                "Test 78 - If percentage difference > 0 but components sum = 0 or missing, amend total = FALSE, then the method stops",  # noqa: E501
-                # Sheet TCC_test_data_case_b8
+                "Test 64 - If percentage difference > 0 but components sum = 0 or missing, amend total = FALSE, then the method stops",  # noqa: E501
+                # Sheet TCC_test_data_case_b8 reference 8001
                 # If percentage difference > 0 but components sum = 0 or missing, amend total = FALSE,
                 # TCC Marker = S
             ),
             (
-                "UAT-PERC-DIFF-9",
+                "UAT-PERC-DIFF-8002",
+                10817,
+                [
+                    (0),
+                    (0),
+                    (0),
+                    (0),
+                ],
+                False,
+                10817,
+                1,
+                None,
+                None,
+                0.1,
+                (
+                    "UAT-PERC-DIFF-8002",
+                    None,
+                    None,
+                    None,
+                    10817,
+                    [0, 0, 0, 0],
+                    "S",
+                ),
+                "Test 65 - If percentage difference > 0 but components sum = 0 or missing, amend total = FALSE, then the method stops",  # noqa: E501
+                # Sheet TCC_test_data_case_b8 reference 8002
+                # If percentage difference > 0 but components sum = 0 or missing, amend total = FALSE,
+                # TCC Marker = S
+            ),
+            (
+                "UAT-PERC-DIFF-8003",
+                103,
+                [
+                    (0),
+                    (0),
+                    (0),
+                    (0),
+                ],
+                False,
+                103,
+                1,
+                None,
+                None,
+                0.1,
+                (
+                    "UAT-PERC-DIFF-8003",
+                    None,
+                    None,
+                    None,
+                    103,
+                    [0, 0, 0, 0],
+                    "S",
+                ),
+                "Test 68 - If percentage difference > 0 but components sum = 0 or missing, amend total = FALSE, then the method stops",  # noqa: E501
+                # Sheet TCC_test_data_case_b8 reference 8003
+                # If percentage difference > 0 but components sum = 0 or missing, amend total = FALSE,
+                # TCC Marker = S
+            ),
+            (
+                "UAT-PERC-DIFF-9001",
+                1612,
+                [
+                    (632),
+                    (732),
+                    (99),
+                    (162),
+                ],
+                True,
+                None,
+                28,
+                1745,
+                None,
+                0.1,
+                (
+                    "UAT-PERC-DIFF-9001",
+                    None,
+                    1462.5,
+                    1787.5,
+                    1625,
+                    [632, 732, 99, 162],
+                    "T",
+                ),
+                "Test 67 - If percentage difference <= 10 and > 0 but percentage difference is calculated with auxiliary",  # noqa: E501
+                # Sheet TCC_test_data_case_b9 reference 9001
+                # If percentage difference <= 10 and > 0 but percentage difference is calculated with auxiliary
+                # (I.e., should only be used if populated and predictive value
+                # is missing). TCC = T/C depending on Amend Total
+            ),
+            (
+                "UAT-PERC-DIFF-9002",
                 10817,
                 [
                     (9201),
@@ -2614,7 +3698,7 @@ class TotalsAndComponentsUatTests:
                 None,
                 0.1,
                 (
-                    "UAT-PERC-DIFF-9",
+                    "UAT-PERC-DIFF-9002",
                     None,
                     9729.9,
                     11892.1,
@@ -2622,14 +3706,105 @@ class TotalsAndComponentsUatTests:
                     [9201, 866, 632, 112],
                     "T",
                 ),
-                "Test 79 - If percentage difference <= 10 and > 0 but percentage difference is calculated with auxiliary",  # noqa: E501
-                # Sheet TCC_test_data_case_b9
+                "Test 68 - If percentage difference <= 10 and > 0 but percentage difference is calculated with auxiliary",  # noqa: E501
+                # Sheet TCC_test_data_case_b9 reference 9002
                 # If percentage difference <= 10 and > 0 but percentage difference is calculated with auxiliary
                 # (I.e., should only be used if populated and predictive value
                 # is missing). TCC = T/C depending on Amend Total
             ),
             (
-                "UAT-PERC-DIFF-10",
+                "UAT-PERC-DIFF-9003",
+                103,
+                [
+                    (98),
+                    (0),
+                    (4),
+                    (6),
+                ],
+                True,
+                None,
+                28,
+                101,
+                None,
+                0.1,
+                (
+                    "UAT-PERC-DIFF-9003",
+                    None,
+                    97.2,
+                    118.8,
+                    108,
+                    [98, 0, 4, 6],
+                    "T",
+                ),
+                "Test 69 - If percentage difference <= 10 and > 0 but percentage difference is calculated with auxiliary",  # noqa: E501
+                # Sheet TCC_test_data_case_b9 reference 9003
+                # If percentage difference <= 10 and > 0 but percentage difference is calculated with auxiliary
+                # (I.e., should only be used if populated and predictive value
+                # is missing). TCC = T/C depending on Amend Total
+            ),
+            (
+                "UAT-PERC-DIFF-10001",
+                1612,
+                [
+                    (632),
+                    (732),
+                    (99),
+                    (162),
+                ],
+                True,
+                1621,
+                28,
+                None,
+                None,
+                0,
+                (
+                    "UAT-PERC-DIFF-10001",
+                    None,
+                    1625,
+                    1625,
+                    1612,
+                    [
+                        (632),
+                        (732),
+                        (99),
+                        (162),
+                    ],
+                    "M",
+                ),
+                "Test 70 - If percentage difference > percentage difference threshold, where threshold = 0 we require manual editing",  # noqa: E501
+                # Sheet TCC_test_data_case_b10 reference 10001
+                # If percentage difference > percentage difference threshold, where threshold = 0. TCC Marker = M
+            ),
+            (
+                "UAT-PERC-DIFF-10002",
+                10817,
+                [
+                    (9201),
+                    (866),
+                    (632),
+                    (112),
+                ],
+                True,
+                10817,
+                28,
+                None,
+                None,
+                0,
+                (
+                    "UAT-PERC-DIFF-10002",
+                    None,
+                    10811,
+                    10811,
+                    10817,
+                    [9201, 866, 632, 112],
+                    "M",
+                ),
+                "Test 71 - If percentage difference > percentage difference threshold, where threshold = 0 we require manual editing",  # noqa: E501
+                # Sheet TCC_test_data_case_b10 reference 10002
+                # If percentage difference > percentage difference threshold, where threshold = 0. TCC Marker = M
+            ),
+            (
+                "UAT-PERC-DIFF-10003",
                 103,
                 [
                     (98),
@@ -2644,7 +3819,7 @@ class TotalsAndComponentsUatTests:
                 None,
                 0,
                 (
-                    "UAT-PERC-DIFF-10",
+                    "UAT-PERC-DIFF-10003",
                     None,
                     108,
                     108,
@@ -2652,12 +3827,12 @@ class TotalsAndComponentsUatTests:
                     [98, 0, 4, 6],
                     "M",
                 ),
-                "Test 80 - If percentage difference > percentage difference threshold, where threshold = 0 we require manual editing",  # noqa: E501
-                # Sheet TCC_test_data_case_b10
+                "Test 72 - If percentage difference > percentage difference threshold, where threshold = 0 we require manual editing",  # noqa: E501
+                # Sheet TCC_test_data_case_b10 reference 10003
                 # If percentage difference > percentage difference threshold, where threshold = 0. TCC Marker = M
             ),
             (
-                "UAT-PERC-DIFF-11",
+                "UAT-PERC-DIFF-11001",
                 1621,
                 [
                     (632),
@@ -2672,7 +3847,7 @@ class TotalsAndComponentsUatTests:
                 None,
                 0.1,
                 (
-                    "UAT-PERC-DIFF-11",
+                    "UAT-PERC-DIFF-11001",
                     None,
                     1462.5,
                     1787.5,
@@ -2680,15 +3855,107 @@ class TotalsAndComponentsUatTests:
                     [632, 732, 99, 162],
                     "T",
                 ),
-                "Test 81 - If percentage difference <= 10 and > 0 then we correct the total",
-                # Sheet TCC_test_data_case_b11
+                "Test 73 - If percentage difference <= 10 and > 0 then we correct the total",
+                # Sheet TCC_test_data_case_b11 reference 11001
                 # If percentage difference <= 10 and > 0 but the predictive total is different
                 # to the current period total
                 # (I.e., user fed in another column of data as predictive).
                 # TCC = T/C depending on amend total
             ),
             (
-                "UAT-ABS-PERC-DIFF-1",
+                "UAT-PERC-DIFF-11002",
+                10817,
+                [
+                    (9201),
+                    (866),
+                    (632),
+                    (112),
+                ],
+                True,
+                10695,
+                28,
+                None,
+                None,
+                0.1,
+                (
+                    "UAT-PERC-DIFF-11002",
+                    None,
+                    9729.9,
+                    11892.1,
+                    10811,
+                    [9201, 866, 632, 112],
+                    "T",
+                ),
+                "Test 74 - If percentage difference <= 10 and > 0 then we correct the total",
+                # Sheet TCC_test_data_case_b11 reference 11002
+                # If percentage difference <= 10 and > 0 but the predictive total is different
+                # to the current period total
+                # (I.e., user fed in another column of data as predictive).
+                # TCC = T/C depending on amend total
+            ),
+            (
+                "UAT-PERC-DIFF-11003",
+                103,
+                [
+                    (98),
+                    (0),
+                    (4),
+                    (6),
+                ],
+                True,
+                101,
+                28,
+                None,
+                None,
+                0.1,
+                (
+                    "UAT-PERC-DIFF-11003",
+                    None,
+                    97.2,
+                    118.8,
+                    108,
+                    [98, 0, 4, 6],
+                    "T",
+                ),
+                "Test 75 - If percentage difference <= 10 and > 0 then we correct the total",
+                # Sheet TCC_test_data_case_b11 reference 11003
+                # If percentage difference <= 10 and > 0 but the predictive total is different
+                # to the current period total
+                # (I.e., user fed in another column of data as predictive).
+                # TCC = T/C depending on amend total
+            ),
+            (
+                "UAT-ABS-PERC-DIFF-1001",
+                1964,
+                [
+                    (632),
+                    (732),
+                    (99),
+                    (162),
+                ],
+                True,
+                1964,
+                28,
+                None,
+                25,
+                0.1,
+                (
+                    "UAT-ABS-PERC-DIFF-1001",
+                    339,
+                    1462.5,
+                    1787.5,
+                    1964,
+                    [632, 732, 99, 162],
+                    "M",
+                ),
+                "Test 76 - If absolute difference > 25 and percentage difference > 10, then manual editing is required",
+                # Sheet TCC_test_data_case_c1 reference 1001
+                # If absolute difference > absolute difference threshold
+                # and percentage difference > 10, then no correction is applied,
+                # the marker shows manual editing required. TCC = M
+            ),
+            (
+                "UAT-ABS-PERC-DIFF-1002",
                 12492,
                 [
                     (9201),
@@ -2703,7 +3970,7 @@ class TotalsAndComponentsUatTests:
                 25,
                 0.1,
                 (
-                    "UAT-ABS-PERC-DIFF-1",
+                    "UAT-ABS-PERC-DIFF-1002",
                     1681,
                     9729.9,
                     11892.1,
@@ -2711,14 +3978,104 @@ class TotalsAndComponentsUatTests:
                     [9201, 866, 632, 112],
                     "M",
                 ),
-                "Test 82 - If absolute difference > 25 and percentage difference > 10, then manual editing is required",
-                # Sheet TCC_test_data_case_c1
+                "Test 77 - If absolute difference > 25 and percentage difference > 10, then manual editing is required",
+                # Sheet TCC_test_data_case_c1 reference 1002
                 # If absolute difference > absolute difference threshold
                 # and percentage difference > 10, then no correction is applied,
                 # the marker shows manual editing required. TCC = M
             ),
             (
-                "UAT-ABS-PERC-DIFF-2",
+                "UAT-ABS-PERC-DIFF-1003",
+                153,
+                [
+                    (98),
+                    (0),
+                    (4),
+                    (6),
+                ],
+                True,
+                153,
+                28,
+                None,
+                25,
+                0.1,
+                (
+                    "UAT-ABS-PERC-DIFF-1003",
+                    45,
+                    97.2,
+                    118.8,
+                    153,
+                    [98, 0, 4, 6],
+                    "M",
+                ),
+                "Test 78 - If absolute difference > 25 and percentage difference > 10, then manual editing is required",
+                # Sheet TCC_test_data_case_c1 reference 1003
+                # If absolute difference > absolute difference threshold
+                # and percentage difference > 10, then no correction is applied,
+                # the marker shows manual editing required. TCC = M
+            ),
+            (
+                "UAT-ABS-PERC-DIFF-2001",
+                1793,
+                [
+                    (632),
+                    (732),
+                    (101),
+                    (165),
+                ],
+                True,
+                1793,
+                28,
+                None,
+                25,
+                0.1,
+                (
+                    "UAT-ABS-PERC-DIFF-2001",
+                    163,
+                    1467,
+                    1793,
+                    1630,
+                    [632, 732, 101, 165],
+                    "T",
+                ),
+                "Test 79 - If absolute difference > 25, percentage difference = 10 and amend total = TRUE, then the total correction is applied",  # noqa: E501
+                # Sheet TCC_test_data_case_c2 reference 2001
+                # If absolute difference > absolute difference threshold,
+                # percentage difference = 10 and amend total = TRUE,
+                # then correction applied, and total corrected. TCC = T
+            ),
+            (
+                "UAT-ABS-PERC-DIFF-2002",
+                9729,
+                [
+                    (9200),
+                    (866),
+                    (632),
+                    (112),
+                ],
+                True,
+                9729,
+                28,
+                None,
+                25,
+                0.1,
+                (
+                    "UAT-ABS-PERC-DIFF-2002",
+                    1081,
+                    9729,
+                    11891,
+                    10810,
+                    [9200, 866, 632, 112],
+                    "T",
+                ),
+                "Test 80 - If absolute difference > 25, percentage difference = 10 and amend total = TRUE, then the total correction is applied",  # noqa: E501
+                # Sheet TCC_test_data_case_c2 reference 2002
+                # If absolute difference > absolute difference threshold,
+                # percentage difference = 10 and amend total = TRUE,
+                # then correction applied, and total corrected. TCC = T
+            ),
+            (
+                "UAT-ABS-PERC-DIFF-2003",
                 308,
                 [
                     (240),
@@ -2733,7 +4090,7 @@ class TotalsAndComponentsUatTests:
                 25,
                 0.1,
                 (
-                    "UAT-ABS-PERC-DIFF-2",
+                    "UAT-ABS-PERC-DIFF-2003",
                     28,
                     252,
                     308,
@@ -2741,8 +4098,8 @@ class TotalsAndComponentsUatTests:
                     [240, 0, 30, 10],
                     "T",
                 ),
-                "Test 83 - If absolute difference > 25, percentage difference = 10 and amend total = TRUE, then the total correction is applied",  # noqa: E501
-                # Sheet TCC_test_data_case_c2
+                "Test 81 - If absolute difference > 25, percentage difference = 10 and amend total = TRUE, then the total correction is applied",  # noqa: E501
+                # Sheet TCC_test_data_case_c2 reference 2003
                 # If absolute difference > absolute difference threshold,
                 # percentage difference = 10 and amend total = TRUE,
                 # then correction applied, and total corrected. TCC = T
