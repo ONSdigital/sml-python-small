@@ -14,11 +14,8 @@ jobs:
       matrix:
         python-version: [3.7]
       fail-fast: false
-    environment:
-      name: pypi
-      url: https://pypi.org/p/sml-small
-    permissions:
-      id-token: write
+    outputs:
+      upload: ${{ steps.set.outputs.upload }}
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python ${{ matrix.python-version }}
@@ -34,7 +31,11 @@ jobs:
       - name: build
         run: poetry build
       - name: echo version
-        run: poetry version -s > sml-python-small.version
+        run: |
+          poetry version -s > sml-python-small.version
+          if ! grep -i -q "rc" sml-python-small.version; then
+            echo ::set-output name=upload::"yes"
+          fi
       - name: Archive dist
         uses: actions/upload-artifact@v3
         with:
@@ -47,8 +48,6 @@ jobs:
           name: dist-without-markdown
           path: sml-python-small.version
           retention-days: 1
-      - name: Publish package distributions to PyPI
-        uses: pypa/gh-action-pypi-publish@v1.8.10
 
   release-to-github:
     name: Build and release artifact
@@ -71,3 +70,22 @@ jobs:
             sml-python-small.version
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  upload-to-pypi:
+    name: Build and release artifact
+    runs-on: ubuntu-latest
+    needs: build-and-release
+    if: needs.build-and-release.outputs.upload == 'yes'
+    environment:
+      name: pypi
+      url: https://pypi.org/p/sml-small
+    permissions:
+      id-token: write
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: [ 3.7 ]
+      fail-fast: false
+    steps:
+      - name: Publish package distributions to PyPI
+        uses: pypa/gh-action-pypi-publish@v1.8.10
