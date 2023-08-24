@@ -39,13 +39,13 @@ jobs:
       - name: Archive dist
         uses: actions/upload-artifact@v3
         with:
-          name: dist-without-markdown
+          name: dist
           path: dist
           retention-days: 1
       - name: Archive version
         uses: actions/upload-artifact@v3
         with:
-          name: dist-without-markdown
+          name: sml-python-small.version
           path: sml-python-small.version
           retention-days: 1
 
