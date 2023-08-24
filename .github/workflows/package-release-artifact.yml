@@ -13,7 +13,9 @@ jobs:
       max-parallel: 4
       matrix:
         python-version: [3.7]
-      fail-fast: false 
+      fail-fast: false
+    outputs:
+      upload: ${{ steps.set.outputs.upload }}
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python ${{ matrix.python-version }}
@@ -29,7 +31,36 @@ jobs:
       - name: build
         run: poetry build
       - name: echo version
-        run: poetry version -s > sml-python-small.version
+        run: |
+          poetry version -s > sml-python-small.version
+          if ! grep -i -q "rc" sml-python-small.version; then
+            echo ::set-output name=upload::"yes"
+          fi
+      - name: Archive dist
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist
+          path: dist
+          retention-days: 1
+      - name: Archive version
+        uses: actions/upload-artifact@v3
+        with:
+          name: sml-python-small.version
+          path: sml-python-small.version
+          retention-days: 1
+
+  release-to-github:
+    name: Build and release artifact
+    runs-on: ubuntu-latest
+    needs: build-and-release
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: [ 3.7 ]
+      fail-fast: false
+    steps:
+      - name: Download all workflow run artifacts
+        uses: actions/download-artifact@v3
       - name: Create GitHub release
         uses: softprops/action-gh-release@v1
         with:
@@ -39,3 +70,27 @@ jobs:
             sml-python-small.version
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  upload-to-pypi:
+    name: Upload to pypi
+    runs-on: ubuntu-latest
+    needs: build-and-release
+    if: needs.build-and-release.outputs.upload == 'yes'
+    environment:
+      name: pypi
+      url: https://pypi.org/p/sml-small
+    permissions:
+      id-token: write
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: [ 3.7 ]
+      fail-fast: false
+    steps:
+      - name: Download all workflow run artifacts
+        uses: actions/download-artifact@v3
+      - name: Publish package distributions to PyPI
+        uses: pypa/gh-action-pypi-publish@v1.8.10
+        with:
+          user: ${{ secrets.PYPI_USERNAME }}
+          password: ${{ secrets.PYPI_PASSWORD }}
