@@ -2133,7 +2133,7 @@ class TestsTotalsAndComponentsUAT:
                     ],
                     "C",
                 ),
-                "Test 63 - If absolute difference < 11 and amend total is false then we correct the components",
+                "Test 16 - If absolute difference < 11 and amend total is false then we correct the components",
                 # Sheet TCC_test_data_case_a6 reference 6001
                 # If absolute difference < absolute difference threshold and amend total = FALSE,
                 # then correction applied, and
@@ -2863,7 +2863,7 @@ class TestsTotalsAndComponentsUAT:
             #         None,
             #         None,
             #         1522,
-            #         [9206.1599, 866.48565, None, 632.35443],
+            #         [630.3433814, 730.0812582, None, 161.5753604],
             #         "C",
             #     ),
             #     "Test 40 - If absolute difference < absolute difference threshold amend total is false then we correct the components",  # noqa: E501
@@ -2883,7 +2883,7 @@ class TestsTotalsAndComponentsUAT:
             #     ],
             #     False,
             #     10705,
-            #     8,
+            #     28,
             #     None,
             #     11,
             #     None,
@@ -2893,7 +2893,7 @@ class TestsTotalsAndComponentsUAT:
             #         None,
             #         None,
             #         10705,
-            #         [9206.1599, 866.48565, 632.35443, None],
+            #         [9206.159921, 866.4856529, 632.3544256, None],
             #         "C",
             #     ),
             #     "Test 41 - If absolute difference < absolute difference threshold amend total is false then we correct the components",  # noqa: E501
@@ -2913,7 +2913,7 @@ class TestsTotalsAndComponentsUAT:
             #     ],
             #     False,
             #     103,
-            #     8,
+            #     28,
             #     None,
             #     11,
             #     None,
@@ -2923,7 +2923,7 @@ class TestsTotalsAndComponentsUAT:
             #         None,
             #         None,
             #         103,
-            #         [9206.1599, None, 866.48565, 632.35443],
+            #         [93.46296296, None, 3.81814815, 5.722222222],
             #         "C",
             #     ),
             #     "Test 42 - If absolute difference < absolute difference threshold amend total is false then we correct the components",  # noqa: E501
@@ -3489,7 +3489,7 @@ class TestsTotalsAndComponentsUAT:
                 ],
                 True,
                 1621,
-                1,
+                28,
                 None,
                 None,
                 0.1,
@@ -3518,7 +3518,7 @@ class TestsTotalsAndComponentsUAT:
                 ],
                 True,
                 10817,
-                1,
+                28,
                 None,
                 None,
                 0.1,
@@ -3547,7 +3547,7 @@ class TestsTotalsAndComponentsUAT:
                 ],
                 True,
                 103,
-                1,
+                28,
                 None,
                 None,
                 0.1,
@@ -3576,7 +3576,7 @@ class TestsTotalsAndComponentsUAT:
                 ],
                 False,
                 1621,
-                1,
+                28,
                 None,
                 None,
                 0.1,
@@ -3605,7 +3605,7 @@ class TestsTotalsAndComponentsUAT:
                 ],
                 False,
                 10817,
-                1,
+                28,
                 None,
                 None,
                 0.1,
@@ -3634,7 +3634,7 @@ class TestsTotalsAndComponentsUAT:
                 ],
                 False,
                 103,
-                1,
+                28,
                 None,
                 None,
                 0.1,
@@ -4286,6 +4286,42 @@ class TestsTotalsAndComponentsUAT:
             ),
             (
                 "UAT-ABS-PERC-DIFF-5002",
+                1689,
+                [
+                    (632),
+                    (732),
+                    (101),
+                    (165),
+                ],
+                False,
+                1689,
+                10,
+                None,
+                28,
+                0.1,
+                (
+                    "UAT-ABS-PERC-DIFF-5002",
+                    59,
+                    1467,
+                    1793,
+                    1689,
+                    [
+                        654.8760735,
+                        758.4957055,
+                        104.6558282,
+                        170.9723927,
+                    ],
+                    "C",
+                ),
+                "Test 88 - If absolute difference > 25, percentage difference < 10 and amend total = FALSE, then the component correction is applied",  # noqa: E501
+                # Sheet TCC_test_data_case_c5 reference 5002
+                # If absolute difference > absolute difference threshold,
+                # percentage difference < 10 and amend total = FALSE,
+                # then correction applied, and components corrected.
+                # TCC = C
+            ),
+            (
+                "UAT-ABS-PERC-DIFF-5002",
                 10384,
                 [
                     (9200),
@@ -4295,7 +4331,7 @@ class TestsTotalsAndComponentsUAT:
                 ],
                 False,
                 10384,
-                10,
+                28,
                 None,
                 25,
                 0.1,
@@ -4306,14 +4342,14 @@ class TestsTotalsAndComponentsUAT:
                     11891,
                     10384,
                     [
-                        8837.446809,
-                        831.8727105,
-                        607.0941721,
-                        107.586309,
+                        8837.446808510638,
+                        831.872710453284,
+                        607.0941720629047,
+                        107.58630897317299,
                     ],
                     "C",
                 ),
-                "Test 88 - If absolute difference > 25, percentage difference < 10 and amend total = FALSE, then the component correction is applied",  # noqa: E501
+                "Test 89 - If absolute difference > 25, percentage difference < 10 and amend total = FALSE, then the component correction is applied",  # noqa: E501
                 # Sheet TCC_test_data_case_c5 reference 5002
                 # If absolute difference > absolute difference threshold,
                 # percentage difference < 10 and amend total = FALSE,
@@ -4331,7 +4367,7 @@ class TestsTotalsAndComponentsUAT:
                 ],
                 False,
                 306,
-                10,
+                28,
                 None,
                 25,
                 0.1,
@@ -4342,14 +4378,14 @@ class TestsTotalsAndComponentsUAT:
                     308,
                     306,
                     [
-                        262.2857143,
+                        262.2857142857143,
                         0,
-                        32.78571427,
-                        10.92857143,
+                        32.785714285714285,
+                        10.928571428571429,
                     ],
                     "C",
                 ),
-                "Test 89 - If absolute difference > 25, percentage difference < 10 and amend total = FALSE, then the component correction is applied",  # noqa: E501
+                "Test 90 - If absolute difference > 25, percentage difference < 10 and amend total = FALSE, then the component correction is applied",  # noqa: E501
                 # Sheet TCC_test_data_case_c5 reference 5003
                 # If absolute difference > absolute difference threshold,
                 # percentage difference < 10 and amend total = FALSE,
@@ -4380,7 +4416,7 @@ class TestsTotalsAndComponentsUAT:
                     [5, 4, 0, 2],
                     "T",
                 ),
-                "Test 90 - If absolute difference <= 25, percentage difference > 10 and amend total = TRUE, then the total correction is applied",  # noqa: E501
+                "Test 91 - If absolute difference <= 25, percentage difference > 10 and amend total = TRUE, then the total correction is applied",  # noqa: E501
                 # Sheet TCC_test_data_case_c6 reference 6001
                 # If absolute difference <= 25, percentage difference > 10 and amend total = TRUE,
                 # then correction applied, and total corrected
@@ -4410,7 +4446,7 @@ class TestsTotalsAndComponentsUAT:
                     [53, 24, 4, 7],
                     "T",
                 ),
-                "Test 91 - If absolute difference <= 25, percentage difference > 10 and amend total = TRUE, then the total correction is applied",  # noqa: E501
+                "Test 92 - If absolute difference <= 25, percentage difference > 10 and amend total = TRUE, then the total correction is applied",  # noqa: E501
                 # Sheet TCC_test_data_case_c6 reference 6002
                 # If absolute difference <= 25, percentage difference > 10 and amend total = TRUE,
                 # then correction applied, and total corrected
@@ -4440,7 +4476,7 @@ class TestsTotalsAndComponentsUAT:
                     [49, 0, 30, 10],
                     "T",
                 ),
-                "Test 92 - If absolute difference <= 25, percentage difference > 10 and amend total = TRUE, then the total correction is applied",  # noqa: E501
+                "Test 93 - If absolute difference <= 25, percentage difference > 10 and amend total = TRUE, then the total correction is applied",  # noqa: E501
                 # Sheet TCC_test_data_case_c6 reference 6003
                 # If absolute difference <= 25, percentage difference > 10 and amend total = TRUE,
                 # then correction applied, and total corrected
@@ -4470,7 +4506,7 @@ class TestsTotalsAndComponentsUAT:
                     [632, 732, 101, 165],
                     "M",
                 ),
-                "Test 93 - If absolute difference > absolute difference threshold and percentage difference > percentage difference threshold, where both thresholds = 0. We would require manual editing",  # noqa: E501
+                "Test 94 - If absolute difference > absolute difference threshold and percentage difference > percentage difference threshold, where both thresholds = 0. We would require manual editing",  # noqa: E501
                 # Sheet TCC_test_data_case_c7 reference 7001
                 # If absolute difference > absolute difference threshold
                 # and percentage difference > percentage
@@ -4501,7 +4537,7 @@ class TestsTotalsAndComponentsUAT:
                     [9200, 866, 632, 112],
                     "M",
                 ),
-                "Test 94 - If absolute difference > absolute difference threshold and percentage difference > percentage difference threshold, where both thresholds = 0. We would require manual editing",  # noqa: E501
+                "Test 95 - If absolute difference > absolute difference threshold and percentage difference > percentage difference threshold, where both thresholds = 0. We would require manual editing",  # noqa: E501
                 # Sheet TCC_test_data_case_c7 reference 7003
                 # If absolute difference > absolute difference threshold
                 # and percentage difference > percentage
@@ -4532,7 +4568,7 @@ class TestsTotalsAndComponentsUAT:
                     [240, 0, 30, 10],
                     "M",
                 ),
-                "Test 95 - If absolute difference > absolute difference threshold and percentage difference > percentage difference threshold, where both thresholds = 0. We would require manual editing",  # noqa: E501
+                "Test 96 - If absolute difference > absolute difference threshold and percentage difference > percentage difference threshold, where both thresholds = 0. We would require manual editing",  # noqa: E501
                 # Sheet TCC_test_data_case_c7 reference 7003
                 # If absolute difference > absolute difference threshold
                 # and percentage difference > percentage
@@ -4563,7 +4599,7 @@ class TestsTotalsAndComponentsUAT:
                     [632, 732, 101, 165],
                     "T",
                 ),
-                "Test 96 - If absolute difference > 25, percentage difference < 10 and amend total = TRUE and absolute difference and percentage difference are calculated with auxiliary then we correct the total",  # noqa: E501
+                "Test 97 - If absolute difference > 25, percentage difference < 10 and amend total = TRUE and absolute difference and percentage difference are calculated with auxiliary then we correct the total",  # noqa: E501
                 # Sheet TCC_test_data_case_c8 reference 8001
                 # If absolute difference > absolute difference threshold,
                 # percentage difference < 10 and amend total = TRUE
@@ -4596,7 +4632,7 @@ class TestsTotalsAndComponentsUAT:
                     [9200, 866, 632, 112],
                     "T",
                 ),
-                "Test 97 - If absolute difference > 25, percentage difference < 10 and amend total = TRUE and absolute difference and percentage difference are calculated with auxiliary then we correct the total",  # noqa: E501
+                "Test 98 - If absolute difference > 25, percentage difference < 10 and amend total = TRUE and absolute difference and percentage difference are calculated with auxiliary then we correct the total",  # noqa: E501
                 # Sheet TCC_test_data_case_c8 reference 8002
                 # If absolute difference > absolute difference threshold,
                 # percentage difference < 10 and amend total = TRUE
@@ -4629,7 +4665,7 @@ class TestsTotalsAndComponentsUAT:
                     [240, 0, 30, 10],
                     "T",
                 ),
-                "Test 98 - If absolute difference > 25, percentage difference < 10 and amend total = TRUE and absolute difference and percentage difference are calculated with auxiliary then we correct the total",  # noqa: E501
+                "Test 99 - If absolute difference > 25, percentage difference < 10 and amend total = TRUE and absolute difference and percentage difference are calculated with auxiliary then we correct the total",  # noqa: E501
                 # Sheet TCC_test_data_case_c8 reference 8003
                 # If absolute difference > absolute difference threshold,
                 # percentage difference < 10 and amend total = TRUE
@@ -4662,7 +4698,7 @@ class TestsTotalsAndComponentsUAT:
                     [632, 732, 101, 165],
                     "T",
                 ),
-                "Test 99 - If absolute difference > 25, percentage difference < 10 and amend total = TRUE but the predictive total is different to the current period total then we correct the total"  # noqa: E501
+                "Test 100 - If absolute difference > 25, percentage difference < 10 and amend total = TRUE but the predictive total is different to the current period total then we correct the total"  # noqa: E501
                 # Sheet TCC_test_data_case_c9 reference 9001
                 # If absolute difference > absolute difference threshold,
                 # percentage difference < 10 and amend total = TRUE
@@ -4695,7 +4731,7 @@ class TestsTotalsAndComponentsUAT:
                     [9200, 866, 632, 112],
                     "T",
                 ),
-                "Test 100 - If absolute difference > 25, percentage difference < 10 and amend total = TRUE but the predictive total is different to the current period total then we correct the total"  # noqa: E501
+                "Test 101 - If absolute difference > 25, percentage difference < 10 and amend total = TRUE but the predictive total is different to the current period total then we correct the total"  # noqa: E501
                 # Sheet TCC_test_data_case_c9 reference 9002
                 # If absolute difference > absolute difference threshold,
                 # percentage difference < 10 and amend total = TRUE
@@ -4728,7 +4764,7 @@ class TestsTotalsAndComponentsUAT:
                     [240, 0, 30, 10],
                     "T",
                 ),
-                "Test 101 - If absolute difference > 25, percentage difference < 10 and amend total = TRUE but the predictive total is different to the current period total then we correct the total"  # noqa: E501
+                "Test 102 - If absolute difference > 25, percentage difference < 10 and amend total = TRUE but the predictive total is different to the current period total then we correct the total"  # noqa: E501
                 # Sheet TCC_test_data_case_c9 reference 9003
                 # If absolute difference > absolute difference threshold,
                 # percentage difference < 10 and amend total = TRUE
@@ -4761,7 +4797,7 @@ class TestsTotalsAndComponentsUAT:
                     [20, 30, 40, 10],
                     "T",
                 ),
-                "Test 102 - If the absolute difference threshold = 10, and if percentage difference = 0, then no correction is made",  # noqa: E501
+                "Test 103 - If the absolute difference threshold = 10, and if percentage difference = 0, then no correction is made",  # noqa: E501
                 # If the absolute difference threshold = 0, and if percentage difference = 0,
                 # then the difference is less than or equal to the
                 # threshold and the method will not correct. TCC = T
@@ -4790,7 +4826,7 @@ class TestsTotalsAndComponentsUAT:
                     [20, 30, 40, 10],
                     "N",
                 ),
-                "Test 103 - If the absolute difference threshold = 0, and if absolute difference = 0, then no correction is made",  # noqa: E501
+                "Test 104 - If the absolute difference threshold = 0, and if absolute difference = 0, then no correction is made",  # noqa: E501
                 # If the absolute difference threshold = 0, and if absolute difference = 0,
                 # then the difference is less than or equal to the
                 # threshold and the method will not correct. TCC = N
