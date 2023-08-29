@@ -2839,7 +2839,7 @@ class TestTotalsAndComponentsUATFails:
                     [0, 0, 0, 0],  # final_components
                     "S",  # tcc_marker
                 ),
-                "Test 63 - If absolute difference < 11 and amend total is true then we correct the components",
+                "Test a7-7001 - If absolute difference < 11 and amend total is true then we correct the components",
                 # Sheet TCC_test_data_case_a7
                 # If absolute difference <= absolute difference threshold and > 0 but components sum = 0 or missing,
                 # and amend total = TRUE, then do not amend total.
@@ -2864,7 +2864,32 @@ class TestTotalsAndComponentsUATFails:
                     [float("nan"), float("nan"), float("nan"), float("nan")],
                     "S",
                 ),
-                "Test 63 - If absolute difference < 11 and amend total is true then we correct the components",
+                "Test a7-7002 - If absolute difference < 11 and amend total is true then we correct the components",
+                # Sheet TCC_test_data_case_a7
+                # If absolute difference <= absolute difference threshold and > 0 but components sum = 0 or missing,
+                # and amend total = TRUE, then do not amend total.
+                # TCC marker = S
+            ),
+            (
+                "UAT-ABD-DIFF-7003",  # identifier
+                11,  # total
+                [(0), (0), (0), (0)],  # components
+                True,  # amend_total
+                11,  # predictive
+                28,  # precision
+                None,  # auxiliary
+                11,  # absolute_difference_threshold
+                None,  # percentage_difference_threshold
+                (
+                    "UAT-ABD-DIFF-7003",  # identifier
+                    None,  # absolute_difference
+                    None,  # low_percent_threshold
+                    None,  # high_percent_threshold
+                    11,  # final_total
+                    [0, 0, 0, 0],  # final_components
+                    "S",  # tcc_marker
+                ),
+                "Test a7-7003 - If absolute difference < 11 and amend total is true then we correct the components",
                 # Sheet TCC_test_data_case_a7
                 # If absolute difference <= absolute difference threshold and > 0 but components sum = 0 or missing,
                 # and amend total = TRUE, then do not amend total.
@@ -2889,7 +2914,7 @@ class TestTotalsAndComponentsUATFails:
                     [(630.343381389253), (730.0812581913499), float("NaN"), (161.57536041939713)],
                     "C",
                 ),
-                "Test 63 - If absolute difference < 11 and amend total is true then we correct the components",
+                "Test a14-14001 - If absolute difference < 11 and amend total is true then we correct the components",
                 # Sheet TCC_test_data_case_a7
                 # If absolute difference <= absolute difference threshold and > 0 but components sum = 0 or missing,
                 # and amend total = TRUE, then do not amend total.
@@ -2914,7 +2939,32 @@ class TestTotalsAndComponentsUATFails:
                     [(9206.15992148799), (866.4856528647537), (632.3544256472568), float("NaN")],  # 632.3544256472568
                     "C",
                 ),
-                "Test 63 - If absolute difference < 11 and amend total is true then we correct the components",
+                "Test a14-14002 - If absolute difference < 11 and amend total is true then we correct the components",
+                # Sheet TCC_test_data_case_a7
+                # If absolute difference <= absolute difference threshold and > 0 but components sum = 0 or missing,
+                # and amend total = TRUE, then do not amend total.
+                # TCC marker = S
+            ),
+            (
+                "UAT-ABD-DIFF-14003",
+                103,
+                [(98), float("Nan"), (4), (6)],
+                False,
+                103,
+                28,
+                None,
+                11,
+                None,
+                (
+                    "UAT-ABD-DIFF-14003",
+                    5,
+                    None,
+                    None,
+                    103,
+                    [(93.46296296296296), float("NaN"), (3.814814814814815), (5.722222222222222)],
+                    "C",
+                ),
+                "Test a14-14003 - If absolute difference < 11 and amend total is true then we correct the components",
                 # Sheet TCC_test_data_case_a7
                 # If absolute difference <= absolute difference threshold and > 0 but components sum = 0 or missing,
                 # and amend total = TRUE, then do not amend total.
