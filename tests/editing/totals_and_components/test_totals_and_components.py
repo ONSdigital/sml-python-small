@@ -1,5 +1,7 @@
 import random
+import math
 from decimal import Decimal, getcontext
+from typing import List
 
 import pytest
 
@@ -2787,6 +2789,219 @@ class TestTotalsAndComponents:
             assert (str(exc_info.value)) == str(expected_result)
 
 
+class TestTotalsAndComponentsUATFails:
+    @pytest.mark.parametrize(
+        "identifier, total, components, amend_total, predictive, precision,"
+        "auxiliary, absolute_difference_threshold, percentage_difference_threshold,"
+        "expected_result, test_id",
+        [
+            # (
+            #     "UAT-ABD-DIFF-6002",  # identifier
+            #     10817,  # total
+            #     [9201, 866, 632, 112],  # components
+            #     False,  # amend_total
+            #     10817,  # predictive
+            #     28,  # precision
+            #     None,  # auxiliary
+            #     11,  # absolute_difference_threshold
+            #     None,  # percentage_difference_threshold
+            #     (
+            #         "UAT-ABD-DIFF-6002",  # identifier
+            #         6,  # absolute_difference
+            #         None,  # low_percent_threshold
+            #         None,  # high_percent_threshold
+            #         10817,  # final_total
+            #         [9206.10646563685, 866.4806215891222, 632.3507538618074, 112.0621589122204],
+            #         "C",  # tcc_marker
+            #     ),
+            #     "a6-6002 - If absolute difference < 11 and amend total is true then we correct the components",
+            #     # Sheet TCC_test_data_case_a7
+            #     # If absolute difference <= absolute difference threshold and > 0 but components sum = 0 or missing,
+            #     # and amend total = TRUE, then do not amend total.
+            #     # TCC marker = S
+            # ),
+            (
+                "UAT-ABD-DIFF-7001",  # identifier
+                9,  # total
+                [(0), (0), (0), (0)],  # components
+                True,  # amend_total
+                9,  # predictive
+                28,  # precision
+                None,  # auxiliary
+                11,  # absolute_difference_threshold
+                None,  # percentage_difference_threshold
+                (
+                    "UAT-ABD-DIFF-7001",  # identifier
+                    None,  # absolute_difference
+                    None,  # low_percent_threshold
+                    None,  # high_percent_threshold
+                    9,  # final_total
+                    [0, 0, 0, 0],  # final_components
+                    "S",  # tcc_marker
+                ),
+                "Test 63 - If absolute difference < 11 and amend total is true then we correct the components",
+                # Sheet TCC_test_data_case_a7
+                # If absolute difference <= absolute difference threshold and > 0 but components sum = 0 or missing,
+                # and amend total = TRUE, then do not amend total.
+                # TCC marker = S
+            ),
+            (
+                "UAT-ABD-DIFF-7002",
+                4,
+                [float("NaN"), float("NaN"), float("NaN"), float("NaN")],
+                True,
+                4,
+                28,
+                None,
+                11,
+                None,
+                (
+                    "UAT-ABD-DIFF-7002",
+                    None,
+                    None,
+                    None,
+                    4,
+                    [float("nan"), float("nan"), float("nan"), float("nan")],
+                    "S",
+                ),
+                "Test 63 - If absolute difference < 11 and amend total is true then we correct the components",
+                # Sheet TCC_test_data_case_a7
+                # If absolute difference <= absolute difference threshold and > 0 but components sum = 0 or missing,
+                # and amend total = TRUE, then do not amend total.
+                # TCC marker = S
+            ),
+            (
+                "UAT-ABD-DIFF-14001",
+                1522,
+                [(632), (732), float("NaN"), (162)],
+                False,
+                1522,
+                28,
+                None,
+                11,
+                None,
+                (
+                    "UAT-ABD-DIFF-14001",
+                    4,
+                    None,
+                    None,
+                    1522,
+                    [(630.343381389253), (730.0812581913499), float("NaN"), (161.57536041939713)],
+                    "C",
+                ),
+                "Test 63 - If absolute difference < 11 and amend total is true then we correct the components",
+                # Sheet TCC_test_data_case_a7
+                # If absolute difference <= absolute difference threshold and > 0 but components sum = 0 or missing,
+                # and amend total = TRUE, then do not amend total.
+                # TCC marker = S
+            ),
+            (
+                "UAT-ABD-DIFF-14002",
+                10705,
+                [(9201), (866), (632), float("NaN")],
+                False,
+                10705,
+                28,
+                None,
+                11,
+                None,
+                (
+                    "UAT-ABD-DIFF-14002",
+                    6,
+                    None,
+                    None,
+                    10705,
+                    [(9206.15992148799), (866.4856528647537), (632.3544256472568), float("NaN")],  # 632.3544256472568
+                    "C",
+                ),
+                "Test 63 - If absolute difference < 11 and amend total is true then we correct the components",
+                # Sheet TCC_test_data_case_a7
+                # If absolute difference <= absolute difference threshold and > 0 but components sum = 0 or missing,
+                # and amend total = TRUE, then do not amend total.
+                # TCC marker = S
+            )
+        ],
+    )
+    def test_totals_and_components(
+        self,
+        capfd,
+        identifier,
+        total,
+        components,
+        amend_total,
+        predictive,
+        precision,
+        auxiliary,
+        absolute_difference_threshold,
+        percentage_difference_threshold,
+        expected_result,
+        test_id,
+    ):
+        if isinstance(expected_result, tuple):
+            try:
+                results = totals_and_components(
+                    identifier=identifier,
+                    total=total,
+                    components=components,
+                    amend_total=amend_total,
+                    predictive=predictive,
+                    auxiliary=auxiliary,
+                    absolute_difference_threshold=absolute_difference_threshold,
+                    percentage_difference_threshold=percentage_difference_threshold,
+                )
+
+                # Capture the printed output and remove any leading or trailing whitespace
+                captured = capfd.readouterr()
+                printed_output = captured.out.strip()
+
+                print(printed_output)
+
+                # calculate_weighted(total, components)
+
+                assert results.identifier == expected_result[0]
+                assert results.absolute_difference == expected_result[1]
+                assert results.low_percent_threshold == expected_result[2]
+                assert results.high_percent_threshold == expected_result[3]
+                assert results.final_total == expected_result[4]
+                assert results.tcc_marker == expected_result[6]
+
+                if results.tcc_marker == "T" or results.tcc_marker == "C":
+                    sum_of_components = 0
+                    for component in results.final_components:
+                        print(f"fc - {results.final_components}")
+                        if not math.isnan(component):
+                            sum_of_components += Decimal(str(component))
+
+                    print(f"Comparison Sum: {sum_of_components}")
+                    sum_of_components = float(sum_of_components)
+                    assert sum_of_components == expected_result[4]
+
+                compare_list_of_floats(results.final_components, expected_result[5])
+
+            except Exception as e:
+                pytest.fail(
+                    EXCEPTION_FAIL_MESSAGE.format(
+                        test_id=test_id,
+                        exception_type=type(e).__name__,
+                        exception_msg=str(e.args),
+                    )
+                )
+        else:
+            with pytest.raises(Exception) as exc_info:
+                totals_and_components(
+                    identifier=identifier,
+                    total=total,
+                    components=components,
+                    amend_total=amend_total,
+                    predictive=predictive,
+                    precision=precision,
+                    auxiliary=auxiliary,
+                    absolute_difference_threshold=absolute_difference_threshold,
+                    percentage_difference_threshold=percentage_difference_threshold,
+                )
+            assert (str(exc_info.value)) == str(expected_result)
+
+
 class TestValidateInput:
     @pytest.mark.parametrize(
         "identifier, total, components, amend_total, predictive, "
@@ -3996,3 +4211,38 @@ class TestCorrectComponents:
                     exception_msg=str(e),
                 )
             )
+
+
+def compare_list_of_floats(components: List[float], expected_components: List[float]):
+    for i, (component, expected) in enumerate(zip(components, expected_components)):
+        if math.isnan(component) and math.isnan(expected):
+            assert math.isnan(component) and math.isnan(expected), f"Both components at index {i} are NaN"
+        elif math.isnan(component) or math.isnan(expected):
+            assert False, f"Component at index {i} is NaN, the other is not component {component}, expected {expected}"
+        elif component != expected:
+            assert False, f"Values of components at index {i} do not match: component {component}, expected {expected}"
+
+
+def calculate_weighted(total: float, components: List[float]):
+    component_sum = Decimal(str(0))
+    adjusted_component_sum = Decimal(str(0))
+    adjusted_components = []
+    for component in components:
+        if not math.isnan(component):
+            component_sum += Decimal(str(component))
+
+    print(f"Component sum is: {component_sum}")
+
+    for i, component in enumerate(components):
+        adjusted_components.append((Decimal(component) / component_sum) * Decimal(total))
+
+        if not math.isnan(component):
+            print(f"Adjusted Component {adjusted_components[i]}")
+            # adjusted_component_sum += element
+            print(f"convert to float {float(adjusted_components[i])}")
+
+    adjusted_component_sum = math.fsum(adjusted_components)
+    print(adjusted_component_sum)
+    print(f"adjusted_component_sum: {adjusted_component_sum}")
+
+    print(f"convert to float {float(adjusted_component_sum)}")

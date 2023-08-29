@@ -7,6 +7,7 @@ For Copyright information, please see LICENCE.
 
 import logging.config
 import sys
+import math
 from decimal import Decimal, getcontext
 from enum import Enum
 from os import path
@@ -604,7 +605,7 @@ def check_zero_errors(predictive: float, components_sum: float) -> TccMarker:
     :return: tcc_marker, return a value of STOP if zero error is triggered
     :rtype: TccMarker
     """
-    if predictive > 0 and components_sum == 0:
+    if predictive > 0 and (components_sum == 0 or math.isnan(components_sum)):
         tcc_marker = TccMarker.STOP
         logger.warning(f"TCCMarker = STOP at line:{sys._getframe().f_back.f_lineno}")
     else:
@@ -629,8 +630,11 @@ def check_sum_components_predictive(
              sum of the components as a float.
     :rtype: float
     """
-    absolute_difference = abs(Decimal(str(predictive)) - Decimal(str(components_sum)))
-    absolute_difference = float(absolute_difference)
+    if not math.isnan(components_sum):
+        absolute_difference = abs(Decimal(str(predictive)) - Decimal(str(components_sum)))
+    else:
+        absolute_difference = abs(Decimal(str(predictive)))
+
     return absolute_difference
 
 
@@ -869,6 +873,7 @@ def correct_components(
             Decimal(str(component.original_value)) / Decimal(str(components_sum))
         ) * Decimal(str(total))
         component.final_value = float(component.final_value)
+
     tcc_marker = TccMarker.COMPONENTS_CORRECTED
     return final_total, components, tcc_marker
 
@@ -885,7 +890,8 @@ def sum_components(components: List[ComponentPair]) -> float:
     """
     total_sum = 0
     for component in components:
-        total_sum += Decimal(str(component.original_value))
+        if not math.isnan(component.original_value):
+            total_sum += Decimal(str(component.original_value))
 
     return float(total_sum)
 
