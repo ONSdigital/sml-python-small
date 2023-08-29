@@ -1,5 +1,5 @@
-import random
 import math
+import random
 from decimal import Decimal, getcontext
 from typing import List
 

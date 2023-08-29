@@ -6,8 +6,8 @@ For Copyright information, please see LICENCE.
 """
 
 import logging.config
-import sys
 import math
+import sys
 from decimal import Decimal, getcontext
 from enum import Enum
 from os import path
