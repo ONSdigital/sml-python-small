@@ -635,7 +635,7 @@ def check_sum_components_predictive(
     else:
         absolute_difference = abs(Decimal(str(predictive)))
 
-    return float(absolute_difference)
+    return absolute_difference
 
 
 def determine_error_detection(
