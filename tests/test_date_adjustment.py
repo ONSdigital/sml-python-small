@@ -82,7 +82,7 @@ def load_csv(filepath):
     return df
 
 
-fxt = "tests/fixtures/date_adjustment"
+fxt = "fixtures/date_adjustment"
 trading_weights = load_csv(f"{fxt}/da_trading_weights_data.csv")
 
 

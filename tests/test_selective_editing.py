@@ -17,7 +17,7 @@ question_list = ['question_1', 'question_2', 'question_3']
 combination_method = 'mean'
 
 filter_err = "No test was performed, all data was filtered out by criteria."
-fxt = "tests/fixtures/selective_editing"
+fxt = "fixtures/selective_editing"
 
 show_sums = 1  # 0/1 Bool: Provides additional data on score calculation for checking
 
