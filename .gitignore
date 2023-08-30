@@ -25,8 +25,4 @@ coverage.xml
 junit.xml
 
 # pyenv
-<<<<<<< HEAD
 .python-version
-=======
-.python-version
->>>>>>> 488297e98c75420cec7591acaf29971f29e37574

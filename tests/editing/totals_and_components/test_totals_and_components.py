@@ -1656,6 +1656,7 @@ class TestTotalsAndComponents:
                 )
             assert (str(exc_info.value)) == str(expected_result)
 
+
 class TestTotalsAndComponentsUAT:
     @pytest.mark.parametrize(
         "identifier, total, components, amend_total, predictive, precision,"
@@ -2160,7 +2161,6 @@ class TestTotalsAndComponentsUAT:
             #         [9206.10646563685, 866.4806215891222, 632.3507538618074, 112.0621589122204],
             #         "C",  # tcc_marker
             #     ),
-            #     
             #     "Test 17 - If absolute difference < 11 and amend total is false then we correct the components",
             #     Sheet TCC_test_data_case_a6 reference 6002
             #     If absolute difference < absolute difference threshold and amend total = FALSE,
@@ -2892,7 +2892,7 @@ class TestTotalsAndComponentsUAT:
                     [(93.46296296296296), float("NaN"), (3.814814814814815), (5.722222222222222)],
                     "C",
                 ),
-               "Test 42 - If absolute difference < absolute difference threshold amend total is false then we correct the components",  # noqa: E501
+                "Test 42 - If absolute difference < absolute difference threshold amend total is false then we correct the components",  # noqa: E501
                 # Sheet TCC_test_data_case_a14 reference 14003
                 # If absolute difference < absolute difference threshold,
                 # amend total = FALSE, some
@@ -4877,6 +4877,8 @@ class TestTotalsAndComponentsUAT:
                     percentage_difference_threshold=percentage_difference_threshold,
                 )
             assert (str(exc_info.value)) == str(expected_result)
+
+            
 class TestValidateInput:
     @pytest.mark.parametrize(
         "identifier, total, components, amend_total, predictive, "
