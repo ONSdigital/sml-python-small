@@ -5,21 +5,36 @@ from typing import List
 
 import pytest
 
-from sml_small.editing.totals_and_components.totals_and_components import (PRECISION_MAX, PRECISION_MIN, ComponentPair,
-                                                                           TACException, TccMarker,
-                                                                           check_absolute_difference_threshold,
-                                                                           check_percentage_difference_threshold,
-                                                                           check_sum_components_predictive,
-                                                                           check_zero_errors, correct_components,
-                                                                           correct_total, determine_error_detection,
-                                                                           error_correction, set_predictive_value,
-                                                                           sum_components, totals_and_components,
-                                                                           validate_input)
-from sml_small.utils.error_utils import (get_mandatory_param_error, get_one_of_params_mandatory_error,
-                                         get_param_outside_range_error, get_params_is_not_a_number_error)
+from sml_small.editing.totals_and_components.totals_and_components import (
+    PRECISION_MAX,
+    PRECISION_MIN,
+    ComponentPair,
+    TACException,
+    TccMarker,
+    check_absolute_difference_threshold,
+    check_percentage_difference_threshold,
+    check_sum_components_predictive,
+    check_zero_errors,
+    correct_components,
+    correct_total,
+    determine_error_detection,
+    error_correction,
+    set_predictive_value,
+    sum_components,
+    totals_and_components,
+    validate_input,
+)
+from sml_small.utils.error_utils import (
+    get_mandatory_param_error,
+    get_one_of_params_mandatory_error,
+    get_param_outside_range_error,
+    get_params_is_not_a_number_error,
+)
 
 # ---- Constant Definitions ----
-EXCEPTION_FAIL_MESSAGE = "{test_id} : Expected no exception, but got {exception_type}: {exception_msg}"
+EXCEPTION_FAIL_MESSAGE = (
+    "{test_id} : Expected no exception, but got {exception_type}: {exception_msg}"
+)
 
 
 # ---- Class Defnitions ----
@@ -1951,7 +1966,12 @@ class TestTotalsAndComponentsUAT:
                     None,
                     None,
                     1614,
-                    [627.7218461538462, 727.044923076923, 98.32984615384615, 160.90338461538462],
+                    [
+                        627.7218461538462,
+                        727.044923076923,
+                        98.32984615384615,
+                        160.90338461538462,
+                    ],
                     "C",
                 ),
                 "Test 10 - If absolute difference = 11 and amend total is false then we correct the components",
@@ -1981,7 +2001,12 @@ class TestTotalsAndComponentsUAT:
                     None,
                     None,
                     10822,
-                    [9210.36185366756, 866.8811395800574, 632.643048746647, 112.1139580057349],
+                    [
+                        9210.36185366756,
+                        866.8811395800574,
+                        632.643048746647,
+                        112.1139580057349,
+                    ],
                     "C",
                 ),
                 "Test 11 - If absolute difference = 11 and amend total is false then we correct the components",
@@ -2132,7 +2157,10 @@ class TestTotalsAndComponentsUAT:
                     None,
                     1621,
                     [
-                        630.4443076923077, 730.1981538461539, 98.75630769230769, 161.60123076923077
+                        630.4443076923077,
+                        730.1981538461539,
+                        98.75630769230769,
+                        161.60123076923077,
                     ],
                     "C",
                 ),
@@ -2188,12 +2216,7 @@ class TestTotalsAndComponentsUAT:
                     None,
                     None,
                     103,
-                    [
-                        93.46296296296296,
-                        0,
-                        3.814814814814815,
-                        5.722222222222222
-                    ],
+                    [93.46296296296296, 0, 3.814814814814815, 5.722222222222222],
                     "C",
                 ),
                 "Test 18 - If absolute difference < 11 and amend total is false then we correct the components",
@@ -2839,7 +2862,12 @@ class TestTotalsAndComponentsUAT:
                     None,
                     None,
                     1522,
-                    [(630.343381389253), (730.0812581913499), float("NaN"), (161.57536041939713)],
+                    [
+                        (630.343381389253),
+                        (730.0812581913499),
+                        float("NaN"),
+                        (161.57536041939713),
+                    ],
                     "C",
                 ),
                 "Test 40 - If absolute difference < absolute difference threshold amend total is false then we correct the components",  # noqa: E501
@@ -2864,7 +2892,12 @@ class TestTotalsAndComponentsUAT:
                     None,
                     None,
                     10705,
-                    [(9206.15992148799), (866.4856528647537), (632.3544256472568), float("NaN")],  # 632.3544256472568
+                    [
+                        (9206.15992148799),
+                        (866.4856528647537),
+                        (632.3544256472568),
+                        float("NaN"),
+                    ],  # 632.3544256472568
                     "C",
                 ),
                 "Test 41 - If absolute difference < absolute difference threshold amend total is false then we correct the components",  # noqa: E501
@@ -2889,7 +2922,12 @@ class TestTotalsAndComponentsUAT:
                     None,
                     None,
                     103,
-                    [(93.46296296296296), float("NaN"), (3.814814814814815), (5.722222222222222)],
+                    [
+                        (93.46296296296296),
+                        float("NaN"),
+                        (3.814814814814815),
+                        (5.722222222222222),
+                    ],
                     "C",
                 ),
                 "Test 42 - If absolute difference < absolute difference threshold amend total is false then we correct the components",  # noqa: E501
@@ -4878,7 +4916,7 @@ class TestTotalsAndComponentsUAT:
                 )
             assert (str(exc_info.value)) == str(expected_result)
 
-            
+
 class TestValidateInput:
     @pytest.mark.parametrize(
         "identifier, total, components, amend_total, predictive, "
@@ -5673,7 +5711,9 @@ class TestCheckSumComponentsPredictive:
 
         try:
             components_sum = sum_components(test_components)
-            absolute_difference = check_sum_components_predictive(predictive, components_sum)
+            absolute_difference = check_sum_components_predictive(
+                predictive, components_sum
+            )
 
             assert absolute_difference == expected_result
 
@@ -6066,9 +6106,7 @@ class TestCorrectComponents:
 
         try:
             result = correct_components(
-                components_sum=components_sum,
-                components=components,
-                total=total
+                components_sum=components_sum, components=components, total=total
             )
 
             assert (
@@ -6093,11 +6131,17 @@ class TestCorrectComponents:
 def compare_list_of_floats(components: List[float], expected_components: List[float]):
     for i, (component, expected) in enumerate(zip(components, expected_components)):
         if math.isnan(component) and math.isnan(expected):
-            assert math.isnan(component) and math.isnan(expected), f"Both components at index {i} are NaN"
+            assert math.isnan(component) and math.isnan(
+                expected
+            ), f"Both components at index {i} are NaN"
         elif math.isnan(component) or math.isnan(expected):
-            assert False, f"Component at index {i} is NaN, the other is not component {component}, expected {expected}"
+            assert (
+                False
+            ), f"Component at index {i} is NaN, the other is not component {component}, expected {expected}"
         elif component != expected:
-            assert False, f"Values of components at index {i} do not match: component {component}, expected {expected}"
+            assert (
+                False
+            ), f"Values of components at index {i} do not match: component {component}, expected {expected}"
 
 
 def calculate_weighted(total: float, components: List[float]):
@@ -6111,7 +6155,9 @@ def calculate_weighted(total: float, components: List[float]):
     print(f"Component sum is: {component_sum}")
 
     for i, component in enumerate(components):
-        adjusted_components.append((Decimal(component) / component_sum) * Decimal(total))
+        adjusted_components.append(
+            (Decimal(component) / component_sum) * Decimal(total)
+        )
 
         if not math.isnan(component):
             print(f"Adjusted Component {adjusted_components[i]}")
