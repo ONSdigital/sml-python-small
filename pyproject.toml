@@ -17,6 +17,11 @@ pytest-cov = "^4.0.0"
 pytest-dependency = "^0.5.1"
 pytest-tap = "^3.3"
 
+[project]
+dependencies = [
+    "mkdocstrings-python",
+]
+
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.3.1"
 
