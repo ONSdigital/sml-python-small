@@ -309,8 +309,7 @@ def totals_and_components(
             output_list["tcc_marker"] = check_zero_errors(predictive, component_total)
 
             absolute_difference = check_sum_components_predictive(
-                predictive,
-                component_total
+                predictive, component_total
             )
 
             #  Determine if a correction is required
@@ -364,7 +363,7 @@ def totals_and_components(
                             original_components=input_parameters[
                                 InputParameters.COMPONENTS.value
                             ],
-                            total=input_parameters[InputParameters.TOTAL.value]
+                            total=input_parameters[InputParameters.TOTAL.value],
                         )
 
         # Return the raw string instead of the enum value
@@ -389,7 +388,10 @@ def totals_and_components(
         if identifier is None:
             identifier = "N/A"
 
-        logger.error(f"identifier: {identifier}, Exception full traceback: {error}", exc_info=True)
+        logger.error(
+            f"identifier: {identifier}, Exception full traceback: {error}",
+            exc_info=True,
+        )
         raise TACException(f"identifier: {identifier}", error)
 
 
@@ -428,7 +430,7 @@ def validate_input(
     Union[float, None],
     Union[float, None],
     Union[float, None],
-    int
+    int,
 ]:
     """
     This function is used to validate the data passed to the totals_and_components
@@ -519,7 +521,8 @@ def validate_input(
         absolute_difference_threshold is not None
         and validate_number(
             "absolute difference threshold", absolute_difference_threshold
-        ) is True
+        )
+        is True
     ):
         absolute_difference_threshold = float(absolute_difference_threshold)
 
@@ -527,7 +530,8 @@ def validate_input(
         percentage_difference_threshold is not None
         and validate_number(
             "percentage difference threshold", percentage_difference_threshold
-        ) is True
+        )
+        is True
     ):
         percentage_difference_threshold = float(percentage_difference_threshold)
 
@@ -613,10 +617,7 @@ def check_zero_errors(predictive: float, components_sum: float) -> TccMarker:
     return tcc_marker
 
 
-def check_sum_components_predictive(
-    predictive: float,
-    components_sum: float
-) -> float:
+def check_sum_components_predictive(predictive: float, components_sum: float) -> float:
     """
     Calculates the absolute difference between the predictive value and the sum of the
     components and returns that value
@@ -759,7 +760,7 @@ def error_correction(
     amend_total: bool,
     components_sum: float,
     original_components: List[ComponentPair],
-    total: float
+    total: float,
 ) -> Tuple[float, List[float], TccMarker]:
     """
     The error correction function will use the amend_total to either
@@ -796,9 +797,7 @@ def error_correction(
 
     else:
         final_total, original_components, tcc_marker = correct_components(
-            components_sum,
-            original_components,
-            total
+            components_sum, original_components, total
         )
 
     final_components = []
