@@ -1,3 +1,3 @@
-::: sml_small.selective_edit
+::: sml_small.selective_editing
     :docstring:
     :members:

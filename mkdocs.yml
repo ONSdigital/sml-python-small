@@ -7,8 +7,5 @@ plugins:
 - mkdocstrings:
     handlers:
       python:
-        paths: sys;sys.path.append('./sml_small')
-markdown_extensions:
-  - admonition
-  - codehilite
-  - mkautodoc
+        paths: [./sml_small]
+
