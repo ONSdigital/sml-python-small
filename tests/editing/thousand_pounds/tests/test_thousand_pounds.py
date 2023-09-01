@@ -1,10 +1,6 @@
 import pytest
 
-from sml_small.editing.thousand_pounds.thousand_pounds import (
-    Target_variable,
-    Thousands_output,
-    run,
-)
+from sml_small.editing.thousand_pounds.thousand_pounds import Target_variable, Thousands_output, run
 
 testdata = [
     pytest.param(
