@@ -47,7 +47,7 @@ def date_adjustment(input_dataframe: pd.DataFrame,
     7. average_weekly_subfunction.
 
     All calculations are done on a row by row basis. Full documentation can be found in
-    the readme.md file in the docs directory.
+    the README.md file in the docs directory.
 ----
     **Parameters**
 

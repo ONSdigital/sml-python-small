@@ -1,5 +1,5 @@
 import pytest
-from thousand_pounds import Target_variable, Thousands_output, run
+from sml_small.editing.thousand_pounds.thousand_pounds import Target_variable, Thousands_output, run
 
 testdata = [
     pytest.param(
@@ -8,7 +8,7 @@ testdata = [
         50000,  # predictive
         15000,  # auxiliary
         1350,  # upper limit
-        350,  # lower limit
+        350,  # lower limitx
         [Target_variable("q101", 500), Target_variable("q102", 1000), Target_variable("q103", 12345), Target_variable("q104", 0)],
         Thousands_output(
             "q100",
@@ -211,7 +211,7 @@ testdata = [
         350,  # upper limit
         351,  # lower limit
         [],
-        Thousands_output("Dummy", 10, 10, [], None, "E", "Lower limit is larger than the upper limit"),
+        Thousands_output("Dummy", 10, 10, [], None, "E", "Lower limit is larger than the upper limit (351:350)"),
         id="Lower limit is larger than the upper limit",
     ),
 ]

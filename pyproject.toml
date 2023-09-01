@@ -6,7 +6,8 @@ authors = []
 readme= "README.md"
 exclude = [
     "sml_small/editing/totals_and_components/example.py",
-    "sml_small/editing/totals_and_components/pandas_example.py"
+    "sml_small/editing/totals_and_components/pandas_example.py",
+    "sml_small/editing/thousand_pounds/example.py"
 ]
 
 [tool.poetry.dependencies]
@@ -26,9 +27,6 @@ tabulate = "^0.9.0"
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.3.1"
 
-[tool.pytest.ini_options]
-junit_test_suite_name = "sml_small"
-addopts = "--cov=sml_small --cov-fail-under=90 --cov-config=.coveragerc"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
