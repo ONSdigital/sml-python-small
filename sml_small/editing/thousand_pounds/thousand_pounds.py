@@ -15,9 +15,15 @@ class Target_variable:
 class Thousands_output:
     principal_identifier: Optional[str]  # Unique identifer e.g. a question code - q500
     principal_original_value: float  # Original provided value
-    principal_final_value: Optional[float]  # Output value that may or may not be adjusted
-    target_variables: List[Target_variable]  # Output linked values that may or may not be adjusted
-    tpc_ratio: Optional[float]  # Ratio of the principal variable against good/predictive/aux response
+    principal_final_value: Optional[
+        float
+    ]  # Output value that may or may not be adjusted
+    target_variables: List[
+        Target_variable
+    ]  # Output linked values that may or may not be adjusted
+    tpc_ratio: Optional[
+        float
+    ]  # Ratio of the principal variable against good/predictive/aux response
     tpc_marker: str  # C = Correction applied | N = No correction applied | E = Process failure
     error_description: str = ""  # Error information populated as required
 
@@ -26,7 +32,9 @@ class Thousands_output:
 def run(
     principal_identifier: Optional[str],  # Unique identifer e.g. a question code - q500
     principal_variable: float,  # Original response value provided for the 'current' period
-    predictive: Optional[float],  # Value used for 'previous' response (Returned/Imputed/Constructed)
+    predictive: Optional[
+        float
+    ],  # Value used for 'previous' response (Returned/Imputed/Constructed)
     auxiliary: Optional[float],  # Calculated response for the 'previous' period
     upper_limit: float,  # Upper bound of 'error ratio' threshold
     lower_limit: float,  # Lower bound of 'error ratio' threshold
@@ -41,12 +49,18 @@ def run(
     do_adjustment = False
     try:
         predictive_value = determine_predictive_value(predictive, auxiliary)
-        if predictive_value:  # Allow the case where given predictive = 0 and aux is missing to be a valid case
+        if (
+            predictive_value
+        ):  # Allow the case where given predictive = 0 and aux is missing to be a valid case
             error_ratio = calculate_error_ratio(principal_variable, predictive_value)
             do_adjustment = is_within_threshold(error_ratio, lower_limit, upper_limit)
 
-        principal_adjusted_value = adjust_value(principal_variable) if do_adjustment else principal_variable
-        target_variables_final = adjust_target_variables(do_adjustment, target_variables)
+        principal_adjusted_value = (
+            adjust_value(principal_variable) if do_adjustment else principal_variable
+        )
+        target_variables_final = adjust_target_variables(
+            do_adjustment, target_variables
+        )
 
         return Thousands_output(
             principal_identifier=principal_identifier,
@@ -57,13 +71,18 @@ def run(
             tpc_marker=determine_tpc_marker(do_adjustment),
         )
 
-    except Exception as error:  # Catch any underlying errors and return a coherent output dataset
-
+    except (
+        Exception
+    ) as error:  # Catch any underlying errors and return a coherent output dataset
         # Ensure we populate the output target variables with the same output values as originally given
         target_variables_final = []
         for question in target_variables:
             target_variables_final.append(
-                Target_variable(identifier=question.identifier, original_value=question.original_value, final_value=question.original_value)
+                Target_variable(
+                    identifier=question.identifier,
+                    original_value=question.original_value,
+                    final_value=question.original_value,
+                )
             )
 
         return Thousands_output(
@@ -81,14 +100,18 @@ def determine_tpc_marker(do_adjustment: bool) -> str:
     return "C" if do_adjustment else "N"
 
 
-def determine_predictive_value(predictive: Optional[float], auxiliary: Optional[float]) -> float:
+def determine_predictive_value(
+    predictive: Optional[float], auxiliary: Optional[float]
+) -> float:
     if predictive:
         validate_number("predictive", predictive)
         return float(predictive)
     if auxiliary:
         validate_number("auxiliary", auxiliary)
         return float(auxiliary)
-    if predictive == 0:  # Allow us to handle case when predictive = 0 and Aux is missing which is not an error
+    if (
+        predictive == 0
+    ):  # Allow us to handle case when predictive = 0 and Aux is missing which is not an error
         return 0
     raise ValueError("Both predictive and auxiliary values are missing")
 
@@ -99,21 +122,28 @@ def calculate_error_ratio(principal_variable: float, predictive_value: float) ->
     validate_number("principal_variable", principal_variable)
     if not predictive_value:
         raise ValueError("predictive_value is 0/missing")
-    return float(principal_variable) / float(predictive_value)  # predictive is already validated
+    return float(principal_variable) / float(
+        predictive_value
+    )  # predictive is already validated
 
 
 # Calculate the error value and determine whether the adjustment should be made
-def is_within_threshold(error_ratio: float, lower_limit: float, upper_limit: float) -> bool:
-
+def is_within_threshold(
+    error_ratio: float, lower_limit: float, upper_limit: float
+) -> bool:
     if not lower_limit or not upper_limit:
         raise ValueError("At least one of the lower or upper limits are 0 or missing")
     validate_number("lower_limit", lower_limit)
     validate_number("upper_limit", upper_limit)
 
     if float(lower_limit) > float(upper_limit):
-        raise ValueError(f"Lower limit is larger than the upper limit ({lower_limit}:{upper_limit})")
+        raise ValueError(
+            f"Lower limit is larger than the upper limit ({lower_limit}:{upper_limit})"
+        )
 
-    if float(error_ratio) > float(lower_limit) and float(error_ratio) < float(upper_limit):
+    if float(error_ratio) > float(lower_limit) and float(error_ratio) < float(
+        upper_limit
+    ):
         return True
     return False  # Outside the bounds of the threshold, do not adjust
 
@@ -139,12 +169,23 @@ def isNumber(input) -> bool:
     return True
 
 
-def adjust_target_variables(do_adjustment: bool, target_variables: List[Target_variable]) -> List[Target_variable]:
+def adjust_target_variables(
+    do_adjustment: bool, target_variables: List[Target_variable]
+) -> List[Target_variable]:
     adjusted_target_variables = []
     for question in target_variables:
-        if validate_number(question.identifier, question.original_value) and do_adjustment:
+        if (
+            validate_number(question.identifier, question.original_value)
+            and do_adjustment
+        ):
             final_value = round(adjust_value(question.original_value), 2)
         else:
             final_value = question.original_value
-        adjusted_target_variables.append(Target_variable(identifier=question.identifier, original_value=question.original_value, final_value=final_value))
+        adjusted_target_variables.append(
+            Target_variable(
+                identifier=question.identifier,
+                original_value=question.original_value,
+                final_value=final_value,
+            )
+        )
     return adjusted_target_variables
