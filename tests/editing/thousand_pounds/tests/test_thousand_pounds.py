@@ -1,5 +1,10 @@
 import pytest
-from sml_small.editing.thousand_pounds.thousand_pounds import Target_variable, Thousands_output, run
+
+from sml_small.editing.thousand_pounds.thousand_pounds import (
+    Target_variable,
+    Thousands_output,
+    run,
+)
 
 testdata = [
     pytest.param(
@@ -9,12 +14,22 @@ testdata = [
         15000,  # auxiliary
         1350,  # upper limit
         350,  # lower limitx
-        [Target_variable("q101", 500), Target_variable("q102", 1000), Target_variable("q103", 12345), Target_variable("q104", 0)],
+        [
+            Target_variable("q101", 500),
+            Target_variable("q102", 1000),
+            Target_variable("q103", 12345),
+            Target_variable("q104", 0),
+        ],
         Thousands_output(
             "q100",
             50000000,
             50000.0,
-            [Target_variable("q101", 500, 0.5), Target_variable("q102", 1000, 1), Target_variable("q103", 12345, 12.35), Target_variable("q104", 0, 0)],
+            [
+                Target_variable("q101", 500, 0.5),
+                Target_variable("q102", 1000, 1),
+                Target_variable("q103", 12345, 12.35),
+                Target_variable("q104", 0, 0),
+            ],
             1000.0,
             "C",
         ),
@@ -50,7 +65,15 @@ testdata = [
         1350,
         350,
         [],
-        Thousands_output("q400", 80000000, 80000000.0, [], None, "E", "Both predictive and auxiliary values are missing"),
+        Thousands_output(
+            "q400",
+            80000000,
+            80000000.0,
+            [],
+            None,
+            "E",
+            "Both predictive and auxiliary values are missing",
+        ),
         id="Given config(missing predictive and auxiliary) - default outputs and error indicated",
     ),
     pytest.param(
@@ -100,7 +123,13 @@ testdata = [
         350,
         [Target_variable("q501", 500), Target_variable("q502", 1000)],
         Thousands_output(
-            "q500", None, None, [Target_variable("q501", 500, 500), Target_variable("q502", 1000, 1000)], None, "E", "principal_variable is missing"
+            "q500",
+            None,
+            None,
+            [Target_variable("q501", 500, 500), Target_variable("q502", 1000, 1000)],
+            None,
+            "E",
+            "principal_variable is missing",
         ),
         id="Given config(missing principal variable) - default outputs and error indicated",
     ),
@@ -112,7 +141,15 @@ testdata = [
         1350,
         350,
         [Target_variable("q601", 500), Target_variable("q602", 1000)],
-        Thousands_output("q600", 0, 0, [Target_variable("q601", 500, 500), Target_variable("q602", 1000, 1000)], 0, "N", ""),
+        Thousands_output(
+            "q600",
+            0,
+            0,
+            [Target_variable("q601", 500, 500), Target_variable("q602", 1000, 1000)],
+            0,
+            "N",
+            "",
+        ),
         id="Given config(principal variable of 0) - default outputs and error indicated",
     ),
     pytest.param(
@@ -123,7 +160,9 @@ testdata = [
         1350,
         350,
         [Target_variable("q701", 500)],
-        Thousands_output("q700", 3500, 3500, [Target_variable("q701", 500, 500)], 350, "N", ""),
+        Thousands_output(
+            "q700", 3500, 3500, [Target_variable("q701", 500, 500)], 350, "N", ""
+        ),
         id="Given valid config but exactly on lower limit threshold - do not adjust",
     ),
     pytest.param(
@@ -134,7 +173,9 @@ testdata = [
         1350,  # Upper limit
         350,  # lower limit
         [Target_variable("q801", 500)],
-        Thousands_output("q800", 13500, 13500, [Target_variable("q801", 500, 500)], 1350, "N", ""),
+        Thousands_output(
+            "q800", 13500, 13500, [Target_variable("q801", 500, 500)], 1350, "N", ""
+        ),
         id="Given valid config but exactly on upper limit threshold - do not adjust",
     ),
     pytest.param(
@@ -145,7 +186,15 @@ testdata = [
         0,  # upper limit
         1,  # lower limit
         [],
-        Thousands_output("", 0, 0, [], None, "E", "At least one of the lower or upper limits are 0 or missing"),
+        Thousands_output(
+            "",
+            0,
+            0,
+            [],
+            None,
+            "E",
+            "At least one of the lower or upper limits are 0 or missing",
+        ),
         id="Upper limit is 0 - default outputs and error indicated",
     ),
     pytest.param(
@@ -156,7 +205,15 @@ testdata = [
         1,  # upper limit
         0,  # lower limit
         [],
-        Thousands_output("", 0, 0, [], None, "E", "At least one of the lower or upper limits are 0 or missing"),
+        Thousands_output(
+            "",
+            0,
+            0,
+            [],
+            None,
+            "E",
+            "At least one of the lower or upper limits are 0 or missing",
+        ),
         id="Lower limit is 0 - default outputs and error indicated",
     ),
     pytest.param(
@@ -167,7 +224,15 @@ testdata = [
         3,  # upper limit
         4,  # lower limit
         [],
-        Thousands_output("Ham", "Cheese", "Cheese", [], None, "E", "Attribute 'principal_variable' is missing or not a valid number"),
+        Thousands_output(
+            "Ham",
+            "Cheese",
+            "Cheese",
+            [],
+            None,
+            "E",
+            "Attribute 'principal_variable' is missing or not a valid number",
+        ),
         id="Invalid format for principal variable",
     ),
     pytest.param(
@@ -178,7 +243,15 @@ testdata = [
         "3",  # upper limit
         "4",  # lower limit
         [],
-        Thousands_output("Dummy", 0, 0, [], None, "E", "Attribute 'predictive' is missing or not a valid number"),
+        Thousands_output(
+            "Dummy",
+            0,
+            0,
+            [],
+            None,
+            "E",
+            "Attribute 'predictive' is missing or not a valid number",
+        ),
         id="Invalid format for predictive variable",
     ),
     pytest.param(
@@ -189,7 +262,15 @@ testdata = [
         "33 56 767",  # upper limit
         "4",  # lower limit
         [],
-        Thousands_output("Dummy", 10, 10, [], None, "E", "Attribute 'upper_limit' is missing or not a valid number"),
+        Thousands_output(
+            "Dummy",
+            10,
+            10,
+            [],
+            None,
+            "E",
+            "Attribute 'upper_limit' is missing or not a valid number",
+        ),
         id="Invalid format for upper_limit variable",
     ),
     pytest.param(
@@ -200,7 +281,15 @@ testdata = [
         "1234",  # upper limit
         "98123x21",  # lower limit
         [],
-        Thousands_output("Dummy", 10, 10, [], None, "E", "Attribute 'lower_limit' is missing or not a valid number"),
+        Thousands_output(
+            "Dummy",
+            10,
+            10,
+            [],
+            None,
+            "E",
+            "Attribute 'lower_limit' is missing or not a valid number",
+        ),
         id="Invalid format for lower_limit variable",
     ),
     pytest.param(
@@ -211,14 +300,43 @@ testdata = [
         350,  # upper limit
         351,  # lower limit
         [],
-        Thousands_output("Dummy", 10, 10, [], None, "E", "Lower limit is larger than the upper limit (351:350)"),
+        Thousands_output(
+            "Dummy",
+            10,
+            10,
+            [],
+            None,
+            "E",
+            "Lower limit is larger than the upper limit (351:350)",
+        ),
         id="Lower limit is larger than the upper limit",
     ),
 ]
 
 
-@pytest.mark.parametrize("principal_identifier, principal_variable, predictive, auxiliary, upper_limit, lower_limit, target_variables, expected", testdata)
+@pytest.mark.parametrize(
+    "principal_identifier, principal_variable, predictive, auxiliary, upper_limit, lower_limit, target_variables, expected",
+    testdata,
+)
 def test__run__given_valid_config__returns_adjusted_figures(
-    principal_identifier, principal_variable, predictive, auxiliary, upper_limit, lower_limit, target_variables, expected
+    principal_identifier,
+    principal_variable,
+    predictive,
+    auxiliary,
+    upper_limit,
+    lower_limit,
+    target_variables,
+    expected,
 ):
-    assert run(principal_identifier, principal_variable, predictive, auxiliary, upper_limit, lower_limit, target_variables) == expected
+    assert (
+        run(
+            principal_identifier,
+            principal_variable,
+            predictive,
+            auxiliary,
+            upper_limit,
+            lower_limit,
+            target_variables,
+        )
+        == expected
+    )
