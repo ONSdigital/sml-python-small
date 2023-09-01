@@ -1,11 +1,12 @@
-from csv import DictReader
-from thousand_pounds import Target_variable, run
-import json
 import dataclasses
+import json
+from csv import DictReader
+
+from thousand_pounds import Target_variable, run
+
 
 # Load some local csvs into memory and then run the pounds thousands method
 def invoke_process_with_local_csv():
-
     # Load the csvs into memory
     with open("tests/config.csv") as file:
         config_csv = file.read()
@@ -36,7 +37,6 @@ def invoke_process_with_inmemory_csv_example():
 # Substitutes missing values with the Python 'None'
 # Does not have any explicit exception/error handling
 def invoke(config_csv: str, linked_question_csv: str):
-
     # Format:  principal_identifier,principal_variable,predicted,auxiliary,upper_limit,lower_limit
     config_reader = DictReader(config_csv.splitlines())
     config = []
@@ -50,12 +50,19 @@ def invoke(config_csv: str, linked_question_csv: str):
     for linked_row in linked_question_reader:
         # print(f"Linked row: {linked_row}")
         linked_questions.append(
-            Target_variable(identifier=linked_row["identifier"], original_value=None if not linked_row["value"] else float(linked_row["value"]))
+            Target_variable(
+                identifier=linked_row["identifier"],
+                original_value=None
+                if not linked_row["value"]
+                else float(linked_row["value"]),
+            )
         )
 
     return run(
         principal_identifier=config["principal_identifier"],
-        principal_variable=None if not config["principal_variable"] else float(config["principal_variable"]),
+        principal_variable=None
+        if not config["principal_variable"]
+        else float(config["principal_variable"]),
         predictive=None if not config["predictive"] else float(config["predictive"]),
         auxiliary=None if not config["auxiliary"] else float(config["auxiliary"]),
         upper_limit=float(config["upper_limit"]),
@@ -83,10 +90,13 @@ def invoke_directly_writing_output_to_csv_example():
     print(f"\nOutput json: {json.dumps(dataclasses.asdict(output),indent=4)}")
 
     header = "principal_identifier,principal_original_value,principal_adjusted_value,tpc_ratio,tpc_marker,error_description"
-    row = f"{output.principal_identifier},{output.principal_original_value},{output.principal_final_value},{output.tpc_ratio},{output.tpc_marker},{output.error_description}"
+    row = f"{output.principal_identifier},{output.principal_original_value},{output.principal_final_value}," \
+          f"{output.tpc_ratio},{output.tpc_marker},{output.error_description}"
 
     for linkedq in output.target_variables:
-        header += f",{linkedq.identifier}_original_value,{linkedq.identifier}_adjusted_value"
+        header += (
+            f",{linkedq.identifier}_original_value,{linkedq.identifier}_adjusted_value"
+        )
         row += f",{linkedq.original_value},{linkedq.final_value}"
 
     print("\nOutput csv:")
@@ -101,7 +111,6 @@ def invoke_directly_writing_output_to_csv_example():
 
 
 def invoke_process_with_inmemory_single_csv_example():
-
     config_csv = """principal_identifier,principal_variable,predictive,auxiliary,upper_limit,lower_limit,q101,q102,q103,q104
 123A-202203,50000000,60000,30000,1350,250,500,1000,1500,
 123B-202203,50000000,60000,30000,1350,250,500,1000,1500,12345
@@ -122,7 +131,11 @@ def invoke_process_with_inmemory_single_csv_example():
         question_list = {key: v for key, v in config_row.items() if "q" in key}
         linked_questions = []
         for question in question_list:
-            linked_questions.append(Target_variable(identifier=question, original_value=question_list[question]))
+            linked_questions.append(
+                Target_variable(
+                    identifier=question, original_value=question_list[question]
+                )
+            )
         config_row["target_variables"] = linked_questions
         configs.append(config_row)
 
@@ -134,7 +147,6 @@ def invoke_process_with_inmemory_single_csv_example():
     output_header = f"principal_identifier,principal_original_value,principal_final_value,tpc_ratio,tpc_marker,error_description{output_question_header}"
     output_row = ""
     for config in configs:
-
         output = run(
             principal_identifier=config["principal_identifier"],
             principal_variable=config["principal_variable"],
@@ -145,7 +157,8 @@ def invoke_process_with_inmemory_single_csv_example():
             target_variables=config["target_variables"],
         )
 
-        output_row += f"{output.principal_identifier},{output.principal_original_value},{output.principal_final_value},{output.tpc_ratio},{output.tpc_marker},{output.error_description}"
+        output_row += f"{output.principal_identifier},{output.principal_original_value},{output.principal_final_value}," \
+                      f"{output.tpc_ratio},{output.tpc_marker},{output.error_description}"
         for question in output.target_variables:
             output_row += f",{question.original_value},{question.final_value}"
         output_row += "\n"
@@ -162,7 +175,6 @@ def invoke_process_with_inmemory_single_csv_example():
 
 
 if __name__ == "__main__":
-
     print("\nTesting using local csv:")
     output = invoke_process_with_local_csv()
     print(f"Output: {output}")
