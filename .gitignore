@@ -9,9 +9,7 @@ dist/
 *~
 /tests/fixtures/date_adjustment/testing_output.csv
 /tests/testing_output.csv
-/.venv/
-
-
+.venv/
 
 # Unit test / coverage reports
 htmlcov/
@@ -24,3 +22,7 @@ coverage.xml
 *.cover
 .hypothesis/
 .pytest_cache/
+junit.xml
+
+# pyenv
+.python-version
