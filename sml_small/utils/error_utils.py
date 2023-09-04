@@ -77,3 +77,22 @@ def get_param_outside_range_error(tag: str, param_list: List[str]) -> str:
     param_list_text = separator.join(param_list)
 
     return f"{tag} is outside of range {param_list_text}"
+
+
+def get_boundary_error(param_list: List[int]) -> str:
+    """
+        This function returns an error message that specifies that a lower boundary is
+        greater than its corresponding upper boundary.
+
+        :param param_list: List of parameters to be returned as part of the error message.
+        :type param_list: List[str]
+        ...
+        :return: Error string which contains the parameters and highlights the parameter
+                 that must be specified
+        :rtype: str
+        """
+    list_string = map(str, param_list)
+    separator = ":"
+    param_list_text = separator.join(list_string)
+
+    return f"Lower limit is larger than the upper limit ({param_list_text})"

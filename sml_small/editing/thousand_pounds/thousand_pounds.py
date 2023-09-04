@@ -1,5 +1,22 @@
 from dataclasses import dataclass
+from enum import Enum
 from typing import List, Optional
+
+from sml_small.utils.common_utils import validate_number
+from sml_small.utils.error_utils import get_boundary_error, get_mandatory_param_error, get_one_of_params_mandatory_error
+
+
+class InputParameters(Enum):
+    """
+    Enum for use when accessing values from the input parameters tuple
+    """
+
+    PREDICTIVE = 0
+    AUXILIARY = 1
+    PRINCIPAL_VARIABLE = 2
+    LOWER_LIMIT = 3
+    UPPER_LIMIT = 4
+    TARGET_VARIABLES = 5
 
 
 # Dataset holding all 'linked questions' with their initial response and final/adjusted values
@@ -28,6 +45,47 @@ class Thousands_output:
     error_description: str = ""  # Error information populated as required
 
 
+def validate_input(
+    predictive,
+    auxiliary,
+    principal_variable,
+    lower_limit,
+    upper_limit,
+    target_variables,
+):
+    if predictive and validate_number("predictive", predictive):
+        float(predictive)
+    if auxiliary and validate_number("auxiliary", auxiliary):
+        float(auxiliary)
+    if predictive is None and auxiliary is None:
+        raise ValueError(get_one_of_params_mandatory_error(["predictive", "auxiliary"]))
+    if principal_variable is None:
+        raise ValueError(get_mandatory_param_error("principal_variable"))
+    elif validate_number("principal_variable", principal_variable) is True:
+        float(principal_variable)
+    if not lower_limit:
+        raise ValueError(get_mandatory_param_error("lower_limit"))
+    elif validate_number("lower_limit", lower_limit) is True:
+        float(lower_limit)
+    if not upper_limit:
+        raise ValueError(get_mandatory_param_error("upper_limit"))
+    elif validate_number("upper_limit", upper_limit) is True:
+        float(upper_limit)
+    if float(lower_limit) > float(upper_limit):
+        raise ValueError(get_boundary_error([lower_limit, upper_limit]))
+    for question in target_variables:
+        if validate_number(question.identifier, question.original_value) is True:
+            float(question.original_value)
+    return (
+        predictive,
+        auxiliary,
+        principal_variable,
+        lower_limit,
+        upper_limit,
+        target_variables,
+    )
+
+
 # Process through the config and run the pounds thousands method
 def run(
     principal_identifier: Optional[str],  # Unique identifer e.g. a question code - q500
@@ -48,23 +106,45 @@ def run(
     error_ratio = None
     do_adjustment = False
     try:
-        predictive_value = determine_predictive_value(predictive, auxiliary)
+        input_parameters = validate_input(
+            predictive,
+            auxiliary,
+            principal_variable,
+            lower_limit,
+            upper_limit,
+            target_variables,
+        )
+        predictive_value = determine_predictive_value(
+            input_parameters[InputParameters.PREDICTIVE.value],
+            input_parameters[InputParameters.AUXILIARY.value],
+        )
         if (
             predictive_value
         ):  # Allow the case where given predictive = 0 and aux is missing to be a valid case
-            error_ratio = calculate_error_ratio(principal_variable, predictive_value)
-            do_adjustment = is_within_threshold(error_ratio, lower_limit, upper_limit)
+            error_ratio = calculate_error_ratio(
+                input_parameters[InputParameters.PRINCIPAL_VARIABLE.value],
+                predictive_value,
+            )
+            do_adjustment = is_within_threshold(
+                error_ratio,
+                input_parameters[InputParameters.LOWER_LIMIT.value],
+                input_parameters[InputParameters.UPPER_LIMIT.value],
+            )
 
         principal_adjusted_value = (
-            adjust_value(principal_variable) if do_adjustment else principal_variable
+            adjust_value(input_parameters[InputParameters.PRINCIPAL_VARIABLE.value])
+            if do_adjustment
+            else input_parameters[InputParameters.PRINCIPAL_VARIABLE.value]
         )
         target_variables_final = adjust_target_variables(
-            do_adjustment, target_variables
+            do_adjustment, input_parameters[InputParameters.TARGET_VARIABLES.value]
         )
 
         return Thousands_output(
             principal_identifier=principal_identifier,
-            principal_original_value=principal_variable,
+            principal_original_value=input_parameters[
+                InputParameters.PRINCIPAL_VARIABLE.value
+            ],
             principal_final_value=principal_adjusted_value,
             target_variables=target_variables_final,
             tpc_ratio=error_ratio,
@@ -104,24 +184,16 @@ def determine_predictive_value(
     predictive: Optional[float], auxiliary: Optional[float]
 ) -> float:
     if predictive:
-        validate_number("predictive", predictive)
         return float(predictive)
     if auxiliary:
-        validate_number("auxiliary", auxiliary)
         return float(auxiliary)
     if (
         predictive == 0
     ):  # Allow us to handle case when predictive = 0 and Aux is missing which is not an error
         return 0
-    raise ValueError("Both predictive and auxiliary values are missing")
 
 
 def calculate_error_ratio(principal_variable: float, predictive_value: float) -> float:
-    if principal_variable is None:
-        raise ValueError("principal_variable is missing")
-    validate_number("principal_variable", principal_variable)
-    if not predictive_value:
-        raise ValueError("predictive_value is 0/missing")
     return float(principal_variable) / float(
         predictive_value
     )  # predictive is already validated
@@ -131,19 +203,7 @@ def calculate_error_ratio(principal_variable: float, predictive_value: float) ->
 def is_within_threshold(
     error_ratio: float, lower_limit: float, upper_limit: float
 ) -> bool:
-    if not lower_limit or not upper_limit:
-        raise ValueError("At least one of the lower or upper limits are 0 or missing")
-    validate_number("lower_limit", lower_limit)
-    validate_number("upper_limit", upper_limit)
-
-    if float(lower_limit) > float(upper_limit):
-        raise ValueError(
-            f"Lower limit is larger than the upper limit ({lower_limit}:{upper_limit})"
-        )
-
-    if float(error_ratio) > float(lower_limit) and float(error_ratio) < float(
-        upper_limit
-    ):
+    if float(lower_limit) < float(error_ratio) < float(upper_limit):
         return True
     return False  # Outside the bounds of the threshold, do not adjust
 
@@ -154,30 +214,12 @@ def adjust_value(value: Optional[float]) -> Optional[float]:
         return float(value) / 1000  # Do not adjust missing/null responses
 
 
-def validate_number(description: str, input) -> bool:
-    if not isNumber(input):
-        raise ValueError(f"Attribute '{description}' is missing or not a valid number")
-    return True
-
-
-# Validate that the provided attribute is a number
-def isNumber(input) -> bool:
-    try:
-        float(input)
-    except Exception:
-        return False
-    return True
-
-
 def adjust_target_variables(
     do_adjustment: bool, target_variables: List[Target_variable]
 ) -> List[Target_variable]:
     adjusted_target_variables = []
     for question in target_variables:
-        if (
-            validate_number(question.identifier, question.original_value)
-            and do_adjustment
-        ):
+        if do_adjustment:
             final_value = round(adjust_value(question.original_value), 2)
         else:
             final_value = question.original_value
