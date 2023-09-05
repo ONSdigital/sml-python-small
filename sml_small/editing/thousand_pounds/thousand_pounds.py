@@ -27,6 +27,11 @@ class Target_variable:
     final_value: Optional[float] = None
 
 
+class TPException(Exception):
+    "Thousand Pounds error"
+    pass
+
+
 # Structure of the output dataset
 @dataclass(frozen=True)
 class Thousands_output:
@@ -42,7 +47,6 @@ class Thousands_output:
         float
     ]  # Ratio of the principal variable against good/predictive/aux response
     tpc_marker: str  # C = Correction applied | N = No correction applied | E = Process failure
-    error_description: str = ""  # Error information populated as required
 
 
 # Process through the config and run the pounds thousands method
@@ -115,24 +119,9 @@ def run(
     ) as error:  # Catch any underlying errors and return a coherent output dataset
         # Ensure we populate the output target variables with the same output values as originally given
         target_variables_final = []
-        for question in target_variables:
-            target_variables_final.append(
-                Target_variable(
-                    identifier=question.identifier,
-                    original_value=question.original_value,
-                    final_value=question.original_value,
-                )
-            )
-
-        return Thousands_output(
-            principal_identifier=principal_identifier,
-            principal_original_value=principal_variable,
-            principal_final_value=principal_variable,  # Always return the final output as the same as the input
-            target_variables=target_variables_final,
-            tpc_ratio=None,
-            tpc_marker="E",
-            error_description=f"{error}",
-        )
+        if principal_identifier is None:
+            principal_identifier = "N/A"
+        raise TPException(f"identifier: {principal_identifier}", error)
 
 
 def validate_input(
@@ -225,3 +214,4 @@ def adjust_target_variables(
             )
         )
     return adjusted_target_variables
+
