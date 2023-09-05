@@ -1,10 +1,10 @@
 import pytest
 
-from sml_small.editing.thousand_pounds.thousand_pounds import (Target_variable, Thousands_output,
+from sml_small.editing.thousand_pounds.thousand_pounds import (Target_variable, Thousands_output, TPException,
                                                                adjust_target_variables, adjust_value,
                                                                calculate_error_ratio, determine_predictive_value,
                                                                determine_tpc_marker, is_within_threshold, run,
-                                                               validate_input, TPException)
+                                                               validate_input)
 from sml_small.utils.error_utils import (get_boundary_error, get_mandatory_param_error,
                                          get_one_of_params_mandatory_error, get_params_is_not_a_number_error)
 
@@ -55,7 +55,7 @@ class TestRun:
                 350,
                 [],
                 Thousands_output("q200", 60000000, 60000.0, [], 400.0, "C"),
-                "Given config(missing auxiliary) - outputs adjusted for all target variables"
+                "Given config(missing auxiliary) - outputs adjusted for all target variables",
             ),
             (
                 "q300",
@@ -80,7 +80,7 @@ class TestRun:
                     "identifier: q400",
                     ValueError(
                         get_one_of_params_mandatory_error(["predictive", "auxiliary"])
-                    )
+                    ),
                 ),
                 "Given config(missing predictive and auxiliary) - default outputs and error indicated",
             ),
@@ -96,7 +96,10 @@ class TestRun:
                     "q450",
                     8000,
                     8000,
-                    [Target_variable("q451", 500, 500), Target_variable("q452", 1000, 1000)],
+                    [
+                        Target_variable("q451", 500, 500),
+                        Target_variable("q452", 1000, 1000),
+                    ],
                     None,
                     "N",
                 ),
@@ -114,7 +117,10 @@ class TestRun:
                     "q450",
                     8000,
                     8000,
-                    [Target_variable("q451", 500, 500), Target_variable("q452", 1000, 1000)],
+                    [
+                        Target_variable("q451", 500, 500),
+                        Target_variable("q452", 1000, 1000),
+                    ],
                     None,
                     "N",
                 ),
@@ -130,9 +136,7 @@ class TestRun:
                 [Target_variable("q501", 500), Target_variable("q502", 1000)],
                 TPException(
                     "identifier: q500",
-                    ValueError(
-                        get_mandatory_param_error("principal_variable")
-                    )
+                    ValueError(get_mandatory_param_error("principal_variable")),
                 ),
                 "Given config(missing principal variable) - default outputs and error indicated",
             ),
@@ -148,7 +152,10 @@ class TestRun:
                     "q600",
                     0,
                     0,
-                    [Target_variable("q601", 500, 500), Target_variable("q602", 1000, 1000)],
+                    [
+                        Target_variable("q601", 500, 500),
+                        Target_variable("q602", 1000, 1000),
+                    ],
                     0,
                     "N",
                 ),
@@ -163,7 +170,12 @@ class TestRun:
                 350,
                 [Target_variable("q701", 500)],
                 Thousands_output(
-                    "q700", 3500, 3500, [Target_variable("q701", 500, 500)], 350, "N",
+                    "q700",
+                    3500,
+                    3500,
+                    [Target_variable("q701", 500, 500)],
+                    350,
+                    "N",
                 ),
                 "Given valid config but exactly on lower limit threshold - do not adjust",
             ),
@@ -176,7 +188,12 @@ class TestRun:
                 350,  # lower limit
                 [Target_variable("q801", 500)],
                 Thousands_output(
-                    "q800", 13500, 13500, [Target_variable("q801", 500, 500)], 1350, "N",
+                    "q800",
+                    13500,
+                    13500,
+                    [Target_variable("q801", 500, 500)],
+                    1350,
+                    "N",
                 ),
                 "Given valid config but exactly on upper limit threshold - do not adjust",
             ),
@@ -190,7 +207,7 @@ class TestRun:
                 [],
                 TPException(
                     "identifier: q900",
-                    ValueError(get_mandatory_param_error("upper_limit"))
+                    ValueError(get_mandatory_param_error("upper_limit")),
                 ),
                 "Upper limit is 0 - default outputs and error indicated",
             ),
@@ -204,7 +221,7 @@ class TestRun:
                 [],
                 TPException(
                     "identifier: q1000",
-                    ValueError(get_mandatory_param_error("lower_limit"))
+                    ValueError(get_mandatory_param_error("lower_limit")),
                 ),
                 "Lower limit is 0 - default outputs and error indicated",
             ),
@@ -220,7 +237,6 @@ class TestRun:
                     "identifier: q1100",
                     ValueError(get_params_is_not_a_number_error("principal_variable")),
                 ),
-
                 "Invalid format for principal variable",
             ),
             (
@@ -279,7 +295,7 @@ class TestRun:
                 ),
                 "Lower limit is larger than the upper limit",
             ),
-        ]
+        ],
     )
     def test__run__given_valid_config__returns_adjusted_figures(
         self,
@@ -291,7 +307,7 @@ class TestRun:
         lower_limit,
         target_variables,
         expected,
-        test_id
+        test_id,
     ):
         if isinstance(expected, Thousands_output):
             try:
