@@ -79,7 +79,7 @@ def get_param_outside_range_error(tag: str, param_list: List[str]) -> str:
     return f"{tag} is outside of range {param_list_text}"
 
 
-def get_boundary_error(param_list: List[int]) -> str:
+def get_boundary_error(param_list: List[float]) -> str:
     """
     This function returns an error message that specifies that a lower boundary is
     greater than its corresponding upper boundary.
