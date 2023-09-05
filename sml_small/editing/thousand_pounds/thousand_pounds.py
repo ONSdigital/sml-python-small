@@ -214,4 +214,3 @@ def adjust_target_variables(
             )
         )
     return adjusted_target_variables
-
