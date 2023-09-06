@@ -350,19 +350,20 @@ class TestValidateInput:
         "test_id",
         [
             (
-                "500",
-                None,
-                200,
-                50,
-                100,
-                [Target_variable("q501", 500), Target_variable("q502", 1000)],
+                "500", # predictive
+                None, # auxiliary
+                200, # principal_variable
+                50, # lower limit
+                100, # upper limit
+                [Target_variable("q501", 500), Target_variable("q502", 1000)], # target variaibles
                 (
-                    500.0,
-                    None,
-                    200.0,
-                    50.0,
-                    100.0,
-                    [Target_variable("q501", 500.0), Target_variable("q502", 1000.0)],
+                    500.0, # expected output predictive
+                    None, # expected output auxiliary
+                    200.0, # expected output principal variable
+                    50.0, # expected output lower limit
+                    100.0, # expected output upper limit
+                    [Target_variable("q501", 500.0), Target_variable("q502", 1000.0)],  # expected output
+                        # target variables
                 ),
                 "Test 1: Predictive as an interpretable string",
             ),
@@ -540,6 +541,16 @@ class TestValidateInput:
                 500,
                 600,
                 200,
+                100,
+                100,
+                [Target_variable("q501", 500), Target_variable("q502", 1000)],
+                ValueError(get_boundary_error([100.0, 100.0])),
+                "Test 16: Lower Limit is equal to Upper Limit",
+            ),
+            (
+                500,
+                600,
+                200,
                 50,
                 100,
                 [Target_variable("q501", "500"), Target_variable("q502", 1000)],
@@ -551,7 +562,7 @@ class TestValidateInput:
                     100.0,
                     [Target_variable("q501", 500.0), Target_variable("q502", 1000.0)],
                 ),
-                "Test 16: Target Variable is an interpretable string",
+                "Test 17: Target Variable is an interpretable string",
             ),
             (
                 500,
@@ -564,7 +575,7 @@ class TestValidateInput:
                     Target_variable("q502", 1000),
                 ],
                 ValueError(get_params_is_not_a_number_error("q501")),
-                "Test 17: Target Variable is a non-interpretable string",
+                "Test 18: Target Variable is a non-interpretable string",
             ),
         ],
     )

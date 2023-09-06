@@ -1,11 +1,11 @@
 from dataclasses import dataclass
 from enum import Enum
-from typing import List, Optional
+from typing import List, Optional, Tuple, Union
 
 from sml_small.utils.common_utils import validate_number
 from sml_small.utils.error_utils import get_boundary_error, get_mandatory_param_error, get_one_of_params_mandatory_error
 
-
+# --- Enum Definitions ---
 class InputParameters(Enum):
     """
     Enum for use when accessing values from the input parameters tuple
@@ -19,17 +19,13 @@ class InputParameters(Enum):
     TARGET_VARIABLES = 5
 
 
+# --- Class Definitions  ---
 # Dataset holding all 'linked questions' with their initial response and final/adjusted values
 @dataclass(frozen=False)
 class Target_variable:
     identifier: str  # Unique identifer e.g. a question code - q050
     original_value: Optional[float]
     final_value: Optional[float] = None
-
-
-class TPException(Exception):
-    "Thousand Pounds error"
-    pass
 
 
 # Structure of the output dataset
@@ -49,7 +45,13 @@ class Thousands_output:
     tpc_marker: str  # C = Correction applied | N = No correction applied | E = Process failure
 
 
-# Process through the config and run the pounds thousands method
+# --- Custom Exceptions ---
+class TPException(Exception):
+    "Thousand Pounds error"
+    pass
+
+
+# --- Method Definitions ---
 def run(
     principal_identifier: Optional[str],  # Unique identifer e.g. a question code - q500
     principal_variable: float,  # Original response value provided for the 'current' period
@@ -77,13 +79,14 @@ def run(
             upper_limit,
             target_variables,
         )
+
         predictive_value = determine_predictive_value(
             input_parameters[InputParameters.PREDICTIVE.value],
             input_parameters[InputParameters.AUXILIARY.value],
         )
         if (
             predictive_value
-        ):  # Allow the case where given predictive = 0 and aux is missing to be a valid case
+        ):
             error_ratio = calculate_error_ratio(
                 input_parameters[InputParameters.PRINCIPAL_VARIABLE.value],
                 predictive_value,
@@ -125,13 +128,53 @@ def run(
 
 
 def validate_input(
-    predictive,
-    auxiliary,
-    principal_variable,
-    lower_limit,
-    upper_limit,
-    target_variables,
-):
+    predictive: Optional[float],
+    auxiliary: Optional[float],
+    principal_variable:  float,
+    lower_limit: float,
+    upper_limit: float,
+    target_variables: List[Target_variable],
+) -> Tuple[
+    Union[float, None],
+    Union[float, None],
+    float,
+    float,
+    float,
+    List[Target_variable],
+]:
+
+    """
+    This function is used to validate the data passed to the thousand_pounds
+    method ensuring that the values are present when expected and that they are of
+    the correct type. If invalid data is received then an appropriate exception is
+    raised.
+
+    :param predictive:  Value used for 'previous' response (Returned/Imputed/Constructed)
+    :type predictive: Optional[float]
+    :param auxiliary: Calculated response for the 'previous' period
+    :type auxiliary: Optional[float]
+    :param principal_variable: Original response value provided for the 'current' period
+    :type principal_variable: float
+    :param lower_limit: Lower bound of 'error ratio' threshold
+    :type lower_limit: float
+    :param upper_limit: Upper bound of 'error ratio' threshold
+    :type upper_limit: float
+    :param target_variables: List of monetary variables that may be automatically corrected
+    :type target_variables: List[Targer_variable]
+
+    :return: predictive is returned as a converted float
+    :rtype: float | None
+    :return: auxiliary is returned as a converted float
+    :rtype: float | None
+    :return: principal_variable is returned as a converted float
+    :rtype: float
+    :return: lower_limit is returned as a converted float
+    :rtype: float
+    :return: upper_limit is returned as a converted float
+    :rtype: float
+    :return: target_variables, target_variable.original_value is returned as a converted float
+    :rtype: List[Target_variable]
+    """
     if predictive and validate_number("predictive", predictive):
         predictive = float(predictive)
     if auxiliary and validate_number("auxiliary", auxiliary):
@@ -150,7 +193,7 @@ def validate_input(
         raise ValueError(get_mandatory_param_error("upper_limit"))
     elif validate_number("upper_limit", upper_limit) is True:
         upper_limit = float(upper_limit)
-    if float(lower_limit) > float(upper_limit):
+    if float(lower_limit) >= float(upper_limit):
         raise ValueError(get_boundary_error([lower_limit, upper_limit]))
     for question in target_variables:
         if validate_number(question.identifier, question.original_value) is True:

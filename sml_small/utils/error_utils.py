@@ -95,4 +95,4 @@ def get_boundary_error(param_list: List[float]) -> str:
     separator = ":"
     param_list_text = separator.join(list_string)
 
-    return f"Lower limit is larger than the upper limit ({param_list_text})"
+    return f"Lower limit is larger than or equal to the upper limit ({param_list_text})"
