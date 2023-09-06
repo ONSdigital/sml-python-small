@@ -5,6 +5,7 @@ from typing import List, Optional, Tuple, Union
 from sml_small.utils.common_utils import validate_number
 from sml_small.utils.error_utils import get_boundary_error, get_mandatory_param_error, get_one_of_params_mandatory_error
 
+
 # --- Enum Definitions ---
 class InputParameters(Enum):
     """
@@ -84,9 +85,7 @@ def run(
             input_parameters[InputParameters.PREDICTIVE.value],
             input_parameters[InputParameters.AUXILIARY.value],
         )
-        if (
-            predictive_value
-        ):
+        if predictive_value:
             error_ratio = calculate_error_ratio(
                 input_parameters[InputParameters.PRINCIPAL_VARIABLE.value],
                 predictive_value,
@@ -130,7 +129,7 @@ def run(
 def validate_input(
     predictive: Optional[float],
     auxiliary: Optional[float],
-    principal_variable:  float,
+    principal_variable: float,
     lower_limit: float,
     upper_limit: float,
     target_variables: List[Target_variable],
@@ -142,7 +141,6 @@ def validate_input(
     float,
     List[Target_variable],
 ]:
-
     """
     This function is used to validate the data passed to the thousand_pounds
     method ensuring that the values are present when expected and that they are of

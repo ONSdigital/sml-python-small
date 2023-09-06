@@ -350,20 +350,26 @@ class TestValidateInput:
         "test_id",
         [
             (
-                "500", # predictive
-                None, # auxiliary
-                200, # principal_variable
-                50, # lower limit
-                100, # upper limit
-                [Target_variable("q501", 500), Target_variable("q502", 1000)], # target variaibles
+                "500",  # predictive
+                None,  # auxiliary
+                200,  # principal_variable
+                50,  # lower limit
+                100,  # upper limit
+                [
+                    Target_variable("q501", 500),
+                    Target_variable("q502", 1000),
+                ],  # target variaibles
                 (
-                    500.0, # expected output predictive
-                    None, # expected output auxiliary
-                    200.0, # expected output principal variable
-                    50.0, # expected output lower limit
-                    100.0, # expected output upper limit
-                    [Target_variable("q501", 500.0), Target_variable("q502", 1000.0)],  # expected output
-                        # target variables
+                    500.0,  # expected output predictive
+                    None,  # expected output auxiliary
+                    200.0,  # expected output principal variable
+                    50.0,  # expected output lower limit
+                    100.0,  # expected output upper limit
+                    [
+                        Target_variable("q501", 500.0),
+                        Target_variable("q502", 1000.0),
+                    ],  # expected output
+                    # target variables
                 ),
                 "Test 1: Predictive as an interpretable string",
             ),
