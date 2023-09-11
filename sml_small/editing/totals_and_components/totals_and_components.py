@@ -13,7 +13,7 @@ from enum import Enum
 from os import path
 from typing import List, Optional, Tuple, Union
 
-from sml_small.utils.common_utils import log_table, validate_number
+from sml_small.utils.common_utils import convert_input_to_decimal, log_table, validate_number
 from sml_small.utils.error_utils import (get_mandatory_param_error, get_one_of_params_mandatory_error,
                                          get_param_outside_range_error)
 
@@ -273,10 +273,12 @@ def totals_and_components(
             "high_percent_threshold": None,
             "absolute_difference": None,
         }
+
         components_list = initialize_components_list(components)
 
-        #  Check for invalid parameter values
-        input_parameters = validate_input(
+        #  Check for invalid parameter values and set the precision value
+        #  for Decimal calculations
+        precision = validate_input(
             identifier,
             total,
             components_list,
@@ -286,11 +288,42 @@ def totals_and_components(
             auxiliary,
             absolute_difference_threshold,
             percentage_difference_threshold,
+        ) 
+
+        print('checkpoint')
+
+        keys = [
+            'total',
+            'components',
+            'predictive', 
+            'auxiliary',
+            'absolute_difference_threshold',
+            'percentage_difference_threshold'
+            ]
+
+        args= [
+            total,
+            components,
+            predictive, 
+            auxiliary,
+            absolute_difference_threshold,
+            percentage_difference_threshold
+        ]
+
+
+        print('checkpoint2')
+
+        decimal_values = convert_input_to_decimal(
+            keys,
+            args
         )
 
-        # Set the precision for Decimal calculations
-        getcontext().prec = input_parameters[InputParameters.PRECISION.value]
+        input_parameters = (decimal_values(total), decimal_values(components), decimal_values(predictive), decimal_values(auxiliary), decimal_values(absolute_difference_threshold), decimal_values(percentage_difference_threshold), precision)
+        
+        print('checkpoint3')
 
+        getcontext().prec = input_parameters[InputParameters.PRECISION.value]
+        
         #  Set the predictive as either the current value, total or auxiliary
         # depending on what values exist from the data input.
         (predictive, output_list["tcc_marker"]) = set_predictive_value(
@@ -423,15 +456,7 @@ def validate_input(
     auxiliary: Optional[float],
     absolute_difference_threshold: Optional[float],
     percentage_difference_threshold: Optional[float],
-) -> Tuple[
-    float,
-    List[ComponentPair],
-    Union[float, None],
-    Union[float, None],
-    Union[float, None],
-    Union[float, None],
-    int,
-]:
+) -> int:
     """
     This function is used to validate the data passed to the totals_and_components
     method ensuring that the values are present when expected and that they are of
@@ -552,16 +577,7 @@ def validate_input(
                         ],
                     )
                 )
-
-    return (
-        total,
-        components,
-        predictive,
-        auxiliary,
-        absolute_difference_threshold,
-        percentage_difference_threshold,
-        precision,
-    )
+    return precision
 
 
 def set_predictive_value(
@@ -632,9 +648,9 @@ def check_sum_components_predictive(predictive: float, components_sum: float) ->
     :rtype: float
     """
     if not math.isnan(components_sum):
-        absolute_difference = abs(Decimal(str(predictive)) - Decimal(str(components_sum)))
+        absolute_difference = abs(predictive - components_sum)
     else:
-        absolute_difference = abs(Decimal(str(predictive)))
+        absolute_difference = abs(predictive)
 
     return float(absolute_difference)
 
@@ -868,10 +884,7 @@ def correct_components(
     """
     final_total = total
     for component in components:
-        component.final_value = (
-            Decimal(str(component.original_value)) / Decimal(str(components_sum))
-        ) * Decimal(str(total))
-        component.final_value = float(component.final_value)
+        component.final_value = (component.original_value / components_sum) * total
 
     tcc_marker = TccMarker.COMPONENTS_CORRECTED
     return final_total, components, tcc_marker
@@ -890,7 +903,7 @@ def sum_components(components: List[ComponentPair]) -> float:
     total_sum = 0
     for component in components:
         if not math.isnan(component.original_value):
-            total_sum += Decimal(str(component.original_value))
+            total_sum += component.original_value
 
     return float(total_sum)
 
@@ -930,15 +943,11 @@ def calculate_percent_thresholds(
         high_percent_threshold = None
     else:
         low_percent_threshold = abs(
-            Decimal(str(sum_of_components))
-            - (Decimal(str(sum_of_components)) * Decimal(str(percentage_threshold)))
+            sum_of_components - (sum_of_components * percentage_threshold)
         )
-        low_percent_threshold = float(low_percent_threshold)
         high_percent_threshold = abs(
-            Decimal(str(sum_of_components))
-            + (Decimal(str(sum_of_components)) * Decimal(str(percentage_threshold)))
+            sum_of_components + (sum_of_components * percentage_threshold)
         )
-        high_percent_threshold = float(high_percent_threshold)
     output_list["low_percent_threshold"] = low_percent_threshold
     output_list["high_percent_threshold"] = high_percent_threshold
     return low_percent_threshold, high_percent_threshold, output_list
