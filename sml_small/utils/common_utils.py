@@ -3,8 +3,10 @@ Common functionality that can be used by any SML method
 
 For Copyright information, please see LICENCE.
 """
+from decimal import Decimal
 import logging.config
 from os import path
+from typing import List, Tuple, Union
 
 from sml_small.utils.error_utils import get_params_is_not_a_number_error
 
@@ -80,3 +82,43 @@ def is_number(value) -> bool:
         return False
 
     return True
+
+
+def convert_input_to_decimal(
+    keys: List[str],
+    args: List[float],
+) -> List[Tuple[(str, float)]]:
+    try:
+
+        if len(keys) != len(args):
+            raise ValueError("Number of keys needs to match the number of arguments") 
+
+        print(keys, args)
+
+        decimal_values = []
+        
+        for arg in args:
+
+                print('start', keys[0], arg)
+
+                if arg.isdecimal() is True:
+                    print(arg.isdecimal(), arg)
+                    decimal_values.append((keys[arg], arg))
+
+                elif arg == None or arg.isnan():
+                    print("add")
+                    decimal_values.append((keys[arg], arg))
+                    print('checkpoint2a')
+
+                else: 
+                    print('arg2')
+                    arg = Decimal(str(arg))
+                    decimal_values.append((keys[arg], arg))
+                    print('checkpoint3a')
+
+        print(decimal_values)
+
+        return decimal_values
+
+    except Exception as error:
+        Exception(error)

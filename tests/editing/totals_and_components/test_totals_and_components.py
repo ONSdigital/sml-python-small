@@ -14,7 +14,7 @@ from sml_small.editing.totals_and_components.totals_and_components import (PRECI
                                                                            correct_total, determine_error_detection,
                                                                            error_correction, set_predictive_value,
                                                                            sum_components, totals_and_components,
-                                                                           validate_input)
+                                                                           validate_input, convert_input_to_decimal)
 from sml_small.utils.error_utils import (get_mandatory_param_error, get_one_of_params_mandatory_error,
                                          get_param_outside_range_error, get_params_is_not_a_number_error)
 
@@ -4904,269 +4904,6 @@ class TestTotalsAndComponentsUAT:
             assert (str(exc_info.value)) == str(expected_result)
 
 
-class TestTotalsAndComponentsUATFails:
-    @pytest.mark.parametrize(
-        "identifier, total, components, amend_total, predictive, precision,"
-        "auxiliary, absolute_difference_threshold, percentage_difference_threshold,"
-        "expected_result, test_id",
-        [
-            # (
-            #     "UAT-ABD-DIFF-6002",  # identifier
-            #     10817,  # total
-            #     [9201, 866, 632, 112],  # components
-            #     False,  # amend_total
-            #     10817,  # predictive
-            #     28,  # precision
-            #     None,  # auxiliary
-            #     11,  # absolute_difference_threshold
-            #     None,  # percentage_difference_threshold
-            #     (
-            #         "UAT-ABD-DIFF-6002",  # identifier
-            #         6,  # absolute_difference
-            #         None,  # low_percent_threshold
-            #         None,  # high_percent_threshold
-            #         10817,  # final_total
-            #         [9206.10646563685, 866.4806215891222, 632.3507538618074, 112.0621589122204],
-            #         "C",  # tcc_marker
-            #     ),
-            #     "a6-6002 - If absolute difference < 11 and amend total is true then we correct the components",
-            #     # Sheet TCC_test_data_case_a7
-            #     # If absolute difference <= absolute difference threshold and > 0 but components sum = 0 or missing,
-            #     # and amend total = TRUE, then do not amend total.
-            #     # TCC marker = S
-            # ),
-            (
-                "UAT-ABD-DIFF-7001",  # identifier
-                9,  # total
-                [(0), (0), (0), (0)],  # components
-                True,  # amend_total
-                9,  # predictive
-                28,  # precision
-                None,  # auxiliary
-                11,  # absolute_difference_threshold
-                None,  # percentage_difference_threshold
-                (
-                    "UAT-ABD-DIFF-7001",  # identifier
-                    None,  # absolute_difference
-                    None,  # low_percent_threshold
-                    None,  # high_percent_threshold
-                    9,  # final_total
-                    [0, 0, 0, 0],  # final_components
-                    "S",  # tcc_marker
-                ),
-                "Test a7-7001 - If absolute difference < 11 and amend total is true then we correct the components",
-                # Sheet TCC_test_data_case_a7
-                # If absolute difference <= absolute difference threshold and > 0 but components sum = 0 or missing,
-                # and amend total = TRUE, then do not amend total.
-                # TCC marker = S
-            ),
-            (
-                "UAT-ABD-DIFF-7002",
-                4,
-                [float("NaN"), float("NaN"), float("NaN"), float("NaN")],
-                True,
-                4,
-                28,
-                None,
-                11,
-                None,
-                (
-                    "UAT-ABD-DIFF-7002",
-                    None,
-                    None,
-                    None,
-                    4,
-                    [float("nan"), float("nan"), float("nan"), float("nan")],
-                    "S",
-                ),
-                "Test a7-7002 - If absolute difference < 11 and amend total is true then we correct the components",
-                # Sheet TCC_test_data_case_a7
-                # If absolute difference <= absolute difference threshold and > 0 but components sum = 0 or missing,
-                # and amend total = TRUE, then do not amend total.
-                # TCC marker = S
-            ),
-            (
-                "UAT-ABD-DIFF-7003",  # identifier
-                11,  # total
-                [(0), (0), (0), (0)],  # components
-                True,  # amend_total
-                11,  # predictive
-                28,  # precision
-                None,  # auxiliary
-                11,  # absolute_difference_threshold
-                None,  # percentage_difference_threshold
-                (
-                    "UAT-ABD-DIFF-7003",  # identifier
-                    None,  # absolute_difference
-                    None,  # low_percent_threshold
-                    None,  # high_percent_threshold
-                    11,  # final_total
-                    [0, 0, 0, 0],  # final_components
-                    "S",  # tcc_marker
-                ),
-                "Test a7-7003 - If absolute difference < 11 and amend total is true then we correct the components",
-                # Sheet TCC_test_data_case_a7
-                # If absolute difference <= absolute difference threshold and > 0 but components sum = 0 or missing,
-                # and amend total = TRUE, then do not amend total.
-                # TCC marker = S
-            ),
-            (
-                "UAT-ABD-DIFF-14001",
-                1522,
-                [(632), (732), float("NaN"), (162)],
-                False,
-                1522,
-                28,
-                None,
-                11,
-                None,
-                (
-                    "UAT-ABD-DIFF-14001",
-                    4,
-                    None,
-                    None,
-                    1522,
-                    [(630.343381389253), (730.0812581913499), float("NaN"), (161.57536041939713)],
-                    "C",
-                ),
-                "Test a14-14001 - If absolute difference < 11 and amend total is true then we correct the components",
-                # Sheet TCC_test_data_case_a7
-                # If absolute difference <= absolute difference threshold and > 0 but components sum = 0 or missing,
-                # and amend total = TRUE, then do not amend total.
-                # TCC marker = S
-            ),
-            (
-                "UAT-ABD-DIFF-14002",
-                10705,
-                [(9201), (866), (632), float("NaN")],
-                False,
-                10705,
-                28,
-                None,
-                11,
-                None,
-                (
-                    "UAT-ABD-DIFF-14002",
-                    6,
-                    None,
-                    None,
-                    10705,
-                    [(9206.15992148799), (866.4856528647537), (632.3544256472568), float("NaN")],  # 632.3544256472568
-                    "C",
-                ),
-                "Test a14-14002 - If absolute difference < 11 and amend total is true then we correct the components",
-                # Sheet TCC_test_data_case_a7
-                # If absolute difference <= absolute difference threshold and > 0 but components sum = 0 or missing,
-                # and amend total = TRUE, then do not amend total.
-                # TCC marker = S
-            ),
-            (
-                "UAT-ABD-DIFF-14003",
-                103,
-                [(98), float("Nan"), (4), (6)],
-                False,
-                103,
-                28,
-                None,
-                11,
-                None,
-                (
-                    "UAT-ABD-DIFF-14003",
-                    5,
-                    None,
-                    None,
-                    103,
-                    [(93.46296296296296), float("NaN"), (3.814814814814815), (5.722222222222222)],
-                    "C",
-                ),
-                "Test a14-14003 - If absolute difference < 11 and amend total is true then we correct the components",
-                # Sheet TCC_test_data_case_a7
-                # If absolute difference <= absolute difference threshold and > 0 but components sum = 0 or missing,
-                # and amend total = TRUE, then do not amend total.
-                # TCC marker = S
-            )
-        ],
-    )
-    def test_totals_and_components(
-        self,
-        capfd,
-        identifier,
-        total,
-        components,
-        amend_total,
-        predictive,
-        precision,
-        auxiliary,
-        absolute_difference_threshold,
-        percentage_difference_threshold,
-        expected_result,
-        test_id,
-    ):
-        if isinstance(expected_result, tuple):
-            try:
-                results = totals_and_components(
-                    identifier=identifier,
-                    total=total,
-                    components=components,
-                    amend_total=amend_total,
-                    predictive=predictive,
-                    auxiliary=auxiliary,
-                    absolute_difference_threshold=absolute_difference_threshold,
-                    percentage_difference_threshold=percentage_difference_threshold,
-                )
-
-                # Capture the printed output and remove any leading or trailing whitespace
-                captured = capfd.readouterr()
-                printed_output = captured.out.strip()
-
-                print(printed_output)
-
-                # calculate_weighted(total, components)
-
-                assert results.identifier == expected_result[0]
-                assert results.absolute_difference == expected_result[1]
-                assert results.low_percent_threshold == expected_result[2]
-                assert results.high_percent_threshold == expected_result[3]
-                assert results.final_total == expected_result[4]
-                assert results.tcc_marker == expected_result[6]
-
-                if results.tcc_marker == "T" or results.tcc_marker == "C":
-                    sum_of_components = 0
-                    for component in results.final_components:
-                        print(f"fc - {results.final_components}")
-                        if not math.isnan(component):
-                            sum_of_components += Decimal(str(component))
-
-                    print(f"Comparison Sum: {sum_of_components}")
-                    sum_of_components = float(sum_of_components)
-                    assert sum_of_components == expected_result[4]
-
-                compare_list_of_floats(results.final_components, expected_result[5])
-
-            except Exception as e:
-                pytest.fail(
-                    EXCEPTION_FAIL_MESSAGE.format(
-                        test_id=test_id,
-                        exception_type=type(e).__name__,
-                        exception_msg=str(e.args),
-                    )
-                )
-        else:
-            with pytest.raises(Exception) as exc_info:
-                totals_and_components(
-                    identifier=identifier,
-                    total=total,
-                    components=components,
-                    amend_total=amend_total,
-                    predictive=predictive,
-                    precision=precision,
-                    auxiliary=auxiliary,
-                    absolute_difference_threshold=absolute_difference_threshold,
-                    percentage_difference_threshold=percentage_difference_threshold,
-                )
-            assert (str(exc_info.value)) == str(expected_result)
-
-
 class TestValidateInput:
     @pytest.mark.parametrize(
         "identifier, total, components, amend_total, predictive, "
@@ -5188,20 +4925,7 @@ class TestValidateInput:
                 20,
                 0.1,
                 6,
-                (
-                    100,
-                    [
-                        ComponentPair(original_value=1, final_value=None),
-                        ComponentPair(original_value=2, final_value=None),
-                        ComponentPair(original_value=3, final_value=None),
-                        ComponentPair(original_value=4, final_value=None),
-                    ],
-                    100.0,
-                    300.0,
-                    20,
-                    0.1,
-                    6,
-                ),
+                (6),
                 "Test 1: Correct values test",
                 # Test to ensure we have a happy path walkthrough
             ),
@@ -5220,20 +4944,7 @@ class TestValidateInput:
                 105.0,
                 None,
                 28,
-                (
-                    100.0,
-                    [
-                        ComponentPair(original_value=1, final_value=None),
-                        ComponentPair(original_value=2, final_value=None),
-                        ComponentPair(original_value=3, final_value=None),
-                        ComponentPair(original_value=4, final_value=None),
-                    ],
-                    100.0,
-                    104.0,
-                    105.0,
-                    None,
-                    28,
-                ),
+                (28),
                 "Test 2: None value for percentage difference threshold",
                 # Test to see what happens when a none value is entered by
                 # the user for the percentage difference threshold
@@ -5254,20 +4965,7 @@ class TestValidateInput:
                 None,
                 20,
                 28,
-                (
-                    100.0,
-                    [
-                        ComponentPair(original_value=1, final_value=None),
-                        ComponentPair(original_value=2, final_value=None),
-                        ComponentPair(original_value=3, final_value=None),
-                        ComponentPair(original_value=4, final_value=None),
-                    ],
-                    100.0,
-                    104.0,
-                    None,
-                    20,
-                    28,
-                ),
+                (28),
                 "Test 3: None value for absolute difference threshold",
                 # Test to see what happens when a none value is entered by
                 # the user for the absolute difference threshold
@@ -5288,20 +4986,7 @@ class TestValidateInput:
                 20,
                 0.1,
                 28,
-                (
-                    100,
-                    [
-                        ComponentPair(original_value=1, final_value=None),
-                        ComponentPair(original_value=2, final_value=None),
-                        ComponentPair(original_value=3, final_value=None),
-                        ComponentPair(original_value=4, final_value=None),
-                    ],
-                    None,  # missing predictive does not trigger value error
-                    100,
-                    20,
-                    0.1,
-                    28,
-                ),
+                (28),
                 "Test 4: Predictive is missing so method carries on",
                 # Test to see what happens when a none value is entered by
                 # the user for the predictive difference threshold
@@ -5317,15 +5002,7 @@ class TestValidateInput:
                 20,
                 0.1,
                 28,
-                (
-                    100,
-                    [],
-                    101,
-                    103,
-                    20,
-                    0.1,
-                    28,
-                ),
+                (28),
                 "Test 5: Empty component list",
                 # Test to see what happens when no component list is provided
                 # we expect the method to return the values
@@ -5544,20 +5221,7 @@ class TestValidateInput:
                 20,
                 0.1,
                 6,
-                (
-                    100,
-                    [
-                        ComponentPair(original_value=1, final_value=None),
-                        ComponentPair(original_value=2, final_value=None),
-                        ComponentPair(original_value=3, final_value=None),
-                        ComponentPair(original_value=4, final_value=None),
-                    ],
-                    100.0,
-                    300.0,
-                    20,
-                    0.1,
-                    6,
-                ),
+                (6),
                 "Test 15: Total is a string of a number",
                 # Test to ensure total number entered as a string passes
             ),
@@ -5576,20 +5240,7 @@ class TestValidateInput:
                 20,
                 0.1,
                 6,
-                (
-                    100,
-                    [
-                        ComponentPair(original_value=1, final_value=None),
-                        ComponentPair(original_value=2, final_value=None),
-                        ComponentPair(original_value=3, final_value=None),
-                        ComponentPair(original_value=4, final_value=None),
-                    ],
-                    100.0,
-                    300.0,
-                    20,
-                    0.1,
-                    6,
-                ),
+                (6),
                 "Test 16: predictive is a string of a number",
                 # Test to ensure predictive number entered as a string passes
             ),
@@ -5608,20 +5259,7 @@ class TestValidateInput:
                 20,
                 0.1,
                 6,
-                (
-                    100,
-                    [
-                        ComponentPair(original_value=1, final_value=None),
-                        ComponentPair(original_value=2, final_value=None),
-                        ComponentPair(original_value=3, final_value=None),
-                        ComponentPair(original_value=4, final_value=None),
-                    ],
-                    100.0,
-                    300.0,
-                    20,
-                    0.1,
-                    6,
-                ),
+                (6),
                 "Test 17: auxiliary is a string of a number",
                 # Test to ensure auxiliary number entered as a string passes
             ),
@@ -5640,20 +5278,7 @@ class TestValidateInput:
                 "20",
                 0.1,
                 6,
-                (
-                    100,
-                    [
-                        ComponentPair(original_value=1, final_value=None),
-                        ComponentPair(original_value=2, final_value=None),
-                        ComponentPair(original_value=3, final_value=None),
-                        ComponentPair(original_value=4, final_value=None),
-                    ],
-                    100.0,
-                    300.0,
-                    20,
-                    0.1,
-                    6,
-                ),
+                (6),
                 "Test 18: absolute difference threshold is a string of a number",
                 # Test to ensure absolute difference threshold number entered as a string passes
             ),
@@ -5672,20 +5297,7 @@ class TestValidateInput:
                 20,
                 "0.1",
                 6,
-                (
-                    100,
-                    [
-                        ComponentPair(original_value=1, final_value=None),
-                        ComponentPair(original_value=2, final_value=None),
-                        ComponentPair(original_value=3, final_value=None),
-                        ComponentPair(original_value=4, final_value=None),
-                    ],
-                    100.0,
-                    300.0,
-                    20,
-                    0.1,
-                    6,
-                ),
+                (6),
                 "Test 19: percentage difference threshold is a string of a number",
                 # Test to ensure percentage difference threshold number entered as a string passes
             ),
@@ -5704,20 +5316,7 @@ class TestValidateInput:
                 20,
                 0.1,
                 "6",
-                (
-                    100,
-                    [
-                        ComponentPair(original_value=1, final_value=None),
-                        ComponentPair(original_value=2, final_value=None),
-                        ComponentPair(original_value=3, final_value=None),
-                        ComponentPair(original_value=4, final_value=None),
-                    ],
-                    100.0,
-                    300.0,
-                    20,
-                    0.1,
-                    6,
-                ),
+                (6),
                 "Test 20: precision is a string of a number",
                 # Test to ensure precision number entered as a string passes
             ),
@@ -5737,7 +5336,7 @@ class TestValidateInput:
         expected_result,
         test_id,
     ):
-        if isinstance(expected_result, tuple):
+        if isinstance(expected_result, int):
             try:
                 result = validate_input(
                     identifier=identifier,
@@ -5762,6 +5361,555 @@ class TestValidateInput:
         else:
             with pytest.raises(Exception) as exc_info:
                 validate_input(
+                    identifier=identifier,
+                    total=total,
+                    components=components,
+                    amend_total=amend_total,
+                    predictive=predictive,
+                    auxiliary=auxiliary,
+                    absolute_difference_threshold=absolute_difference_threshold,
+                    percentage_difference_threshold=percentage_difference_threshold,
+                    precision=precision,
+                )
+                print(exc_info.value)
+            assert (str(exc_info.value)) == str(expected_result)
+    
+class TestConvertToDecimal:
+    @pytest.mark.parametrize(
+        "identifier, total, components, amend_total, predictive, "
+        "auxiliary, absolute_difference_threshold, "
+        "percentage_difference_threshold, expected_result, test_id",
+        [
+            (
+                "A",
+                100,
+                [
+                    ComponentPair(original_value=1, final_value=None),
+                    ComponentPair(original_value=2, final_value=None),
+                    ComponentPair(original_value=3, final_value=None),
+                    ComponentPair(original_value=4, final_value=None),
+                ],
+                True,
+                100.0,
+                300.0,
+                20,
+                0.1,
+                (
+                    100,
+                    [
+                        ComponentPair(original_value=1, final_value=None),
+                        ComponentPair(original_value=2, final_value=None),
+                        ComponentPair(original_value=3, final_value=None),
+                        ComponentPair(original_value=4, final_value=None),
+                    ],
+                    100.0,
+                    300.0,
+                    20,
+                    0.1,
+                ),
+                "Test 1: Correct values test",
+                # Test to ensure we have a happy path walkthrough
+            ),
+            (
+                "B",
+                100.0,
+                [
+                    ComponentPair(original_value=1, final_value=None),
+                    ComponentPair(original_value=2, final_value=None),
+                    ComponentPair(original_value=3, final_value=None),
+                    ComponentPair(original_value=4, final_value=None),
+                ],
+                False,
+                100.0,
+                104.0,
+                105.0,
+                None,
+                (
+                    100.0,
+                    [
+                        ComponentPair(original_value=1, final_value=None),
+                        ComponentPair(original_value=2, final_value=None),
+                        ComponentPair(original_value=3, final_value=None),
+                        ComponentPair(original_value=4, final_value=None),
+                    ],
+                    100.0,
+                    104.0,
+                    105.0,
+                    None,
+                ),
+                "Test 2: None value for percentage difference threshold",
+                # Test to see what happens when a none value is entered by
+                # the user for the percentage difference threshold
+                # this will not trigger an error exception
+            ),
+            (
+                "C",
+                100.0,
+                [
+                    ComponentPair(original_value=1, final_value=None),
+                    ComponentPair(original_value=2, final_value=None),
+                    ComponentPair(original_value=3, final_value=None),
+                    ComponentPair(original_value=4, final_value=None),
+                ],
+                True,
+                100.0,
+                104.0,
+                None,
+                20,
+                (
+                    100.0,
+                    [
+                        ComponentPair(original_value=1, final_value=None),
+                        ComponentPair(original_value=2, final_value=None),
+                        ComponentPair(original_value=3, final_value=None),
+                        ComponentPair(original_value=4, final_value=None),
+                    ],
+                    100.0,
+                    104.0,
+                    None,
+                    20,
+                ),
+                "Test 3: None value for absolute difference threshold",
+                # Test to see what happens when a none value is entered by
+                # the user for the absolute difference threshold
+                # this will not trigger an error exception
+            ),
+            (
+                "D",
+                100,
+                [
+                    ComponentPair(original_value=1, final_value=None),
+                    ComponentPair(original_value=2, final_value=None),
+                    ComponentPair(original_value=3, final_value=None),
+                    ComponentPair(original_value=4, final_value=None),
+                ],
+                False,
+                None,  # missing predictive
+                100,
+                20,
+                0.1,
+                28,
+                (
+                    100,
+                    [
+                        ComponentPair(original_value=1, final_value=None),
+                        ComponentPair(original_value=2, final_value=None),
+                        ComponentPair(original_value=3, final_value=None),
+                        ComponentPair(original_value=4, final_value=None),
+                    ],
+                    None,  # missing predictive does not trigger value error
+                    100,
+                    20,
+                    0.1,
+                ),
+                "Test 4: Predictive is missing so method carries on",
+                # Test to see what happens when a none value is entered by
+                # the user for the predictive difference threshold
+                # this will not trigger an error exception
+            ),
+            (
+                "E",
+                100,
+                [],
+                True,
+                101,
+                103,
+                20,
+                0.1,
+                28,
+                (
+                    100,
+                    [],
+                    101,
+                    103,
+                    20,
+                    0.1,
+                ),
+                "Test 5: Empty component list",
+                # Test to see what happens when no component list is provided
+                # we expect the method to return the values
+            ),
+            (
+                "F",
+                100.0,
+                [
+                    ComponentPair(original_value="InvalidString", final_value=None),
+                    ComponentPair(original_value=2, final_value=None),
+                    ComponentPair(original_value=3, final_value=None),
+                    ComponentPair(original_value=4, final_value=None),
+                ],
+                True,
+                101.0,
+                103.0,
+                20,
+                0.1,
+                ValueError(get_params_is_not_a_number_error("component=InvalidString")),
+                "Test 6: Invalid string in component list",
+                # Test to see what happens when an invalid string value is within the
+                # component list we expect the appropriate value error to be raised.
+            ),
+            (
+                "G",
+                "String",
+                [
+                    ComponentPair(original_value=1, final_value=None),
+                    ComponentPair(original_value=2, final_value=None),
+                    ComponentPair(original_value=3, final_value=None),
+                    ComponentPair(original_value=4, final_value=None),
+                ],
+                False,
+                102.0,
+                104.0,
+                20,
+                0.1,
+                ValueError(get_params_is_not_a_number_error("total")),
+                "Test 7: Invalid Total",
+                # Test to see what happens when an invalid total
+                # string value is provided
+                # we expect the appropriate value error to be raised.
+            ),
+            (
+                "H",
+                100.0,
+                [
+                    ComponentPair(original_value=1, final_value=None),
+                    ComponentPair(original_value=2, final_value=None),
+                    ComponentPair(original_value=3, final_value=None),
+                    ComponentPair(original_value=4, final_value=None),
+                ],
+                True,
+                "String",
+                102.0,
+                20,
+                0.1,
+                ValueError(get_params_is_not_a_number_error("predictive")),
+                "Test 8: Invalid predictive test",
+                # Test to see what happens when an invalid predictive
+                # string value is provided
+                # we expect the appropriate value error to be raised.
+            ),
+            (
+                "I",
+                100.0,
+                [
+                    ComponentPair(original_value=1, final_value=None),
+                    ComponentPair(original_value=2, final_value=None),
+                    ComponentPair(original_value=3, final_value=None),
+                    ComponentPair(original_value=4, final_value=None),
+                ],
+                False,
+                101.0,
+                "String",
+                20,
+                0.1,
+                ValueError(get_params_is_not_a_number_error("auxiliary")),
+                "Test 9: Invalid auxiliary",
+                # Test to see what happens when an invalid auxiliary
+                # string value is provided
+                # we expect the appropriate value error to be raised.
+            ),
+            (
+                "J",
+                100.0,
+                [
+                    ComponentPair(original_value=1, final_value=None),
+                    ComponentPair(original_value=2, final_value=None),
+                    ComponentPair(original_value=3, final_value=None),
+                    ComponentPair(original_value=4, final_value=None),
+                ],
+                True,
+                102.0,
+                104.0,
+                {20},
+                0.1,
+                ValueError(
+                    get_params_is_not_a_number_error("absolute difference threshold")
+                ),
+                "Test 10: Invalid absolute difference threshold",
+                # Test to see what happens when an invalid ABT
+                # tuple value is provided
+                # we expect the appropriate value error to be raised.
+            ),
+            (
+                "K",
+                100.0,
+                [
+                    ComponentPair(original_value=1, final_value=None),
+                    ComponentPair(original_value=2, final_value=None),
+                    ComponentPair(original_value=3, final_value=None),
+                    ComponentPair(original_value=4, final_value=None),
+                ],
+                False,
+                102.0,
+                104.0,
+                20,
+                {2},
+                ValueError(
+                    get_params_is_not_a_number_error("percentage difference threshold")
+                ),
+                "Test 11: Invalid percentage difference threshold",
+                # Test to see what happens when an invalid PDT
+                # value is provided
+                # we expect the appropriate value error to be raised.
+            ),
+            (
+                "L",
+                100.0,
+                [
+                    ComponentPair(original_value=1, final_value=None),
+                    ComponentPair(original_value=2, final_value=None),
+                    ComponentPair(original_value=3, final_value=None),
+                    ComponentPair(original_value=4, final_value=None),
+                ],
+                True,
+                102.0,
+                89.0,
+                None,
+                None,
+                ValueError(
+                    get_one_of_params_mandatory_error(
+                        [
+                            "absolute_difference_threshold",
+                            "percentage_difference_threshold",
+                        ]
+                    )
+                ),
+                "Test 12: None value for percentage and absolute difference threshold",
+                # Test to see what happens when an invalid PDT and ABT
+                # values are provided
+                # we expect the appropriate value error to be raised.
+            ),
+            (
+                "M",
+                100.0,
+                [
+                    ComponentPair(original_value=1, final_value=None),
+                    ComponentPair(original_value=2, final_value=None),
+                    ComponentPair(original_value=3, final_value=None),
+                    ComponentPair(original_value=4, final_value=None),
+                ],
+                None,
+                102.0,
+                89.0,
+                11,
+                0.1,
+                ValueError(get_mandatory_param_error("amend_total")),
+                "Test 13: None value for amend value",
+                # Test to see what happens when an none amend total
+                # value is provided
+                # we expect the appropriate value error to be raised.
+            ),
+            (
+                "N",
+                None,
+                [
+                    ComponentPair(original_value=1, final_value=None),
+                    ComponentPair(original_value=2, final_value=None),
+                    ComponentPair(original_value=3, final_value=None),
+                    ComponentPair(original_value=4, final_value=None),
+                ],
+                True,
+                102.0,
+                89.0,
+                11,
+                0.1,
+                ValueError(get_mandatory_param_error("total")),
+                "Test 14: None value for total",
+                # Test to see what happens when an none
+                # value for total value is provided
+                # we expect the appropriate value error to be raised.
+            ),
+            (
+                "O",
+                "100",
+                [
+                    ComponentPair(original_value=1, final_value=None),
+                    ComponentPair(original_value=2, final_value=None),
+                    ComponentPair(original_value=3, final_value=None),
+                    ComponentPair(original_value=4, final_value=None),
+                ],
+                True,
+                100.0,
+                300.0,
+                20,
+                0.1,
+                (
+                    100,
+                    [
+                        ComponentPair(original_value=1, final_value=None),
+                        ComponentPair(original_value=2, final_value=None),
+                        ComponentPair(original_value=3, final_value=None),
+                        ComponentPair(original_value=4, final_value=None),
+                    ],
+                    100.0,
+                    300.0,
+                    20,
+                    0.1,
+                ),
+                "Test 15: Total is a string of a number",
+                # Test to ensure total number entered as a string passes
+            ),
+            (
+                "P",
+                100,
+                [
+                    ComponentPair(original_value=1, final_value=None),
+                    ComponentPair(original_value=2, final_value=None),
+                    ComponentPair(original_value=3, final_value=None),
+                    ComponentPair(original_value=4, final_value=None),
+                ],
+                True,
+                "100.0",
+                300.0,
+                20,
+                0.1,
+                (
+                    100,
+                    [
+                        ComponentPair(original_value=1, final_value=None),
+                        ComponentPair(original_value=2, final_value=None),
+                        ComponentPair(original_value=3, final_value=None),
+                        ComponentPair(original_value=4, final_value=None),
+                    ],
+                    100.0,
+                    300.0,
+                    20,
+                    0.1,
+                ),
+                "Test 16: predictive is a string of a number",
+                # Test to ensure predictive number entered as a string passes
+            ),
+            (
+                "Q",
+                100,
+                [
+                    ComponentPair(original_value=1, final_value=None),
+                    ComponentPair(original_value=2, final_value=None),
+                    ComponentPair(original_value=3, final_value=None),
+                    ComponentPair(original_value=4, final_value=None),
+                ],
+                True,
+                100.0,
+                "300.0",
+                20,
+                0.1,
+                (
+                    100,
+                    [
+                        ComponentPair(original_value=1, final_value=None),
+                        ComponentPair(original_value=2, final_value=None),
+                        ComponentPair(original_value=3, final_value=None),
+                        ComponentPair(original_value=4, final_value=None),
+                    ],
+                    100.0,
+                    300.0,
+                    20,
+                    0.1,
+                ),
+                "Test 17: auxiliary is a string of a number",
+                # Test to ensure auxiliary number entered as a string passes
+            ),
+            (
+                "R",
+                100,
+                [
+                    ComponentPair(original_value=1, final_value=None),
+                    ComponentPair(original_value=2, final_value=None),
+                    ComponentPair(original_value=3, final_value=None),
+                    ComponentPair(original_value=4, final_value=None),
+                ],
+                True,
+                100.0,
+                300.0,
+                "20",
+                0.1,
+                (
+                    100,
+                    [
+                        ComponentPair(original_value=1, final_value=None),
+                        ComponentPair(original_value=2, final_value=None),
+                        ComponentPair(original_value=3, final_value=None),
+                        ComponentPair(original_value=4, final_value=None),
+                    ],
+                    100.0,
+                    300.0,
+                    20,
+                    0.1,
+                ),
+                "Test 18: absolute difference threshold is a string of a number",
+                # Test to ensure absolute difference threshold number entered as a string passes
+            ),
+            (
+                "S",
+                100,
+                [
+                    ComponentPair(original_value=1, final_value=None),
+                    ComponentPair(original_value=2, final_value=None),
+                    ComponentPair(original_value=3, final_value=None),
+                    ComponentPair(original_value=4, final_value=None),
+                ],
+                True,
+                100.0,
+                300.0,
+                20,
+                "0.1",
+                (
+                    100,
+                    [
+                        ComponentPair(original_value=1, final_value=None),
+                        ComponentPair(original_value=2, final_value=None),
+                        ComponentPair(original_value=3, final_value=None),
+                        ComponentPair(original_value=4, final_value=None),
+                    ],
+                    100.0,
+                    300.0,
+                    20,
+                    0.1,
+                ),
+                "Test 19: percentage difference threshold is a string of a number",
+                # Test to ensure percentage difference threshold number entered as a string passes
+            ),
+        ],
+    )
+    def convert_input_to_decimal(
+        self,
+        identifier,
+        total,
+        components,
+        amend_total,
+        predictive,
+        auxiliary,
+        absolute_difference_threshold,
+        percentage_difference_threshold,
+        precision,
+        expected_result,
+        test_id,
+    ):
+        if isinstance(expected_result, tuple):
+            try:
+                result = convert_input_to_decimal(
+                    identifier=identifier,
+                    total=total,
+                    components=components,
+                    amend_total=amend_total,
+                    predictive=predictive,
+                    auxiliary=auxiliary,
+                    absolute_difference_threshold=absolute_difference_threshold,
+                    percentage_difference_threshold=percentage_difference_threshold,
+                    precision=precision,
+                )
+                assert result == expected_result
+            except Exception as e:
+                pytest.fail(
+                    EXCEPTION_FAIL_MESSAGE.format(
+                        test_id=test_id,
+                        exception_type=type(e).__name__,
+                        exception_msg=str(e),
+                    )
+                )
+        else:
+            with pytest.raises(Exception) as exc_info:
+                convert_input_to_decimal(
                     identifier=identifier,
                     total=total,
                     components=components,
