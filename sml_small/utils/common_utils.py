@@ -6,7 +6,7 @@ For Copyright information, please see LICENCE.
 from decimal import Decimal
 import logging.config
 from os import path
-from typing import List, Tuple, Union
+from typing import List, Tuple, Union, Dict
 
 from sml_small.utils.error_utils import get_params_is_not_a_number_error
 
@@ -87,38 +87,43 @@ def is_number(value) -> bool:
 def convert_input_to_decimal(
     keys: List[str],
     args: List[float],
-) -> List[Tuple[(str, float)]]:
-    try:
+) -> Dict[str, Decimal]:
+    print("Working", args)
 
-        if len(keys) != len(args):
-            raise ValueError("Number of keys needs to match the number of arguments") 
+    # The dictionary where we will store the keys and decimal values
+    decimal_values = {}
 
-        print(keys, args)
+    if len(keys) != len(args):
+        print("Length of keys is not equal to length of args")
+    # Need to raise an exception here and stop the code here
 
-        decimal_values = []
-        
-        for arg in args:
+    # Using zip to iterate through the keys and arguments simultaneously
+    for key, arg in zip(keys, args):
+        print(key, arg)
+        #If the argument is a list, we are assuming it's the components list
+        # We then run through each of the component in the components list and check if it's a decimal
+        if type(arg) == list:
+            for i in range(len(arg)):
+                # if it's a decimal we don't do anything and add to the decimal_values dictionary
+                if type(arg[i]) == Decimal:
+                    arg[i] = arg[i]
+                else:
+                    # if it's not a decimal we convert it into a decimal and then add to the decimal_values dictionary
+                    arg[i] = Decimal(str(arg[i]))
+            decimal_values[key] = arg
 
-                print('start', keys[0], arg)
+        # If the argument is a None we set it as None
+        elif arg == None:
+            decimal_values[key] = None
 
-                if arg.isdecimal() is True:
-                    print(arg.isdecimal(), arg)
-                    decimal_values.append((keys[arg], arg))
+        # If the argument is not a list or a None
+        else:
+            # if it's a decimal we don't do anything and add to the decimal_values dictionary
+            if type(arg) == Decimal:
+                decimal_values[key] = arg
+            else:
+                # if it's not a decimal we convert it into a decimal and then add to the decimal_values dictionary
+                decimal_values[key] = Decimal(str(arg))
 
-                elif arg == None or arg.isnan():
-                    print("add")
-                    decimal_values.append((keys[arg], arg))
-                    print('checkpoint2a')
-
-                else: 
-                    print('arg2')
-                    arg = Decimal(str(arg))
-                    decimal_values.append((keys[arg], arg))
-                    print('checkpoint3a')
-
-        print(decimal_values)
-
-        return decimal_values
-
-    except Exception as error:
-        Exception(error)
+    print(decimal_values)
+    return decimal_values
