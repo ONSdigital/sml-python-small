@@ -121,20 +121,20 @@ class TotalsAndComponentsOutput:
     """
 
     identifier: Optional[str] = ""  # unique identifier
-    absolute_difference: Optional[float]  # this is the absolute value showing the
+    absolute_difference: Optional[Decimal]  # this is the absolute value showing the
     # difference between the components input and the predictive total
     low_percent_threshold: Optional[
-        float
+        Decimal
     ] = None  # the sum of the input components minus the absolute percentage difference
     high_percent_threshold: Optional[
-        float
+        Decimal
     ] = None  # the sum of the input components plus the absolute percentage difference
     final_total: Optional[
-        float
+        Decimal
     ] = None  # the output total which may have been corrected based on user input amend_
     # total variable
     final_components: Optional[
-        float
+        Decimal
     ] = None  # the output components which may have been corrected to match the received
     # predictive value. If corrected the components are scaled proportionally
     # based on the input values
@@ -277,7 +277,7 @@ def totals_and_components(
         components_list = initialize_components_list(components)
 
         #  Check for invalid parameter values and set the precision value
-        #  for Decimal calculations
+        #  for decimal calculations
         precision = validate_input(
             identifier,
             total,
@@ -308,17 +308,20 @@ def totals_and_components(
             percentage_difference_threshold
         ]
 
-        print(components)
-
         decimal_values = convert_input_to_decimal(
             keys,
             args
         )
 
-        input_parameters = (decimal_values.get('total'), decimal_values.get('components'), decimal_values.get('predictive'), decimal_values.get('auxiliary'), decimal_values.get('absolute_difference_threshold'), decimal_values.get('percentage_difference_threshold'), precision)
+        input_parameters = (
+            decimal_values.get('total'),
+            initialize_components_list(decimal_values.get('components')),
+            decimal_values.get('predictive'),
+            decimal_values.get('auxiliary'),
+            decimal_values.get('absolute_difference_threshold'),
+            decimal_values.get('percentage_difference_threshold'),
+            precision)
         
-        print(input_parameters)
-        print(input_parameters[InputParameters.COMPONENTS.value])
 
         getcontext().prec = input_parameters[InputParameters.PRECISION.value]
         
@@ -427,13 +430,13 @@ def totals_and_components(
 
 
 def initialize_components_list(
-    component_list: List[float],
+    component_list: List[Decimal],
 ) -> List[ComponentPair]:
     """
     Takes the list of components values and constructs Component_List objects from them
 
     :param component_list: List of component values, the sum of which, should match the received total value.
-    :type component_list: list(float)
+    :type component_list: list(decimal)
     ...
     :return: component_object_list List of components stored within ComponentsList objects
     :rtype: list(ComponentsList)
@@ -579,20 +582,20 @@ def validate_input(
 
 
 def set_predictive_value(
-    predictive: Optional[float],
-    auxiliary: Optional[float],
-) -> Tuple[Union[float, None], TccMarker]:
+    predictive: Optional[Decimal],
+    auxiliary: Optional[Decimal],
+) -> Tuple[Union[Decimal, None], TccMarker]:
     """
     Checks if predictive and auxiliary values are input, when predictive is None but auxiliary
     is available set predictive to auxiliary. If auxiliary is also None use the total value.
 
     :param predictive: The predictive value.
-    :type predictive: float, optional
+    :type predictive: Decimal, optional
     :param auxiliary: The value to be used in the absence of a predictive value.
-    :type auxiliary: float, optional
+    :type auxiliary: Decimal, optional
     ...
     :return: predictive, updated predictive value
-    :rtype: None | float
+    :rtype: None | Decimal
     :return: tcc_marker, updated tcc_marker value
     :rtype: TccMarker
     """
@@ -610,15 +613,15 @@ def set_predictive_value(
     return predictive, tcc_marker
 
 
-def check_zero_errors(predictive: float, components_sum: float) -> TccMarker:
+def check_zero_errors(predictive: Decimal, components_sum: Decimal) -> TccMarker:
     """
     Stop method processing when the predictive value is positive but the sum of components is zero.
     In these scenarios a correction is not possible.
 
     :param predictive: The predictive value, typically the total.
-    :type predictive: float
+    :type predictive: Decimal
     :param components_sum: total sum of all the components values entered.
-    :type components_sum: float
+    :type components_sum: Decimal
     ...
     :return: tcc_marker, return a value of STOP if zero error is triggered
     :rtype: TccMarker
@@ -631,35 +634,36 @@ def check_zero_errors(predictive: float, components_sum: float) -> TccMarker:
     return tcc_marker
 
 
-def check_sum_components_predictive(predictive: float, components_sum: float) -> float:
+def check_sum_components_predictive(predictive: Decimal, components_sum: Decimal) -> Decimal:
     """
     Calculates the absolute difference between the predictive value and the sum of the
     components and returns that value
 
     :param predictive: This is the predictive value used in the absolute difference calculation.
-    :type predictive: float
+    :type predictive: Decimal
     :param components_sum: total sum of all the components values entered.
-    :type components_sum: float
+    :type components_sum: Decimal
     ...
     :return: Returns the absolute difference between the received predictive value and the received
-             sum of the components as a float.
-    :rtype: float
+             sum of the components as a Decimal.
+    :rtype: Decimal
     """
+
     if not math.isnan(components_sum):
         absolute_difference = abs(predictive - components_sum)
     else:
         absolute_difference = abs(predictive)
 
-    return float(absolute_difference)
+    return absolute_difference
 
 
 def determine_error_detection(
-    absolute_difference_threshold: Optional[float],
-    percentage_difference_threshold: Optional[float],
-    absolute_difference: float,
-    predictive: float,
-    low_threshold: Optional[float],
-    high_threshold: Optional[float],
+    absolute_difference_threshold: Optional[Decimal],
+    percentage_difference_threshold: Optional[Decimal],
+    absolute_difference: Decimal,
+    predictive: Decimal,
+    low_threshold: Optional[Decimal],
+    high_threshold: Optional[Decimal],
 ) -> TccMarker:
     """
     Determines and calls the relevant error detection methods to be applied to the input
@@ -667,25 +671,25 @@ def determine_error_detection(
     :param absolute_difference_threshold: Value used to check if the difference
                                           between the predictive total and sum
                                           of components requires an automatic update.
-    :type absolute_difference_threshold: None | float
+    :type absolute_difference_threshold: None | Decimal
     :param percentage_difference_threshold: If the predictive total is within the
                                             specified percentage of the sum of the
                                             components, the method will
                                             automatically correct.
-    :type percentage_difference_threshold: None | float
+    :type percentage_difference_threshold: None | Decimal
     :param absolute_difference: The absolute value showing the difference between
                                 the input components and the predictive total.
-    :type absolute_difference: Float
+    :type absolute_difference: Decimal
     :param predictive: The predictive value, typically the total.
-    :type predictive: float
+    :type predictive: Decimal
     :param low_threshold: Low percentage threshold previously
                        calculated from the percentage_difference_threshold and
                        input components
-    :type low_threshold: float | None
+    :type low_threshold: Decimal | None
     :param high_threshold: High percentage threshold previously
                        calculated from the percentage_difference_threshold and
                        input components
-    :type high_threshold: float | None
+    :type high_threshold: Decimal | None
     ...
     :return: TCC_Marker, Returned Tcc_Marker (either stop or continue)
     :rtype: TccMarker
@@ -714,7 +718,7 @@ def determine_error_detection(
 
 
 def check_absolute_difference_threshold(
-    absolute_difference_threshold: float, absolute_difference: float
+    absolute_difference_threshold: Decimal, absolute_difference: Decimal
 ) -> bool:
     """
     Function to determine whether error correction can be applied automatically
@@ -724,10 +728,10 @@ def check_absolute_difference_threshold(
     :param absolute_difference_threshold: Value used to check if the difference
                                           between the predictive total and sum of
                                           components requires an automatic update.
-    :type absolute_difference_threshold: float
+    :type absolute_difference_threshold: Decimal
     :param absolute_difference: The absolute value showing the difference between
                                 the input components and the predictive total.
-    :type absolute_difference: float
+    :type absolute_difference: Decimal
     ...
     :return: correct_error a flag indicating if the threshold is satisfied and
                            automatic correction can be applied
@@ -740,7 +744,7 @@ def check_absolute_difference_threshold(
 
 
 def check_percentage_difference_threshold(
-    predictive: float, low_threshold: float, high_threshold: float
+    predictive: Decimal, low_threshold: Decimal, high_threshold: Decimal
 ) -> bool:
     """
     Function to determine whether error correction can be applied automatically
@@ -751,15 +755,15 @@ def check_percentage_difference_threshold(
                        of the current total, predictive total or auxiliary
                        value dependant upon what values where passed to the
                        top level totals_and_components function.
-    :type predictive: float
+    :type predictive: Decimal
     :param low_threshold: Low percentage threshold previously
                        calculated from the percentage_difference_threshold and
                        input components
-    :type low_threshold: float
+    :type low_threshold: Decimal
      :param high_threshold: High percentage threshold previously
                        calculated from the percentage_difference_threshold and
                        input components
-    :type high_threshold: float
+    :type high_threshold: Decimal
     ...
     :return: correct_error a marker indicating if the threshold is satisfied
     :rtype: bool
@@ -772,10 +776,10 @@ def check_percentage_difference_threshold(
 
 def error_correction(
     amend_total: bool,
-    components_sum: float,
+    components_sum: Decimal,
     original_components: List[ComponentPair],
-    total: float,
-) -> Tuple[float, List[float], TccMarker]:
+    total: Decimal,
+) -> Tuple[Decimal, List[Decimal], TccMarker]:
     """
     The error correction function will use the amend_total to either
     correct the total or components. Correcting the total will set the final
@@ -788,18 +792,18 @@ def error_correction(
     :param total: Total value specified when the main totals_and_components method is
                   called, this is typically the total value associated with the
                   most current data received.
-    :type total: float
+    :type total: Decimal
     :param components_sum: Sum of original values of components list
-    :type components_sum: float
+    :type components_sum: Decimal
     :param original_components: List of Components objects so final values can be amended
     :type original_components: list(ComponentPair)
     :param precision: Precision is used by the decimal package to perform calculations to the specified accuracy.
     :type precision: int
     ...
     :return: final_total Final Total value to be output
-    :rtype: float
+    :rtype: Decimal
     :return: original_components Updated final values list to be output
-    :rtype: list(float)
+    :rtype: list(Decimal)
     :return: tcc_marker Returned Tcc_Marker (either total corrected or components corrected)
     :rtype: TccMarker
     """
@@ -823,18 +827,18 @@ def error_correction(
 
 
 def correct_total(
-    components_sum: float, original_components: List[ComponentPair]
-) -> Tuple[float, List[ComponentPair], TccMarker]:
+    components_sum: Decimal, original_components: List[ComponentPair]
+) -> Tuple[Decimal, List[ComponentPair], TccMarker]:
     """
     Function to correct the total value
 
     :param components_sum: Sum of original values of components list
-    :type components_sum: float
+    :type components_sum: Decimal
     :param original_components: List of Components objects so final values can be amended
     :type original_components: list(Components_list)
     ...
     :return:  final_total, Final Total value to be output
-    :rtype: float
+    :rtype: Decimal
     :return: original_components, Input Component list with final values updated
     :rtype: list(Components_list)
     :return: tcc_marker, Returned Tcc_Marker (Total_corrected)
@@ -851,10 +855,10 @@ def correct_total(
 
 
 def correct_components(
-    components_sum: float,
+    components_sum: Decimal,
     components: List[ComponentPair],
-    total: float,
-) -> Tuple[float, List[ComponentPair], TccMarker]:
+    total: Decimal,
+) -> Tuple[Decimal, List[ComponentPair], TccMarker]:
     """
     Function to correct the components values to add up to the received total value,
     set the final total as the received total and indicate that the component
@@ -862,7 +866,7 @@ def correct_components(
     values are weighted instead of normalised
 
     :param components_sum: Sum of original values of components list
-    :type components_sum: float
+    :type components_sum: Decimal
     :param components: a list that includes the original component
                        values received, these are used when calculating the
                        amended component values to retain the original weighting.
@@ -871,10 +875,10 @@ def correct_components(
                       adjusted components to the specified accuracy.
     :type precision: int
     :param total: current total
-    :type total: float
+    :type total: Decimal
     ...
     :return: final_total, Final Total value to be output
-    :rtype: float
+    :rtype: Decimal
     :return: components Input Component list with final values updated
     :rtype: list(Components_list)
     :return: tcc_marker, Returned Tcc_Marker (Components_corrected)
@@ -888,7 +892,7 @@ def correct_components(
     return final_total, components, tcc_marker
 
 
-def sum_components(components: List[ComponentPair]) -> float:
+def sum_components(components: List[ComponentPair]) -> Decimal:
     """
     Returns the total sum of a received list of component values
 
@@ -896,42 +900,42 @@ def sum_components(components: List[ComponentPair]) -> float:
     :type components list(components_list)
     ...
     :return: total_sum Final total of summed components
-    :rtype: float
+    :rtype: Decimal
     """
     total_sum = 0
     for component in components:
         if not math.isnan(component.original_value):
             total_sum += component.original_value
 
-    return float(total_sum)
+    return total_sum
 
 
 def calculate_percent_thresholds(
-    sum_of_components: float,
-    percentage_threshold: float,
+    sum_of_components: Decimal,
+    percentage_threshold: Decimal,
     output_list: dict,
-) -> Tuple[Union[float, None], Union[float, None], dict]:
+) -> Tuple[Union[Decimal, None], Union[Decimal, None], dict]:
     """
     Calculate and return the low and high percentage thresholds based on the
     sum of the received components and the specified percentage threshold factor
     (expressed as a decimal)
 
     :param sum_of_components: A sum of the original components list input to the method
-    :type sum_of_components: float
+    :type sum_of_components: Decimal
     :param percentage_threshold: If the predictive total is within the specified percentage
                                     of the sum of the components, the method will automatically
                                     correct.
-    :type percentage_threshold: float
+    :type percentage_threshold: Decimal
     :param output_list: dictionary containing attributes output at the end of the totals and
     components function
     :type output_list: dict
     ...
     :return: low_percent_threshold, The lower threshold calculated from the sum of components
                                     and percentage threshold
-    :rtype: float
+    :rtype: Decimal
     :return: high_percent_threshold The upper threshold calculated from the sum of components
                                      and percentage threshold
-    :rtype: float
+    :rtype: Decimal
     :return: output_list, dictionary containing attributes output at the end of the totals and
     components function
     :rtype: dict
@@ -946,6 +950,9 @@ def calculate_percent_thresholds(
         high_percent_threshold = abs(
             sum_of_components + (sum_of_components * percentage_threshold)
         )
+    print('this is where we are printing 1', type(low_percent_threshold), type(high_percent_threshold))
     output_list["low_percent_threshold"] = low_percent_threshold
     output_list["high_percent_threshold"] = high_percent_threshold
+
+    print('this is where we are printing 2', type(low_percent_threshold), type(high_percent_threshold))
     return low_percent_threshold, high_percent_threshold, output_list
