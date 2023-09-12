@@ -5,6 +5,7 @@ For Copyright information, please see LICENCE.
 """
 from decimal import Decimal
 import logging.config
+from math import isnan
 from os import path
 from typing import List, Tuple, Union, Dict
 
@@ -88,42 +89,46 @@ def convert_input_to_decimal(
     keys: List[str],
     args: List[float],
 ) -> Dict[str, Decimal]:
-    print("Working", args)
+    """
+    convert_input_to_decimal _summary_
 
-    # The dictionary where we will store the keys and decimal values
-    decimal_values = {}
+    :param keys: _description_
+    :type keys: List[str]
+    :param args: _description_
+    :type args: List[float]
+    :raises ValueError: _description_
+    :raises error: _description_
+    :return: _description_
+    :rtype: Dict[str, Decimal]
+    """
+    try:
 
-    if len(keys) != len(args):
-        print("Length of keys is not equal to length of args")
-    # Need to raise an exception here and stop the code here
+        if len(keys) != len(args):
+            raise ValueError("Number of keys needs to match the number of arguments") 
 
-    # Using zip to iterate through the keys and arguments simultaneously
-    for key, arg in zip(keys, args):
-        print(key, arg)
-        #If the argument is a list, we are assuming it's the components list
-        # We then run through each of the component in the components list and check if it's a decimal
-        if type(arg) == list:
-            for i in range(len(arg)):
-                # if it's a decimal we don't do anything and add to the decimal_values dictionary
-                if type(arg[i]) == Decimal:
-                    arg[i] = arg[i]
-                else:
-                    # if it's not a decimal we convert it into a decimal and then add to the decimal_values dictionary
-                    arg[i] = Decimal(str(arg[i]))
-            decimal_values[key] = arg
+        decimal_values = {}
 
-        # If the argument is a None we set it as None
-        elif arg == None:
-            decimal_values[key] = None
+        # Using zip to iterate through the keys and arguments simultaneously
+        for key, arg in zip(keys, args):
 
-        # If the argument is not a list or a None
-        else:
-            # if it's a decimal we don't do anything and add to the decimal_values dictionary
             if type(arg) == Decimal:
                 decimal_values[key] = arg
+
+            elif type(arg) == list:
+
+                for i in range(len(arg)):
+                    if type(arg[i]) == Decimal:
+                        arg[i] = arg[i]
+                    else:
+                        arg[i] = Decimal(str(arg[i]))
+                decimal_values[key] = arg
+
+            elif arg == None:
+                decimal_values[key] = None
+
             else:
-                # if it's not a decimal we convert it into a decimal and then add to the decimal_values dictionary
                 decimal_values[key] = Decimal(str(arg))
 
-    print(decimal_values)
-    return decimal_values
+        return decimal_values
+    except Exception as error:
+        raise error

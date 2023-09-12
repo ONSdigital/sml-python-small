@@ -290,8 +290,6 @@ def totals_and_components(
             percentage_difference_threshold,
         ) 
 
-        print('checkpoint')
-
         keys = [
             'total',
             'components',
@@ -310,17 +308,17 @@ def totals_and_components(
             percentage_difference_threshold
         ]
 
-
-        print('checkpoint2')
+        print(components)
 
         decimal_values = convert_input_to_decimal(
             keys,
             args
         )
 
-        input_parameters = (decimal_values(total), decimal_values(components), decimal_values(predictive), decimal_values(auxiliary), decimal_values(absolute_difference_threshold), decimal_values(percentage_difference_threshold), precision)
+        input_parameters = (decimal_values.get('total'), decimal_values.get('components'), decimal_values.get('predictive'), decimal_values.get('auxiliary'), decimal_values.get('absolute_difference_threshold'), decimal_values.get('percentage_difference_threshold'), precision)
         
-        print('checkpoint3')
+        print(input_parameters)
+        print(input_parameters[InputParameters.COMPONENTS.value])
 
         getcontext().prec = input_parameters[InputParameters.PRECISION.value]
         
