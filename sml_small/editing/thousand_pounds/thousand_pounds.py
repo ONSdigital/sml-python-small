@@ -1,11 +1,11 @@
+import logging
 from dataclasses import dataclass
 from enum import Enum
-from typing import List, Optional, Tuple, Union
 from os import path
-import logging
-from sml_small.utils.common_utils import validate_number, log_table
-from sml_small.utils.error_utils import get_boundary_error, get_mandatory_param_error, get_one_of_params_mandatory_error
+from typing import List, Optional, Tuple, Union
 
+from sml_small.utils.common_utils import log_table, validate_number
+from sml_small.utils.error_utils import get_boundary_error, get_mandatory_param_error, get_one_of_params_mandatory_error
 
 # Pick up configuration for logging
 log_config_path = path.join(path.dirname(path.abspath(__file__)), "../../logging.conf")
@@ -65,9 +65,7 @@ class TPException(Exception):
 def thousand_pounds(
     principal_identifier: Optional[str],  #
     principal_variable: float,  #
-    predictive: Optional[
-        float
-    ],  #
+    predictive: Optional[float],  #
     auxiliary: Optional[float],  #
     upper_limit: float,  #
     lower_limit: float,  #
