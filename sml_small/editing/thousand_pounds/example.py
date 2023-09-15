@@ -2,7 +2,7 @@ import dataclasses
 import json
 from csv import DictReader
 
-from thousand_pounds import Target_variable, run
+from thousand_pounds import Target_variable, thousand_pounds
 
 
 # Load some local csvs into memory and then run the pounds thousands method
@@ -58,7 +58,7 @@ def invoke(config_csv: str, linked_question_csv: str):
             )
         )
 
-    return run(
+    return thousand_pounds(
         principal_identifier=config["principal_identifier"],
         principal_variable=None
         if not config["principal_variable"]
@@ -72,7 +72,7 @@ def invoke(config_csv: str, linked_question_csv: str):
 
 
 def invoke_directly_writing_output_to_csv_example():
-    output = run(
+    output = thousand_pounds(
         principal_identifier="q100",
         principal_variable=50000000,
         predictive=60000,
@@ -147,7 +147,7 @@ def invoke_process_with_inmemory_single_csv_example():
     output_header = f"principal_identifier,principal_original_value,principal_final_value,tpc_ratio,tpc_marker,error_description{output_question_header}"
     output_row = ""
     for config in configs:
-        output = run(
+        output = thousand_pounds(
             principal_identifier=config["principal_identifier"],
             principal_variable=config["principal_variable"],
             predictive=config["predictive"],

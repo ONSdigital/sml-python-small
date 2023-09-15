@@ -3,8 +3,8 @@ import pytest
 from sml_small.editing.thousand_pounds.thousand_pounds import (Target_variable, Thousands_output, TPException,
                                                                adjust_target_variables, adjust_value,
                                                                calculate_error_ratio, determine_predictive_value,
-                                                               determine_tpc_marker, is_within_threshold, run,
-                                                               validate_input)
+                                                               determine_tpc_marker, is_within_threshold,
+                                                               thousand_pounds, validate_input)
 from sml_small.utils.error_utils import (get_boundary_error, get_mandatory_param_error,
                                          get_one_of_params_mandatory_error, get_params_is_not_a_number_error)
 
@@ -311,7 +311,7 @@ class TestRun:
     ):
         if isinstance(expected, Thousands_output):
             try:
-                result = run(
+                result = thousand_pounds(
                     principal_identifier,
                     principal_variable,
                     predictive,
@@ -332,7 +332,7 @@ class TestRun:
                 )
         else:
             with pytest.raises(Exception) as exc_info:
-                run(
+                thousand_pounds(
                     principal_identifier,
                     principal_variable,
                     predictive,
