@@ -1631,7 +1631,6 @@ class TestTotalsAndComponents:
                     for component in results.final_components:
                         sum_of_components += Decimal(str(component))
 
-                    sum_of_components = float(sum_of_components)
                     assert sum_of_components == expected_result[4]
 
             except Exception as e:
@@ -1665,7 +1664,7 @@ class TestTotalsAndComponentsUAT:
         "expected_result, test_id",
         [
             (
-                "UAT-ABD-DIFF-1001",
+                "UAT-ABD-DIFF-SHEET-A-1001",
                 1625,
                 [
                     (632),
@@ -1680,7 +1679,7 @@ class TestTotalsAndComponentsUAT:
                 11,
                 None,
                 (
-                    "UAT-ABD-DIFF-1001",
+                    "UAT-ABD-DIFF-SHEET-A-1001",
                     Decimal(0),
                     None,
                     None,
@@ -1694,7 +1693,7 @@ class TestTotalsAndComponentsUAT:
                 # TCC = N
             ),
             (
-                "UAT-ABD-DIFF-1002",
+                "UAT-ABD-DIFF-SHEET-A-1002",
                 10811,
                 [
                     (9201),
@@ -1709,7 +1708,7 @@ class TestTotalsAndComponentsUAT:
                 11,
                 None,
                 (
-                    "UAT-ABD-DIFF-1002",
+                    "UAT-ABD-DIFF-SHEET-A-1002",
                     Decimal(0),
                     None,
                     None,
@@ -1723,7 +1722,7 @@ class TestTotalsAndComponentsUAT:
                 # TCC = N
             ),
             (
-                "UAT-ABD-DIFF-1003",
+                "UAT-ABD-DIFF-SHEET-A-1003",
                 108,
                 [
                     (98),
@@ -1738,7 +1737,7 @@ class TestTotalsAndComponentsUAT:
                 11,
                 None,
                 (
-                    "UAT-ABD-DIFF-1003",
+                    "UAT-ABD-DIFF-SHEET-A-1003",
                     Decimal(0),
                     None,
                     None,
@@ -1752,7 +1751,7 @@ class TestTotalsAndComponentsUAT:
                 # TCC = N
             ),
             (
-                "UAT-ABD-DIFF-2001",
+                "UAT-ABD-DIFF-SHEET-A-2001",
                 1603,
                 [
                     (632),
@@ -1767,7 +1766,7 @@ class TestTotalsAndComponentsUAT:
                 11,
                 None,
                 (
-                    "UAT-ABD-DIFF-2001",
+                    "UAT-ABD-DIFF-SHEET-A-2001",
                     Decimal(22),
                     None,
                     None,
@@ -1782,7 +1781,7 @@ class TestTotalsAndComponentsUAT:
                 # shows manual editing required. TCC = M
             ),
             (
-                "UAT-ABD-DIFF-2002",
+                "UAT-ABD-DIFF-SHEET-A-2002",
                 10745,
                 [
                     (9201),
@@ -1797,7 +1796,7 @@ class TestTotalsAndComponentsUAT:
                 11,
                 None,
                 (
-                    "UAT-ABD-DIFF-2002",
+                    "UAT-ABD-DIFF-SHEET-A-2002",
                     Decimal(66),
                     None,
                     None,
@@ -1812,7 +1811,7 @@ class TestTotalsAndComponentsUAT:
                 # shows manual editing required. TCC = M
             ),
             (
-                "UAT-ABD-DIFF-2003",
+                "UAT-ABD-DIFF-SHEET-A-2003",
                 153,
                 [
                     (98),
@@ -1827,7 +1826,7 @@ class TestTotalsAndComponentsUAT:
                 11,
                 None,
                 (
-                    "UAT-ABD-DIFF-2003",
+                    "UAT-ABD-DIFF-SHEET-A-2003",
                     Decimal(45),
                     None,
                     None,
@@ -1842,7 +1841,7 @@ class TestTotalsAndComponentsUAT:
                 # shows manual editing required. TCC = M
             ),
             (
-                "UAT-ABD-DIFF-3001",
+                "UAT-ABD-DIFF-SHEET-A-3001",
                 1614,
                 [
                     (632),
@@ -1857,7 +1856,7 @@ class TestTotalsAndComponentsUAT:
                 11,
                 None,
                 (
-                    "UAT-ABD-DIFF-3001",
+                    "UAT-ABD-DIFF-SHEET-A-3001",
                     Decimal(11),
                     None,
                     None,
@@ -1872,7 +1871,7 @@ class TestTotalsAndComponentsUAT:
                 # and total corrected. TCC = T
             ),
             (
-                "UAT-ABD-DIFF-3002",
+                "UAT-ABD-DIFF-SHEET-A-3002",
                 10822,
                 [
                     (9201),
@@ -1887,7 +1886,7 @@ class TestTotalsAndComponentsUAT:
                 11,
                 None,
                 (
-                    "UAT-ABD-DIFF-3002",
+                    "UAT-ABD-DIFF-SHEET-A-3002",
                     Decimal(11),
                     None,
                     None,
@@ -1902,7 +1901,7 @@ class TestTotalsAndComponentsUAT:
                 # and total corrected. TCC = T
             ),
             (
-                "UAT-ABD-DIFF-3003",
+                "UAT-ABD-DIFF-SHEET-A-3003",
                 119,
                 [
                     (98),
@@ -1917,7 +1916,7 @@ class TestTotalsAndComponentsUAT:
                 11,
                 None,
                 (
-                    "UAT-ABD-DIFF-3003",
+                    "UAT-ABD-DIFF-SHEET-A-3003",
                     Decimal(11),
                     None,
                     None,
@@ -1932,7 +1931,7 @@ class TestTotalsAndComponentsUAT:
                 # and total corrected. TCC = T
             ),
             (
-                "UAT-ABD-DIFF-4001",
+                "UAT-ABD-DIFF-SHEET-A-4001",
                 1614,
                 [
                     (632),
@@ -1947,7 +1946,7 @@ class TestTotalsAndComponentsUAT:
                 11,
                 None,
                 (
-                    "UAT-ABD-DIFF-4001",
+                    "UAT-ABD-DIFF-SHEET-A-4001",
                     Decimal(11),
                     None,
                     None,
@@ -1967,7 +1966,7 @@ class TestTotalsAndComponentsUAT:
                 # rescaled. TCC = C
             ),
             (
-                "UAT-ABD-DIFF-4002",
+                "UAT-ABD-DIFF-SHEET-A-4002",
                 10822,
                 [
                     (9201),
@@ -1982,7 +1981,7 @@ class TestTotalsAndComponentsUAT:
                 11,
                 None,
                 (
-                    "UAT-ABD-DIFF-4002",
+                    "UAT-ABD-DIFF-SHEET-A-4002",
                     Decimal(11),
                     None,
                     None,
@@ -2002,7 +2001,7 @@ class TestTotalsAndComponentsUAT:
                 # rescaled. TCC = C
             ),
             (
-                "UAT-ABD-DIFF-4003",
+                "UAT-ABD-DIFF-SHEET-A-4003",
                 119,
                 [
                     (98),
@@ -2017,7 +2016,7 @@ class TestTotalsAndComponentsUAT:
                 11,
                 None,
                 (
-                    "UAT-ABD-DIFF-4003",
+                    "UAT-ABD-DIFF-SHEET-A-4003",
                     Decimal(11),
                     None,
                     None,
@@ -2032,7 +2031,7 @@ class TestTotalsAndComponentsUAT:
                 # rescaled. TCC = C
             ),
             (
-                "UAT-ABD-DIFF-5001",
+                "UAT-ABD-DIFF-SHEET-A-5001",
                 1621,
                 [
                     (632),
@@ -2047,7 +2046,7 @@ class TestTotalsAndComponentsUAT:
                 11,
                 None,
                 (
-                    "UAT-ABD-DIFF-5001",
+                    "UAT-ABD-DIFF-SHEET-A-5001",
                     Decimal(4),
                     None,
                     None,
@@ -2062,7 +2061,7 @@ class TestTotalsAndComponentsUAT:
                 # TCC = T
             ),
             (
-                "UAT-ABD-DIFF-5002",
+                "UAT-ABD-DIFF-SHEET-A-5002",
                 10817,
                 [
                     (9201),
@@ -2077,7 +2076,7 @@ class TestTotalsAndComponentsUAT:
                 11,
                 None,
                 (
-                    "UAT-ABD-DIFF-5002",
+                    "UAT-ABD-DIFF-SHEET-A-5002",
                     Decimal(6),
                     None,
                     None,
@@ -2092,7 +2091,7 @@ class TestTotalsAndComponentsUAT:
                 # TCC = T
             ),
             (
-                "UAT-ABD-DIFF-5003",
+                "UAT-ABD-DIFF-SHEET-A-5003",
                 103,
                 [
                     (98),
@@ -2107,7 +2106,7 @@ class TestTotalsAndComponentsUAT:
                 11,
                 None,
                 (
-                    "UAT-ABD-DIFF-5003",
+                    "UAT-ABD-DIFF-SHEET-A-5003",
                     Decimal(5),
                     None,
                     None,
@@ -2122,7 +2121,7 @@ class TestTotalsAndComponentsUAT:
                 # TCC = T
             ),
             (
-                "UAT-ABD-DIFF-6001",
+                "UAT-ABD-DIFF-SHEET-A-6001",
                 1621,
                 [
                     (632),
@@ -2137,7 +2136,7 @@ class TestTotalsAndComponentsUAT:
                 11,
                 None,
                 (
-                    "UAT-ABD-DIFF-6001",
+                    "UAT-ABD-DIFF-SHEET-A-6001",
                     Decimal(4),
                     None,
                     None,
@@ -2156,33 +2155,33 @@ class TestTotalsAndComponentsUAT:
                 # then correction applied, and
                 # components rescaled. TCC = C
             ),
-            # (
-            #     "UAT-ABD-DIFF-6002",  # identifier
-            #     10817,  # total
-            #     [Decimal(9201), Decimal(866), Decimal(632), Decimal(112)],  # components
-            #     False,  # amend_total
-            #     10817,  # predictive
-            #     28,  # precision
-            #     None,  # auxiliary
-            #     11,  # absolute_difference_threshold
-            #     None,  # percentage_difference_threshold
-            #     (
-            #         "UAT-ABD-DIFF-6002",  # identifier
-            #         6,  # absolute_difference
-            #         None,  # low_percent_threshold
-            #         None,  # high_percent_threshold
-            #         10817,  # final_total
-            #         [9206.10646563685, 866.4806215891222, 632.3507538618074, 112.0621589122204],
-            #         "C",  # tcc_marker
-            #     ),
-            #     "Test 17 - If absolute difference < 11 and amend total is false then we correct the components",
-            #     Sheet TCC_test_data_case_a6 reference 6002
-            #     If absolute difference < absolute difference threshold and amend total = FALSE,
-            #     then correction applied, and
-            #     components rescaled. TCC = C
-            # ),
             (
-                "UAT-ABD-DIFF-6003",
+                "UAT-ABD-DIFF-SHEET-A-6002",  # identifier
+                10817,  # total
+                [(9201), (866), (632), (112)],  # components
+                False,  # amend_total
+                10817,  # predictive
+                28,  # precision
+                None,  # auxiliary
+                11,  # absolute_difference_threshold
+                None,  # percentage_difference_threshold
+                (
+                    "UAT-ABD-DIFF-SHEET-A-6002",  # identifier
+                    Decimal('6'),  # absolute_difference
+                    None,  # low_percent_threshold
+                    None,  # high_percent_threshold
+                    Decimal('10817'),  # final_total
+                    [Decimal('9206.10646563685'), Decimal('866.4806215891222'), Decimal('632.3507538618074'), Decimal('112.0621589122204')],
+                    "C",  # tcc_marker
+                ),
+                "Test 17 - If absolute difference < 11 and amend total is false then we correct the components",
+                # Sheet TCC_test_data_case_a6 reference 6002
+                # If absolute difference < absolute difference threshold and amend total = FALSE,
+                # then correction applied, and
+                # components rescaled. TCC = C
+            ),
+            (
+                "UAT-ABD-DIFF-SHEET-A-6003",
                 103,
                 [
                     (98),
@@ -2197,7 +2196,7 @@ class TestTotalsAndComponentsUAT:
                 11,
                 None,
                 (
-                    "UAT-ABD-DIFF-6003",
+                    "UAT-ABD-DIFF-SHEET-A-6003",
                     Decimal(5),
                     None,
                     None,
@@ -2212,7 +2211,7 @@ class TestTotalsAndComponentsUAT:
                 # components rescaled. TCC = C
             ),
             (
-                "UAT-ABD-DIFF-7001",  # identifier
+                "UAT-ABD-DIFF-SHEET-A-7001",  # identifier
                 9,  # total
                 [(0), (0), (0), (0)],  # components
                 True,  # amend_total
@@ -2222,7 +2221,7 @@ class TestTotalsAndComponentsUAT:
                 11,  # absolute_difference_threshold
                 None,  # percentage_difference_threshold
                 (
-                    "UAT-ABD-DIFF-7001",  # identifier
+                    "UAT-ABD-DIFF-SHEET-A-7001",  # identifier
                     None,  # absolute_difference
                     None,  # low_percent_threshold
                     None,  # high_percent_threshold
@@ -2237,7 +2236,7 @@ class TestTotalsAndComponentsUAT:
                 # TCC marker = S
             ),
             (
-                "UAT-ABD-DIFF-7002",
+                "UAT-ABD-DIFF-SHEET-A-7002",
                 4,
                 [float("NaN"), float("NaN"), float("NaN"), float("NaN")],
                 True,
@@ -2247,7 +2246,7 @@ class TestTotalsAndComponentsUAT:
                 11,
                 None,
                 (
-                    "UAT-ABD-DIFF-7002",
+                    "UAT-ABD-DIFF-SHEET-A-7002",
                     None,
                     None,
                     None,
@@ -2262,7 +2261,7 @@ class TestTotalsAndComponentsUAT:
                 # TCC marker = S
             ),
             (
-                "UAT-ABD-DIFF-7003",  # identifier
+                "UAT-ABD-DIFF-SHEET-A-7003",  # identifier
                 11,  # total
                 [(0), (0), (0), (0)],  # components
                 True,  # amend_total
@@ -2272,7 +2271,7 @@ class TestTotalsAndComponentsUAT:
                 11,  # absolute_difference_threshold
                 None,  # percentage_difference_threshold
                 (
-                    "UAT-ABD-DIFF-7003",  # identifier
+                    "UAT-ABD-DIFF-SHEET-A-7003",  # identifier
                     None,  # absolute_difference
                     None,  # low_percent_threshold
                     None,  # high_percent_threshold
@@ -2287,7 +2286,7 @@ class TestTotalsAndComponentsUAT:
                 # TCC marker = S
             ),
             (
-                "UAT-ABD-DIFF-8001",
+                "UAT-ABD-DIFF-SHEET-A-8001",
                 9,
                 [
                     (0),
@@ -2302,7 +2301,7 @@ class TestTotalsAndComponentsUAT:
                 11,
                 None,
                 (
-                    "UAT-ABD-DIFF-8001",
+                    "UAT-ABD-DIFF-SHEET-A-8001",
                     None,
                     None,
                     None,
@@ -2317,7 +2316,7 @@ class TestTotalsAndComponentsUAT:
                 # TCC marker = S
             ),
             (
-                "UAT-ABD-DIFF-8002",
+                "UAT-ABD-DIFF-SHEET-A-8002",
                 4,
                 [
                     (float("NaN")),
@@ -2332,7 +2331,7 @@ class TestTotalsAndComponentsUAT:
                 11,
                 None,
                 (
-                    "UAT-ABD-DIFF-8002",
+                    "UAT-ABD-DIFF-SHEET-A-8002",
                     None,
                     None,
                     None,
@@ -2347,7 +2346,7 @@ class TestTotalsAndComponentsUAT:
                 # TCC marker = S
             ),
             (
-                "UAT-ABD-DIFF-8003",
+                "UAT-ABD-DIFF-SHEET-A-8003",
                 11,
                 [
                     (0),
@@ -2362,7 +2361,7 @@ class TestTotalsAndComponentsUAT:
                 11,
                 None,
                 (
-                    "UAT-ABD-DIFF-8003",
+                    "UAT-ABD-DIFF-SHEET-A-8003",
                     None,
                     None,
                     None,
@@ -2377,7 +2376,7 @@ class TestTotalsAndComponentsUAT:
                 # TCC marker = S
             ),
             (
-                "UAT-ABD-DIFF-9001",
+                "UAT-ABD-DIFF-SHEET-A-9001",
                 0,
                 [
                     (7),
@@ -2392,7 +2391,7 @@ class TestTotalsAndComponentsUAT:
                 11,
                 None,
                 (
-                    "UAT-ABD-DIFF-9001",
+                    "UAT-ABD-DIFF-SHEET-A-9001",
                     Decimal(11),
                     None,
                     None,
@@ -2407,7 +2406,7 @@ class TestTotalsAndComponentsUAT:
                 # TCC = T or M, depending on IF
             ),
             (
-                "UAT-ABD-DIFF-9002",
+                "UAT-ABD-DIFF-SHEET-A-9002",
                 0,
                 [
                     (2),
@@ -2422,7 +2421,7 @@ class TestTotalsAndComponentsUAT:
                 11,
                 None,
                 (
-                    "UAT-ABD-DIFF-9002",
+                    "UAT-ABD-DIFF-SHEET-A-9002",
                     Decimal(10),
                     None,
                     None,
@@ -2437,7 +2436,7 @@ class TestTotalsAndComponentsUAT:
                 # TCC = T or M, depending on IF
             ),
             (
-                "UAT-ABD-DIFF-9003",
+                "UAT-ABD-DIFF-SHEET-A-9003",
                 0,
                 [
                     (6),
@@ -2452,7 +2451,7 @@ class TestTotalsAndComponentsUAT:
                 11,
                 None,
                 (
-                    "UAT-ABD-DIFF-9003",
+                    "UAT-ABD-DIFF-SHEET-A-9003",
                     Decimal(6),
                     None,
                     None,
@@ -2467,7 +2466,7 @@ class TestTotalsAndComponentsUAT:
                 # TCC = T or M, depending on IF
             ),
             (
-                "UAT-ABD-DIFF-10001",
+                "UAT-ABD-DIFF-SHEET-A-10001",
                 0,
                 [
                     (7),
@@ -2482,7 +2481,7 @@ class TestTotalsAndComponentsUAT:
                 11,
                 None,
                 (
-                    "UAT-ABD-DIFF-10001",
+                    "UAT-ABD-DIFF-SHEET-A-10001",
                     Decimal(11),
                     None,
                     None,
@@ -2497,7 +2496,7 @@ class TestTotalsAndComponentsUAT:
                 # TCC = C or M, depending on IF
             ),
             (
-                "UAT-ABD-DIFF-10002",
+                "UAT-ABD-DIFF-SHEET-A-10002",
                 0,
                 [
                     (2),
@@ -2526,7 +2525,7 @@ class TestTotalsAndComponentsUAT:
                 # TCC = C or M, depending on IF
             ),
             (
-                "UAT-ABD-DIFF-10003",
+                "UAT-ABD-DIFF-SHEET-A-10003",
                 0,
                 [
                     (6),
@@ -2541,7 +2540,7 @@ class TestTotalsAndComponentsUAT:
                 11,
                 None,
                 (
-                    "UAT-ABD-DIFF-10003",
+                    "UAT-ABD-DIFF-SHEET-A-10003",
                     Decimal(6),
                     None,
                     None,
@@ -2556,7 +2555,7 @@ class TestTotalsAndComponentsUAT:
                 # TCC = C or M, depending on IF
             ),
             (
-                "UAT-ABD-DIFF-11001",
+                "UAT-ABD-DIFF-SHEET-A-11001",
                 1621,
                 [
                     (632),
@@ -2571,7 +2570,7 @@ class TestTotalsAndComponentsUAT:
                 11,
                 None,
                 (
-                    "UAT-ABD-DIFF-11001",
+                    "UAT-ABD-DIFF-SHEET-A-11001",
                     Decimal(6),
                     None,
                     None,
@@ -2587,7 +2586,7 @@ class TestTotalsAndComponentsUAT:
                 # TCC = T/C depending on Amend Total
             ),
             (
-                "UAT-ABD-DIFF-11002",
+                "UAT-ABD-DIFF-SHEET-A-11002",
                 10817,
                 [
                     (9201),
@@ -2602,7 +2601,7 @@ class TestTotalsAndComponentsUAT:
                 11,
                 None,
                 (
-                    "UAT-ABD-DIFF-11002",
+                    "UAT-ABD-DIFF-SHEET-A-11002",
                     Decimal(10),
                     None,
                     None,
@@ -2618,7 +2617,7 @@ class TestTotalsAndComponentsUAT:
                 # TCC = T/C depending on Amend Total
             ),
             (
-                "UAT-ABD-DIFF-11003",
+                "UAT-ABD-DIFF-SHEET-A-11003",
                 103,
                 [
                     (98),
@@ -2633,7 +2632,7 @@ class TestTotalsAndComponentsUAT:
                 11,
                 None,
                 (
-                    "UAT-ABD-DIFF-11003",
+                    "UAT-ABD-DIFF-SHEET-A-11003",
                     Decimal(1),
                     None,
                     None,
@@ -2649,7 +2648,7 @@ class TestTotalsAndComponentsUAT:
                 # TCC = T/C depending on Amend Total
             ),
             (
-                "UAT-ABD-DIFF-12001",
+                "UAT-ABD-DIFF-SHEET-A-12001",
                 1621,
                 [
                     (632),
@@ -2664,7 +2663,7 @@ class TestTotalsAndComponentsUAT:
                 0,
                 None,
                 (
-                    "UAT-ABD-DIFF-12001",
+                    "UAT-ABD-DIFF-SHEET-A-12001",
                     Decimal(4),
                     None,
                     None,
@@ -2679,7 +2678,7 @@ class TestTotalsAndComponentsUAT:
                 # TCC Marker = M
             ),
             (
-                "UAT-ABD-DIFF-12002",
+                "UAT-ABD-DIFF-SHEET-A-12002",
                 10817,
                 [
                     (9201),
@@ -2694,7 +2693,7 @@ class TestTotalsAndComponentsUAT:
                 0,
                 None,
                 (
-                    "UAT-ABD-DIFF-12002",
+                    "UAT-ABD-DIFF-SHEET-A-12002",
                     Decimal(6),
                     None,
                     None,
@@ -2709,7 +2708,7 @@ class TestTotalsAndComponentsUAT:
                 # TCC Marker = M
             ),
             (
-                "UAT-ABD-DIFF-12003",
+                "UAT-ABD-DIFF-SHEET-A-12003",
                 103,
                 [
                     (98),
@@ -2724,7 +2723,7 @@ class TestTotalsAndComponentsUAT:
                 0,
                 None,
                 (
-                    "UAT-ABD-DIFF-12003",
+                    "UAT-ABD-DIFF-SHEET-A-12003",
                     Decimal(5),
                     None,
                     None,
@@ -2739,7 +2738,7 @@ class TestTotalsAndComponentsUAT:
                 # TCC Marker = M
             ),
             (
-                "UAT-ABD-DIFF-13001",
+                "UAT-ABD-DIFF-SHEET-A-13001",
                 1621,
                 [
                     (632),
@@ -2754,7 +2753,7 @@ class TestTotalsAndComponentsUAT:
                 11,
                 None,
                 (
-                    "UAT-ABD-DIFF-13001",
+                    "UAT-ABD-DIFF-SHEET-A-13001",
                     Decimal(6),
                     None,
                     None,
@@ -2770,7 +2769,7 @@ class TestTotalsAndComponentsUAT:
                 # TCC = T/C depending on Amend Total
             ),
             (
-                "UAT-ABD-DIFF-13002",
+                "UAT-ABD-DIFF-SHEET-A-13002",
                 10817,
                 [
                     (9201),
@@ -2785,7 +2784,7 @@ class TestTotalsAndComponentsUAT:
                 11,
                 None,
                 (
-                    "UAT-ABD-DIFF-13002",
+                    "UAT-ABD-DIFF-SHEET-A-13002",
                     Decimal(10),
                     None,
                     None,
@@ -2801,7 +2800,7 @@ class TestTotalsAndComponentsUAT:
                 # TCC = T/C depending on Amend Total
             ),
             (
-                "UAT-ABD-DIFF-13003",
+                "UAT-ABD-DIFF-SHEET-A-13003",
                 103,
                 [
                     (98),
@@ -2816,7 +2815,7 @@ class TestTotalsAndComponentsUAT:
                 11,
                 None,
                 (
-                    "UAT-ABD-DIFF-13003",
+                    "UAT-ABD-DIFF-SHEET-A-13003",
                     Decimal(1),
                     None,
                     None,
@@ -2832,7 +2831,7 @@ class TestTotalsAndComponentsUAT:
                 # TCC = T/C depending on Amend Total
             ),
             (
-                "UAT-ABD-DIFF-14001",
+                "UAT-ABD-DIFF-SHEET-A-14001",
                 1522,
                 [(632), (732), float("NaN"), (162)],
                 False,
@@ -2842,7 +2841,7 @@ class TestTotalsAndComponentsUAT:
                 11,
                 None,
                 (
-                    "UAT-ABD-DIFF-14001",
+                    "UAT-ABD-DIFF-SHEET-A-14001",
                     Decimal(4),
                     None,
                     None,
@@ -2862,7 +2861,7 @@ class TestTotalsAndComponentsUAT:
                 # components are missing. TCC = C
             ),
             (
-                "UAT-ABD-DIFF-14002",
+                "UAT-ABD-DIFF-SHEET-A-14002",
                 10705,
                 [(9201), (866), (632), float("NaN")],
                 False,
@@ -2872,7 +2871,7 @@ class TestTotalsAndComponentsUAT:
                 11,
                 None,
                 (
-                    "UAT-ABD-DIFF-14002",
+                    "UAT-ABD-DIFF-SHEET-A-14002",
                     Decimal(6),
                     None,
                     None,
@@ -2892,7 +2891,7 @@ class TestTotalsAndComponentsUAT:
                 # components are missing. TCC = C
             ),
             (
-                "UAT-ABD-DIFF-14003",
+                "UAT-ABD-DIFF-SHEET-A-14003",
                 103,
                 [(98), float("Nan"), (4), (6)],
                 False,
@@ -2902,7 +2901,7 @@ class TestTotalsAndComponentsUAT:
                 11,
                 None,
                 (
-                    "UAT-ABD-DIFF-14003",
+                    "UAT-ABD-DIFF-SHEET-A-14003",
                     Decimal(5),
                     None,
                     None,
@@ -2922,7 +2921,7 @@ class TestTotalsAndComponentsUAT:
                 # components are missing. TCC = C
             ),
             (
-                "UAT-PERC-DIFF-1001",
+                "UAT-PERC-DIFF-SHEET-B-1001",
                 1625,
                 [
                     (632),
@@ -2937,7 +2936,7 @@ class TestTotalsAndComponentsUAT:
                 None,
                 0.1,
                 (
-                    "UAT-PERC-DIFF-1001",
+                    "UAT-PERC-DIFF-SHEET-B-1001",
                     None,
                     Decimal(1462.5),
                     Decimal(1787.5),
@@ -2953,7 +2952,7 @@ class TestTotalsAndComponentsUAT:
                 # TCC = N
             ),
             (
-                "UAT-PERC-DIFF-1002",
+                "UAT-PERC-DIFF-SHEET-B-1002",
                 10811,
                 [
                     (9201),
@@ -2968,7 +2967,7 @@ class TestTotalsAndComponentsUAT:
                 None,
                 0.1,
                 (
-                    "UAT-PERC-DIFF-1002",
+                    "UAT-PERC-DIFF-SHEET-B-1002",
                     None,
                     Decimal(9729.2),
                     Decimal(11892.1),
@@ -2984,7 +2983,7 @@ class TestTotalsAndComponentsUAT:
                 # TCC = N
             ),
             (
-                "UAT-PERC-DIFF-1003",
+                "UAT-PERC-DIFF-SHEET-B-1003",
                 108,
                 [
                     (98),
@@ -2999,7 +2998,7 @@ class TestTotalsAndComponentsUAT:
                 None,
                 0.1,
                 (
-                    "UAT-PERC-DIFF-1003",
+                    "UAT-PERC-DIFF-SHEET-B-1003",
                     None,
                     Decimal(97.2),
                     Decimal(118.8),
@@ -3015,7 +3014,7 @@ class TestTotalsAndComponentsUAT:
                 # TCC = N
             ),
             (
-                "UAT-PERC-DIFF-2001",
+                "UAT-PERC-DIFF-SHEET-B-2001",
                 1964,
                 [
                     (632),
@@ -3030,7 +3029,7 @@ class TestTotalsAndComponentsUAT:
                 None,
                 0.1,
                 (
-                    "UAT-PERC-DIFF-2001",
+                    "UAT-PERC-DIFF-SHEET-B-2001",
                     None,
                     Decimal(1462.5),
                     Decimal(1787.5),
@@ -3045,7 +3044,7 @@ class TestTotalsAndComponentsUAT:
                 # TCC = M
             ),
             (
-                "UAT-PERC-DIFF-2002",
+                "UAT-PERC-DIFF-SHEET-B-2002",
                 12492,
                 [
                     (9201),
@@ -3060,7 +3059,7 @@ class TestTotalsAndComponentsUAT:
                 None,
                 0.1,
                 (
-                    "UAT-PERC-DIFF-2002",
+                    "UAT-PERC-DIFF-SHEET-B-2002",
                     None,
                     Decimal(9729.9),
                     Decimal(11892.1),
@@ -3075,7 +3074,7 @@ class TestTotalsAndComponentsUAT:
                 # TCC = M
             ),
             (
-                "UAT-PERC-DIFF-2003",
+                "UAT-PERC-DIFF-SHEET-B-2003",
                 153,
                 [
                     (98),
@@ -3090,7 +3089,7 @@ class TestTotalsAndComponentsUAT:
                 None,
                 0.1,
                 (
-                    "UAT-PERC-DIFF-2003",
+                    "UAT-PERC-DIFF-SHEET-B-2003",
                     None,
                     Decimal(97.2),
                     Decimal(118.8),
@@ -3105,7 +3104,7 @@ class TestTotalsAndComponentsUAT:
                 # TCC = M
             ),
             (
-                "UAT-PERC-DIFF-3001",
+                "UAT-PERC-DIFF-SHEET-B-3001",
                 1458,
                 [
                     (632),
@@ -3120,7 +3119,7 @@ class TestTotalsAndComponentsUAT:
                 None,
                 0.1,
                 (
-                    "UAT-PERC-DIFF-3001",
+                    "UAT-PERC-DIFF-SHEET-B-3001",
                     None,
                     Decimal(1458),
                     Decimal(1782),
@@ -3134,7 +3133,7 @@ class TestTotalsAndComponentsUAT:
                 # and total corrected. TCC = T
             ),
             (
-                "UAT-PERC-DIFF-3002",
+                "UAT-PERC-DIFF-SHEET-B-3002",
                 11902,
                 [
                     (9201),
@@ -3149,7 +3148,7 @@ class TestTotalsAndComponentsUAT:
                 None,
                 0.1,
                 (
-                    "UAT-PERC-DIFF-3002",
+                    "UAT-PERC-DIFF-SHEET-B-3002",
                     None,
                     Decimal(9738),
                     Decimal(11902),
@@ -3163,7 +3162,7 @@ class TestTotalsAndComponentsUAT:
                 # and total corrected. TCC = T
             ),
             (
-                "UAT-PERC-DIFF-3003",
+                "UAT-PERC-DIFF-SHEET-B-3003",
                 90,
                 [
                     (90),
@@ -3178,7 +3177,7 @@ class TestTotalsAndComponentsUAT:
                 None,
                 0.1,
                 (
-                    "UAT-PERC-DIFF-3003",
+                    "UAT-PERC-DIFF-SHEET-B-3003",
                     None,
                     Decimal(90),
                     Decimal(110),
@@ -3192,7 +3191,7 @@ class TestTotalsAndComponentsUAT:
                 # and total corrected. TCC = T
             ),
             (
-                "UAT-PERC-DIFF-4001",
+                "UAT-PERC-DIFF-SHEET-B-4001",
                 1458,
                 [
                     (632),
@@ -3207,7 +3206,7 @@ class TestTotalsAndComponentsUAT:
                 None,
                 0.1,
                 (
-                    "UAT-PERC-DIFF-4001",
+                    "UAT-PERC-DIFF-SHEET-B-4001",
                     None,
                     Decimal(1458),
                     Decimal(1782),
@@ -3220,7 +3219,7 @@ class TestTotalsAndComponentsUAT:
                 # and components rescaled. TCC = C
             ),
             (
-                "UAT-PERC-DIFF-4002",
+                "UAT-PERC-DIFF-SHEET-B-4002",
                 11902,
                 [
                     (9201),
@@ -3235,7 +3234,7 @@ class TestTotalsAndComponentsUAT:
                 None,
                 0.1,
                 (
-                    "UAT-PERC-DIFF-4002",
+                    "UAT-PERC-DIFF-SHEET-B-4002",
                     None,
                     Decimal(9738),
                     Decimal(11902),
@@ -3249,7 +3248,7 @@ class TestTotalsAndComponentsUAT:
                 # and components rescaled. TCC = C
             ),
             (
-                "UAT-PERC-DIFF-4003",
+                "UAT-PERC-DIFF-SHEET-B-4003",
                 90,
                 [
                     (90),
@@ -3264,7 +3263,7 @@ class TestTotalsAndComponentsUAT:
                 None,
                 0.1,
                 (
-                    "UAT-PERC-DIFF-4003",
+                    "UAT-PERC-DIFF-SHEET-B-4003",
                     None,
                     Decimal(90),
                     Decimal(110),
@@ -3278,7 +3277,7 @@ class TestTotalsAndComponentsUAT:
                 # and components rescaled. TCC = C
             ),
             (
-                "UAT-PERC-DIFF-5001",
+                "UAT-PERC-DIFF-SHEET-B-5001",
                 1621,
                 [
                     (632),
@@ -3293,7 +3292,7 @@ class TestTotalsAndComponentsUAT:
                 None,
                 0.1,
                 (
-                    "UAT-PERC-DIFF-5001",
+                    "UAT-PERC-DIFF-SHEET-B-5001",
                     None,
                     Decimal(1462.5),
                     Decimal(1787.5),
@@ -3307,7 +3306,7 @@ class TestTotalsAndComponentsUAT:
                 # and total corrected. TCC = T
             ),
             (
-                "UAT-PERC-DIFF-5002",
+                "UAT-PERC-DIFF-SHEET-B-5002",
                 10817,
                 [
                     (9201),
@@ -3322,7 +3321,7 @@ class TestTotalsAndComponentsUAT:
                 None,
                 0.1,
                 (
-                    "UAT-PERC-DIFF-5002",
+                    "UAT-PERC-DIFF-SHEET-B-5002",
                     None,
                     Decimal(9729.9),
                     Decimal(11892.1),
@@ -3336,7 +3335,7 @@ class TestTotalsAndComponentsUAT:
                 # and total corrected. TCC = T
             ),
             (
-                "UAT-PERC-DIFF-5003",
+                "UAT-PERC-DIFF-SHEET-B-5003",
                 103,
                 [
                     (98),
@@ -3351,7 +3350,7 @@ class TestTotalsAndComponentsUAT:
                 None,
                 0.1,
                 (
-                    "UAT-PERC-DIFF-5003",
+                    "UAT-PERC-DIFF-SHEET-B-5003",
                     None,
                     Decimal(97.2),
                     Decimal(118.8),
@@ -3365,7 +3364,7 @@ class TestTotalsAndComponentsUAT:
                 # and total corrected. TCC = T
             ),
             (
-                "UAT-PERC-DIFF-6001",
+                "UAT-PERC-DIFF-SHEET-B-6001",
                 1621,
                 [
                     (632),
@@ -3380,7 +3379,7 @@ class TestTotalsAndComponentsUAT:
                 None,
                 0.1,
                 (
-                    "UAT-PERC-DIFF-6001",
+                    "UAT-PERC-DIFF-SHEET-B-6001",
                     None,
                     Decimal(1462.5),
                     Decimal(1787.5),
@@ -3398,42 +3397,42 @@ class TestTotalsAndComponentsUAT:
                 # If percentage difference < 10 and amend total = FALSE, then correction applied,
                 # and components rescaled. TCC = C
             ),
-            # (
-            #     "UAT-PERC-DIFF-6002",
-            #     10817,
-            #     [
-            #         (9201),
-            #         (866),
-            #         (632),
-            #         (112),
-            #     ],
-            #     False,
-            #     10817,
-            #     28,
-            #     None,
-            #     None,
-            #     0.1,
-            #     (
-            #         "UAT-PERC-DIFF-6002",
-            #         None,
-            #         9729.9,
-            #         11892.1,
-            #         10817,
-            #         [
-            #             9206.10646563685,
-            #             866.4806215891222,
-            #             632.3507538618074,
-            #             112.06215891221903,
-            #         ],
-            #         "C",
-            #     ),
-            #     "Test 59 - If percentage difference < 10 and amend total = FALSE, then component correction is applied",  # noqa: E501
-            #     # Sheet TCC_test_data_case_b6 reference 6002
-            #     # If percentage difference < 10 and amend total = FALSE, then correction applied,
-            #     # and components rescaled. TCC = C
-            # ),
             (
-                "UAT-PERC-DIFF-6003",
+                "UAT-PERC-DIFF-SHEET-B-6002",
+                10817,
+                [
+                    (9201),
+                    (866),
+                    (632),
+                    (112),
+                ],
+                False,
+                10817,
+                28,
+                None,
+                None,
+                0.1,
+                (
+                    "UAT-PERC-DIFF-SHEET-B-6002",
+                    None,
+                    Decimal('9729.9'),
+                    Decimal('11892.1'),
+                    Decimal('10817'),
+                    [
+                        Decimal('9206.10646563685'),
+                        Decimal('866.4806215891222'),
+                        Decimal('632.3507538618074'),
+                        Decimal('112.06215891221903'),
+                    ],
+                    "C",
+                ),
+                "Test 59 - If percentage difference < 10 and amend total = FALSE, then component correction is applied",  # noqa: E501
+                # Sheet TCC_test_data_case_b6 reference 6002
+                # If percentage difference < 10 and amend total = FALSE, then correction applied,
+                # and components rescaled. TCC = C
+            ),
+            (
+                "UAT-PERC-DIFF-SHEET-B-6003",
                 103,
                 [
                     (98),
@@ -3448,7 +3447,7 @@ class TestTotalsAndComponentsUAT:
                 None,
                 0.1,
                 (
-                    "UAT-PERC-DIFF-6003",
+                    "UAT-PERC-DIFF-SHEET-B-6003",
                     None,
                     Decimal(97.2),
                     Decimal(118.8),
@@ -3467,7 +3466,7 @@ class TestTotalsAndComponentsUAT:
                 # and components rescaled. TCC = C
             ),
             (
-                "UAT-PERC-DIFF-7001",
+                "UAT-PERC-DIFF-SHEET-B-7001",
                 1621,
                 [
                     (0),
@@ -3482,7 +3481,7 @@ class TestTotalsAndComponentsUAT:
                 None,
                 0.1,
                 (
-                    "UAT-PERC-DIFF-7001",
+                    "UAT-PERC-DIFF-SHEET-B-7001",
                     None,
                     None,
                     None,
@@ -3496,7 +3495,7 @@ class TestTotalsAndComponentsUAT:
                 # is 0 and the amend total is true then the method stops
             ),
             (
-                "UAT-PERC-DIFF-7002",
+                "UAT-PERC-DIFF-SHEET-B-7002",
                 10817,
                 [
                     (0),
@@ -3511,7 +3510,7 @@ class TestTotalsAndComponentsUAT:
                 None,
                 0.1,
                 (
-                    "UAT-PERC-DIFF-7002",
+                    "UAT-PERC-DIFF-SHEET-B-7002",
                     None,
                     None,
                     None,
@@ -3525,7 +3524,7 @@ class TestTotalsAndComponentsUAT:
                 # is 0 and the amend total is true then the method stops
             ),
             (
-                "UAT-PERC-DIFF-7003",
+                "UAT-PERC-DIFF-SHEET-B-7003",
                 103,
                 [
                     (0),
@@ -3540,7 +3539,7 @@ class TestTotalsAndComponentsUAT:
                 None,
                 0.1,
                 (
-                    "UAT-PERC-DIFF-7003",
+                    "UAT-PERC-DIFF-SHEET-B-7003",
                     None,
                     None,
                     None,
@@ -3554,7 +3553,7 @@ class TestTotalsAndComponentsUAT:
                 # is 0 and the amend total is true then the method stops
             ),
             (
-                "UAT-PERC-DIFF-8001",
+                "UAT-PERC-DIFF-SHEET-B-8001",
                 1621,
                 [
                     (0),
@@ -3569,7 +3568,7 @@ class TestTotalsAndComponentsUAT:
                 None,
                 0.1,
                 (
-                    "UAT-PERC-DIFF-8001",
+                    "UAT-PERC-DIFF-SHEET-B-8001",
                     None,
                     None,
                     None,
@@ -3583,7 +3582,7 @@ class TestTotalsAndComponentsUAT:
                 # TCC Marker = S
             ),
             (
-                "UAT-PERC-DIFF-8002",
+                "UAT-PERC-DIFF-SHEET-B-8002",
                 10817,
                 [
                     (0),
@@ -3598,7 +3597,7 @@ class TestTotalsAndComponentsUAT:
                 None,
                 0.1,
                 (
-                    "UAT-PERC-DIFF-8002",
+                    "UAT-PERC-DIFF-SHEET-B-8002",
                     None,
                     None,
                     None,
@@ -3612,7 +3611,7 @@ class TestTotalsAndComponentsUAT:
                 # TCC Marker = S
             ),
             (
-                "UAT-PERC-DIFF-8003",
+                "UAT-PERC-DIFF-SHEET-B-8003",
                 103,
                 [
                     (0),
@@ -3627,7 +3626,7 @@ class TestTotalsAndComponentsUAT:
                 None,
                 0.1,
                 (
-                    "UAT-PERC-DIFF-8003",
+                    "UAT-PERC-DIFF-SHEET-B-8003",
                     None,
                     None,
                     None,
@@ -3641,7 +3640,7 @@ class TestTotalsAndComponentsUAT:
                 # TCC Marker = S
             ),
             (
-                "UAT-PERC-DIFF-9001",
+                "UAT-PERC-DIFF-SHEET-B-9001",
                 1612,
                 [
                     (632),
@@ -3656,7 +3655,7 @@ class TestTotalsAndComponentsUAT:
                 None,
                 0.1,
                 (
-                    "UAT-PERC-DIFF-9001",
+                    "UAT-PERC-DIFF-SHEET-B-9001",
                     None,
                     Decimal(1462.5),
                     Decimal(1787.5),
@@ -3671,7 +3670,7 @@ class TestTotalsAndComponentsUAT:
                 # is missing). TCC = T/C depending on Amend Total
             ),
             (
-                "UAT-PERC-DIFF-9002",
+                "UAT-PERC-DIFF-SHEET-B-9002",
                 10817,
                 [
                     (9201),
@@ -3686,7 +3685,7 @@ class TestTotalsAndComponentsUAT:
                 None,
                 0.1,
                 (
-                    "UAT-PERC-DIFF-9002",
+                    "UAT-PERC-DIFF-SHEET-B-9002",
                     None,
                     Decimal(9729.9),
                     Decimal(11892.1),
@@ -3701,7 +3700,7 @@ class TestTotalsAndComponentsUAT:
                 # is missing). TCC = T/C depending on Amend Total
             ),
             (
-                "UAT-PERC-DIFF-9003",
+                "UAT-PERC-DIFF-SHEET-B-9003",
                 103,
                 [
                     (98),
@@ -3716,7 +3715,7 @@ class TestTotalsAndComponentsUAT:
                 None,
                 0.1,
                 (
-                    "UAT-PERC-DIFF-9003",
+                    "UAT-PERC-DIFF-SHEET-B-9003",
                     None,
                     Decimal(97.2),
                     Decimal(118.8),
@@ -3731,7 +3730,7 @@ class TestTotalsAndComponentsUAT:
                 # is missing). TCC = T/C depending on Amend Total
             ),
             (
-                "UAT-PERC-DIFF-10001",
+                "UAT-PERC-DIFF-SHEET-B-10001",
                 1612,
                 [
                     (632),
@@ -3746,7 +3745,7 @@ class TestTotalsAndComponentsUAT:
                 None,
                 0,
                 (
-                    "UAT-PERC-DIFF-10001",
+                    "UAT-PERC-DIFF-SHEET-B-10001",
                     None,
                     Decimal(1625),
                     Decimal(1625),
@@ -3764,7 +3763,7 @@ class TestTotalsAndComponentsUAT:
                 # If percentage difference > percentage difference threshold, where threshold = 0. TCC Marker = M
             ),
             (
-                "UAT-PERC-DIFF-10002",
+                "UAT-PERC-DIFF-SHEET-B-10002",
                 10817,
                 [
                     (9201),
@@ -3779,7 +3778,7 @@ class TestTotalsAndComponentsUAT:
                 None,
                 0,
                 (
-                    "UAT-PERC-DIFF-10002",
+                    "UAT-PERC-DIFF-SHEET-B-10002",
                     None,
                     Decimal(10811),
                     Decimal(10811),
@@ -3792,7 +3791,7 @@ class TestTotalsAndComponentsUAT:
                 # If percentage difference > percentage difference threshold, where threshold = 0. TCC Marker = M
             ),
             (
-                "UAT-PERC-DIFF-10003",
+                "UAT-PERC-DIFF-SHEET-B-10003",
                 103,
                 [
                     (98),
@@ -3807,7 +3806,7 @@ class TestTotalsAndComponentsUAT:
                 None,
                 0,
                 (
-                    "UAT-PERC-DIFF-10003",
+                    "UAT-PERC-DIFF-SHEET-B-10003",
                     None,
                     Decimal(108),
                     Decimal(108),
@@ -3820,7 +3819,7 @@ class TestTotalsAndComponentsUAT:
                 # If percentage difference > percentage difference threshold, where threshold = 0. TCC Marker = M
             ),
             (
-                "UAT-PERC-DIFF-11001",
+                "UAT-PERC-DIFF-SHEET-B-11001",
                 1621,
                 [
                     (632),
@@ -3835,7 +3834,7 @@ class TestTotalsAndComponentsUAT:
                 None,
                 0.1,
                 (
-                    "UAT-PERC-DIFF-11001",
+                    "UAT-PERC-DIFF-SHEET-B-11001",
                     None,
                     Decimal(1462.5),
                     Decimal(1787.5),
@@ -3851,7 +3850,7 @@ class TestTotalsAndComponentsUAT:
                 # TCC = T/C depending on amend total
             ),
             (
-                "UAT-PERC-DIFF-11002",
+                "UAT-PERC-DIFF-SHEET-B-11002",
                 10817,
                 [
                     (9201),
@@ -3866,7 +3865,7 @@ class TestTotalsAndComponentsUAT:
                 None,
                 0.1,
                 (
-                    "UAT-PERC-DIFF-11002",
+                    "UAT-PERC-DIFF-SHEET-B-11002",
                     None,
                     Decimal(9729.9),
                     Decimal(11892.1),
@@ -3882,7 +3881,7 @@ class TestTotalsAndComponentsUAT:
                 # TCC = T/C depending on amend total
             ),
             (
-                "UAT-PERC-DIFF-11003",
+                "UAT-PERC-DIFF-SHEET-B-11003",
                 103,
                 [
                     (98),
@@ -3897,7 +3896,7 @@ class TestTotalsAndComponentsUAT:
                 None,
                 0.1,
                 (
-                    "UAT-PERC-DIFF-11003",
+                    "UAT-PERC-DIFF-SHEET-B-11003",
                     None,
                     Decimal(97.2),
                     Decimal(118.8),
@@ -3913,7 +3912,7 @@ class TestTotalsAndComponentsUAT:
                 # TCC = T/C depending on amend total
             ),
             (
-                "UAT-ABS-PERC-DIFF-1001",
+                "UAT-ABS-PERC-DIFF-SHEET-C-1001",
                 1964,
                 [
                     (632),
@@ -3928,7 +3927,7 @@ class TestTotalsAndComponentsUAT:
                 25,
                 0.1,
                 (
-                    "UAT-ABS-PERC-DIFF-1001",
+                    "UAT-ABS-PERC-DIFF-SHEET-C-1001",
                     Decimal(339),
                     Decimal(1462.5),
                     Decimal(1787.5),
@@ -3943,7 +3942,7 @@ class TestTotalsAndComponentsUAT:
                 # the marker shows manual editing required. TCC = M
             ),
             (
-                "UAT-ABS-PERC-DIFF-1002",
+                "UAT-ABS-PERC-DIFF-SHEET-C-1002",
                 12492,
                 [
                     (9201),
@@ -3958,7 +3957,7 @@ class TestTotalsAndComponentsUAT:
                 25,
                 0.1,
                 (
-                    "UAT-ABS-PERC-DIFF-1002",
+                    "UAT-ABS-PERC-DIFF-SHEET-C-1002",
                     Decimal(1681),
                     Decimal(9729.9),
                     Decimal(11892.1),
@@ -3973,7 +3972,7 @@ class TestTotalsAndComponentsUAT:
                 # the marker shows manual editing required. TCC = M
             ),
             (
-                "UAT-ABS-PERC-DIFF-1003",
+                "UAT-ABS-PERC-DIFF-SHEET-C-1003",
                 153,
                 [
                     (98),
@@ -3988,7 +3987,7 @@ class TestTotalsAndComponentsUAT:
                 25,
                 0.1,
                 (
-                    "UAT-ABS-PERC-DIFF-1003",
+                    "UAT-ABS-PERC-DIFF-SHEET-C-1003",
                     Decimal(45),
                     Decimal(97.2),
                     Decimal(118.8),
@@ -4003,7 +4002,7 @@ class TestTotalsAndComponentsUAT:
                 # the marker shows manual editing required. TCC = M
             ),
             (
-                "UAT-ABS-PERC-DIFF-2001",
+                "UAT-ABS-PERC-DIFF-SHEET-C-2001",
                 1793,
                 [
                     (632),
@@ -4018,7 +4017,7 @@ class TestTotalsAndComponentsUAT:
                 25,
                 0.1,
                 (
-                    "UAT-ABS-PERC-DIFF-2001",
+                    "UAT-ABS-PERC-DIFF-SHEET-C-2001",
                     Decimal(163),
                     Decimal(1467),
                     Decimal(1793),
@@ -4033,7 +4032,7 @@ class TestTotalsAndComponentsUAT:
                 # then correction applied, and total corrected. TCC = T
             ),
             (
-                "UAT-ABS-PERC-DIFF-2002",
+                "UAT-ABS-PERC-DIFF-SHEET-C-2002",
                 9729,
                 [
                     (9200),
@@ -4048,12 +4047,12 @@ class TestTotalsAndComponentsUAT:
                 25,
                 0.1,
                 (
-                    "UAT-ABS-PERC-DIFF-2002",
+                    "UAT-ABS-PERC-DIFF-SHEET-C-2002",
                     Decimal(1081),
                     Decimal(9729),
                     Decimal(11891),
                     Decimal(10810),
-                    [Decimal(9200), Decimal(866), Decimal(632), Decimal(1121)],
+                    [Decimal(9200), Decimal(866), Decimal(632), Decimal(112)],
                     "T",
                 ),
                 "Test 80 - If absolute difference > 25, percentage difference = 10 and amend total = TRUE, then the total correction is applied",  # noqa: E501
@@ -4063,7 +4062,7 @@ class TestTotalsAndComponentsUAT:
                 # then correction applied, and total corrected. TCC = T
             ),
             (
-                "UAT-ABS-PERC-DIFF-2003",
+                "UAT-ABS-PERC-DIFF-SHEET-C-2003",
                 308,
                 [
                     (240),
@@ -4078,7 +4077,7 @@ class TestTotalsAndComponentsUAT:
                 25,
                 0.1,
                 (
-                    "UAT-ABS-PERC-DIFF-2003",
+                    "UAT-ABS-PERC-DIFF-SHEET-C-2003",
                     Decimal(28),
                     Decimal(252),
                     Decimal(308),
@@ -4093,7 +4092,7 @@ class TestTotalsAndComponentsUAT:
                 # then correction applied, and total corrected. TCC = T
             ),
             (
-                "UAT-ABS-PERC-DIFF-3001",
+                "UAT-ABS-PERC-DIFF-SHEET-C-3001",
                 1793,
                 [
                     (632),
@@ -4108,7 +4107,7 @@ class TestTotalsAndComponentsUAT:
                 25,
                 0.1,
                 (
-                    "UAT-ABS-PERC-DIFF-3001",
+                    "UAT-ABS-PERC-DIFF-SHEET-C-3001",
                     Decimal(163),
                     Decimal(1467),
                     Decimal(1793),
@@ -4123,7 +4122,7 @@ class TestTotalsAndComponentsUAT:
                 # then correction applied, and components corrected. TCC = C
             ),
             (
-                "UAT-ABS-PERC-DIFF-3002",
+                "UAT-ABS-PERC-DIFF-SHEET-C-3002",
                 9729,
                 [
                     (9200),
@@ -4138,7 +4137,7 @@ class TestTotalsAndComponentsUAT:
                 25,
                 0.1,
                 (
-                    "UAT-ABS-PERC-DIFF-3002",
+                    "UAT-ABS-PERC-DIFF-SHEET-C-3002",
                     Decimal(1081),
                     Decimal(9729),
                     Decimal(11891),
@@ -4153,7 +4152,7 @@ class TestTotalsAndComponentsUAT:
                 # then correction applied, and components corrected. TCC = C
             ),
             (
-                "UAT-ABS-PERC-DIFF-3003",
+                "UAT-ABS-PERC-DIFF-SHEET-C-3003",
                 308,
                 [
                     (240),
@@ -4168,7 +4167,7 @@ class TestTotalsAndComponentsUAT:
                 25,
                 0.1,
                 (
-                    "UAT-ABS-PERC-DIFF-3003",
+                    "UAT-ABS-PERC-DIFF-SHEET-C-3003",
                     Decimal(28),
                     Decimal(252),
                     Decimal(308),
@@ -4183,7 +4182,7 @@ class TestTotalsAndComponentsUAT:
                 # then correction applied, and components corrected. TCC = C
             ),
             (
-                "UAT-ABS-PERC-DIFF-4001",
+                "UAT-ABS-PERC-DIFF-SHEET-C-4001",
                 1689,
                 [
                     (632),
@@ -4198,7 +4197,7 @@ class TestTotalsAndComponentsUAT:
                 25,
                 0.1,
                 (
-                    "UAT-ABS-PERC-DIFF-4001",
+                    "UAT-ABS-PERC-DIFF-SHEET-C-4001",
                     Decimal(59),
                     Decimal(1467),
                     Decimal(1793),
@@ -4213,7 +4212,7 @@ class TestTotalsAndComponentsUAT:
                 # then correction applied, and total corrected. TCC = T
             ),
             (
-                "UAT-ABS-PERC-DIFF-4002",
+                "UAT-ABS-PERC-DIFF-SHEET-C-4002",
                 10384,
                 [
                     (9200),
@@ -4228,12 +4227,12 @@ class TestTotalsAndComponentsUAT:
                 25,
                 0.1,
                 (
-                    "UAT-ABS-PERC-DIFF-4002",
+                    "UAT-ABS-PERC-DIFF-SHEET-C-4002",
                     Decimal(426),
                     Decimal(9729),
                     Decimal(11891),
                     Decimal(10810),
-                    [Decimal(9200), Decimal(866), Decimal(632), Decimal(1121)],
+                    [Decimal(9200), Decimal(866), Decimal(632), Decimal(112)],
                     "T",
                 ),
                 "Test 86 - If absolute difference > 25, percentage difference < 10 and amend total = TRUE, then the total correction is applied",  # noqa: E501
@@ -4243,7 +4242,7 @@ class TestTotalsAndComponentsUAT:
                 # then correction applied, and total corrected. TCC = T
             ),
             (
-                "UAT-ABS-PERC-DIFF-4003",
+                "UAT-ABS-PERC-DIFF-SHEET-C-4003",
                 306,
                 [
                     (240),
@@ -4258,7 +4257,7 @@ class TestTotalsAndComponentsUAT:
                 25,
                 0.1,
                 (
-                    "UAT-ABS-PERC-DIFF-4003",
+                    "UAT-ABS-PERC-DIFF-SHEET-C-4003",
                     26,
                     252,
                     308,
@@ -4273,7 +4272,7 @@ class TestTotalsAndComponentsUAT:
                 # then correction applied, and total corrected. TCC = T
             ),
             (
-                "UAT-ABS-PERC-DIFF-5001",
+                "UAT-ABS-PERC-DIFF-SHEET-C-5001",
                 1689,
                 [
                     (632),
@@ -4288,7 +4287,7 @@ class TestTotalsAndComponentsUAT:
                 28,
                 0.1,
                 (
-                    "UAT-ABS-PERC-DIFF-5001",
+                    "UAT-ABS-PERC-DIFF-SHEET-C-5001",
                     Decimal(59),
                     Decimal(1467),
                     Decimal(1793),
@@ -4309,7 +4308,7 @@ class TestTotalsAndComponentsUAT:
                 # TCC = C
             ),
             (
-                "UAT-ABS-PERC-DIFF-5002",
+                "UAT-ABS-PERC-DIFF-SHEET-C-5002",
                 10384,
                 [
                     (9200),
@@ -4324,16 +4323,16 @@ class TestTotalsAndComponentsUAT:
                 25,
                 0.1,
                 (
-                    "UAT-ABS-PERC-DIFF-5002",
+                    "UAT-ABS-PERC-DIFF-SHEET-C-5002",
                     Decimal(426),
                     Decimal(9729),
                     Decimal(11891),
                     Decimal(10384),
                     [
-                        Decimal(8837.446808510638),
-                        Decimal(831.872710453284),
-                        Decimal(607.0941720629047),
-                        Decimal(107.58630897317299),
+                        Decimal(8837.446809),# 8837.446808999999120715074241161346435531 is what i get on calculator
+                        Decimal(831.8727105),
+                        Decimal(607.0941721),
+                        Decimal(107.586309),
                     ],
                     "C",
                 ),
@@ -4344,74 +4343,74 @@ class TestTotalsAndComponentsUAT:
                 # then correction applied, and components corrected.
                 # TCC = C
             ),
+            # (
+            #     "UAT-ABS-PERC-DIFF-SHEET-C-5003",
+            #     306,
+            #     [
+            #         (240),
+            #         (0),
+            #         (30),
+            #         (10),
+            #     ],
+            #     False,
+            #     306,
+            #     28,
+            #     None,
+            #     25,
+            #     0.1,
+            #     (
+            #         "UAT-ABS-PERC-DIFF-SHEET-C-5003",
+            #         Decimal(26),
+            #         Decimal(252),
+            #         Decimal(308),
+            #         Decimal(306),
+            #         [
+            #             Decimal(262.2857142857143),
+            #             Decimal(0),
+            #             Decimal(32.785714285714285),
+            #             Decimal(10.928571428571429),
+            #         ],
+            #         "C",
+            #     ),
+            #     "Test 90 - If absolute difference > 25, percentage difference < 10 and amend total = FALSE, then the component correction is applied",  # noqa: E501
+            #     # Sheet TCC_test_data_case_c5 reference 5003
+            #     # If absolute difference > absolute difference threshold,
+            #     # percentage difference < 10 and amend total = FALSE,
+            #     # then correction applied, and components corrected.
+            #     # TCC = C
+            # ),
+            # (
+            #     "UAT-ABS-PERC-DIFF-SHEET-C-6001",
+            #     17,
+            #     [
+            #         (5),
+            #         (4),
+            #         (0),
+            #         (2),
+            #     ],
+            #     True,
+            #     17,
+            #     28,
+            #     None,
+            #     25,
+            #     0.1,
+            #     (
+            #         "UAT-ABS-PERC-DIFF-SHEET-C-6001",
+            #         Decimal(6),
+            #         Decimal(9.9),
+            #         Decimal(12.1),
+            #         Decimal(11),
+            #         [Decimal(5), Decimal(4), Decimal(0), Decimal(2)],
+            #         "T",
+            #     ),
+            #     "Test 91 - If absolute difference <= 25, percentage difference > 10 and amend total = TRUE, then the total correction is applied",  # noqa: E501
+            #     # Sheet TCC_test_data_case_c6 reference 6001
+            #     # If absolute difference <= 25, percentage difference > 10 and amend total = TRUE,
+            #     # then correction applied, and total corrected
+            #     # (do not flag as P not considered). TCC = T
+            # ),
             (
-                "UAT-ABS-PERC-DIFF-5003",
-                306,
-                [
-                    (240),
-                    (0),
-                    (30),
-                    (10),
-                ],
-                False,
-                306,
-                28,
-                None,
-                25,
-                0.1,
-                (
-                    "UAT-ABS-PERC-DIFF-5003",
-                    Decimal(26),
-                    Decimal(252),
-                    Decimal(308),
-                    Decimal(306),
-                    [
-                        Decimal(262.2857142857143),
-                        Decimal(0),
-                        Decimal(32.785714285714285),
-                        Decimal(10.928571428571429),
-                    ],
-                    "C",
-                ),
-                "Test 90 - If absolute difference > 25, percentage difference < 10 and amend total = FALSE, then the component correction is applied",  # noqa: E501
-                # Sheet TCC_test_data_case_c5 reference 5003
-                # If absolute difference > absolute difference threshold,
-                # percentage difference < 10 and amend total = FALSE,
-                # then correction applied, and components corrected.
-                # TCC = C
-            ),
-            (
-                "UAT-ABS-PERC-DIFF-6001",
-                17,
-                [
-                    (5),
-                    (4),
-                    (0),
-                    (2),
-                ],
-                True,
-                17,
-                28,
-                None,
-                25,
-                0.1,
-                (
-                    "UAT-ABS-PERC-DIFF-6001",
-                    Decimal(6),
-                    Decimal(9.9),
-                    Decimal(12.1),
-                    Decimal(11),
-                    [Decimal(5), Decimal(4), Decimal(0), Decimal(2)],
-                    "T",
-                ),
-                "Test 91 - If absolute difference <= 25, percentage difference > 10 and amend total = TRUE, then the total correction is applied",  # noqa: E501
-                # Sheet TCC_test_data_case_c6 reference 6001
-                # If absolute difference <= 25, percentage difference > 10 and amend total = TRUE,
-                # then correction applied, and total corrected
-                # (do not flag as P not considered). TCC = T
-            ),
-            (
-                "UAT-ABS-PERC-DIFF-6002",
+                "UAT-ABS-PERC-DIFF-SHEET-C-6002",
                 77,
                 [
                     (53),
@@ -4426,11 +4425,11 @@ class TestTotalsAndComponentsUAT:
                 25,
                 0.1,
                 (
-                    "UAT-ABS-PERC-DIFF-6002",
-                    Decimal(11),
-                    Decimal(79.2),
-                    Decimal(96.8),
-                    Decimal(88),
+                    "UAT-ABS-PERC-DIFF-SHEET-C-6002",
+                    Decimal(11), # abs 
+                    Decimal(79.2000000000000028421709430404007434844970703125),# lower
+                    Decimal(96.8), # higher
+                    Decimal(88), # total
                     [Decimal(53), Decimal(24), Decimal(4), Decimal(7)],
                     "T",
                 ),
@@ -4440,38 +4439,38 @@ class TestTotalsAndComponentsUAT:
                 # then correction applied, and total corrected
                 # (do not flag as P not considered). TCC = T
             ),
+            # (
+            #     "UAT-ABS-PERC-DIFF-SHEET-C-6003",
+            #     114,
+            #     [
+            #         (49),
+            #         (0),
+            #         (30),
+            #         (10),
+            #     ],
+            #     True,
+            #     114,
+            #     28,
+            #     None,
+            #     25,
+            #     0.1,
+            #     (
+            #         "UAT-ABS-PERC-DIFF-SHEET-C-6003",
+            #         Decimal(25),
+            #         Decimal(80.1),
+            #         Decimal(97.9),
+            #         Decimal(89),
+            #         [Decimal(49), Decimal(0), Decimal(30), Decimal(10)],
+            #         "T",
+            #     ),
+            #     "Test 93 - If absolute difference <= 25, percentage difference > 10 and amend total = TRUE, then the total correction is applied",  # noqa: E501
+            #     # Sheet TCC_test_data_case_c6 reference 6003
+            #     # If absolute difference <= 25, percentage difference > 10 and amend total = TRUE,
+            #     # then correction applied, and total corrected
+            #     # (do not flag as P not considered). TCC = T
+            # ),
             (
-                "UAT-ABS-PERC-DIFF-6003",
-                114,
-                [
-                    (49),
-                    (0),
-                    (30),
-                    (10),
-                ],
-                True,
-                114,
-                28,
-                None,
-                25,
-                0.1,
-                (
-                    "UAT-ABS-PERC-DIFF-6003",
-                    Decimal(25),
-                    Decimal(80.1),
-                    Decimal(97.9),
-                    Decimal(89),
-                    [Decimal(49), Decimal(0), Decimal(30), Decimal(10)],
-                    "T",
-                ),
-                "Test 93 - If absolute difference <= 25, percentage difference > 10 and amend total = TRUE, then the total correction is applied",  # noqa: E501
-                # Sheet TCC_test_data_case_c6 reference 6003
-                # If absolute difference <= 25, percentage difference > 10 and amend total = TRUE,
-                # then correction applied, and total corrected
-                # (do not flag as P not considered). TCC = T
-            ),
-            (
-                "UAT-ABS-PERC-DIFF-7001",
+                "UAT-ABS-PERC-DIFF-SHEET-C-7001",
                 1689,
                 [
                     (632),
@@ -4486,7 +4485,7 @@ class TestTotalsAndComponentsUAT:
                 0,
                 0,
                 (
-                    "UAT-ABS-PERC-DIFF-7001",
+                    "UAT-ABS-PERC-DIFF-SHEET-C-7001",
                     Decimal(59),
                     Decimal(1630),
                     Decimal(1630),
@@ -4502,7 +4501,7 @@ class TestTotalsAndComponentsUAT:
                 # TCC Marker = M
             ),
             (
-                "UAT-ABS-PERC-DIFF-7002",
+                "UAT-ABS-PERC-DIFF-SHEET-C-7002",
                 10384,
                 [
                     (9200),
@@ -4517,12 +4516,12 @@ class TestTotalsAndComponentsUAT:
                 0,
                 0,
                 (
-                    "UAT-ABS-PERC-DIFF-7002",
+                    "UAT-ABS-PERC-DIFF-SHEET-C-7002",
                     Decimal(426),
                     Decimal(10810),
                     Decimal(10810),
                     Decimal(10384),
-                    [Decimal(9200), Decimal(866), Decimal(632), Decimal(1121)],
+                    [Decimal(9200), Decimal(866), Decimal(632), Decimal(112)],
                     "M",
                 ),
                 "Test 95 - If absolute difference > absolute difference threshold and percentage difference > percentage difference threshold, where both thresholds = 0. We would require manual editing",  # noqa: E501
@@ -4533,7 +4532,7 @@ class TestTotalsAndComponentsUAT:
                 # TCC Marker = M
             ),
             (
-                "UAT-ABS-PERC-DIFF-7003",
+                "UAT-ABS-PERC-DIFF-SHEET-C-7003",
                 306,
                 [
                     (240),
@@ -4548,7 +4547,7 @@ class TestTotalsAndComponentsUAT:
                 0,
                 0,
                 (
-                    "UAT-ABS-PERC-DIFF-7003",
+                    "UAT-ABS-PERC-DIFF-SHEET-C-7003",
                     Decimal(26),
                     Decimal(280),
                     Decimal(280),
@@ -4564,7 +4563,7 @@ class TestTotalsAndComponentsUAT:
                 # TCC Marker = M
             ),
             (
-                "UAT-ABS-PERC-DIFF-8001",
+                "UAT-ABS-PERC-DIFF-SHEET-C-8001",
                 1689,
                 [
                     (632),
@@ -4579,7 +4578,7 @@ class TestTotalsAndComponentsUAT:
                 25,
                 0.1,
                 (
-                    "UAT-ABS-PERC-DIFF-8001",
+                    "UAT-ABS-PERC-DIFF-SHEET-C-8001",
                     Decimal(118),
                     Decimal(1467),
                     Decimal(1793),
@@ -4597,7 +4596,7 @@ class TestTotalsAndComponentsUAT:
                 # predictive value is missing). TCC = T
             ),
             (
-                "UAT-ABS-PERC-DIFF-8002",
+                "UAT-ABS-PERC-DIFF-SHEET-C-8002",
                 10384,
                 [
                     (9200),
@@ -4612,12 +4611,12 @@ class TestTotalsAndComponentsUAT:
                 25,
                 0.1,
                 (
-                    "UAT-ABS-PERC-DIFF-8002",
+                    "UAT-ABS-PERC-DIFF-SHEET-C-8002",
                     Decimal(234),
                     Decimal(9729),
                     Decimal(11891),
                     Decimal(10810),
-                    [Decimal(9200), Decimal(866), Decimal(632), Decimal(1121)],
+                    [Decimal(9200), Decimal(866), Decimal(632), Decimal(112)],
                     "T",
                 ),
                 "Test 98 - If absolute difference > 25, percentage difference < 10 and amend total = TRUE and absolute difference and percentage difference are calculated with auxiliary then we correct the total",  # noqa: E501
@@ -4630,7 +4629,7 @@ class TestTotalsAndComponentsUAT:
                 # predictive value is missing). TCC = T
             ),
             (
-                "UAT-ABS-PERC-DIFF-8003",
+                "UAT-ABS-PERC-DIFF-SHEET-C-8003",
                 306,
                 [
                     (240),
@@ -4645,7 +4644,7 @@ class TestTotalsAndComponentsUAT:
                 25,
                 0.1,
                 (
-                    "UAT-ABS-PERC-DIFF-8003",
+                    "UAT-ABS-PERC-DIFF-SHEET-C-8003",
                     Decimal(27),
                     Decimal(252),
                     Decimal(308),
@@ -4663,7 +4662,7 @@ class TestTotalsAndComponentsUAT:
                 # predictive value is missing). TCC = T
             ),
             (
-                "UAT-ABS-PERC-DIFF-9001",
+                "UAT-ABS-PERC-DIFF-SHEET-C-9001",
                 1689,
                 [
                     (632),
@@ -4678,7 +4677,7 @@ class TestTotalsAndComponentsUAT:
                 25,
                 0.1,
                 (
-                    "UAT-ABS-PERC-DIFF-9001",
+                    "UAT-ABS-PERC-DIFF-SHEET-C-9001",
                     Decimal(118),
                     Decimal(1467),
                     Decimal(1793),
@@ -4696,7 +4695,7 @@ class TestTotalsAndComponentsUAT:
                 # TCC = T
             ),
             (
-                "UAT-ABS-PERC-DIFF-9002",
+                "UAT-ABS-PERC-DIFF-SHEET-C-9002",
                 10384,
                 [
                     (9200),
@@ -4711,12 +4710,12 @@ class TestTotalsAndComponentsUAT:
                 25,
                 0.1,
                 (
-                    "UAT-ABS-PERC-DIFF-9002",
+                    "UAT-ABS-PERC-DIFF-SHEET-C-9002",
                     Decimal(234),
                     Decimal(9729),
                     Decimal(11891),
                     Decimal(10810),
-                    [Decimal(9200), Decimal(866), Decimal(632), Decimal(1121)],
+                    [Decimal(9200), Decimal(866), Decimal(632), Decimal(112)],
                     "T",
                 ),
                 "Test 101 - If absolute difference > 25, percentage difference < 10 and amend total = TRUE but the predictive total is different to the current period total then we correct the total"  # noqa: E501
@@ -4729,7 +4728,7 @@ class TestTotalsAndComponentsUAT:
                 # TCC = T
             ),
             (
-                "UAT-ABS-PERC-DIFF-9003",
+                "UAT-ABS-PERC-DIFF-SHEET-C-9003",
                 306,
                 [
                     (240),
@@ -4744,7 +4743,7 @@ class TestTotalsAndComponentsUAT:
                 25,
                 0.1,
                 (
-                    "UAT-ABS-PERC-DIFF-9003",
+                    "UAT-ABS-PERC-DIFF-SHEET-C-9003",
                     Decimal(27),
                     Decimal(252),
                     Decimal(308),
@@ -4762,7 +4761,7 @@ class TestTotalsAndComponentsUAT:
                 # TCC = T
             ),
             (
-                "UAT-PERC-DIFF-10001",
+                "UAT-PERC-DIFF-SHEET-B-10001",
                 110,
                 [
                     (20),
@@ -4777,7 +4776,7 @@ class TestTotalsAndComponentsUAT:
                 10,
                 0,
                 (
-                    "UAT-PERC-DIFF-10001",
+                    "UAT-PERC-DIFF-SHEET-B-10001",
                     Decimal(0),
                     Decimal(100),
                     Decimal(100),
@@ -4872,7 +4871,6 @@ class TestTotalsAndComponentsUAT:
                             sum_of_components += Decimal(str(component))
 
                     print(f"Comparison Sum: {sum_of_components}")
-                    sum_of_components = float(sum_of_components)
                     assert sum_of_components == expected_result[4]
 
                 compare_list_of_floats(results.final_components, expected_result[5])

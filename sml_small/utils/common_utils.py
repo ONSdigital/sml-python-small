@@ -5,7 +5,8 @@ For Copyright information, please see LICENCE.
 """
 from decimal import Decimal
 import logging.config
-from math import isnan
+from math import isnan, nan
+import math
 from os import path
 from typing import List, Tuple, Union, Dict
 
@@ -102,7 +103,6 @@ def convert_input_to_decimal(
     :rtype: Dict[str, Decimal]
     """
     try:
-
         if len(keys) != len(args):
             raise ValueError("Number of keys needs to match the number of arguments") 
 
@@ -119,15 +119,27 @@ def convert_input_to_decimal(
                 for i in range(len(arg)):
                     if type(arg[i]) == Decimal:
                         arg[i] = arg[i]
+                    
+                    elif arg[i] == None:
+                        decimal_values[key] = None
+
+                    elif math.isnan(arg[i]):
+                        decimal_values[key] = Decimal(str(arg))
+                        
                     else:
                         arg[i] = Decimal(str(arg[i]))
-                decimal_values[key] = arg
+                        decimal_values[key] = arg
 
-            elif arg == None or arg == "NaN":
+            elif arg == None:
                 decimal_values[key] = None
 
+            elif math.isnan(arg):
+                decimal_values[key] = Decimal(str(arg))
+                
             else:
                 decimal_values[key] = Decimal(str(arg))
+            # print(Decimal(str(arg)))
+        print('decimal_values', decimal_values)
 
         return decimal_values
     except Exception as error:
