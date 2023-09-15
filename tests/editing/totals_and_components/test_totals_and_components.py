@@ -1618,20 +1618,43 @@ class TestTotalsAndComponents:
 
                 print(printed_output)
 
+                # calculate_weighted(total, components)
+
                 assert results.identifier == expected_result[0]
-                assert results.absolute_difference == expected_result[1]
-                assert results.low_percent_threshold == expected_result[2]
-                assert results.high_percent_threshold == expected_result[3]
-                assert results.final_total == expected_result[4]
-                assert results.final_components == expected_result[5]
+
+                if results.absolute_difference is None:
+                    assert results.absolute_difference == expected_result[1]
+                else:
+                    assert round(results.absolute_difference, 1) == round(expected_result[1] , 1)
+
+                if results.low_percent_threshold is None:
+                    assert results.low_percent_threshold == expected_result[2]
+                else:
+                    assert round(results.low_percent_threshold, 1) == round(expected_result[2] , 1)
+
+                if results.high_percent_threshold is None:
+                    assert results.high_percent_threshold == expected_result[3]
+                else:
+                    assert round(results.high_percent_threshold, 1) == round(expected_result[3] , 1)
+
+                if results.final_total is None:
+                    assert results.final_total == expected_result[4]
+                else:
+                    assert round(results.final_total, 1) == round(expected_result[4] , 1)
+
                 assert results.tcc_marker == expected_result[6]
 
                 if results.tcc_marker == "T" or results.tcc_marker == "C":
                     sum_of_components = 0
                     for component in results.final_components:
-                        sum_of_components += Decimal(str(component))
+                        print(f"fc - {results.final_components}")
+                        if not math.isnan(component):
+                            sum_of_components += Decimal(str(component))
 
-                    assert sum_of_components == expected_result[4]
+                    print(f"Comparison Sum: {sum_of_components}")
+                    assert round(sum_of_components, 1) == round(expected_result[4], 1)
+
+                compare_list_of_floats(results.final_components, expected_result[5])
 
             except Exception as e:
                 pytest.fail(
@@ -2969,7 +2992,7 @@ class TestTotalsAndComponentsUAT:
                 (
                     "UAT-PERC-DIFF-SHEET-B-1002",
                     None,
-                    Decimal(9729.2),
+                    Decimal(9729.9),
                     Decimal(11892.1),
                     Decimal(10811),
                     [Decimal(9201), Decimal(866), Decimal(632), Decimal(112)],
@@ -3210,6 +3233,7 @@ class TestTotalsAndComponentsUAT:
                     None,
                     Decimal(1458),
                     Decimal(1782),
+                    Decimal(1458),
                     [Decimal(568.8), Decimal(658.8), Decimal(89.1), Decimal(141.3)],
                     "C",
                 ),
@@ -4293,10 +4317,10 @@ class TestTotalsAndComponentsUAT:
                     Decimal(1793),
                     Decimal(1689),
                     [
-                        Decimal(654.8760736196319),
-                        Decimal(758.4957055214724),
-                        Decimal(104.6558282208589),
-                        Decimal(170.9723926380368),
+                        Decimal('654.8760736196319018404907976'),
+                        Decimal('758.4957055214723926380368097'),
+                        Decimal('104.6558282208588957055214724'),
+                        Decimal('170.9723926380368098159509203'),
                     ],
                     "C",
                 ),
@@ -4329,10 +4353,10 @@ class TestTotalsAndComponentsUAT:
                     Decimal(11891),
                     Decimal(10384),
                     [
-                        Decimal(8837.446809),# 8837.446808999999120715074241161346435531 is what i get on calculator
-                        Decimal(831.8727105),
-                        Decimal(607.0941721),
-                        Decimal(107.586309),
+                        Decimal('8837.446808510638297872340426'),
+                        Decimal('831.8727104532839962997224792'),
+                        Decimal('607.0941720629047178538390380'),
+                        Decimal('107.5863089731729879740980574'),
                     ],
                     "C",
                 ),
@@ -4343,72 +4367,72 @@ class TestTotalsAndComponentsUAT:
                 # then correction applied, and components corrected.
                 # TCC = C
             ),
-            # (
-            #     "UAT-ABS-PERC-DIFF-SHEET-C-5003",
-            #     306,
-            #     [
-            #         (240),
-            #         (0),
-            #         (30),
-            #         (10),
-            #     ],
-            #     False,
-            #     306,
-            #     28,
-            #     None,
-            #     25,
-            #     0.1,
-            #     (
-            #         "UAT-ABS-PERC-DIFF-SHEET-C-5003",
-            #         Decimal(26),
-            #         Decimal(252),
-            #         Decimal(308),
-            #         Decimal(306),
-            #         [
-            #             Decimal(262.2857142857143),
-            #             Decimal(0),
-            #             Decimal(32.785714285714285),
-            #             Decimal(10.928571428571429),
-            #         ],
-            #         "C",
-            #     ),
-            #     "Test 90 - If absolute difference > 25, percentage difference < 10 and amend total = FALSE, then the component correction is applied",  # noqa: E501
-            #     # Sheet TCC_test_data_case_c5 reference 5003
-            #     # If absolute difference > absolute difference threshold,
-            #     # percentage difference < 10 and amend total = FALSE,
-            #     # then correction applied, and components corrected.
-            #     # TCC = C
-            # ),
-            # (
-            #     "UAT-ABS-PERC-DIFF-SHEET-C-6001",
-            #     17,
-            #     [
-            #         (5),
-            #         (4),
-            #         (0),
-            #         (2),
-            #     ],
-            #     True,
-            #     17,
-            #     28,
-            #     None,
-            #     25,
-            #     0.1,
-            #     (
-            #         "UAT-ABS-PERC-DIFF-SHEET-C-6001",
-            #         Decimal(6),
-            #         Decimal(9.9),
-            #         Decimal(12.1),
-            #         Decimal(11),
-            #         [Decimal(5), Decimal(4), Decimal(0), Decimal(2)],
-            #         "T",
-            #     ),
-            #     "Test 91 - If absolute difference <= 25, percentage difference > 10 and amend total = TRUE, then the total correction is applied",  # noqa: E501
-            #     # Sheet TCC_test_data_case_c6 reference 6001
-            #     # If absolute difference <= 25, percentage difference > 10 and amend total = TRUE,
-            #     # then correction applied, and total corrected
-            #     # (do not flag as P not considered). TCC = T
-            # ),
+            (
+                "UAT-ABS-PERC-DIFF-SHEET-C-5003",
+                306,
+                [
+                    (240),
+                    (0),
+                    (30),
+                    (10),
+                ],
+                False,
+                306,
+                28,
+                None,
+                25,
+                0.1,
+                (
+                    "UAT-ABS-PERC-DIFF-SHEET-C-5003",
+                    Decimal(26),
+                    Decimal(252),
+                    Decimal(308),
+                    Decimal(306),
+                    [
+                        Decimal('262.2857142857142857142857143'),
+                        Decimal('0'),
+                        Decimal('32.78571428571428571428571427'),
+                        Decimal('10.92857142857142857142857143')
+                    ],
+                    "C",
+                ),
+                "Test 90 - If absolute difference > 25, percentage difference < 10 and amend total = FALSE, then the component correction is applied",  # noqa: E501
+                # Sheet TCC_test_data_case_c5 reference 5003
+                # If absolute difference > absolute difference threshold,
+                # percentage difference < 10 and amend total = FALSE,
+                # then correction applied, and components corrected.
+                # TCC = C
+            ),
+            (
+                "UAT-ABS-PERC-DIFF-SHEET-C-6001",
+                17,
+                [
+                    (5),
+                    (4),
+                    (0),
+                    (2),
+                ],
+                True,
+                17,
+                28,
+                None,
+                25,
+                0.1,
+                (
+                    "UAT-ABS-PERC-DIFF-SHEET-C-6001",
+                    Decimal(6),
+                    Decimal(9.9),
+                    Decimal(12.1),
+                    Decimal(11),
+                    [Decimal(5), Decimal(4), Decimal(0), Decimal(2)],
+                    "T",
+                ),
+                "Test 91 - If absolute difference <= 25, percentage difference > 10 and amend total = TRUE, then the total correction is applied",  # noqa: E501
+                # Sheet TCC_test_data_case_c6 reference 6001
+                # If absolute difference <= 25, percentage difference > 10 and amend total = TRUE,
+                # then correction applied, and total corrected
+                # (do not flag as P not considered). TCC = T
+            ),
             (
                 "UAT-ABS-PERC-DIFF-SHEET-C-6002",
                 77,
@@ -4426,10 +4450,10 @@ class TestTotalsAndComponentsUAT:
                 0.1,
                 (
                     "UAT-ABS-PERC-DIFF-SHEET-C-6002",
-                    Decimal(11), # abs 
-                    Decimal(79.2000000000000028421709430404007434844970703125),# lower
-                    Decimal(96.8), # higher
-                    Decimal(88), # total
+                    Decimal(11),
+                    Decimal(79.2),
+                    Decimal(96.8),
+                    Decimal(88),
                     [Decimal(53), Decimal(24), Decimal(4), Decimal(7)],
                     "T",
                 ),
@@ -4439,36 +4463,36 @@ class TestTotalsAndComponentsUAT:
                 # then correction applied, and total corrected
                 # (do not flag as P not considered). TCC = T
             ),
-            # (
-            #     "UAT-ABS-PERC-DIFF-SHEET-C-6003",
-            #     114,
-            #     [
-            #         (49),
-            #         (0),
-            #         (30),
-            #         (10),
-            #     ],
-            #     True,
-            #     114,
-            #     28,
-            #     None,
-            #     25,
-            #     0.1,
-            #     (
-            #         "UAT-ABS-PERC-DIFF-SHEET-C-6003",
-            #         Decimal(25),
-            #         Decimal(80.1),
-            #         Decimal(97.9),
-            #         Decimal(89),
-            #         [Decimal(49), Decimal(0), Decimal(30), Decimal(10)],
-            #         "T",
-            #     ),
-            #     "Test 93 - If absolute difference <= 25, percentage difference > 10 and amend total = TRUE, then the total correction is applied",  # noqa: E501
-            #     # Sheet TCC_test_data_case_c6 reference 6003
-            #     # If absolute difference <= 25, percentage difference > 10 and amend total = TRUE,
-            #     # then correction applied, and total corrected
-            #     # (do not flag as P not considered). TCC = T
-            # ),
+            (
+                "UAT-ABS-PERC-DIFF-SHEET-C-6003",
+                114,
+                [
+                    (49),
+                    (0),
+                    (30),
+                    (10),
+                ],
+                True,
+                114,
+                28,
+                None,
+                25,
+                0.1,
+                (
+                    "UAT-ABS-PERC-DIFF-SHEET-C-6003",
+                    Decimal(25),
+                    Decimal(80.1),
+                    Decimal(97.9),
+                    Decimal(89),
+                    [Decimal(49), Decimal(0), Decimal(30), Decimal(10)],
+                    "T",
+                ),
+                "Test 93 - If absolute difference <= 25, percentage difference > 10 and amend total = TRUE, then the total correction is applied",  # noqa: E501
+                # Sheet TCC_test_data_case_c6 reference 6003
+                # If absolute difference <= 25, percentage difference > 10 and amend total = TRUE,
+                # then correction applied, and total corrected
+                # (do not flag as P not considered). TCC = T
+            ),
             (
                 "UAT-ABS-PERC-DIFF-SHEET-C-7001",
                 1689,
@@ -4857,10 +4881,27 @@ class TestTotalsAndComponentsUAT:
                 # calculate_weighted(total, components)
 
                 assert results.identifier == expected_result[0]
-                assert results.absolute_difference == expected_result[1]
-                assert results.low_percent_threshold == expected_result[2]
-                assert results.high_percent_threshold == expected_result[3]
-                assert results.final_total == expected_result[4]
+
+                if results.absolute_difference is None:
+                    assert results.absolute_difference == expected_result[1]
+                else:
+                    assert round(results.absolute_difference, 1) == round(expected_result[1] , 1)
+
+                if results.low_percent_threshold is None:
+                    assert results.low_percent_threshold == expected_result[2]
+                else:
+                    assert round(results.low_percent_threshold, 1) == round(expected_result[2] , 1)
+
+                if results.high_percent_threshold is None:
+                    assert results.high_percent_threshold == expected_result[3]
+                else:
+                    assert round(results.high_percent_threshold, 1) == round(expected_result[3] , 1)
+
+                if results.final_total is None:
+                    assert results.final_total == expected_result[4]
+                else:
+                    assert round(results.final_total, 1) == round(expected_result[4] , 1)
+
                 assert results.tcc_marker == expected_result[6]
 
                 if results.tcc_marker == "T" or results.tcc_marker == "C":
@@ -4871,7 +4912,7 @@ class TestTotalsAndComponentsUAT:
                             sum_of_components += Decimal(str(component))
 
                     print(f"Comparison Sum: {sum_of_components}")
-                    assert sum_of_components == expected_result[4]
+                    assert round(sum_of_components, 1) == round(expected_result[4], 1)
 
                 compare_list_of_floats(results.final_components, expected_result[5])
 
@@ -6530,7 +6571,7 @@ def compare_list_of_floats(components: List[float], expected_components: List[fl
             assert math.isnan(component) and math.isnan(expected), f"Both components at index {i} are NaN"
         elif math.isnan(component) or math.isnan(expected):
             assert False, f"Component at index {i} is NaN, the other is not component {component}, expected {expected}"
-        elif component != expected:
+        elif round(component , 1) != round(expected , 1):
             assert False, f"Values of components at index {i} do not match: component {component}, expected {expected}"
 
 

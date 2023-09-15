@@ -123,8 +123,8 @@ def convert_input_to_decimal(
                     elif arg[i] == None:
                         decimal_values[key] = None
 
-                    elif math.isnan(arg[i]):
-                        decimal_values[key] = Decimal(str(arg))
+                    # elif math.isnan(arg[i]):
+                    #     decimal_values[key] = nan
                         
                     else:
                         arg[i] = Decimal(str(arg[i]))
@@ -133,8 +133,8 @@ def convert_input_to_decimal(
             elif arg == None:
                 decimal_values[key] = None
 
-            elif math.isnan(arg):
-                decimal_values[key] = Decimal(str(arg))
+            # elif math.isnan(arg):
+            #     decimal_values[key] = nan
                 
             else:
                 decimal_values[key] = Decimal(str(arg))
