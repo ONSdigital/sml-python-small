@@ -123,7 +123,7 @@ def convert_input_to_decimal(
                         arg[i] = Decimal(str(arg[i]))
                 decimal_values[key] = arg
 
-            elif arg == None:
+            elif arg == None or arg == "NaN":
                 decimal_values[key] = None
 
             else:
