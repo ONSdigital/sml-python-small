@@ -5,7 +5,7 @@ For Copyright information, please see LICENCE.
 """
 import pandas as pd
 # We import the wrapper function from the pandas_wrapper
-from pandas_wrapper import wrapper
+from sml_small.utils.pandas_wrapper import wrapper
 
 
 # Function below is used to read a CSV file from the given
