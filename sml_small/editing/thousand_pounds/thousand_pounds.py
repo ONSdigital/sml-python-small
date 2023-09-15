@@ -172,7 +172,16 @@ def thousand_pounds(
         Exception
     ) as error:  # Catch any underlying errors and return a coherent output dataset
         # Ensure we populate the output target variables with the same output values as originally given
-        target_variables_final = []
+        log_table(
+            "Thousand Pounds Error",
+            principal_identifier=principal_identifier,
+            principal_variable=principal_variable,
+            predictive=predictive,
+            auxiliary=auxiliary,
+            upper_limit=upper_limit,
+            lower_limit=lower_limit,
+            target_variables=target_variables,
+        )
         if principal_identifier is None:
             principal_identifier = "N/A"
         raise TPException(f"identifier: {principal_identifier}", error)
