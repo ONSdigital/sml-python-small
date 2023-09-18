@@ -6580,10 +6580,10 @@ def compare_results_to_expected_results(results: TotalsAndComponentsOutput, expe
                 
         assert round(sum_of_components, 7) == round(expected_result[4], 7)
 
-    compare_list_of_floats(results.final_components, expected_result[5])
+    compare_list_of_decimals(results.final_components, expected_result[5])
 
 
-def compare_list_of_floats(components: List[float], expected_components: List[float]):
+def compare_list_of_decimals(components: List[Decimal], expected_components: List[Decimal]):
     for i, (component, expected) in enumerate(zip(components, expected_components)):
         if math.isnan(component) and math.isnan(expected):
             assert math.isnan(component) and math.isnan(
@@ -6599,7 +6599,7 @@ def compare_list_of_floats(components: List[float], expected_components: List[fl
             ), f"Values of components at index {i} do not match: component {component}, expected {expected}"
 
 
-def calculate_weighted(total: float, components: List[float]):
+def calculate_weighted(total: Decimal, components: List[Decimal]):
     component_sum = Decimal(str(0))
     adjusted_component_sum = Decimal(str(0))
     adjusted_components = []
@@ -6617,10 +6617,10 @@ def calculate_weighted(total: float, components: List[float]):
         if not math.isnan(component):
             print(f"Adjusted Component {adjusted_components[i]}")
             # adjusted_component_sum += element
-            print(f"convert to float {float(adjusted_components[i])}")
+            print(f"convert to decimal {Decimal(adjusted_components[i])}")
 
     adjusted_component_sum = math.fsum(adjusted_components)
     print(adjusted_component_sum)
     print(f"adjusted_component_sum: {adjusted_component_sum}")
 
-    print(f"convert to float {float(adjusted_component_sum)}")
+    print(f"convert to decimal {Decimal(adjusted_component_sum)}")
