@@ -116,19 +116,23 @@ def convert_input_to_decimal(
 
             elif type(arg) == list:
 
-                for i in range(len(arg)):
-                    if type(arg[i]) == Decimal:
-                        arg[i] = arg[i]
-                    
-                    elif arg[i] == None:
-                        decimal_values[key] = None
+                if arg == []:
+                   decimal_values[key] = arg  
 
-                    # elif math.isnan(arg[i]):
-                    #     decimal_values[key] = nan
+                else:
+                    for i in range(len(arg)):
+                        if type(arg[i]) == Decimal:
+                            arg[i] = arg[i]
                         
-                    else:
-                        arg[i] = Decimal(str(arg[i]))
-                        decimal_values[key] = arg
+                        elif arg[i] == None:
+                            decimal_values[key] = None
+
+                        # elif math.isnan(arg[i]):
+                        #     decimal_values[key] = nan
+                            
+                        else:
+                            arg[i] = Decimal(str(arg[i]))
+                            decimal_values[key] = arg
 
             elif arg == None:
                 decimal_values[key] = None
