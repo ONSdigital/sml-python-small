@@ -3,12 +3,10 @@ Common functionality that can be used by any SML method
 
 For Copyright information, please see LICENCE.
 """
-from decimal import Decimal
 import logging.config
-from math import isnan, nan
-import math
+from decimal import Decimal
 from os import path
-from typing import List, Tuple, Union, Dict
+from typing import Dict, List
 
 from sml_small.utils.error_utils import get_params_is_not_a_number_error
 
@@ -101,9 +99,9 @@ def convert_input_to_decimal(
     :raises ValueError: Error string raised in the event the keys do not
     have arguments or arguments do not have keys
     ...
-    :return: key names and their values returned as decimals.
+    :return: key names and their values returned as decimals if appropriate.
     :rtype: Dict[str, Decimal]
-    """    
+    """
     try:
         if len(keys) != len(args):
             raise ValueError("Number of keys needs to match the number of arguments")
@@ -126,14 +124,14 @@ def convert_input_to_decimal(
                         if type(arg[i]) == Decimal:
                             arg[i] = arg[i]
 
-                        elif arg[i] == None:
+                        elif arg[i] is None:
                             decimal_values[key] = None
 
                         else:
                             arg[i] = Decimal(str(arg[i]))
                             decimal_values[key] = arg
 
-            elif arg == None:
+            elif arg is None:
                 decimal_values[key] = None
 
             else:

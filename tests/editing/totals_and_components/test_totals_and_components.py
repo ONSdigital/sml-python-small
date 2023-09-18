@@ -5,33 +5,19 @@ from typing import List
 
 import pytest
 
-from sml_small.editing.totals_and_components.totals_and_components import (
-    PRECISION_MAX,
-    PRECISION_MIN,
-    ComponentPair,
-    TACException,
-    TccMarker,
-    TotalsAndComponentsOutput,
-    check_absolute_difference_threshold,
-    check_percentage_difference_threshold,
-    check_sum_components_predictive,
-    check_zero_errors,
-    correct_components,
-    correct_total,
-    determine_error_detection,
-    error_correction,
-    set_predictive_value,
-    sum_components,
-    totals_and_components,
-    validate_input,
-    convert_input_to_decimal,
-)
-from sml_small.utils.error_utils import (
-    get_mandatory_param_error,
-    get_one_of_params_mandatory_error,
-    get_param_outside_range_error,
-    get_params_is_not_a_number_error,
-)
+from sml_small.editing.totals_and_components.totals_and_components import (PRECISION_MAX, PRECISION_MIN, ComponentPair,
+                                                                           TACException, TccMarker,
+                                                                           TotalsAndComponentsOutput,
+                                                                           check_absolute_difference_threshold,
+                                                                           check_percentage_difference_threshold,
+                                                                           check_sum_components_predictive,
+                                                                           check_zero_errors, convert_input_to_decimal,
+                                                                           correct_components, correct_total,
+                                                                           determine_error_detection, error_correction,
+                                                                           set_predictive_value, sum_components,
+                                                                           totals_and_components, validate_input)
+from sml_small.utils.error_utils import (get_mandatory_param_error, get_one_of_params_mandatory_error,
+                                         get_param_outside_range_error, get_params_is_not_a_number_error)
 
 # ---- Constant Definitions ----
 EXCEPTION_FAIL_MESSAGE = (
@@ -6540,29 +6526,26 @@ class TestCorrectComponents:
                 )
             )
 
-def compare_results_to_expected_results(results: TotalsAndComponentsOutput, expected_result: tuple):
+
+def compare_results_to_expected_results(
+    results: TotalsAndComponentsOutput, expected_result: tuple
+):
     assert results.identifier == expected_result[0]
 
     if results.absolute_difference is None:
         assert results.absolute_difference == expected_result[1]
     else:
-        assert round(results.absolute_difference, 7) == round(
-            expected_result[1], 7
-        )
+        assert round(results.absolute_difference, 7) == round(expected_result[1], 7)
 
     if results.low_percent_threshold is None:
         assert results.low_percent_threshold == expected_result[2]
     else:
-        assert round(results.low_percent_threshold, 7) == round(
-            expected_result[2], 7
-        )
+        assert round(results.low_percent_threshold, 7) == round(expected_result[2], 7)
 
     if results.high_percent_threshold is None:
         assert results.high_percent_threshold == expected_result[3]
     else:
-        assert round(results.high_percent_threshold, 7) == round(
-            expected_result[3], 7
-        )
+        assert round(results.high_percent_threshold, 7) == round(expected_result[3], 7)
 
     if results.final_total is None:
         assert results.final_total == expected_result[4]
@@ -6577,13 +6560,15 @@ def compare_results_to_expected_results(results: TotalsAndComponentsOutput, expe
             print(f"fc - {results.final_components}")
             if not math.isnan(component):
                 sum_of_components += Decimal(str(component))
-                
+
         assert round(sum_of_components, 7) == round(expected_result[4], 7)
 
     compare_list_of_decimals(results.final_components, expected_result[5])
 
 
-def compare_list_of_decimals(components: List[Decimal], expected_components: List[Decimal]):
+def compare_list_of_decimals(
+    components: List[Decimal], expected_components: List[Decimal]
+):
     for i, (component, expected) in enumerate(zip(components, expected_components)):
         if math.isnan(component) and math.isnan(expected):
             assert math.isnan(component) and math.isnan(

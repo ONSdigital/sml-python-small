@@ -13,16 +13,9 @@ from enum import Enum
 from os import path
 from typing import List, Optional, Tuple, Union
 
-from sml_small.utils.common_utils import (
-    convert_input_to_decimal,
-    log_table,
-    validate_number,
-)
-from sml_small.utils.error_utils import (
-    get_mandatory_param_error,
-    get_one_of_params_mandatory_error,
-    get_param_outside_range_error,
-)
+from sml_small.utils.common_utils import convert_input_to_decimal, log_table, validate_number
+from sml_small.utils.error_utils import (get_mandatory_param_error, get_one_of_params_mandatory_error,
+                                         get_param_outside_range_error)
 
 # Pick up configuration for logging
 log_config_path = path.join(path.dirname(path.abspath(__file__)), "../../logging.conf")
@@ -492,18 +485,6 @@ def validate_input(
     :raises ValueError: ValueErrors are returned when required data is missing or in the
                         incorrect type/format.
     ...
-    :return: total is returned as a converted float
-    :rtype: float
-    :return: components are returned as a list of converted floats
-    :rtype: List[ComponentPair]
-    :return: predictive is returned as a converted float
-    :rtype: float | None
-    :return: auxiliary is returned as a converted float
-    :rtype: float | None
-    :return: absolute_difference_threshold is returned as a converted float
-    :rtype: float | None
-    :return: percentage_difference_threshold is returned as a converted float
-    :rtype: float | None
     :return: precision
     :rtype: int is returned as a converted integer
     """
@@ -956,17 +937,8 @@ def calculate_percent_thresholds(
         high_percent_threshold = abs(
             sum_of_components + (sum_of_components * percentage_threshold)
         )
-    print(
-        "this is where we are printing 1",
-        type(low_percent_threshold),
-        type(high_percent_threshold),
-    )
+
     output_list["low_percent_threshold"] = low_percent_threshold
     output_list["high_percent_threshold"] = high_percent_threshold
 
-    print(
-        "this is where we are printing 2",
-        type(low_percent_threshold),
-        type(high_percent_threshold),
-    )
     return low_percent_threshold, high_percent_threshold, output_list
