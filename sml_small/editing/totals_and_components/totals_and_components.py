@@ -13,9 +13,16 @@ from enum import Enum
 from os import path
 from typing import List, Optional, Tuple, Union
 
-from sml_small.utils.common_utils import convert_input_to_decimal, log_table, validate_number
-from sml_small.utils.error_utils import (get_mandatory_param_error, get_one_of_params_mandatory_error,
-                                         get_param_outside_range_error)
+from sml_small.utils.common_utils import (
+    convert_input_to_decimal,
+    log_table,
+    validate_number,
+)
+from sml_small.utils.error_utils import (
+    get_mandatory_param_error,
+    get_one_of_params_mandatory_error,
+    get_param_outside_range_error,
+)
 
 # Pick up configuration for logging
 log_config_path = path.join(path.dirname(path.abspath(__file__)), "../../logging.conf")
@@ -288,43 +295,40 @@ def totals_and_components(
             auxiliary,
             absolute_difference_threshold,
             percentage_difference_threshold,
-        ) 
-
-        keys = [
-            'total',
-            'components',
-            'predictive', 
-            'auxiliary',
-            'absolute_difference_threshold',
-            'percentage_difference_threshold'
-            ]
-
-        args= [
-            total,
-            components,
-            predictive, 
-            auxiliary,
-            absolute_difference_threshold,
-            percentage_difference_threshold
-        ]
-
-        decimal_values = convert_input_to_decimal(
-            keys,
-            args
         )
 
+        keys = [
+            "total",
+            "components",
+            "predictive",
+            "auxiliary",
+            "absolute_difference_threshold",
+            "percentage_difference_threshold",
+        ]
+
+        args = [
+            total,
+            components,
+            predictive,
+            auxiliary,
+            absolute_difference_threshold,
+            percentage_difference_threshold,
+        ]
+
+        decimal_values = convert_input_to_decimal(keys, args)
+
         input_parameters = (
-            decimal_values.get('total'),
-            initialize_components_list(decimal_values.get('components')),
-            decimal_values.get('predictive'),
-            decimal_values.get('auxiliary'),
-            decimal_values.get('absolute_difference_threshold'),
-            decimal_values.get('percentage_difference_threshold'),
-            precision)
-        
+            decimal_values.get("total"),
+            initialize_components_list(decimal_values.get("components")),
+            decimal_values.get("predictive"),
+            decimal_values.get("auxiliary"),
+            decimal_values.get("absolute_difference_threshold"),
+            decimal_values.get("percentage_difference_threshold"),
+            precision,
+        )
 
         getcontext().prec = input_parameters[InputParameters.PRECISION.value]
-        
+
         #  Set the predictive as either the current value, total or auxiliary
         # depending on what values exist from the data input.
         (predictive, output_list["tcc_marker"]) = set_predictive_value(
@@ -634,7 +638,9 @@ def check_zero_errors(predictive: Decimal, components_sum: Decimal) -> TccMarker
     return tcc_marker
 
 
-def check_sum_components_predictive(predictive: Decimal, components_sum: Decimal) -> Decimal:
+def check_sum_components_predictive(
+    predictive: Decimal, components_sum: Decimal
+) -> Decimal:
     """
     Calculates the absolute difference between the predictive value and the sum of the
     components and returns that value
@@ -950,9 +956,17 @@ def calculate_percent_thresholds(
         high_percent_threshold = abs(
             sum_of_components + (sum_of_components * percentage_threshold)
         )
-    print('this is where we are printing 1', type(low_percent_threshold), type(high_percent_threshold))
+    print(
+        "this is where we are printing 1",
+        type(low_percent_threshold),
+        type(high_percent_threshold),
+    )
     output_list["low_percent_threshold"] = low_percent_threshold
     output_list["high_percent_threshold"] = high_percent_threshold
 
-    print('this is where we are printing 2', type(low_percent_threshold), type(high_percent_threshold))
+    print(
+        "this is where we are printing 2",
+        type(low_percent_threshold),
+        type(high_percent_threshold),
+    )
     return low_percent_threshold, high_percent_threshold, output_list

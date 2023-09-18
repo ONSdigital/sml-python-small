@@ -5,18 +5,33 @@ from typing import List
 
 import pytest
 
-from sml_small.editing.totals_and_components.totals_and_components import (PRECISION_MAX, PRECISION_MIN, ComponentPair,
-                                                                           TACException, TccMarker,
-                                                                           check_absolute_difference_threshold,
-                                                                           check_percentage_difference_threshold,
-                                                                           check_sum_components_predictive,
-                                                                           check_zero_errors, correct_components,
-                                                                           correct_total, determine_error_detection,
-                                                                           error_correction, set_predictive_value,
-                                                                           sum_components, totals_and_components,
-                                                                           validate_input, convert_input_to_decimal)
-from sml_small.utils.error_utils import (get_mandatory_param_error, get_one_of_params_mandatory_error,
-                                         get_param_outside_range_error, get_params_is_not_a_number_error)
+from sml_small.editing.totals_and_components.totals_and_components import (
+    PRECISION_MAX,
+    PRECISION_MIN,
+    ComponentPair,
+    TACException,
+    TccMarker,
+    TotalsAndComponentsOutput,
+    check_absolute_difference_threshold,
+    check_percentage_difference_threshold,
+    check_sum_components_predictive,
+    check_zero_errors,
+    correct_components,
+    correct_total,
+    determine_error_detection,
+    error_correction,
+    set_predictive_value,
+    sum_components,
+    totals_and_components,
+    validate_input,
+    convert_input_to_decimal,
+)
+from sml_small.utils.error_utils import (
+    get_mandatory_param_error,
+    get_one_of_params_mandatory_error,
+    get_param_outside_range_error,
+    get_params_is_not_a_number_error,
+)
 
 # ---- Constant Definitions ----
 EXCEPTION_FAIL_MESSAGE = (
@@ -1618,43 +1633,7 @@ class TestTotalsAndComponents:
 
                 print(printed_output)
 
-                # calculate_weighted(total, components)
-
-                assert results.identifier == expected_result[0]
-
-                if results.absolute_difference is None:
-                    assert results.absolute_difference == expected_result[1]
-                else:
-                    assert round(results.absolute_difference, 7) == round(expected_result[1] , 7)
-
-                if results.low_percent_threshold is None:
-                    assert results.low_percent_threshold == expected_result[2]
-                else:
-                    assert round(results.low_percent_threshold, 7) == round(expected_result[2] , 7)
-
-                if results.high_percent_threshold is None:
-                    assert results.high_percent_threshold == expected_result[3]
-                else:
-                    assert round(results.high_percent_threshold, 7) == round(expected_result[3] , 7)
-
-                if results.final_total is None:
-                    assert results.final_total == expected_result[4]
-                else:
-                    assert round(results.final_total, 7) == round(expected_result[4] , 7)
-
-                assert results.tcc_marker == expected_result[6]
-
-                if results.tcc_marker == "T" or results.tcc_marker == "C":
-                    sum_of_components = 0
-                    for component in results.final_components:
-                        print(f"fc - {results.final_components}")
-                        if not math.isnan(component):
-                            sum_of_components += Decimal(str(component))
-
-                    print(f"Comparison Sum: {sum_of_components}")
-                    assert round(sum_of_components, 7) == round(expected_result[4], 7)
-
-                compare_list_of_floats(results.final_components, expected_result[5])
+                compare_results_to_expected_results(results, expected_result)
 
             except Exception as e:
                 pytest.fail(
@@ -2044,7 +2023,12 @@ class TestTotalsAndComponentsUAT:
                     None,
                     None,
                     Decimal(119),
-                    [Decimal(107.98148148148148), Decimal(0), Decimal(4.407407407407407), Decimal(6.611111111111111)],
+                    [
+                        Decimal(107.98148148148148),
+                        Decimal(0),
+                        Decimal(4.407407407407407),
+                        Decimal(6.611111111111111),
+                    ],
                     "C",
                 ),
                 "Test 12 - If absolute difference = 11 and amend total is false then we correct the components",
@@ -2190,11 +2174,16 @@ class TestTotalsAndComponentsUAT:
                 None,  # percentage_difference_threshold
                 (
                     "UAT-ABD-DIFF-SHEET-A-6002",  # identifier
-                    Decimal('6'),  # absolute_difference
+                    Decimal("6"),  # absolute_difference
                     None,  # low_percent_threshold
                     None,  # high_percent_threshold
-                    Decimal('10817'),  # final_total
-                    [Decimal('9206.10646563685'), Decimal('866.4806215891222'), Decimal('632.3507538618074'), Decimal('112.0621589122204')],
+                    Decimal("10817"),  # final_total
+                    [
+                        Decimal("9206.10646563685"),
+                        Decimal("866.4806215891222"),
+                        Decimal("632.3507538618074"),
+                        Decimal("112.0621589122204"),
+                    ],
                     "C",  # tcc_marker
                 ),
                 "Test 17 - If absolute difference < 11 and amend total is false then we correct the components",
@@ -2224,7 +2213,12 @@ class TestTotalsAndComponentsUAT:
                     None,
                     None,
                     Decimal(103),
-                    [Decimal(93.46296296296296), Decimal(0), Decimal(3.814814814814815), Decimal(5.722222222222222)],
+                    [
+                        Decimal(93.46296296296296),
+                        Decimal(0),
+                        Decimal(3.814814814814815),
+                        Decimal(5.722222222222222),
+                    ],
                     "C",
                 ),
                 "Test 18 - If absolute difference < 11 and amend total is false then we correct the components",
@@ -2249,7 +2243,12 @@ class TestTotalsAndComponentsUAT:
                     None,  # low_percent_threshold
                     None,  # high_percent_threshold
                     Decimal(9),  # final_total
-                    [Decimal(0), Decimal(0), Decimal(0), Decimal(0)],  # final_components
+                    [
+                        Decimal(0),
+                        Decimal(0),
+                        Decimal(0),
+                        Decimal(0),
+                    ],  # final_components
                     "S",  # tcc_marker
                 ),
                 "Test 19 - If absolute difference < 11 and amend total is true then we correct the components",
@@ -2299,7 +2298,12 @@ class TestTotalsAndComponentsUAT:
                     None,  # low_percent_threshold
                     None,  # high_percent_threshold
                     Decimal(11),  # final_total
-                    [Decimal(0), Decimal(0), Decimal(0), Decimal(0)],  # final_components
+                    [
+                        Decimal(0),
+                        Decimal(0),
+                        Decimal(0),
+                        Decimal(0),
+                    ],  # final_components
                     "S",  # tcc_marker
                 ),
                 "Test 21 - If absolute difference < 11 and amend total is true then we correct the components",
@@ -3440,14 +3444,14 @@ class TestTotalsAndComponentsUAT:
                 (
                     "UAT-PERC-DIFF-SHEET-B-6002",
                     None,
-                    Decimal('9729.9'),
-                    Decimal('11892.1'),
-                    Decimal('10817'),
+                    Decimal("9729.9"),
+                    Decimal("11892.1"),
+                    Decimal("10817"),
                     [
-                        Decimal('9206.10646563685'),
-                        Decimal('866.4806215891222'),
-                        Decimal('632.3507538618074'),
-                        Decimal('112.06215891221903'),
+                        Decimal("9206.10646563685"),
+                        Decimal("866.4806215891222"),
+                        Decimal("632.3507538618074"),
+                        Decimal("112.06215891221903"),
                     ],
                     "C",
                 ),
@@ -4318,10 +4322,10 @@ class TestTotalsAndComponentsUAT:
                     Decimal(1793),
                     Decimal(1689),
                     [
-                        Decimal('654.8760736196319018404907976'),
-                        Decimal('758.4957055214723926380368097'),
-                        Decimal('104.6558282208588957055214724'),
-                        Decimal('170.9723926380368098159509203'),
+                        Decimal("654.8760736196319018404907976"),
+                        Decimal("758.4957055214723926380368097"),
+                        Decimal("104.6558282208588957055214724"),
+                        Decimal("170.9723926380368098159509203"),
                     ],
                     "C",
                 ),
@@ -4354,10 +4358,10 @@ class TestTotalsAndComponentsUAT:
                     Decimal(11891),
                     Decimal(10384),
                     [
-                        Decimal('8837.446808510638297872340426'),
-                        Decimal('831.8727104532839962997224792'),
-                        Decimal('607.0941720629047178538390380'),
-                        Decimal('107.5863089731729879740980574'),
+                        Decimal("8837.446808510638297872340426"),
+                        Decimal("831.8727104532839962997224792"),
+                        Decimal("607.0941720629047178538390380"),
+                        Decimal("107.5863089731729879740980574"),
                     ],
                     "C",
                 ),
@@ -4390,10 +4394,10 @@ class TestTotalsAndComponentsUAT:
                     Decimal(308),
                     Decimal(306),
                     [
-                        Decimal('262.2857142857142857142857143'),
-                        Decimal('0'),
-                        Decimal('32.78571428571428571428571427'),
-                        Decimal('10.92857142857142857142857143')
+                        Decimal("262.2857142857142857142857143"),
+                        Decimal("0"),
+                        Decimal("32.78571428571428571428571427"),
+                        Decimal("10.92857142857142857142857143"),
                     ],
                     "C",
                 ),
@@ -4879,43 +4883,7 @@ class TestTotalsAndComponentsUAT:
 
                 print(printed_output)
 
-                # calculate_weighted(total, components)
-
-                assert results.identifier == expected_result[0]
-
-                if results.absolute_difference is None:
-                    assert results.absolute_difference == expected_result[1]
-                else:
-                    assert round(results.absolute_difference, 7) == round(expected_result[1] , 7)
-
-                if results.low_percent_threshold is None:
-                    assert results.low_percent_threshold == expected_result[2]
-                else:
-                    assert round(results.low_percent_threshold, 7) == round(expected_result[2] , 7)
-
-                if results.high_percent_threshold is None:
-                    assert results.high_percent_threshold == expected_result[3]
-                else:
-                    assert round(results.high_percent_threshold, 7) == round(expected_result[3] , 7)
-
-                if results.final_total is None:
-                    assert results.final_total == expected_result[4]
-                else:
-                    assert round(results.final_total, 7) == round(expected_result[4] , 7)
-
-                assert results.tcc_marker == expected_result[6]
-
-                if results.tcc_marker == "T" or results.tcc_marker == "C":
-                    sum_of_components = 0
-                    for component in results.final_components:
-                        print(f"fc - {results.final_components}")
-                        if not math.isnan(component):
-                            sum_of_components += Decimal(str(component))
-
-                    print(f"Comparison Sum: {sum_of_components}")
-                    assert round(sum_of_components, 7) == round(expected_result[4], 7)
-
-                compare_list_of_floats(results.final_components, expected_result[5])
+                compare_results_to_expected_results(results, expected_result)
 
             except Exception as e:
                 pytest.fail(
@@ -5410,7 +5378,8 @@ class TestValidateInput:
                 )
                 print(exc_info.value)
             assert (str(exc_info.value)) == str(expected_result)
-    
+
+
 class TestConvertToDecimal:
     @pytest.mark.parametrize(
         "identifier, total, components, amend_total, predictive, "
@@ -5464,10 +5433,10 @@ class TestConvertToDecimal:
                 (
                     Decimal(100),
                     [
-                    ComponentPair(original_value=Decimal(1), final_value=None),
-                    ComponentPair(original_value=Decimal(2), final_value=None),
-                    ComponentPair(original_value=Decimal(3), final_value=None),
-                    ComponentPair(original_value=Decimal(4), final_value=None),
+                        ComponentPair(original_value=Decimal(1), final_value=None),
+                        ComponentPair(original_value=Decimal(2), final_value=None),
+                        ComponentPair(original_value=Decimal(3), final_value=None),
+                        ComponentPair(original_value=Decimal(4), final_value=None),
                     ],
                     Decimal(100),
                     Decimal(104),
@@ -5892,7 +5861,7 @@ class TestConvertToDecimal:
                 300.0,
                 20,
                 "0.1",
-                (   
+                (
                     Decimal(100),
                     [
                         ComponentPair(original_value=Decimal(1), final_value=None),
@@ -6502,7 +6471,10 @@ class TestCorrectComponents:
                 100.0,
                 18,
                 100,
-                [Decimal(10),] * 10,
+                [
+                    Decimal(10),
+                ]
+                * 10,
                 "Test 1: Component = 90, " "predictive = 100",
             ),
             (
@@ -6524,7 +6496,10 @@ class TestCorrectComponents:
                 0,
                 1,
                 0,
-                [Decimal(0),] * 10,
+                [
+                    Decimal(0),
+                ]
+                * 10,
                 "Test 3: Component = 100, " "predictive = 0",
             ),
         ],
@@ -6565,15 +6540,63 @@ class TestCorrectComponents:
                 )
             )
 
+def compare_results_to_expected_results(results: TotalsAndComponentsOutput, expected_result: tuple):
+    assert results.identifier == expected_result[0]
+
+    if results.absolute_difference is None:
+        assert results.absolute_difference == expected_result[1]
+    else:
+        assert round(results.absolute_difference, 7) == round(
+            expected_result[1], 7
+        )
+
+    if results.low_percent_threshold is None:
+        assert results.low_percent_threshold == expected_result[2]
+    else:
+        assert round(results.low_percent_threshold, 7) == round(
+            expected_result[2], 7
+        )
+
+    if results.high_percent_threshold is None:
+        assert results.high_percent_threshold == expected_result[3]
+    else:
+        assert round(results.high_percent_threshold, 7) == round(
+            expected_result[3], 7
+        )
+
+    if results.final_total is None:
+        assert results.final_total == expected_result[4]
+    else:
+        assert round(results.final_total, 7) == round(expected_result[4], 7)
+
+    assert results.tcc_marker == expected_result[6]
+
+    if results.tcc_marker == "T" or results.tcc_marker == "C":
+        sum_of_components = 0
+        for component in results.final_components:
+            print(f"fc - {results.final_components}")
+            if not math.isnan(component):
+                sum_of_components += Decimal(str(component))
+                
+        assert round(sum_of_components, 7) == round(expected_result[4], 7)
+
+    compare_list_of_floats(results.final_components, expected_result[5])
+
 
 def compare_list_of_floats(components: List[float], expected_components: List[float]):
     for i, (component, expected) in enumerate(zip(components, expected_components)):
         if math.isnan(component) and math.isnan(expected):
-            assert math.isnan(component) and math.isnan(expected), f"Both components at index {i} are NaN"
+            assert math.isnan(component) and math.isnan(
+                expected
+            ), f"Both components at index {i} are NaN"
         elif math.isnan(component) or math.isnan(expected):
-            assert False, f"Component at index {i} is NaN, the other is not component {component}, expected {expected}"
-        elif round(component , 7) != round(expected , 7):
-            assert False, f"Values of components at index {i} do not match: component {component}, expected {expected}"
+            assert (
+                False
+            ), f"Component at index {i} is NaN, the other is not component {component}, expected {expected}"
+        elif round(component, 7) != round(expected, 7):
+            assert (
+                False
+            ), f"Values of components at index {i} do not match: component {component}, expected {expected}"
 
 
 def calculate_weighted(total: float, components: List[float]):
@@ -6587,7 +6610,9 @@ def calculate_weighted(total: float, components: List[float]):
     print(f"Component sum is: {component_sum}")
 
     for i, component in enumerate(components):
-        adjusted_components.append((Decimal(component) / component_sum) * Decimal(total))
+        adjusted_components.append(
+            (Decimal(component) / component_sum) * Decimal(total)
+        )
 
         if not math.isnan(component):
             print(f"Adjusted Component {adjusted_components[i]}")

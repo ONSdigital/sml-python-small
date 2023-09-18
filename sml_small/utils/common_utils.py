@@ -104,11 +104,11 @@ def convert_input_to_decimal(
     """
     try:
         if len(keys) != len(args):
-            raise ValueError("Number of keys needs to match the number of arguments") 
+            raise ValueError("Number of keys needs to match the number of arguments")
 
         decimal_values = {}
 
-        # Using zip to iterate through the keys and arguments simultaneously
+        # Using zip to iterate through the keys and arguments simultaneously
         for key, arg in zip(keys, args):
 
             if type(arg) == Decimal:
@@ -117,19 +117,16 @@ def convert_input_to_decimal(
             elif type(arg) == list:
 
                 if arg == []:
-                   decimal_values[key] = arg  
+                    decimal_values[key] = arg
 
                 else:
                     for i in range(len(arg)):
                         if type(arg[i]) == Decimal:
                             arg[i] = arg[i]
-                        
+
                         elif arg[i] == None:
                             decimal_values[key] = None
 
-                        # elif math.isnan(arg[i]):
-                        #     decimal_values[key] = nan
-                            
                         else:
                             arg[i] = Decimal(str(arg[i]))
                             decimal_values[key] = arg
@@ -137,13 +134,8 @@ def convert_input_to_decimal(
             elif arg == None:
                 decimal_values[key] = None
 
-            # elif math.isnan(arg):
-            #     decimal_values[key] = nan
-                
             else:
                 decimal_values[key] = Decimal(str(arg))
-            # print(Decimal(str(arg)))
-        print('decimal_values', decimal_values)
 
         return decimal_values
     except Exception as error:
