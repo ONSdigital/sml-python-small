@@ -91,17 +91,19 @@ def convert_input_to_decimal(
     args: List[float],
 ) -> Dict[str, Decimal]:
     """
-    convert_input_to_decimal _summary_
+    convert_input_to_decimal This function will take key value pairs within a dict
+    the values will then be converted to decimal if possible.
 
-    :param keys: _description_
+    :param keys: List of string names associated with the values in the list
     :type keys: List[str]
-    :param args: _description_
+    :param args: Values to be converted to decimal
     :type args: List[float]
-    :raises ValueError: _description_
-    :raises error: _description_
-    :return: _description_
+    :raises ValueError: Error string raised in the event the keys do not
+    have arguments or arguments do not have keys
+    ...
+    :return: key names and their values returned as decimals.
     :rtype: Dict[str, Decimal]
-    """
+    """    
     try:
         if len(keys) != len(args):
             raise ValueError("Number of keys needs to match the number of arguments")
