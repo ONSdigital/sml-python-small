@@ -1625,22 +1625,22 @@ class TestTotalsAndComponents:
                 if results.absolute_difference is None:
                     assert results.absolute_difference == expected_result[1]
                 else:
-                    assert round(results.absolute_difference, 1) == round(expected_result[1] , 1)
+                    assert round(results.absolute_difference, 8) == round(expected_result[1] , 8)
 
                 if results.low_percent_threshold is None:
                     assert results.low_percent_threshold == expected_result[2]
                 else:
-                    assert round(results.low_percent_threshold, 1) == round(expected_result[2] , 1)
+                    assert round(results.low_percent_threshold, 8) == round(expected_result[2] , 8)
 
                 if results.high_percent_threshold is None:
                     assert results.high_percent_threshold == expected_result[3]
                 else:
-                    assert round(results.high_percent_threshold, 1) == round(expected_result[3] , 1)
+                    assert round(results.high_percent_threshold, 8) == round(expected_result[3] , 8)
 
                 if results.final_total is None:
                     assert results.final_total == expected_result[4]
                 else:
-                    assert round(results.final_total, 1) == round(expected_result[4] , 1)
+                    assert round(results.final_total, 8) == round(expected_result[4] , 8)
 
                 assert results.tcc_marker == expected_result[6]
 
@@ -1652,7 +1652,7 @@ class TestTotalsAndComponents:
                             sum_of_components += Decimal(str(component))
 
                     print(f"Comparison Sum: {sum_of_components}")
-                    assert round(sum_of_components, 1) == round(expected_result[4], 1)
+                    assert round(sum_of_components, 8) == round(expected_result[4], 8)
 
                 compare_list_of_floats(results.final_components, expected_result[5])
 
@@ -4886,22 +4886,22 @@ class TestTotalsAndComponentsUAT:
                 if results.absolute_difference is None:
                     assert results.absolute_difference == expected_result[1]
                 else:
-                    assert round(results.absolute_difference, 1) == round(expected_result[1] , 1)
+                    assert round(results.absolute_difference, 8) == round(expected_result[1] , 8)
 
                 if results.low_percent_threshold is None:
                     assert results.low_percent_threshold == expected_result[2]
                 else:
-                    assert round(results.low_percent_threshold, 1) == round(expected_result[2] , 1)
+                    assert round(results.low_percent_threshold, 8) == round(expected_result[2] , 8)
 
                 if results.high_percent_threshold is None:
                     assert results.high_percent_threshold == expected_result[3]
                 else:
-                    assert round(results.high_percent_threshold, 1) == round(expected_result[3] , 1)
+                    assert round(results.high_percent_threshold, 8) == round(expected_result[3] , 8)
 
                 if results.final_total is None:
                     assert results.final_total == expected_result[4]
                 else:
-                    assert round(results.final_total, 1) == round(expected_result[4] , 1)
+                    assert round(results.final_total, 8) == round(expected_result[4] , 8)
 
                 assert results.tcc_marker == expected_result[6]
 
@@ -4913,7 +4913,7 @@ class TestTotalsAndComponentsUAT:
                             sum_of_components += Decimal(str(component))
 
                     print(f"Comparison Sum: {sum_of_components}")
-                    assert round(sum_of_components, 1) == round(expected_result[4], 1)
+                    assert round(sum_of_components, 8) == round(expected_result[4], 8)
 
                 compare_list_of_floats(results.final_components, expected_result[5])
 
@@ -6572,7 +6572,7 @@ def compare_list_of_floats(components: List[float], expected_components: List[fl
             assert math.isnan(component) and math.isnan(expected), f"Both components at index {i} are NaN"
         elif math.isnan(component) or math.isnan(expected):
             assert False, f"Component at index {i} is NaN, the other is not component {component}, expected {expected}"
-        elif round(component , 1) != round(expected , 1):
+        elif round(component , 8) != round(expected , 8):
             assert False, f"Values of components at index {i} do not match: component {component}, expected {expected}"
 
 
