@@ -19,6 +19,7 @@ isort = "^5.11.5"
 pytest = "^7.2.1"
 pylint = "*"
 black = "*"
+
 coverage = "^7.0"
 pytest-cov = "^4.0.0"
 pytest-dependency = "^0.5.1"
