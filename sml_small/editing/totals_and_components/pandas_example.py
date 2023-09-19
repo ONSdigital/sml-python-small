@@ -27,15 +27,15 @@ components = ["comp_1", "comp_2", "comp_3", "comp_4"]
 # column names
 test = wrapper(
     input_dataframe,
-    "reference",
-    "total",
-    components,
-    "amend_total",
-    "predictive",
-    "auxiliary",
-    "abs_threshold",
-    "perc_threshold",
-    amend_predictive=True,
+    'totals_and_components',
+    unique_identifier_column="reference",
+    total_column="total",
+    components_list_columns=components,
+    amend_total_column="amend_total",
+    predictive_column="predictive",
+    auxiliary_column="auxiliary",
+    absolute_threshold_column="abs_threshold",
+    percentage_threshold_column="perc_threshold",
 )
 
 # The resulting DataFrame that is stored in the variable test
