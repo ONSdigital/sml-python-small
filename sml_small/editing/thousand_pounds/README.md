@@ -34,7 +34,7 @@ q104|
 The method has the following interface:
 
 ```python
-def run(
+def thousand_pounds(
     principal_identifier: Optional[str],  # Unique identifer e.g. a question code/ruref/period/id/combination of all of thse
     principal_variable: float,  # Original response value provided for the 'current' period
     predictive: Optional[float],  # Value used for 'previous' response (Returned/Imputed/Constructed)
@@ -48,7 +48,7 @@ def run(
 e.g.
 
 ```python
-output = run(
+output = thousand_pounds(
     principal_identifier = "12340000001-201409-q100",
     principal_variable = 50000000,
     predictive = 60000,
