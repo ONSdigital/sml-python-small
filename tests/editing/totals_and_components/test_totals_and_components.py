@@ -5,18 +5,31 @@ from typing import List
 
 import pytest
 
-from sml_small.editing.totals_and_components.totals_and_components import (PRECISION_MAX, PRECISION_MIN, ComponentPair,
-                                                                           TACException, TccMarker,
-                                                                           check_absolute_difference_threshold,
-                                                                           check_percentage_difference_threshold,
-                                                                           check_sum_components_predictive,
-                                                                           check_zero_errors, correct_components,
-                                                                           correct_total, determine_error_detection,
-                                                                           error_correction, set_predictive_value,
-                                                                           sum_components, totals_and_components,
-                                                                           validate_input)
-from sml_small.utils.error_utils import (get_mandatory_param_error, get_one_of_params_mandatory_error,
-                                         get_param_outside_range_error, get_params_is_not_a_number_error)
+from sml_small.editing.totals_and_components.totals_and_components import (
+    PRECISION_MAX,
+    PRECISION_MIN,
+    ComponentPair,
+    TACException,
+    TccMarker,
+    check_absolute_difference_threshold,
+    check_percentage_difference_threshold,
+    check_sum_components_predictive,
+    check_zero_errors,
+    correct_components,
+    correct_total,
+    determine_error_detection,
+    error_correction,
+    set_predictive_value,
+    sum_components,
+    totals_and_components,
+    validate_input,
+)
+from sml_small.utils.error_utils import (
+    get_mandatory_param_error,
+    get_one_of_params_mandatory_error,
+    get_param_outside_range_error,
+    get_params_is_not_a_number_error,
+)
 
 # ---- Constant Definitions ----
 EXCEPTION_FAIL_MESSAGE = (
@@ -5026,7 +5039,12 @@ class TestTotalsAndComponentsUATFails:
                     None,
                     None,
                     1522,
-                    [(630.343381389253), (730.0812581913499), float("NaN"), (161.57536041939713)],
+                    [
+                        (630.343381389253),
+                        (730.0812581913499),
+                        float("NaN"),
+                        (161.57536041939713),
+                    ],
                     "C",
                 ),
                 "Test a14-14001 - If absolute difference < 11 and amend total is true then we correct the components",
@@ -5051,7 +5069,12 @@ class TestTotalsAndComponentsUATFails:
                     None,
                     None,
                     10705,
-                    [(9206.15992148799), (866.4856528647537), (632.3544256472568), float("NaN")],  # 632.3544256472568
+                    [
+                        (9206.15992148799),
+                        (866.4856528647537),
+                        (632.3544256472568),
+                        float("NaN"),
+                    ],  # 632.3544256472568
                     "C",
                 ),
                 "Test a14-14002 - If absolute difference < 11 and amend total is true then we correct the components",
@@ -5076,7 +5099,12 @@ class TestTotalsAndComponentsUATFails:
                     None,
                     None,
                     103,
-                    [(93.46296296296296), float("NaN"), (3.814814814814815), (5.722222222222222)],
+                    [
+                        (93.46296296296296),
+                        float("NaN"),
+                        (3.814814814814815),
+                        (5.722222222222222),
+                    ],
                     "C",
                 ),
                 "Test a14-14003 - If absolute difference < 11 and amend total is true then we correct the components",
@@ -5084,7 +5112,7 @@ class TestTotalsAndComponentsUATFails:
                 # If absolute difference <= absolute difference threshold and > 0 but components sum = 0 or missing,
                 # and amend total = TRUE, then do not amend total.
                 # TCC marker = S
-            )
+            ),
         ],
     )
     def test_totals_and_components(
@@ -6381,11 +6409,17 @@ class TestCorrectComponents:
 def compare_list_of_floats(components: List[float], expected_components: List[float]):
     for i, (component, expected) in enumerate(zip(components, expected_components)):
         if math.isnan(component) and math.isnan(expected):
-            assert math.isnan(component) and math.isnan(expected), f"Both components at index {i} are NaN"
+            assert math.isnan(component) and math.isnan(
+                expected
+            ), f"Both components at index {i} are NaN"
         elif math.isnan(component) or math.isnan(expected):
-            assert False, f"Component at index {i} is NaN, the other is not component {component}, expected {expected}"
+            assert (
+                False
+            ), f"Component at index {i} is NaN, the other is not component {component}, expected {expected}"
         elif component != expected:
-            assert False, f"Values of components at index {i} do not match: component {component}, expected {expected}"
+            assert (
+                False
+            ), f"Values of components at index {i} do not match: component {component}, expected {expected}"
 
 
 def calculate_weighted(total: float, components: List[float]):
@@ -6399,7 +6433,9 @@ def calculate_weighted(total: float, components: List[float]):
     print(f"Component sum is: {component_sum}")
 
     for i, component in enumerate(components):
-        adjusted_components.append((Decimal(component) / component_sum) * Decimal(total))
+        adjusted_components.append(
+            (Decimal(component) / component_sum) * Decimal(total)
+        )
 
         if not math.isnan(component):
             print(f"Adjusted Component {adjusted_components[i]}")
