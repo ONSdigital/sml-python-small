@@ -13,16 +13,9 @@ from enum import Enum
 from os import path
 from typing import List, Optional, Tuple, Union
 
-from sml_small.utils.common_utils import (
-    convert_input_to_decimal,
-    log_table,
-    validate_number,
-)
-from sml_small.utils.error_utils import (
-    get_mandatory_param_error,
-    get_one_of_params_mandatory_error,
-    get_param_outside_range_error,
-)
+from sml_small.utils.common_utils import convert_input_to_decimal, log_table, validate_number
+from sml_small.utils.error_utils import (get_mandatory_param_error, get_one_of_params_mandatory_error,
+                                         get_param_outside_range_error)
 
 # Pick up configuration for logging
 log_config_path = path.join(path.dirname(path.abspath(__file__)), "../../logging.conf")
@@ -440,7 +433,7 @@ def initialize_components_list(
     Takes the list of components values and constructs Component_List objects from them
 
     :param component_list: List of component values, the sum of which, should match the received total value.
-    :type component_list: list(decimal)
+    :type component_list: list(Decimal)
     ...
     :return: component_object_list List of components stored within ComponentsList objects
     :rtype: list(ComponentsList)
