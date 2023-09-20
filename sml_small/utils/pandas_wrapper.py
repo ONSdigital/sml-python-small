@@ -124,9 +124,9 @@ def run_thousand_pounds(
     pandas dataframe
     :rtype: dataframe
     """
-    target_variables_list = []
+    target_variables_list = {}
     for value in target_variables_columns:
-        target_variables_list.append(Target_variable(value, row[value]))
+        target_variables_list[value] = row[value]
 
     input_dict = {
         "principal_identifier": principal_identifier_column,
