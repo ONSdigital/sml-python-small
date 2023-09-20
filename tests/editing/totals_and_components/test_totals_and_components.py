@@ -1,3 +1,4 @@
+from cmath import nan
 import math
 import random
 from decimal import Decimal, getcontext
@@ -2259,7 +2260,7 @@ class TestTotalsAndComponentsUAT:
                     None,
                     None,
                     Decimal(4),
-                    [Decimal("NaN"), Decimal("NaN"), Decimal("NaN"), Decimal("NaN")],
+                    [nan, nan, nan, nan],
                     "S",
                 ),
                 "Test 20 - If absolute difference < 11 and amend total is true then we correct the components",
@@ -2349,7 +2350,7 @@ class TestTotalsAndComponentsUAT:
                     None,
                     None,
                     Decimal(4),
-                    [Decimal("NaN"), Decimal("NaN"), Decimal("NaN"), Decimal("NaN")],
+                    [nan, nan, nan, nan],
                     "S",
                 ),
                 "Test 23 - If absolute difference < 11 and amend total is false then we correct the components",
@@ -2863,7 +2864,7 @@ class TestTotalsAndComponentsUAT:
                     [
                         Decimal(630.343381389253),
                         Decimal(730.0812581913499),
-                        Decimal("NaN"),
+                        nan,
                         Decimal(161.57536041939713),
                     ],
                     "C",
@@ -2894,7 +2895,7 @@ class TestTotalsAndComponentsUAT:
                         Decimal(9206.15992148799),
                         Decimal(866.4856528647537),
                         Decimal(632.3544256472568),
-                        Decimal("NaN"),
+                        nan,
                     ],
                     "C",
                 ),
@@ -2922,7 +2923,7 @@ class TestTotalsAndComponentsUAT:
                     Decimal(103),
                     [
                         Decimal(93.46296296296296),
-                        Decimal("NaN"),
+                        nan,
                         Decimal(3.814814814814815),
                         Decimal(5.722222222222222),
                     ],

@@ -3,6 +3,7 @@ Common functionality that can be used by any SML method
 
 For Copyright information, please see LICENCE.
 """
+from cmath import nan
 import logging.config
 from decimal import Decimal
 from os import path
@@ -90,7 +91,7 @@ def convert_input_to_decimal(
 ) -> Dict[str, Decimal]:
     """
     convert_input_to_decimal This function will take key value pairs within a dict
-    the values will then be converted to decimal if possible.
+    the values will then be converted to decimal if appropriate.
 
     :param keys: List of string names associated with the values in the list
     :type keys: List[str]
@@ -124,15 +125,15 @@ def convert_input_to_decimal(
                         if type(arg[i]) == Decimal:
                             arg[i] = arg[i]
 
-                        elif arg[i] is None:
-                            decimal_values[key] = None
+                        elif arg[i] is None or arg[i] == nan:
+                            decimal_values[key] = arg
 
                         else:
                             arg[i] = Decimal(str(arg[i]))
                             decimal_values[key] = arg
 
-            elif arg is None:
-                decimal_values[key] = None
+            elif arg is None or arg is nan:
+                decimal_values[key] = arg
 
             else:
                 decimal_values[key] = Decimal(str(arg))
