@@ -39,6 +39,7 @@ class TpcMarker(Enum):
     NO_CORRECTION = "N"
     METHOD_PROCEED = "P"
 
+
 # --- Class Definitions  ---
 # Dataset holding all 'linked questions' with their initial response and final/adjusted values
 @dataclass(frozen=False)
@@ -293,12 +294,14 @@ def validate_input(
         auxiliary,
         principal_variable,
         lower_limit,
-        upper_limit,        target_variables,
-
+        upper_limit,
+        target_variables,
     )
 
 
-def check_zero_errors(predictive: Optional[float], auxiliary: Optional[float]) -> TpcMarker:
+def check_zero_errors(
+    predictive: Optional[float], auxiliary: Optional[float]
+) -> TpcMarker:
     """
     Checks predictive and auxiliary to ensure that there is not only a 0 value available,
     as this will cause a divide by 0 error
@@ -332,7 +335,11 @@ def determine_tpc_marker(do_adjustment: bool, tpc_marker: TpcMarker) -> str:
     if tpc_marker is TpcMarker.STOP:
         return tpc_marker.value
     else:
-        return TpcMarker.CORRECTION.value if do_adjustment else TpcMarker.NO_CORRECTION.value
+        return (
+            TpcMarker.CORRECTION.value
+            if do_adjustment
+            else TpcMarker.NO_CORRECTION.value
+        )
 
 
 def determine_predictive_value(

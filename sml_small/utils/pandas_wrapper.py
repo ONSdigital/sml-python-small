@@ -8,7 +8,7 @@ from typing import List, Optional
 
 import pandas as pd
 
-from sml_small.editing.thousand_pounds.thousand_pounds import Target_variable, thousand_pounds
+from sml_small.editing.thousand_pounds.thousand_pounds import thousand_pounds
 from sml_small.editing.totals_and_components.totals_and_components import totals_and_components
 
 

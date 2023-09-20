@@ -1,11 +1,10 @@
 import pytest
 
-from sml_small.editing.thousand_pounds.thousand_pounds import (Target_variable, Thousands_output, TPException,
-                                                               adjust_target_variables, adjust_value,
-                                                               calculate_error_ratio, determine_predictive_value,
-                                                               determine_tpc_marker, is_within_threshold,
-                                                               thousand_pounds, validate_input, create_target_variable_objects,
-                                                               TpcMarker)
+from sml_small.editing.thousand_pounds.thousand_pounds import (Target_variable, Thousands_output, TpcMarker,
+                                                               TPException, adjust_target_variables, adjust_value,
+                                                               calculate_error_ratio, create_target_variable_objects,
+                                                               determine_predictive_value, determine_tpc_marker,
+                                                               is_within_threshold, thousand_pounds, validate_input)
 from sml_small.utils.error_utils import (get_boundary_error, get_mandatory_param_error,
                                          get_one_of_params_mandatory_error, get_params_is_not_a_number_error)
 
@@ -116,10 +115,7 @@ class TestThousandPounds:
                 None,  # auxiliary
                 1350,
                 350,
-                {
-                    "q451": 500,
-                    "q452": 1000
-                },
+                {"q451": 500, "q452": 1000},
                 Thousands_output(
                     "q450",
                     8000,
@@ -140,10 +136,7 @@ class TestThousandPounds:
                 20,  # auxiliary
                 1350,
                 350,
-                {
-                    "q501": 500,
-                    "q502": 1000
-                },
+                {"q501": 500, "q502": 1000},
                 TPException(
                     "identifier: q500",
                     ValueError(get_mandatory_param_error("principal_variable")),
@@ -157,7 +150,7 @@ class TestThousandPounds:
                 20,  # auxiliary
                 1350,
                 350,
-                {"q601": 500,"q602": 1000},
+                {"q601": 500, "q602": 1000},
                 Thousands_output(
                     "q600",
                     0,
@@ -361,14 +354,13 @@ class TestCreateTargetVariableObjects:
             (
                 {"Q123": 400, "Q983": 21},
                 [Target_variable("Q123", 400, None), Target_variable("Q983", 21, None)],
-                "Test 1: Dictionary structure input"
+                "Test 1: Dictionary structure input",
             )
-        ]
+        ],
     )
-    def test_create_target_variable_objects(self,
-                                            target_variable,
-                                            expected_result,
-                                            test_id):
+    def test_create_target_variable_objects(
+        self, target_variable, expected_result, test_id
+    ):
         try:
             result = create_target_variable_objects(target_variable)
             assert result == expected_result
@@ -674,7 +666,7 @@ class TestDetermineTpcMarker:
             (True, TpcMarker.METHOD_PROCEED, "C", "Test 1: do_adjustment is True"),
             (False, TpcMarker.METHOD_PROCEED, "N", "Test 2: do_adjustment is False"),
             (None, TpcMarker.METHOD_PROCEED, "N", "Test 3: do_adjustment is None"),
-            (True, TpcMarker.STOP, "S", "Test 4: TpcMarker is STOP")
+            (True, TpcMarker.STOP, "S", "Test 4: TpcMarker is STOP"),
         ],
     )
     def test_determine_tpc_marker(
