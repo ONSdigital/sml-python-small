@@ -1,24 +1,38 @@
-from cmath import nan
 import math
 import random
+from cmath import nan
 from decimal import Decimal, getcontext
 from typing import List
 
 import pytest
 
-from sml_small.editing.totals_and_components.totals_and_components import (PRECISION_MAX, PRECISION_MIN, ComponentPair,
-                                                                           TACException, TccMarker,
-                                                                           TotalsAndComponentsOutput,
-                                                                           check_absolute_difference_threshold,
-                                                                           check_percentage_difference_threshold,
-                                                                           check_sum_components_predictive,
-                                                                           check_zero_errors, convert_input_to_decimal,
-                                                                           correct_components, correct_total,
-                                                                           determine_error_detection, error_correction,
-                                                                           set_predictive_value, sum_components,
-                                                                           totals_and_components, validate_input)
-from sml_small.utils.error_utils import (get_mandatory_param_error, get_one_of_params_mandatory_error,
-                                         get_param_outside_range_error, get_params_is_not_a_number_error)
+from sml_small.editing.totals_and_components.totals_and_components import (
+    PRECISION_MAX,
+    PRECISION_MIN,
+    ComponentPair,
+    TACException,
+    TccMarker,
+    TotalsAndComponentsOutput,
+    check_absolute_difference_threshold,
+    check_percentage_difference_threshold,
+    check_sum_components_predictive,
+    check_zero_errors,
+    convert_input_to_decimal,
+    correct_components,
+    correct_total,
+    determine_error_detection,
+    error_correction,
+    set_predictive_value,
+    sum_components,
+    totals_and_components,
+    validate_input,
+)
+from sml_small.utils.error_utils import (
+    get_mandatory_param_error,
+    get_one_of_params_mandatory_error,
+    get_param_outside_range_error,
+    get_params_is_not_a_number_error,
+)
 
 # ---- Constant Definitions ----
 EXCEPTION_FAIL_MESSAGE = (
@@ -6583,30 +6597,3 @@ def compare_list_of_decimals(
             assert (
                 False
             ), f"Values of components at index {i} do not match: component {component}, expected {expected}"
-
-
-def calculate_weighted(total: Decimal, components: List[Decimal]):
-    component_sum = Decimal(str(0))
-    adjusted_component_sum = Decimal(str(0))
-    adjusted_components = []
-    for component in components:
-        if not math.isnan(component):
-            component_sum += Decimal(str(component))
-
-    print(f"Component sum is: {component_sum}")
-
-    for i, component in enumerate(components):
-        adjusted_components.append(
-            (Decimal(component) / component_sum) * Decimal(total)
-        )
-
-        if not math.isnan(component):
-            print(f"Adjusted Component {adjusted_components[i]}")
-            # adjusted_component_sum += element
-            print(f"convert to decimal {Decimal(adjusted_components[i])}")
-
-    adjusted_component_sum = math.fsum(adjusted_components)
-    print(adjusted_component_sum)
-    print(f"adjusted_component_sum: {adjusted_component_sum}")
-
-    print(f"convert to decimal {Decimal(adjusted_component_sum)}")

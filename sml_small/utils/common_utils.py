@@ -3,8 +3,8 @@ Common functionality that can be used by any SML method
 
 For Copyright information, please see LICENCE.
 """
-from cmath import nan
 import logging.config
+from cmath import nan
 from decimal import Decimal
 from os import path
 from typing import Dict, List
