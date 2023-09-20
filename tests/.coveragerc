@@ -1,6 +1,6 @@
 [run]
 omit = 
     ../sml_small/editing/totals_and_components/example.py    
-    ../sml_small/editing/totals_and_components/pandas_example.py
-    ../sml_small/editing/totals_and_components/pandas_wrapper.py
+    ../sml_small/utils/pandas_example.py
+    ../sml_small/utils/pandas_wrapper.py
     ../sml_small/editing/thousand_pounds/example.py
