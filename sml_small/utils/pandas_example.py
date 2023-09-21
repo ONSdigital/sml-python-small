@@ -16,6 +16,7 @@ def load_csv(filepath):
     df = pd.read_csv(filepath)
     return df
 
+
 # ---------------------------------------
 # Totals and Components usage
 # ---------------------------------------
