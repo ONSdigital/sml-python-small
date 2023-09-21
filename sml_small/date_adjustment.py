@@ -56,7 +56,8 @@ def date_adjustment(
         :param  input_dataframe: The dataframe containing the data to be processed plus processing options.
         :param  trading_weights: The trading day weight reference data required for processing.
         :param  target_columns: The names of the columns in input_dataframe to be date_adjusted.
-        :param  contributor_returned_start_date_col: Name of the column holding the contributors returned period start date.
+        :param  contributor_returned_start_date_col: Name of the column holding the contributors
+        returned period start date.
         :param  contributor_returned_end_date_col: Name of the column holding the contributors returned period end date.
         :param  expected_start_date_col: Name of the column holding the expected period start date in input_dataframe.
         :param  expected_end_date_col: Name of the column holding the expected period end date in input_dataframe.
@@ -66,13 +67,17 @@ def date_adjustment(
         :param  set_to_mid_point_col: Name of the column holding the "Set to mid-point" option in input_dataframe.
         :param  use_calendar_days_col: Name of the column holding the "use calendar days" option in input_dataframe.
         :param  equal_weighted_col: Name of the column holding the "Set to equal weighted" option in input_dataframe.
-        :param  average_weekly_col: Name of the column holding the "average_weekly" in input_dataframe.
-        :param  da_error_flag_col: Name of the column that the user wishes the error flag column to be called in the output.
+        :param  average_weekly_col: Name of the column holding the "average_weekly"
+        in input_dataframe.
+        :param  da_error_flag_col: Name of the column that the user wishes the error flag column to
+        be called in the output.
         :param  trading_date_col: Name of the column holding the dates in trading_weights.
-        :param  trading_weights_col: Name of the column holding the weights in the trading_weights DataFrame.
-        :param  trading_domain_col: Name of the column holding the domain in the trading_weights DataFrame.
-        :param  trading_period_start_col: Name of the column holding the trading period start date in the trading_weights
-                DataFrame.
+        :param  trading_weights_col: Name of the column holding the weights in the
+        trading_weights DataFrame.
+        :param  trading_domain_col: Name of the column holding the domain in the
+        trading_weights DataFrame.
+        :param  trading_period_start_col: Name of the column holding the trading period start
+        date in the trading_weightsDataFrame.
         :param  trading_period_end_col: Name of the column holding the trading period end date in the trading_weights
                 DataFrame.
         :param  ignore_multi_aw_param_error: Used in testing only. Leave blank so it defaults to False.

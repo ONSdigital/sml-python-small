@@ -5,19 +5,11 @@ import numpy as np
 import pandas as pd
 
 # noinspection PyProtectedMember
-from sml_small.date_adjustment import (
-    _convert_question_string_to_list,
-    _generate_error_code_list,
-    _set_dtypes,
-    average_weekly_subfunction,
-    date_adjustment,
-    date_adjustment_subfunction,
-    generate_average_weekly_questions,
-    midpoint_subfunction,
-    missing_value_subfunction,
-    primary_wrangler_subfunction,
-    secondary_wrangler_subfunction,
-)
+from sml_small.date_adjustment import (_convert_question_string_to_list, _generate_error_code_list, _set_dtypes,
+                                       average_weekly_subfunction, date_adjustment, date_adjustment_subfunction,
+                                       generate_average_weekly_questions, midpoint_subfunction,
+                                       missing_value_subfunction, primary_wrangler_subfunction,
+                                       secondary_wrangler_subfunction)
 
 pd.options.mode.chained_assignment = None
 pd.set_option("display.max_columns", 30)
