@@ -1,5 +1,6 @@
 """
-Example code that uses the pandas wrapper with the Totals and Components method.
+Example code that uses the pandas wrapper showing examples of using it with each valid method,
+currently this includes Totals and Components, and Thousand Pounds Correction
 
 For Copyright information, please see LICENCE.
 """
@@ -16,6 +17,9 @@ def load_csv(filepath):
     return df
 
 
+# ---------------------------------------
+# Totals and Components usage
+# ---------------------------------------
 # The code below calls the load_csv function
 # with the filename as an argument
 input_dataframe_totals_and_components = load_csv(
@@ -56,7 +60,9 @@ test_totals_and_components.to_csv(
     "../../../tests/editing/totals_and_components/example_data/example_test_data_pandas_output.csv",
     index=False,
 )
-
+# ---------------------------------------
+# Thousand Pounds usage
+# ---------------------------------------
 input_dataframe_thousand_pounds = load_csv(
     "../../../tests/editing/thousand_pounds/example_data/example_test_data.csv"
 )
