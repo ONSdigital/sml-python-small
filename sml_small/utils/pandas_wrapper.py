@@ -1,5 +1,6 @@
 """
-Defines a wrapper to allow the Totals and Components method to be run with Pandas.
+Defines a wrapper to allow specified methods to be run via a pandas Dataframe, applicable methods can be found
+within the docstrings for wrapper()
 
 For Copyright information, please see LICENCE.
 """
