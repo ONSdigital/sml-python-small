@@ -31,7 +31,7 @@ class InputParameters(Enum):
 
 class TpcMarker(Enum):
     """
-    Enum for use when setting/comparing tcc_marker values
+    Enum for use when setting/comparing tpc_marker values
     """
 
     STOP = "S"
@@ -83,7 +83,7 @@ def thousand_pounds(
     target_variables: dict,
 ) -> Thousands_output:
     """
-    Calculates a pounds thousands error ratio and if the ration is between the bounds of the given limits will adjust
+    Calculates a pounds thousands error ratio and if the ratio is between the bounds of the given limits will adjust
     the given principal variable and any linked variables by a factor of 1000.
 
     :param principal_identifier: Unique identifier e.g. a question code - q500
@@ -170,8 +170,20 @@ def thousand_pounds(
                 upper_limit=upper_limit,
                 lower_limit=lower_limit,
                 target_variables=target_variables,
+                tpc_marker=tpc_marker.value
             )
-
+        else:
+            log_table(
+                "Thousand Pounds Output",
+                principal_identifier=principal_identifier,
+                principal_variable=principal_variable,
+                predictive=predictive,
+                auxiliary=auxiliary,
+                upper_limit=upper_limit,
+                lower_limit=lower_limit,
+                target_variables=target_variables,
+                tpc_marker=tpc_marker.value
+            )
         return Thousands_output(
             principal_identifier=principal_identifier,
             principal_original_value=input_parameters[
@@ -315,7 +327,7 @@ def check_zero_errors(
     :rtype: TpcMarker
     """
     tpc_marker = TpcMarker.METHOD_PROCEED
-    if predictive == 0 and (auxiliary is None or auxiliary == 0):
+    if (predictive is None or predictive == 0) and (auxiliary is None or auxiliary == 0):
         tpc_marker = TpcMarker.STOP
     return tpc_marker
 
