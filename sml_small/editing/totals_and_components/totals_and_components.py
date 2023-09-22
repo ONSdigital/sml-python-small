@@ -632,7 +632,9 @@ def check_sum_components_predictive(predictive: float, components_sum: float) ->
     :rtype: float
     """
     if not math.isnan(components_sum):
-        absolute_difference = abs(Decimal(str(predictive)) - Decimal(str(components_sum)))
+        absolute_difference = abs(
+            Decimal(str(predictive)) - Decimal(str(components_sum))
+        )
     else:
         absolute_difference = abs(Decimal(str(predictive)))
 
