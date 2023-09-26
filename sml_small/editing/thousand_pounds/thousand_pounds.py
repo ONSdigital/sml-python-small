@@ -77,7 +77,7 @@ def thousand_pounds(
     principal_variable: float,
     upper_limit: float,
     lower_limit: float,
-    target_variables: dict,
+    target_variables: dict = {},
     principal_identifier: Optional[str] = None,
     predictive: Optional[float] = None,
     auxiliary: Optional[float] = None,

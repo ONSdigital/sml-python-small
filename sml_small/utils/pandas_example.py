@@ -73,7 +73,7 @@ thousand_pounds_output_columns = [
     "Target Variables",
     "TPC Ratio",
     "TPC Marker",
-    "Auxiliary"
+    "Auxiliary",
 ]
 test_thousand_pounds = wrapper(
     input_dataframe_thousand_pounds,

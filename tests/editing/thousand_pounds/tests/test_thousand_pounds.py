@@ -315,13 +315,13 @@ class TestThousandPounds:
         if isinstance(expected, Thousands_output):
             try:
                 result = thousand_pounds(
-                    principal_identifier,
-                    principal_variable,
-                    predictive,
-                    auxiliary,
-                    upper_limit,
-                    lower_limit,
-                    target_variables,
+                    principal_identifier=principal_identifier,
+                    principal_variable=principal_variable,
+                    predictive=predictive,
+                    auxiliary=auxiliary,
+                    upper_limit=upper_limit,
+                    lower_limit=lower_limit,
+                    target_variables=target_variables,
                 )
                 assert result == expected
 
