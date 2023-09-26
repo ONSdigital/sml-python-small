@@ -1,4 +1,5 @@
 import logging
+import sys
 from dataclasses import dataclass
 from enum import Enum
 from os import path
@@ -329,6 +330,9 @@ def check_zero_errors(
     tpc_marker = TpcMarker.METHOD_PROCEED
     if (predictive is None or predictive == 0) and (auxiliary is None or auxiliary == 0):
         tpc_marker = TpcMarker.STOP
+        logger.warning(
+            f"TPCMarker = STOP at line:{sys._getframe().f_back.f_lineno}"
+        )
     return tpc_marker
 
 
