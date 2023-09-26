@@ -63,13 +63,13 @@ class TPException(Exception):
 
 # --- Method Definitions ---
 def thousand_pounds(
-    principal_identifier: Optional[str],  #
-    principal_variable: float,  #
-    predictive: Optional[float],  #
-    auxiliary: Optional[float],  #
-    upper_limit: float,  #
-    lower_limit: float,  #
+    principal_variable: float,
+    upper_limit: float,
+    lower_limit: float,
     target_variables: List[Target_variable],
+    principal_identifier: Optional[str] = None,
+    predictive: Optional[float] = None,
+    auxiliary: Optional[float] = None,
 ) -> Thousands_output:
     """
     Calculates a pounds thousands error ratio and if the ration is between the bounds of the given limits will adjust
