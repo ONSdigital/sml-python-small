@@ -336,13 +336,13 @@ class TestThousandPounds:
         else:
             with pytest.raises(Exception) as exc_info:
                 thousand_pounds(
-                    principal_identifier,
-                    principal_variable,
-                    predictive,
-                    auxiliary,
-                    upper_limit,
-                    lower_limit,
-                    target_variables,
+                    principal_identifier=principal_identifier,
+                    principal_variable=principal_variable,
+                    predictive=predictive,
+                    auxiliary=auxiliary,
+                    upper_limit=upper_limit,
+                    lower_limit=lower_limit,
+                    target_variables=target_variables,
                 )
             assert (str(exc_info.value)) == str(expected)
 
