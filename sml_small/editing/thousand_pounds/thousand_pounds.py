@@ -1,4 +1,5 @@
 import logging
+import sys
 from dataclasses import dataclass
 from enum import Enum
 from os import path
@@ -108,7 +109,7 @@ def thousand_pounds(
             - principal_final_value: Output value that may or may not be adjusted
             - target_variables: Output linked values that may or may not be adjusted
             - tpc_ratio: Ratio of the principal variable against good/predictive/aux response
-            - tpc_marker: C = Correction applied | N = No correction applied | E = Process failure
+            - tpc_marker: C = Correction applied | N = No correction applied | S = Process Stop
 
     """
 
@@ -329,6 +330,9 @@ def check_zero_errors(
     tpc_marker = TpcMarker.METHOD_PROCEED
     if (predictive is None or predictive == 0) and (auxiliary is None or auxiliary == 0):
         tpc_marker = TpcMarker.STOP
+        logger.warning(
+            f"TPCMarker = STOP at line:{sys._getframe().f_back.f_lineno}"
+        )
     return tpc_marker
 
 
@@ -341,7 +345,7 @@ def determine_tpc_marker(do_adjustment: bool, tpc_marker: TpcMarker) -> str:
     :param tpc_marker: current TPC marker
     :type: TpcMarker
 
-    :return: "C" or "N"
+    :return: "C", "N" or "S"
     :rtype: char
     """
     if tpc_marker is TpcMarker.STOP:
