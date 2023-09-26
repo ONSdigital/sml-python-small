@@ -1,4 +1,5 @@
 import logging
+import sys
 from dataclasses import dataclass
 from enum import Enum
 from os import path
@@ -27,6 +28,17 @@ class InputParameters(Enum):
     LOWER_LIMIT = 3
     UPPER_LIMIT = 4
     TARGET_VARIABLES = 5
+
+
+class TpcMarker(Enum):
+    """
+    Enum for use when setting/comparing tpc_marker values
+    """
+
+    STOP = "S"
+    CORRECTION = "C"
+    NO_CORRECTION = "N"
+    METHOD_PROCEED = "P"
 
 
 # --- Class Definitions  ---
@@ -69,10 +81,10 @@ def thousand_pounds(
     auxiliary: Optional[float],  #
     upper_limit: float,  #
     lower_limit: float,  #
-    target_variables: List[Target_variable],
+    target_variables: dict,
 ) -> Thousands_output:
     """
-    Calculates a pounds thousands error ratio and if the ration is between the bounds of the given limits will adjust
+    Calculates a pounds thousands error ratio and if the ratio is between the bounds of the given limits will adjust
     the given principal variable and any linked variables by a factor of 1000.
 
     :param principal_identifier: Unique identifier e.g. a question code - q500
@@ -97,7 +109,7 @@ def thousand_pounds(
             - principal_final_value: Output value that may or may not be adjusted
             - target_variables: Output linked values that may or may not be adjusted
             - tpc_ratio: Ratio of the principal variable against good/predictive/aux response
-            - tpc_marker: C = Correction applied | N = No correction applied | E = Process failure
+            - tpc_marker: C = Correction applied | N = No correction applied | S = Process Stop
 
     """
 
@@ -113,7 +125,9 @@ def thousand_pounds(
     )
     error_ratio = None
     do_adjustment = False
+    principal_adjusted_value = 0
     try:
+        target_variables = create_target_variable_objects(target_variables)
         input_parameters = validate_input(
             predictive,
             auxiliary,
@@ -122,41 +136,55 @@ def thousand_pounds(
             upper_limit,
             target_variables,
         )
-
-        predictive_value = determine_predictive_value(
-            input_parameters[InputParameters.PREDICTIVE.value],
-            input_parameters[InputParameters.AUXILIARY.value],
-        )
-        if predictive_value:
-            error_ratio = calculate_error_ratio(
-                input_parameters[InputParameters.PRINCIPAL_VARIABLE.value],
-                predictive_value,
+        target_variables_final = target_variables
+        tpc_marker = check_zero_errors(predictive, auxiliary)
+        if tpc_marker == TpcMarker.METHOD_PROCEED:
+            predictive_value = determine_predictive_value(
+                input_parameters[InputParameters.PREDICTIVE.value],
+                input_parameters[InputParameters.AUXILIARY.value],
             )
-            do_adjustment = is_within_threshold(
-                error_ratio,
-                input_parameters[InputParameters.LOWER_LIMIT.value],
-                input_parameters[InputParameters.UPPER_LIMIT.value],
+            if predictive_value:
+                error_ratio = calculate_error_ratio(
+                    input_parameters[InputParameters.PRINCIPAL_VARIABLE.value],
+                    predictive_value,
+                )
+                do_adjustment = is_within_threshold(
+                    error_ratio,
+                    input_parameters[InputParameters.LOWER_LIMIT.value],
+                    input_parameters[InputParameters.UPPER_LIMIT.value],
+                )
+
+            principal_adjusted_value = (
+                adjust_value(input_parameters[InputParameters.PRINCIPAL_VARIABLE.value])
+                if do_adjustment
+                else input_parameters[InputParameters.PRINCIPAL_VARIABLE.value]
             )
-
-        principal_adjusted_value = (
-            adjust_value(input_parameters[InputParameters.PRINCIPAL_VARIABLE.value])
-            if do_adjustment
-            else input_parameters[InputParameters.PRINCIPAL_VARIABLE.value]
-        )
-        target_variables_final = adjust_target_variables(
-            do_adjustment, input_parameters[InputParameters.TARGET_VARIABLES.value]
-        )
-        log_table(
-            "Thousand Pounds Output",
-            principal_identifier=principal_identifier,
-            principal_variable=principal_variable,
-            predictive=predictive,
-            auxiliary=auxiliary,
-            upper_limit=upper_limit,
-            lower_limit=lower_limit,
-            target_variables=target_variables,
-        )
-
+            target_variables_final = adjust_target_variables(
+                do_adjustment, input_parameters[InputParameters.TARGET_VARIABLES.value]
+            )
+            log_table(
+                "Thousand Pounds Output",
+                principal_identifier=principal_identifier,
+                principal_variable=principal_variable,
+                predictive=predictive,
+                auxiliary=auxiliary,
+                upper_limit=upper_limit,
+                lower_limit=lower_limit,
+                target_variables=target_variables,
+                tpc_marker=tpc_marker.value
+            )
+        else:
+            log_table(
+                "Thousand Pounds Output",
+                principal_identifier=principal_identifier,
+                principal_variable=principal_variable,
+                predictive=predictive,
+                auxiliary=auxiliary,
+                upper_limit=upper_limit,
+                lower_limit=lower_limit,
+                target_variables=target_variables,
+                tpc_marker=tpc_marker.value
+            )
         return Thousands_output(
             principal_identifier=principal_identifier,
             principal_original_value=input_parameters[
@@ -165,7 +193,7 @@ def thousand_pounds(
             principal_final_value=principal_adjusted_value,
             target_variables=target_variables_final,
             tpc_ratio=error_ratio,
-            tpc_marker=determine_tpc_marker(do_adjustment),
+            tpc_marker=determine_tpc_marker(do_adjustment, tpc_marker),
         )
 
     except (
@@ -185,6 +213,23 @@ def thousand_pounds(
         if principal_identifier is None:
             principal_identifier = "N/A"
         raise TPException(f"identifier: {principal_identifier}", error)
+
+
+def create_target_variable_objects(target_variables: dict) -> List[Target_variable]:
+    """
+    Takes a dictionary of target variables, where key is the identifier and value is the original value and
+    creates a list of target_variable objects to be used by the method
+
+    :param target_variables: Dictionary containing values to become Target_variable objects
+    :type target_variables: dict
+
+    :return: target_variables_list, a list of Target_variable objects
+    :rtype: List[Target_variable]
+    """
+    target_variables_list = []
+    for key, value in target_variables.items():
+        target_variables_list.append(Target_variable(key, value))
+    return target_variables_list
 
 
 def validate_input(
@@ -267,17 +312,50 @@ def validate_input(
     )
 
 
-def determine_tpc_marker(do_adjustment: bool) -> str:
+def check_zero_errors(
+    predictive: Optional[float], auxiliary: Optional[float]
+) -> TpcMarker:
+    """
+    Checks predictive and auxiliary to ensure that there is not only a 0 value available,
+    as this will cause a divide by 0 error
+
+    :param predictive: Value used for 'previous' response (Returned/Imputed/Constructed)
+    :type predictive: Optional[float]
+    :param auxiliary: Calculated response for the 'previous' period
+    :type auxiliary: Optional[float]
+
+    :return: tpc_marker, either method_proceed or stop
+    :rtype: TpcMarker
+    """
+    tpc_marker = TpcMarker.METHOD_PROCEED
+    if (predictive is None or predictive == 0) and (auxiliary is None or auxiliary == 0):
+        tpc_marker = TpcMarker.STOP
+        logger.warning(
+            f"TPCMarker = STOP at line:{sys._getframe().f_back.f_lineno}"
+        )
+    return tpc_marker
+
+
+def determine_tpc_marker(do_adjustment: bool, tpc_marker: TpcMarker) -> str:
     """
     Determine correction marker that should be output, "C" if values can be corrected, "N" if not.
 
     :param do_adjustment: Marker for if principal variable falls within adjustable range
     :type do_adjustment: bool
+    :param tpc_marker: current TPC marker
+    :type: TpcMarker
 
-    :return: "C" or "N"
+    :return: "C", "N" or "S"
     :rtype: char
     """
-    return "C" if do_adjustment else "N"
+    if tpc_marker is TpcMarker.STOP:
+        return tpc_marker.value
+    else:
+        return (
+            TpcMarker.CORRECTION.value
+            if do_adjustment
+            else TpcMarker.NO_CORRECTION.value
+        )
 
 
 def determine_predictive_value(

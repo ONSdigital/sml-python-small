@@ -9,7 +9,7 @@ from typing import List, Optional
 
 import pandas as pd
 
-from sml_small.editing.thousand_pounds.thousand_pounds import Target_variable, thousand_pounds
+from sml_small.editing.thousand_pounds.thousand_pounds import thousand_pounds
 from sml_small.editing.totals_and_components.totals_and_components import totals_and_components
 
 
@@ -125,9 +125,9 @@ def run_thousand_pounds(
     pandas dataframe
     :rtype: dataframe
     """
-    target_variables_list = []
+    target_variables_list = {}
     for value in target_variables_columns:
-        target_variables_list.append(Target_variable(value, row[value]))
+        target_variables_list[value] = row[value]
 
     input_dict = {
         "principal_identifier": principal_identifier_column,

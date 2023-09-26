@@ -1,10 +1,10 @@
 import pytest
 
-from sml_small.editing.thousand_pounds.thousand_pounds import (Target_variable, Thousands_output, TPException,
-                                                               adjust_target_variables, adjust_value,
-                                                               calculate_error_ratio, determine_predictive_value,
-                                                               determine_tpc_marker, is_within_threshold,
-                                                               thousand_pounds, validate_input)
+from sml_small.editing.thousand_pounds.thousand_pounds import (Target_variable, Thousands_output, TpcMarker,
+                                                               TPException, adjust_target_variables, adjust_value,
+                                                               calculate_error_ratio, create_target_variable_objects,
+                                                               determine_predictive_value, determine_tpc_marker,
+                                                               is_within_threshold, thousand_pounds, validate_input)
 from sml_small.utils.error_utils import (get_boundary_error, get_mandatory_param_error,
                                          get_one_of_params_mandatory_error, get_params_is_not_a_number_error)
 
@@ -13,7 +13,7 @@ EXCEPTION_FAIL_MESSAGE = (
 )
 
 
-class TestRun:
+class TestThousandPounds:
     @pytest.mark.parametrize(
         "principal_identifier, principal_variable, predictive, auxiliary, upper_limit, lower_limit, target_variables, "
         "expected, test_id",
@@ -25,12 +25,12 @@ class TestRun:
                 15000,  # auxiliary
                 1350,  # upper limit
                 350,  # lower limit
-                [
-                    Target_variable("q101", 500),
-                    Target_variable("q102", 1000),
-                    Target_variable("q103", 12345),
-                    Target_variable("q104", 0),
-                ],
+                {
+                    "q101": 500,
+                    "q102": 1000,
+                    "q103": 12345,
+                    "q104": 0,
+                },
                 Thousands_output(
                     "q100",
                     50000000,
@@ -53,7 +53,7 @@ class TestRun:
                 None,  # auxiliary
                 1350,
                 350,
-                [],
+                {},
                 Thousands_output("q200", 60000000, 60000.0, [], 400.0, "C"),
                 "Given config(missing auxiliary) - outputs adjusted for all target variables",
             ),
@@ -64,7 +64,7 @@ class TestRun:
                 200,  # auxiliary
                 1350,
                 350,
-                [],
+                {},
                 Thousands_output("q300", 269980, 269.980, [], 1349.9, "C"),
                 "Given config(missing predictive) - outputs adjusted for all target variables",
             ),
@@ -75,7 +75,7 @@ class TestRun:
                 None,  # auxiliary
                 1350,
                 350,
-                [],
+                {},
                 TPException(
                     "identifier: q400",
                     ValueError(
@@ -85,23 +85,26 @@ class TestRun:
                 "Given config(missing predictive and auxiliary) - default outputs and error indicated",
             ),
             (
-                "q450",
+                "q410",
                 8000,  # principal value/variable
                 0,  # predictive
                 0,  # auxiliary
                 1350,
                 350,
-                [Target_variable("q451", 500), Target_variable("q452", 1000)],
+                {
+                    "q451": 500,
+                    "q452": 1000,
+                },
                 Thousands_output(
-                    "q450",
+                    "q410",
                     8000,
-                    8000,
+                    0,
                     [
-                        Target_variable("q451", 500, 500),
-                        Target_variable("q452", 1000, 1000),
+                        Target_variable("q451", 500, None),
+                        Target_variable("q452", 1000, None),
                     ],
                     None,
-                    "N",
+                    "S",
                 ),
                 "Given config(predictive and auxiliary are 0) - No error, not adjusted",
             ),
@@ -112,17 +115,17 @@ class TestRun:
                 None,  # auxiliary
                 1350,
                 350,
-                [Target_variable("q451", 500), Target_variable("q452", 1000)],
+                {"q451": 500, "q452": 1000},
                 Thousands_output(
                     "q450",
                     8000,
-                    8000,
+                    0,
                     [
-                        Target_variable("q451", 500, 500),
-                        Target_variable("q452", 1000, 1000),
+                        Target_variable("q451", 500, None),
+                        Target_variable("q452", 1000, None),
                     ],
                     None,
-                    "N",
+                    "S",
                 ),
                 "Given config(predictive 0 and auxiliary is None) - No error, not adjusted",
             ),
@@ -133,7 +136,7 @@ class TestRun:
                 20,  # auxiliary
                 1350,
                 350,
-                [Target_variable("q501", 500), Target_variable("q502", 1000)],
+                {"q501": 500, "q502": 1000},
                 TPException(
                     "identifier: q500",
                     ValueError(get_mandatory_param_error("principal_variable")),
@@ -147,7 +150,7 @@ class TestRun:
                 20,  # auxiliary
                 1350,
                 350,
-                [Target_variable("q601", 500), Target_variable("q602", 1000)],
+                {"q601": 500, "q602": 1000},
                 Thousands_output(
                     "q600",
                     0,
@@ -168,7 +171,7 @@ class TestRun:
                 20,  # auxiliary
                 1350,
                 350,
-                [Target_variable("q701", 500)],
+                {"q701": 500},
                 Thousands_output(
                     "q700",
                     3500,
@@ -186,7 +189,7 @@ class TestRun:
                 20,  # auxiliary
                 1350,  # Upper limit
                 350,  # lower limit
-                [Target_variable("q801", 500)],
+                {"q801": 500},
                 Thousands_output(
                     "q800",
                     13500,
@@ -204,7 +207,7 @@ class TestRun:
                 -1,  # auxiliary
                 0,  # upper limit
                 1,  # lower limit
-                [],
+                {},
                 TPException(
                     "identifier: q900",
                     ValueError(get_mandatory_param_error("upper_limit")),
@@ -218,7 +221,7 @@ class TestRun:
                 -1,  # auxiliary
                 1,  # upper limit
                 0,  # lower limit
-                [],
+                {},
                 TPException(
                     "identifier: q1000",
                     ValueError(get_mandatory_param_error("lower_limit")),
@@ -232,7 +235,7 @@ class TestRun:
                 2,  # auxiliary
                 3,  # upper limit
                 4,  # lower limit
-                [],
+                {},
                 TPException(
                     "identifier: q1100",
                     ValueError(get_params_is_not_a_number_error("principal_variable")),
@@ -246,7 +249,7 @@ class TestRun:
                 "2",  # auxiliary
                 "3",  # upper limit
                 "4",  # lower limit
-                [],
+                {},
                 TPException(
                     "identifier: q1200",
                     ValueError(get_params_is_not_a_number_error("predictive")),
@@ -260,7 +263,7 @@ class TestRun:
                 "",  # auxiliary
                 "33 56 767",  # upper limit
                 "4",  # lower limit
-                [],
+                {},
                 TPException(
                     "identifier: q1300",
                     ValueError(get_params_is_not_a_number_error("upper_limit")),
@@ -274,7 +277,7 @@ class TestRun:
                 "",  # auxiliary
                 "1234",  # upper limit
                 "98123x21",  # lower limit
-                [],
+                {},
                 TPException(
                     "identifier: q1400",
                     ValueError(get_params_is_not_a_number_error("lower_limit")),
@@ -288,7 +291,7 @@ class TestRun:
                 23,  # auxiliary
                 350,  # upper limit
                 351,  # lower limit
-                [],
+                {},
                 TPException(
                     "identifier: q1500",
                     ValueError(get_boundary_error([351.0, 350.0])),
@@ -342,6 +345,33 @@ class TestRun:
                     target_variables,
                 )
             assert (str(exc_info.value)) == str(expected)
+
+
+class TestCreateTargetVariableObjects:
+    @pytest.mark.parametrize(
+        "target_variable, expected_result, test_id",
+        [
+            (
+                {"Q123": 400, "Q983": 21},
+                [Target_variable("Q123", 400, None), Target_variable("Q983", 21, None)],
+                "Test 1: Dictionary structure input",
+            )
+        ],
+    )
+    def test_create_target_variable_objects(
+        self, target_variable, expected_result, test_id
+    ):
+        try:
+            result = create_target_variable_objects(target_variable)
+            assert result == expected_result
+        except Exception as e:
+            pytest.fail(
+                EXCEPTION_FAIL_MESSAGE.format(
+                    test_id=test_id,
+                    exception_type=type(e).__name__,
+                    exception_msg=str(e),
+                )
+            )
 
 
 class TestValidateInput:
@@ -631,21 +661,23 @@ class TestValidateInput:
 
 class TestDetermineTpcMarker:
     @pytest.mark.parametrize(
-        "do_adjustment, expected_result, test_id",
+        "do_adjustment, tpc_marker, expected_result, test_id",
         [
-            (True, "C", "Test 1: do_adjustment is True"),
-            (False, "N", "Test 1: do_adjustment is False"),
-            (None, "N", "Test 1: do_adjustment is None"),
+            (True, TpcMarker.METHOD_PROCEED, "C", "Test 1: do_adjustment is True"),
+            (False, TpcMarker.METHOD_PROCEED, "N", "Test 2: do_adjustment is False"),
+            (None, TpcMarker.METHOD_PROCEED, "N", "Test 3: do_adjustment is None"),
+            (True, TpcMarker.STOP, "S", "Test 4: TpcMarker is STOP"),
         ],
     )
     def test_determine_tpc_marker(
         self,
         do_adjustment,
+        tpc_marker,
         expected_result,
         test_id,
     ):
         try:
-            result = determine_tpc_marker(do_adjustment)
+            result = determine_tpc_marker(do_adjustment, tpc_marker)
             assert result == expected_result
         except Exception as e:
             pytest.fail(
