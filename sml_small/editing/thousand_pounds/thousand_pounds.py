@@ -108,7 +108,7 @@ def thousand_pounds(
             - principal_final_value: Output value that may or may not be adjusted
             - target_variables: Output linked values that may or may not be adjusted
             - tpc_ratio: Ratio of the principal variable against good/predictive/aux response
-            - tpc_marker: C = Correction applied | N = No correction applied | E = Process failure
+            - tpc_marker: C = Correction applied | N = No correction applied | S = Process Stop
 
     """
 
@@ -341,7 +341,7 @@ def determine_tpc_marker(do_adjustment: bool, tpc_marker: TpcMarker) -> str:
     :param tpc_marker: current TPC marker
     :type: TpcMarker
 
-    :return: "C" or "N"
+    :return: "C", "N" or "S"
     :rtype: char
     """
     if tpc_marker is TpcMarker.STOP:
