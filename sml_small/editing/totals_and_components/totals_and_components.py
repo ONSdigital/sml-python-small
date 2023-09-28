@@ -5,7 +5,6 @@ based on user supplied thresholds.
 For Copyright information, please see LICENCE.
 """
 
-from cmath import nan
 import logging.config
 import math
 import sys
@@ -847,7 +846,7 @@ def correct_components(
     components: List[ComponentPair],
     total: Decimal,
 ) -> Tuple[Decimal, List[ComponentPair], TccMarker]:
- 
+
     """
     Function to correct the components values to add up to the received total value,
     set the final total as the received total and indicate that the component
@@ -881,25 +880,36 @@ def correct_components(
     component_position = 0
     component_to_correct_position = 0
 
-    # If the component sum does not equal the total then we want to correct the last component so that the sum matches the total.
+    # If the component sum does not equal the total then we want to correct the last
+    # component so that the sum matches the total.
     # If the last final component is NaN or 0 we go to the final component before it.
     for component in components:
         component.final_value = (component.original_value / components_sum) * total
         component_position = component_position + 1
-        if math.isnan(component.final_value) == False and component.final_value != Decimal('0'):
+        if math.isnan(
+            component.final_value
+        ) is False and component.final_value != Decimal("0"):
             sum_of_adjusted = sum_of_adjusted + component.final_value
             component_to_correct_position = component_position - 1
-        
+
     if sum_of_adjusted > final_total:
-        logger.info(f"correct component fine tune down - {sum_of_adjusted} to {final_total}")
-        components[component_to_correct_position].final_value = components[component_to_correct_position].final_value - (sum_of_adjusted - final_total)
+        logger.info(
+            f"correct component fine tune down - {sum_of_adjusted} to {final_total}"
+        )
+        components[component_to_correct_position].final_value = components[
+            component_to_correct_position
+        ].final_value - (sum_of_adjusted - final_total)
 
     elif sum_of_adjusted < final_total:
-        logger.info(f"correct component fine tune up - {sum_of_adjusted} to {final_total}")
-        components[component_to_correct_position].final_value = components[component_to_correct_position].final_value + (final_total - sum_of_adjusted)
+        logger.info(
+            f"correct component fine tune up - {sum_of_adjusted} to {final_total}"
+        )
+        components[component_to_correct_position].final_value = components[
+            component_to_correct_position
+        ].final_value + (final_total - sum_of_adjusted)
 
     else:
-        logger.info(f"No correction fine tune required")
+        logger.info("No correction fine tune required")
 
     tcc_marker = TccMarker.COMPONENTS_CORRECTED
     return final_total, components, tcc_marker
@@ -959,12 +969,12 @@ def calculate_percent_thresholds(
     else:
         low_percent_threshold = abs(
             sum_of_components - (sum_of_components * percentage_threshold)
-            )
-        
+        )
+
         high_percent_threshold = abs(
             sum_of_components + (sum_of_components * percentage_threshold)
-            )
-        
+        )
+
     output_list["low_percent_threshold"] = low_percent_threshold
     output_list["high_percent_threshold"] = high_percent_threshold
 

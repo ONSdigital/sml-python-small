@@ -1632,7 +1632,7 @@ class TestTotalsAndComponents:
                         Decimal("9206.159921487989531731937564"),
                         Decimal("866.4856528647537153004953734"),
                         Decimal("632.3544256472567529675670623"),
-                        Decimal("0")
+                        Decimal("0"),
                     ],
                     "C",
                 ),
@@ -3314,7 +3314,12 @@ class TestTotalsAndComponentsUAT:
                     Decimal("1458"),
                     Decimal("1782"),
                     Decimal("1458"),
-                    [Decimal("568.8"), Decimal("658.8000000000000000000000001"), Decimal("89.1"), Decimal("141.3")],
+                    [
+                        Decimal("568.8"),
+                        Decimal("658.8000000000000000000000001"),
+                        Decimal("89.1"),
+                        Decimal("141.3"),
+                    ],
                     "C",
                 ),
                 "Test 52 - If percentage difference = 10 and amend total = FALSE, then component correction is applied",
@@ -3343,7 +3348,12 @@ class TestTotalsAndComponentsUAT:
                     Decimal("9738"),
                     Decimal("11902"),
                     Decimal("11902"),
-                    [Decimal("10121.1"), Decimal("952.6"), Decimal("705.0999999999999999999999999"), Decimal("123.2")],
+                    [
+                        Decimal("10121.1"),
+                        Decimal("952.6"),
+                        Decimal("705.0999999999999999999999999"),
+                        Decimal("123.2"),
+                    ],
                     "C",
                 ),
                 "Test 53 - If percentage difference = 10 and amend total = FALSE, then component correction is applied",
@@ -4216,7 +4226,12 @@ class TestTotalsAndComponentsUAT:
                     Decimal("1467"),
                     Decimal("1793"),
                     Decimal("1793"),
-                    [Decimal("695.2"), Decimal("805.1999999999999999999999999"), Decimal("111.1"), Decimal("181.5000000000000000000000001")],
+                    [
+                        Decimal("695.2"),
+                        Decimal("805.1999999999999999999999999"),
+                        Decimal("111.1"),
+                        Decimal("181.5000000000000000000000001"),
+                    ],
                     "C",
                 ),
                 "Test 82 - If absolute difference > 25, percentage difference = 10 and amend total = FALSE, then component correction is applied",  # noqa: E501
@@ -4246,7 +4261,12 @@ class TestTotalsAndComponentsUAT:
                     Decimal("9729"),
                     Decimal("11891"),
                     Decimal("9729"),
-                    [Decimal("8280"), Decimal("779.4"), Decimal("568.8"), Decimal("100.8")],
+                    [
+                        Decimal("8280"),
+                        Decimal("779.4"),
+                        Decimal("568.8"),
+                        Decimal("100.8"),
+                    ],
                     "C",
                 ),
                 "Test 83 - If absolute difference > 25, percentage difference = 10 and amend total = FALSE, then component correction is applied",  # noqa: E501
@@ -4276,7 +4296,12 @@ class TestTotalsAndComponentsUAT:
                     Decimal("252"),
                     Decimal("308"),
                     Decimal("308"),
-                    [Decimal("264"), Decimal("0"), Decimal("32.99999999999999999999999999"), Decimal("11")],
+                    [
+                        Decimal("264"),
+                        Decimal("0"),
+                        Decimal("32.99999999999999999999999999"),
+                        Decimal("11"),
+                    ],
                     "C",
                 ),
                 "Test 84 - If absolute difference > 25, percentage difference = 10 and amend total = FALSE, then component correction is applied",  # noqa: E501
@@ -4991,7 +5016,7 @@ class TestTotalsAndComponentsUAT:
 #         "identifier, total, components, amend_total, predictive, precision,"
 #         "auxiliary, absolute_difference_threshold, percentage_difference_threshold,"
 #         "expected_result, test_id",
-#         [ 
+#         [
 #         ],
 #     )
 #     def test_totals_and_components(
@@ -5052,6 +5077,7 @@ class TestTotalsAndComponentsUAT:
 #                     percentage_difference_threshold=percentage_difference_threshold,
 #                 )
 #             assert (str(exc_info.value)) == str(expected_result)
+
 
 class TestValidateInput:
     @pytest.mark.parametrize(
@@ -6024,7 +6050,7 @@ class TestConvertToDecimal:
             ),
         ],
     )
-    def convert_input_to_Decimal(
+    def convert_input_to_decimal(
         self,
         identifier,
         total,
@@ -6040,7 +6066,7 @@ class TestConvertToDecimal:
     ):
         if isinstance(expected_result, tuple):
             try:
-                result = convert_input_to_Decimal(
+                result = convert_input_to_decimal(
                     identifier=identifier,
                     total=total,
                     components=components,
@@ -6062,7 +6088,7 @@ class TestConvertToDecimal:
                 )
         else:
             with pytest.raises(Exception) as exc_info:
-                convert_input_to_Decimal(
+                convert_input_to_decimal(
                     identifier=identifier,
                     total=total,
                     components=components,
@@ -6571,13 +6597,21 @@ class TestCorrectTotal:
             (
                 100.0,
                 [ComponentPair(10.0, None)] * 10,
-                (Decimal("100"), [ComponentPair(Decimal("10"), Decimal("10"))] * 10, "T"),
+                (
+                    Decimal("100"),
+                    [ComponentPair(Decimal("10"), Decimal("10"))] * 10,
+                    "T",
+                ),
                 "Test 1: Final total is sum of received components",
             ),
             (
                 30.0,
                 [ComponentPair(10.0, None)] * 10,
-                (Decimal("30"), [ComponentPair(Decimal("10"), Decimal("10"))] * 10, "T"),
+                (
+                    Decimal("30"),
+                    [ComponentPair(Decimal("10"), Decimal("10"))] * 10,
+                    "T",
+                ),
                 "Test 2: Final total is not sum of received components",
             ),
         ],
@@ -6701,10 +6735,11 @@ def compare_results_to_expected_results(
             print(f"fc - {results.final_components}")
             if not math.isnan(component):
                 sum_of_components += Decimal(str(component))
-                
+
         assert sum_of_components == expected_result[4]
-    
+
     compare_list_of_decimals(results.final_components, expected_result[5])
+
 
 def compare_list_of_decimals(
     components: List[Decimal], expected_components: List[Decimal]
