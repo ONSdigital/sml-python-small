@@ -5,6 +5,7 @@ based on user supplied thresholds.
 For Copyright information, please see LICENCE.
 """
 
+from cmath import nan
 import logging.config
 import math
 import sys
@@ -846,11 +847,15 @@ def correct_components(
     components: List[ComponentPair],
     total: Decimal,
 ) -> Tuple[Decimal, List[ComponentPair], TccMarker]:
+ 
     """
     Function to correct the components values to add up to the received total value,
     set the final total as the received total and indicate that the component
     have been corrected. Calculates each component value based on the original value so
-    values are weighted instead of normalised
+    values are weighted instead of normalised. If the sum of component after the initial correction
+    is not equal to the final total. Then the difference between the two is added to the last component.
+    Providing that component is not 0 or Nan. If the last component is Nan or 0 the method goes
+    to the previous component in the list until it finds a valid number to correct.
 
     :param components_sum: Sum of original values of components list
     :type components_sum: Decimal
@@ -872,8 +877,31 @@ def correct_components(
     :rtyper: TccMarker
     """
     final_total = total
+    sum_of_adjusted = 0
+    component_position = 0
+    component_to_correct_position = 0
+
+    # If the component sum does not equal the total then we want to correct the last component so that the sum matches the total.
+    # If the last final component is NaN or 0 we go to the final component before it.
     for component in components:
         component.final_value = (component.original_value / components_sum) * total
+        component_position = component_position + 1
+        if math.isnan(component.final_value) == False and component.final_value != Decimal('0'):
+            sum_of_adjusted = sum_of_adjusted + component.final_value
+            component_to_correct_position = component_position - 1
+
+    print(f"Component that can be corrected {components[component_to_correct_position].final_value}")
+        
+    if sum_of_adjusted > final_total:
+        print(f"correct component fine tune down - {sum_of_adjusted} to {final_total}")
+        components[component_to_correct_position].final_value = components[component_to_correct_position].final_value - (sum_of_adjusted - final_total)
+
+    elif sum_of_adjusted < final_total:
+        print(f"correct component fine tune up - {sum_of_adjusted} to {final_total}")
+        components[component_to_correct_position].final_value = components[component_to_correct_position].final_value + (final_total - sum_of_adjusted)
+
+    else:
+        print(f"No correction fine tune required")
 
     tcc_marker = TccMarker.COMPONENTS_CORRECTED
     return final_total, components, tcc_marker
