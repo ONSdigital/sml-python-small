@@ -852,8 +852,8 @@ def correct_components(
     set the final total as the received total and indicate that the component
     have been corrected. Calculates each component value based on the original value so
     values are weighted instead of normalised. If the sum of component after the initial correction
-    is not equal to the final total. Then the difference between the two is added to the last component.
-    Providing that component is not 0 or Nan. If the last component is Nan or 0 the method goes
+    is not equal to the final total. Then the difference between the two is added/subtracted from
+    the last component, providing that component is not 0 or Nan. If the last component is Nan or 0 the method goes
     to the previous component in the list until it finds a valid number to correct.
 
     :param components_sum: Sum of original values of components list
