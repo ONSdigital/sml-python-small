@@ -889,19 +889,17 @@ def correct_components(
         if math.isnan(component.final_value) == False and component.final_value != Decimal('0'):
             sum_of_adjusted = sum_of_adjusted + component.final_value
             component_to_correct_position = component_position - 1
-
-    print(f"Component that can be corrected {components[component_to_correct_position].final_value}")
         
     if sum_of_adjusted > final_total:
-        print(f"correct component fine tune down - {sum_of_adjusted} to {final_total}")
+        logger.info(f"correct component fine tune down - {sum_of_adjusted} to {final_total}")
         components[component_to_correct_position].final_value = components[component_to_correct_position].final_value - (sum_of_adjusted - final_total)
 
     elif sum_of_adjusted < final_total:
-        print(f"correct component fine tune up - {sum_of_adjusted} to {final_total}")
+        logger.info(f"correct component fine tune up - {sum_of_adjusted} to {final_total}")
         components[component_to_correct_position].final_value = components[component_to_correct_position].final_value + (final_total - sum_of_adjusted)
 
     else:
-        print(f"No correction fine tune required")
+        logger.info(f"No correction fine tune required")
 
     tcc_marker = TccMarker.COMPONENTS_CORRECTED
     return final_total, components, tcc_marker
@@ -961,11 +959,12 @@ def calculate_percent_thresholds(
     else:
         low_percent_threshold = abs(
             sum_of_components - (sum_of_components * percentage_threshold)
-        )
+            )
+        
         high_percent_threshold = abs(
             sum_of_components + (sum_of_components * percentage_threshold)
-        )
-
+            )
+        
     output_list["low_percent_threshold"] = low_percent_threshold
     output_list["high_percent_threshold"] = high_percent_threshold
 
