@@ -5010,73 +5010,101 @@ class TestTotalsAndComponentsUAT:
 
 
 # This class is to run a single case of the totals and components method
-# Uncomment and add a test to check if it passes or fails
-# class TestTotalsAndComponentsOneCase:
-#     @pytest.mark.parametrize(
-#         "identifier, total, components, amend_total, predictive, precision,"
-#         "auxiliary, absolute_difference_threshold, percentage_difference_threshold,"
-#         "expected_result, test_id",
-#         [
-#         ],
-#     )
-#     def test_totals_and_components(
-#         self,
-#         capfd,
-#         identifier,
-#         total,
-#         components,
-#         amend_total,
-#         predictive,
-#         precision,
-#         auxiliary,
-#         absolute_difference_threshold,
-#         percentage_difference_threshold,
-#         expected_result,
-#         test_id,
-#     ):
-#         if isinstance(expected_result, tuple):
-#             try:
-#                 results = totals_and_components(
-#                     identifier=identifier,
-#                     total=total,
-#                     components=components,
-#                     amend_total=amend_total,
-#                     predictive=predictive,
-#                     auxiliary=auxiliary,
-#                     absolute_difference_threshold=absolute_difference_threshold,
-#                     percentage_difference_threshold=percentage_difference_threshold,
-#                 )
+class TestTotalsAndComponentsSingleTest:
+    @pytest.mark.parametrize(
+        "identifier, total, components, amend_total, predictive, precision,"
+        "auxiliary, absolute_difference_threshold, percentage_difference_threshold,"
+        "expected_result, test_id",
+        [
+            (
+                "UAT-ABD-DIFF-SHEET-A-1001",
+                1625,
+                [
+                    (632),
+                    (732),
+                    (99),
+                    (162),
+                ],
+                True,
+                1625,
+                28,
+                None,
+                11,
+                None,
+                (
+                    "UAT-ABD-DIFF-SHEET-A-1001",
+                    Decimal("0"),
+                    None,
+                    None,
+                    Decimal("1625"),
+                    [Decimal("632"), Decimal("732"), Decimal("99"), Decimal("162")],
+                    "N",
+                ),
+                "Test 1 - If absolute difference = 0 then no correction is applied",
+                # Sheet TCC_test_data_case_a1 reference 1001
+                # If absolute difference = 0, then no correction is applied.
+                # TCC = N
+            ),
+        ],
+    )
+    def test_totals_and_components(
+        self,
+        capfd,
+        identifier,
+        total,
+        components,
+        amend_total,
+        predictive,
+        precision,
+        auxiliary,
+        absolute_difference_threshold,
+        percentage_difference_threshold,
+        expected_result,
+        test_id,
+    ):
+        if isinstance(expected_result, tuple):
+            try:
+                results = totals_and_components(
+                    identifier=identifier,
+                    total=total,
+                    components=components,
+                    amend_total=amend_total,
+                    predictive=predictive,
+                    auxiliary=auxiliary,
+                    absolute_difference_threshold=absolute_difference_threshold,
+                    percentage_difference_threshold=percentage_difference_threshold,
+                )
 
-#                 # Capture the printed output and remove any leading or trailing whitespace
-#                 captured = capfd.readouterr()
-#                 printed_output = captured.out.strip()
+                # Capture the printed output and remove any leading or trailing whitespace
+                captured = capfd.readouterr()
+                printed_output = captured.out.strip()
 
-#                 print(printed_output)
+                print(printed_output)
 
-#                 compare_results_to_expected_results(results, expected_result)
+                compare_results_to_expected_results(results, expected_result)
 
-#             except Exception as e:
-#                 pytest.fail(
-#                     EXCEPTION_FAIL_MESSAGE.format(
-#                         test_id=test_id,
-#                         exception_type=type(e).__name__,
-#                         exception_msg=str(e.args),
-#                     )
-#                 )
-#         else:
-#             with pytest.raises(Exception) as exc_info:
-#                 totals_and_components(
-#                     identifier=identifier,
-#                     total=total,
-#                     components=components,
-#                     amend_total=amend_total,
-#                     predictive=predictive,
-#                     precision=precision,
-#                     auxiliary=auxiliary,
-#                     absolute_difference_threshold=absolute_difference_threshold,
-#                     percentage_difference_threshold=percentage_difference_threshold,
-#                 )
-#             assert (str(exc_info.value)) == str(expected_result)
+            except Exception as e:
+                pytest.fail(
+                    EXCEPTION_FAIL_MESSAGE.format(
+                        test_id=test_id,
+                        exception_type=type(e).__name__,
+                        exception_msg=str(e.args),
+                    )
+                )
+        else:
+            with pytest.raises(Exception) as exc_info:
+                totals_and_components(
+                    identifier=identifier,
+                    total=total,
+                    components=components,
+                    amend_total=amend_total,
+                    predictive=predictive,
+                    precision=precision,
+                    auxiliary=auxiliary,
+                    absolute_difference_threshold=absolute_difference_threshold,
+                    percentage_difference_threshold=percentage_difference_threshold,
+                )
+            assert (str(exc_info.value)) == str(expected_result)
 
 
 class TestValidateInput:
@@ -6732,7 +6760,6 @@ def compare_results_to_expected_results(
     if results.tcc_marker == "T" or results.tcc_marker == "C":
         sum_of_components = 0
         for component in results.final_components:
-            print(f"fc - {results.final_components}")
             if not math.isnan(component):
                 sum_of_components += Decimal(str(component))
 
