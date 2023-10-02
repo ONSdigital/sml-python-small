@@ -73,7 +73,6 @@ thousand_pounds_output_columns = [
     "Target Variables",
     "TPC Ratio",
     "TPC Marker",
-    "Auxiliary",
 ]
 test_thousand_pounds = wrapper(
     input_dataframe_thousand_pounds,
@@ -85,6 +84,7 @@ test_thousand_pounds = wrapper(
     upper_limit_column="threshold_upper",
     lower_limit_column="threshold_lower",
     predictive_column="predictive_val",
+    auxiliary_column="aux_val",
 )
 test_thousand_pounds.to_csv(
     "../../tests/editing/thousand_pounds/example_data/example_test_data_pandas_output.csv",
