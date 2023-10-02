@@ -166,10 +166,10 @@ def totals_and_components(
     total: float,
     components: List[float],
     amend_total: bool,
-    predictive: Optional[float],
-    auxiliary: Optional[float],
-    absolute_difference_threshold: Optional[float],
-    percentage_difference_threshold: Optional[float],
+    predictive: Optional[float] = None,
+    auxiliary: Optional[float] = None,
+    absolute_difference_threshold: Optional[float] = None,
+    percentage_difference_threshold: Optional[float] = None,
     precision: Optional[int] = PRECISION_MAX,
 ) -> TotalsAndComponentsOutput:
     """
@@ -330,7 +330,6 @@ def totals_and_components(
         )
 
         if output_list["tcc_marker"] == TccMarker.METHOD_PROCEED:
-
             #  Check for error scenarios where the sum of the components is zero and
             #  a positive predictive value has been received
             output_list["tcc_marker"] = check_zero_errors(predictive, component_total)
