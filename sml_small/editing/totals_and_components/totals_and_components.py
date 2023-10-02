@@ -878,7 +878,6 @@ def correct_components(
     """
     final_total = total
     sum_of_adjusted = 0
-    component_position = 0
     component_to_correct_position = 0
 
     # If the component sum does not equal the total then we want to correct the last
