@@ -78,7 +78,7 @@ test_thousand_pounds = wrapper(
     input_dataframe_thousand_pounds,
     "thousand_pounds",
     output_columns=thousand_pounds_output_columns,
-    principal_identifier_column="RU",
+    unique_identifier_column="RU",
     principal_variable_column="principal_val",
     target_variables_columns=target_variables,
     upper_limit_column="threshold_upper",

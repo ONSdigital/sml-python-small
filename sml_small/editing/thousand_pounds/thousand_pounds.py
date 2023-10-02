@@ -53,8 +53,7 @@ class Target_variable:
 # Structure of the output dataset
 @dataclass(frozen=True)
 class Thousands_output:
-    principal_identifier: Optional[str]  # Unique identifer e.g. a question code - q500
-    principal_original_value: float  # Original provided value
+    unique_identifier: Optional[str]  # Unique identifer e.g. a question code - q500
     principal_final_value: Optional[
         float
     ]  # Output value that may or may not be adjusted
@@ -79,7 +78,7 @@ def thousand_pounds(
     upper_limit: float,
     lower_limit: float,
     target_variables: dict = {},
-    principal_identifier: Optional[str] = None,
+    unique_identifier: Optional[str] = None,
     predictive: Optional[float] = None,
     auxiliary: Optional[float] = None,
 ) -> Thousands_output:
@@ -87,8 +86,8 @@ def thousand_pounds(
     Calculates a pounds thousands error ratio and if the ratio is between the bounds of the given limits will adjust
     the given principal variable and any linked variables by a factor of 1000.
 
-    :param principal_identifier: Unique identifier e.g. a question code - q500
-    :type principal_identifier: Optional[String]
+    :param unique_identifier: Unique identifier e.g. a question code - q500
+    :type unique_identifier: Optional[String]
     :param principal_variable: Original response value provided for the 'current' period
     :type principal_variable: float
     :param predictive: Value used for 'previous' response (Returned/Imputed/Constructed)
@@ -104,7 +103,7 @@ def thousand_pounds(
 
     :return: Thousands_output: An object containing the
                             following attributes:
-            - principal_identifier: Unique identifer e.g. a question code - q500
+            - unique_identifier: Unique identifer e.g. a question code - q500
             - principal_original_value: Original provided value
             - principal_final_value: Output value that may or may not be adjusted
             - target_variables: Output linked values that may or may not be adjusted
@@ -115,7 +114,7 @@ def thousand_pounds(
 
     log_table(
         "Input Table Function",
-        principal_identifier=principal_identifier,
+        unique_identifier=unique_identifier,
         principal_variable=principal_variable,
         predictive=predictive,
         auxiliary=auxiliary,
@@ -164,7 +163,7 @@ def thousand_pounds(
             )
             log_table(
                 "Thousand Pounds Output",
-                principal_identifier=principal_identifier,
+                unique_identifier=unique_identifier,
                 principal_variable=principal_variable,
                 predictive=predictive,
                 auxiliary=auxiliary,
@@ -176,7 +175,7 @@ def thousand_pounds(
         else:
             log_table(
                 "Thousand Pounds Output",
-                principal_identifier=principal_identifier,
+                unique_identifier=unique_identifier,
                 principal_variable=principal_variable,
                 predictive=predictive,
                 auxiliary=auxiliary,
@@ -186,10 +185,7 @@ def thousand_pounds(
                 tpc_marker=tpc_marker.value
             )
         return Thousands_output(
-            principal_identifier=principal_identifier,
-            principal_original_value=input_parameters[
-                InputParameters.PRINCIPAL_VARIABLE.value
-            ],
+            unique_identifier=unique_identifier,
             principal_final_value=principal_adjusted_value,
             target_variables=target_variables_final,
             tpc_ratio=error_ratio,
@@ -202,7 +198,7 @@ def thousand_pounds(
         # Ensure we populate the output target variables with the same output values as originally given
         log_table(
             "Thousand Pounds Error",
-            principal_identifier=principal_identifier,
+            unique_identifier=unique_identifier,
             principal_variable=principal_variable,
             predictive=predictive,
             auxiliary=auxiliary,
@@ -210,9 +206,9 @@ def thousand_pounds(
             lower_limit=lower_limit,
             target_variables=target_variables,
         )
-        if principal_identifier is None:
-            principal_identifier = "N/A"
-        raise TPException(f"identifier: {principal_identifier}", error)
+        if unique_identifier is None:
+            unique_identifier = "N/A"
+        raise TPException(f"identifier: {unique_identifier}", error)
 
 
 def create_target_variable_objects(target_variables: dict) -> List[Target_variable]:

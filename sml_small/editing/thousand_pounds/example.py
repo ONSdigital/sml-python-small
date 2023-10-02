@@ -19,7 +19,7 @@ def invoke_process_with_local_csv():
 
 # Use some csvs strings already defined in memory and then run the pounds thousands method
 def invoke_process_with_inmemory_csv_example():
-    config_csv = """principal_identifier,principal_variable,predictive,auxiliary,upper_limit,lower_limit
+    config_csv = """unique_identifier,principal_variable,predictive,auxiliary,upper_limit,lower_limit
 100,50000000,60000,30000,1350,350"""
 
     target_questions_csv = """identifier,value
@@ -37,7 +37,7 @@ def invoke_process_with_inmemory_csv_example():
 # Substitutes missing values with the Python 'None'
 # Does not have any explicit exception/error handling
 def invoke(config_csv: str, linked_question_csv: str):
-    # Format:  principal_identifier,principal_variable,predicted,auxiliary,upper_limit,lower_limit
+    # Format:  unique_identifier,principal_variable,predicted,auxiliary,upper_limit,lower_limit
     config_reader = DictReader(config_csv.splitlines())
     config = []
     for config_row in config_reader:
@@ -59,7 +59,7 @@ def invoke(config_csv: str, linked_question_csv: str):
         )
 
     return thousand_pounds(
-        principal_identifier=config["principal_identifier"],
+        unique_identifier=config["unique_identifier"],
         principal_variable=None
         if not config["principal_variable"]
         else float(config["principal_variable"]),
@@ -73,7 +73,7 @@ def invoke(config_csv: str, linked_question_csv: str):
 
 def invoke_directly_writing_output_to_csv_example():
     output = thousand_pounds(
-        principal_identifier="q100",
+        unique_identifier="q100",
         principal_variable=50000000,
         predictive=60000,
         auxiliary=30000,
@@ -89,8 +89,8 @@ def invoke_directly_writing_output_to_csv_example():
     print(f"\nOutput: {output}")
     print(f"\nOutput json: {json.dumps(dataclasses.asdict(output),indent=4)}")
 
-    header = "principal_identifier,principal_original_value,principal_adjusted_value,tpc_ratio,tpc_marker,error_description"
-    row = f"{output.principal_identifier},{output.principal_original_value},{output.principal_final_value}," \
+    header = "unique_identifier,principal_original_value,principal_adjusted_value,tpc_ratio,tpc_marker,error_description"
+    row = f"{output.unique_identifier},{output.principal_original_value},{output.principal_final_value}," \
           f"{output.tpc_ratio},{output.tpc_marker},{output.error_description}"
 
     for linkedq in output.target_variables:
@@ -111,7 +111,7 @@ def invoke_directly_writing_output_to_csv_example():
 
 
 def invoke_process_with_inmemory_single_csv_example():
-    config_csv = """principal_identifier,principal_variable,predictive,auxiliary,upper_limit,lower_limit,q101,q102,q103,q104
+    config_csv = """unique_identifier,principal_variable,predictive,auxiliary,upper_limit,lower_limit,q101,q102,q103,q104
 123A-202203,50000000,60000,30000,1350,250,500,1000,1500,
 123B-202203,50000000,60000,30000,1350,250,500,1000,1500,12345
 124A-202204,50000,600,300,1350,250,200,5000,3500,300
@@ -144,11 +144,11 @@ def invoke_process_with_inmemory_single_csv_example():
     output_question_header = ""
     for question in question_list:
         output_question_header += f",{question}_original_value,{question}_final_value"
-    output_header = f"principal_identifier,principal_original_value,principal_final_value,tpc_ratio,tpc_marker,error_description{output_question_header}"
+    output_header = f"unique_identifier,principal_original_value,principal_final_value,tpc_ratio,tpc_marker,error_description{output_question_header}"
     output_row = ""
     for config in configs:
         output = thousand_pounds(
-            principal_identifier=config["principal_identifier"],
+            unique_identifier=config["unique_identifier"],
             principal_variable=config["principal_variable"],
             predictive=config["predictive"],
             auxiliary=config["auxiliary"],
@@ -157,7 +157,7 @@ def invoke_process_with_inmemory_single_csv_example():
             target_variables=config["target_variables"],
         )
 
-        output_row += f"{output.principal_identifier},{output.principal_original_value},{output.principal_final_value}," \
+        output_row += f"{output.unique_identifier},{output.principal_original_value},{output.principal_final_value}," \
                       f"{output.tpc_ratio},{output.tpc_marker},{output.error_description}"
         for question in output.target_variables:
             output_row += f",{question.original_value},{question.final_value}"
