@@ -8,7 +8,7 @@ For Copyright information, please see LICENCE.
 import logging.config
 import math
 import sys
-from decimal import Decimal, getcontext
+from decimal import Decimal
 from enum import Enum
 from os import path
 from typing import List, Optional, Tuple, Union
@@ -51,7 +51,6 @@ class InputParameters(Enum):
     AUXILIARY = 3
     ABSOLUTE_DIFFERENCE_THRESHOLD = 4
     PERCENTAGE_DIFFERENCE_THRESHOLD = 5
-    PRECISION = 6
 
 
 class TccMarker(Enum):
@@ -308,7 +307,7 @@ def totals_and_components(
             percentage_difference_threshold,
         ]
 
-        decimal_values = convert_input_to_decimal(keys, args)
+        decimal_values = convert_input_to_decimal(keys, args, precision)
 
         input_parameters = (
             decimal_values.get("total"),
@@ -317,10 +316,7 @@ def totals_and_components(
             decimal_values.get("auxiliary"),
             decimal_values.get("absolute_difference_threshold"),
             decimal_values.get("percentage_difference_threshold"),
-            precision,
         )
-
-        getcontext().prec = input_parameters[InputParameters.PRECISION.value]
 
         #  Set the predictive as either the current value, total or auxiliary
         # depending on what values exist from the data input.
@@ -863,9 +859,6 @@ def correct_components(
                        values received, these are used when calculating the
                        amended component values to retain the original weighting.
     :type components: list(Components_list)
-    :param precision: Precision is used by the decimal package to calculate the
-                      adjusted components to the specified accuracy.
-    :type precision: int
     :param total: current total
     :type total: Decimal
     ...

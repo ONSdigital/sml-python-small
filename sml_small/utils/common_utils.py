@@ -6,7 +6,7 @@ For Copyright information, please see LICENCE.
 
 import logging.config
 from cmath import nan
-from decimal import Decimal
+from decimal import Decimal, getcontext
 from os import path
 from typing import Dict, List
 
@@ -89,6 +89,7 @@ def is_number(value) -> bool:
 def convert_input_to_decimal(
     keys: List[str],
     args: List[float],
+    precision: int,
 ) -> Dict[str, Decimal]:
     """
     convert_input_to_decimal This function will take key value pairs within a dict
@@ -108,6 +109,7 @@ def convert_input_to_decimal(
         if len(keys) != len(args):
             raise ValueError("Number of keys needs to match the number of arguments")
 
+        getcontext().prec = precision
         decimal_values = {}
 
         # Using zip to iterate through the keys and arguments simultaneously
