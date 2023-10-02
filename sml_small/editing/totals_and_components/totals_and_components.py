@@ -779,8 +779,6 @@ def error_correction(
     :type components_sum: Decimal
     :param original_components: List of Components objects so final values can be amended
     :type original_components: list(ComponentPair)
-    :param precision: Precision is used by the decimal package to perform calculations to the specified accuracy.
-    :type precision: int
     ...
     :return: final_total Final Total value to be output
     :rtype: Decimal
