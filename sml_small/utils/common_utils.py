@@ -10,13 +10,17 @@ from decimal import Decimal, getcontext
 from os import path
 from typing import Dict, List
 
-from sml_small.utils.error_utils import get_params_is_not_a_number_error
+from sml_small.utils.error_utils import get_param_outside_range_error, get_params_is_not_a_number_error
 
 log_config_path = path.join(path.dirname(path.abspath(__file__)), "../logging.conf")
 logging.config.fileConfig(log_config_path)
 
 # Create logger
 logger = logging.getLogger("commonUtils")
+
+# --- Constant Definitions ---
+PRECISION_MIN = 1
+PRECISION_MAX = 28
 
 
 def log_table(table_name: str, **kwargs):
@@ -86,6 +90,27 @@ def is_number(value) -> bool:
     return True
 
 
+def validate_precision(precision):
+    # Default the precision value when not set
+    if precision is None:
+        precision = PRECISION_MAX
+    else:
+        if validate_number("precision", precision) is True:
+            precision = int(precision)
+
+            if precision < PRECISION_MIN or precision > PRECISION_MAX:
+                raise ValueError(
+                    get_param_outside_range_error(
+                        "precision",
+                        [
+                            str(PRECISION_MIN),
+                            str(PRECISION_MAX),
+                        ],
+                    )
+                )
+    return precision
+
+
 def convert_input_to_decimal(
     keys: List[str],
     args: List[float],
@@ -114,12 +139,10 @@ def convert_input_to_decimal(
 
         # Using zip to iterate through the keys and arguments simultaneously
         for key, arg in zip(keys, args):
-
             if type(arg) == Decimal:
                 decimal_values[key] = arg
 
             elif type(arg) == list:
-
                 if arg == []:
                     decimal_values[key] = arg
 
@@ -133,6 +156,18 @@ def convert_input_to_decimal(
 
                         else:
                             arg[i] = Decimal(str(arg[i]))
+                            decimal_values[key] = arg
+            elif type(arg) == dict:
+                if arg == {}:
+                    decimal_values[key] = arg
+                else:
+                    for dict_keys, dict_values in arg.items():
+                        if type(dict_values) == Decimal:
+                            decimal_values[key] = arg
+                        elif dict_values is None or dict_values == nan:
+                            decimal_values[key] = arg
+                        else:
+                            arg[dict_keys] = Decimal(str(dict_values))
                             decimal_values[key] = arg
 
             elif arg is None or arg is nan:

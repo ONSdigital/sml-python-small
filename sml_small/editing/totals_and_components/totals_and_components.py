@@ -13,9 +13,9 @@ from enum import Enum
 from os import path
 from typing import List, Optional, Tuple, Union
 
-from sml_small.utils.common_utils import convert_input_to_decimal, log_table, validate_number
-from sml_small.utils.error_utils import (get_mandatory_param_error, get_one_of_params_mandatory_error,
-                                         get_param_outside_range_error)
+from sml_small.utils.common_utils import convert_input_to_decimal, log_table, validate_number, validate_precision
+from sml_small.utils.error_utils import (get_mandatory_param_error, get_one_of_params_mandatory_error)
+
 
 # Pick up configuration for logging
 log_config_path = path.join(path.dirname(path.abspath(__file__)), "../../logging.conf")
@@ -540,24 +540,7 @@ def validate_input(
         is True
     ):
         percentage_difference_threshold = float(percentage_difference_threshold)
-
-    # Default the precision value when not set
-    if precision is None:
-        precision = PRECISION_MAX
-    else:
-        if validate_number("precision", precision) is True:
-            precision = int(precision)
-
-            if precision < PRECISION_MIN or precision > PRECISION_MAX:
-                raise ValueError(
-                    get_param_outside_range_error(
-                        "precision",
-                        [
-                            str(PRECISION_MIN),
-                            str(PRECISION_MAX),
-                        ],
-                    )
-                )
+    precision = validate_precision(precision)
     return precision
 
 
@@ -839,7 +822,6 @@ def correct_components(
     components: List[ComponentPair],
     total: Decimal,
 ) -> Tuple[Decimal, List[ComponentPair], TccMarker]:
-
     """
     Function to correct the components values to add up to the received total value,
     set the final total as the received total and indicate that the components

@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 import pytest
 
 from sml_small.editing.thousand_pounds.thousand_pounds import (Target_variable, Thousands_output, TpcMarker,
@@ -33,14 +35,14 @@ class TestThousandPounds:
                 },
                 Thousands_output(
                     "q100",
-                    50000.0,
+                    Decimal("50000.0"),
                     [
-                        Target_variable("q101", 500, 0.5),
-                        Target_variable("q102", 1000, 1),
-                        Target_variable("q103", 12345, 12.35),
-                        Target_variable("q104", 0, 0),
+                        Target_variable("q101", Decimal("500"), Decimal("0.50")),
+                        Target_variable("q102", Decimal("1000"), Decimal("1.00")),
+                        Target_variable("q103", Decimal("12345"), Decimal("12.34")),
+                        Target_variable("q104", Decimal("0"), Decimal("0.00")),
                     ],
-                    1000.0,
+                    Decimal("1000.0"),
                     "C",
                 ),
                 "Given full config - outputs adjusted for all target variables",
@@ -64,7 +66,9 @@ class TestThousandPounds:
                 1350,
                 350,
                 {},
-                Thousands_output("q300", 269.980, [], 1349.9, "C"),
+                Thousands_output(
+                    "q300", Decimal("269.980"), [], Decimal("1349.9"), "C"
+                ),
                 "Given config(missing predictive) - outputs adjusted for all target variables",
             ),
             (
@@ -288,7 +292,7 @@ class TestThousandPounds:
                 {},
                 TPException(
                     "identifier: q1500",
-                    ValueError(get_boundary_error([351.0, 350.0])),
+                    ValueError(get_boundary_error([351, 350])),
                 ),
                 "Lower limit is larger than the upper limit",
             ),
@@ -370,8 +374,8 @@ class TestCreateTargetVariableObjects:
 
 class TestValidateInput:
     @pytest.mark.parametrize(
-        "predictive, auxiliary, principal_variable, lower_limit, upper_limit, target_variables, expected_result, "
-        "test_id",
+        "predictive, auxiliary, principal_variable, lower_limit, upper_limit, precision, target_variables, "
+        "expected_result, test_id",
         [
             (
                 "500",  # predictive
@@ -379,22 +383,12 @@ class TestValidateInput:
                 200,  # principal_variable
                 50,  # lower limit
                 100,  # upper limit
-                [
-                    Target_variable("q501", 500),
-                    Target_variable("q502", 1000),
-                ],  # target variaibles
-                (
-                    500.0,  # expected output predictive
-                    None,  # expected output auxiliary
-                    200.0,  # expected output principal variable
-                    50.0,  # expected output lower limit
-                    100.0,  # expected output upper limit
-                    [
-                        Target_variable("q501", 500.0),
-                        Target_variable("q502", 1000.0),
-                    ],  # expected output
-                    # target variables
-                ),
+                28,  # Precision
+                {
+                    "q501": 500,
+                    "q502": 1000,
+                },  # target variables
+                28,
                 "Test 1: Predictive as an interpretable string",
             ),
             (
@@ -403,7 +397,11 @@ class TestValidateInput:
                 200,
                 50,
                 100,
-                [Target_variable("q501", 500), Target_variable("q502", 1000)],
+                28,
+                {
+                    "q501": 500,
+                    "q502": 1000,
+                },
                 ValueError(get_params_is_not_a_number_error("predictive")),
                 "Test 2: Predictive as a non-interpretable string",
             ),
@@ -413,15 +411,12 @@ class TestValidateInput:
                 200,
                 50,
                 100,
-                [Target_variable("q501", 500), Target_variable("q502", 1000)],
-                (
-                    None,
-                    500.0,
-                    200.0,
-                    50.0,
-                    100.0,
-                    [Target_variable("q501", 500.0), Target_variable("q502", 1000.0)],
-                ),
+                28,
+                {
+                    "q501": 500,
+                    "q502": 1000,
+                },
+                28,
                 "Test 3: Auxiliary as an interpretable string",
             ),
             (
@@ -430,7 +425,11 @@ class TestValidateInput:
                 200,
                 50,
                 100,
-                [Target_variable("q501", 500), Target_variable("q502", 1000)],
+                28,
+                {
+                    "q501": 500,
+                    "q502": 1000,
+                },
                 ValueError(get_params_is_not_a_number_error("auxiliary")),
                 "Test 4: Auxiliary as a non-interpretable string",
             ),
@@ -440,7 +439,11 @@ class TestValidateInput:
                 200,
                 50,
                 100,
-                [Target_variable("q501", 500), Target_variable("q502", 1000)],
+                28,
+                {
+                    "q501": 500,
+                    "q502": 1000,
+                },
                 ValueError(
                     get_one_of_params_mandatory_error(["predictive", "auxiliary"])
                 ),
@@ -452,7 +455,11 @@ class TestValidateInput:
                 None,
                 50,
                 100,
-                [Target_variable("q501", 500), Target_variable("q502", 1000)],
+                28,
+                {
+                    "q501": 500,
+                    "q502": 1000,
+                },
                 ValueError(get_mandatory_param_error("principal_variable")),
                 "Test 6: Principal Variable not input",
             ),
@@ -462,15 +469,12 @@ class TestValidateInput:
                 "200",
                 50,
                 100,
-                [Target_variable("q501", 500), Target_variable("q502", 1000)],
-                (
-                    500.0,
-                    600.0,
-                    200.0,
-                    50.0,
-                    100.0,
-                    [Target_variable("q501", 500.0), Target_variable("q502", 1000.0)],
-                ),
+                3,
+                {
+                    "q501": 500,
+                    "q502": 1000,
+                },
+                3,
                 "Test 7: Principal Variable is an interpretable string",
             ),
             (
@@ -479,7 +483,11 @@ class TestValidateInput:
                 "two hundred",
                 50,
                 100,
-                [Target_variable("q501", 500), Target_variable("q502", 1000)],
+                28,
+                {
+                    "q501": 500,
+                    "q502": 1000,
+                },
                 ValueError(get_params_is_not_a_number_error("principal_variable")),
                 "Test 8: Principal Variable is a non-interpretable string",
             ),
@@ -489,7 +497,11 @@ class TestValidateInput:
                 200,
                 None,
                 100,
-                [Target_variable("q501", 500), Target_variable("q502", 1000)],
+                28,
+                {
+                    "q501": 500,
+                    "q502": 1000,
+                },
                 ValueError(get_mandatory_param_error("lower_limit")),
                 "Test 9: Lower Limit not input",
             ),
@@ -499,15 +511,12 @@ class TestValidateInput:
                 200,
                 "50",
                 100,
-                [Target_variable("q501", 500), Target_variable("q502", 1000)],
-                (
-                    500.0,
-                    600.0,
-                    200.0,
-                    50.0,
-                    100.0,
-                    [Target_variable("q501", 500.0), Target_variable("q502", 1000.0)],
-                ),
+                28,
+                {
+                    "q501": 500,
+                    "q502": 1000,
+                },
+                28,
                 "Test 10: Lower Limit is an interpretable string",
             ),
             (
@@ -516,7 +525,11 @@ class TestValidateInput:
                 200,
                 "fifty",
                 100,
-                [Target_variable("q501", 500), Target_variable("q502", 1000)],
+                28,
+                {
+                    "q501": 500,
+                    "q502": 1000,
+                },
                 ValueError(get_params_is_not_a_number_error("lower_limit")),
                 "Test 11: Lower Limit is a non-interpretable string",
             ),
@@ -526,7 +539,11 @@ class TestValidateInput:
                 200,
                 50,
                 None,
-                [Target_variable("q501", 500), Target_variable("q502", 1000)],
+                28,
+                {
+                    "q501": 500,
+                    "q502": 1000,
+                },
                 ValueError(get_mandatory_param_error("upper_limit")),
                 "Test 12: Upper Limit not input",
             ),
@@ -536,15 +553,12 @@ class TestValidateInput:
                 200,
                 50,
                 "100",
-                [Target_variable("q501", 500), Target_variable("q502", 1000)],
-                (
-                    500.0,
-                    600.0,
-                    200.0,
-                    50.0,
-                    100.0,
-                    [Target_variable("q501", 500.0), Target_variable("q502", 1000.0)],
-                ),
+                28,
+                {
+                    "q501": 500,
+                    "q502": 1000,
+                },
+                28,
                 "Test 13: Upper Limit is an interpretable string",
             ),
             (
@@ -553,7 +567,11 @@ class TestValidateInput:
                 200,
                 50,
                 "one hundred",
-                [Target_variable("q501", 500), Target_variable("q502", 1000)],
+                28,
+                {
+                    "q501": 500,
+                    "q502": 1000,
+                },
                 ValueError(get_params_is_not_a_number_error("upper_limit")),
                 "Test 14: Upper Limit is a non-interpretable string",
             ),
@@ -563,8 +581,12 @@ class TestValidateInput:
                 200,
                 100,
                 50,
-                [Target_variable("q501", 500), Target_variable("q502", 1000)],
-                ValueError(get_boundary_error([100.0, 50.0])),
+                28,
+                {
+                    "q501": 500,
+                    "q502": 1000,
+                },
+                ValueError(get_boundary_error([100, 50])),
                 "Test 15: Lower Limit is greater than Upper Limit",
             ),
             (
@@ -573,8 +595,12 @@ class TestValidateInput:
                 200,
                 100,
                 100,
-                [Target_variable("q501", 500), Target_variable("q502", 1000)],
-                ValueError(get_boundary_error([100.0, 100.0])),
+                28,
+                {
+                    "q501": 500,
+                    "q502": 1000,
+                },
+                ValueError(get_boundary_error([100, 100])),
                 "Test 16: Lower Limit is equal to Upper Limit",
             ),
             (
@@ -583,15 +609,12 @@ class TestValidateInput:
                 200,
                 50,
                 100,
-                [Target_variable("q501", "500"), Target_variable("q502", 1000)],
-                (
-                    500.0,
-                    600.0,
-                    200.0,
-                    50.0,
-                    100.0,
-                    [Target_variable("q501", 500.0), Target_variable("q502", 1000.0)],
-                ),
+                28,
+                {
+                    "q501": 500,
+                    "q502": 1000,
+                },
+                28,
                 "Test 17: Target Variable is an interpretable string",
             ),
             (
@@ -600,10 +623,11 @@ class TestValidateInput:
                 200,
                 50,
                 100,
-                [
-                    Target_variable("q501", "five hundred"),
-                    Target_variable("q502", 1000),
-                ],
+                28,
+                {
+                    "q501": "five hundred",
+                    "q502": 1000,
+                },
                 ValueError(get_params_is_not_a_number_error("q501")),
                 "Test 18: Target Variable is a non-interpretable string",
             ),
@@ -616,11 +640,12 @@ class TestValidateInput:
         principal_variable,
         lower_limit,
         upper_limit,
+        precision,
         target_variables,
         expected_result,
         test_id,
     ):
-        if isinstance(expected_result, tuple):
+        if isinstance(expected_result, int):
             try:
                 result = validate_input(
                     predictive=predictive,
@@ -629,6 +654,7 @@ class TestValidateInput:
                     lower_limit=lower_limit,
                     upper_limit=upper_limit,
                     target_variables=target_variables,
+                    precision=precision,
                 )
                 assert result == expected_result
             except Exception as e:
@@ -648,8 +674,8 @@ class TestValidateInput:
                     lower_limit=lower_limit,
                     upper_limit=upper_limit,
                     target_variables=target_variables,
+                    precision=precision,
                 )
-                print(exc_info.value)
             assert (str(exc_info.value)) == str(expected_result)
 
 
