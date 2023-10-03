@@ -102,7 +102,7 @@ def run_thousand_pounds(
     target_variables_columns: List[str],
     predictive_column: Optional[str] = None,
     auxiliary_column: Optional[str] = None,
-    principal_identifier_column: Optional[str] = None,
+    unique_identifier_column: Optional[str] = None,
 ) -> pd.DataFrame:
     """
     Runs the Thousand Pounds Correction method against the input row of data. All inputs except row and index_number
@@ -119,7 +119,7 @@ def run_thousand_pounds(
     :param target_variables_columns: List of columns containing the target variables values
     :param predictive_column: Column containing the predictive value
     :param auxiliary_column: Column containing the auxiliary value
-    :param principal_identifier_column: Column containing the principal identifier  column
+    :param unique_identifier_column: Column containing the principal identifier  column
 
     :return: thousand_pounds_output, the output of the thousand_pounds method stored within a
     pandas dataframe
@@ -130,7 +130,7 @@ def run_thousand_pounds(
         target_variables_list[value] = row[value]
 
     input_dict = {
-        "principal_identifier": principal_identifier_column,
+        "unique_identifier": unique_identifier_column,
         "principal_variable": principal_variable_column,
         "upper_limit": upper_limit_column,
         "lower_limit": lower_limit_column,
@@ -146,7 +146,7 @@ def run_thousand_pounds(
     # construct a new dataframe containing our output data
     thousand_pounds_output = pd.DataFrame(
         {
-            "Principal Identifier": output.principal_identifier,
+            "Principal Identifier": output.unique_identifier,
             "Principal Original Value": output.principal_original_value,
             "Principal Final Value": output.principal_final_value,
             "Target Variables": [output.target_variables],

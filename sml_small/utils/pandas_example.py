@@ -23,7 +23,7 @@ def load_csv(filepath):
 # The code below calls the load_csv function
 # with the filename as an argument
 input_dataframe_totals_and_components = load_csv(
-    "../../../tests/editing/totals_and_components/example_data/example_test_data.csv"
+    "../../tests/editing/totals_and_components/example_data/example_test_data.csv"
 )
 components = ["comp_1", "comp_2", "comp_3", "comp_4"]
 
@@ -57,14 +57,14 @@ test_totals_and_components = wrapper(
 # The index=False argument ensures that the row indices are not written
 # to the CSV file
 test_totals_and_components.to_csv(
-    "../../../tests/editing/totals_and_components/example_data/example_test_data_pandas_output.csv",
+    "../../tests/editing/totals_and_components/example_data/example_test_data_pandas_output.csv",
     index=False,
 )
 # ---------------------------------------
 # Thousand Pounds usage
 # ---------------------------------------
 input_dataframe_thousand_pounds = load_csv(
-    "../../../tests/editing/thousand_pounds/example_data/example_test_data.csv"
+    "../../tests/editing/thousand_pounds/example_data/example_test_data.csv"
 )
 target_variables = ["q42", "q43"]
 thousand_pounds_output_columns = [
@@ -78,7 +78,7 @@ test_thousand_pounds = wrapper(
     input_dataframe_thousand_pounds,
     "thousand_pounds",
     output_columns=thousand_pounds_output_columns,
-    principal_identifier_column="RU",
+    unique_identifier_column="RU",
     principal_variable_column="principal_val",
     target_variables_columns=target_variables,
     upper_limit_column="threshold_upper",
@@ -87,6 +87,6 @@ test_thousand_pounds = wrapper(
     auxiliary_column="aux_val",
 )
 test_thousand_pounds.to_csv(
-    "../../../tests/editing/thousand_pounds/example_data/example_test_data_pandas_output.csv",
+    "../../tests/editing/thousand_pounds/example_data/example_test_data_pandas_output.csv",
     index=False,
 )

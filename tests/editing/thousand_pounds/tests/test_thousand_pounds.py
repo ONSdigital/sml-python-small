@@ -15,7 +15,7 @@ EXCEPTION_FAIL_MESSAGE = (
 
 class TestThousandPounds:
     @pytest.mark.parametrize(
-        "principal_identifier, principal_variable, predictive, auxiliary, upper_limit, lower_limit, target_variables, "
+        "unique_identifier, principal_variable, predictive, auxiliary, upper_limit, lower_limit, target_variables, "
         "expected, test_id",
         [
             (
@@ -33,7 +33,6 @@ class TestThousandPounds:
                 },
                 Thousands_output(
                     "q100",
-                    50000000,
                     50000.0,
                     [
                         Target_variable("q101", 500, 0.5),
@@ -54,7 +53,7 @@ class TestThousandPounds:
                 1350,
                 350,
                 {},
-                Thousands_output("q200", 60000000, 60000.0, [], 400.0, "C"),
+                Thousands_output("q200", 60000.0, [], 400.0, "C"),
                 "Given config(missing auxiliary) - outputs adjusted for all target variables",
             ),
             (
@@ -65,7 +64,7 @@ class TestThousandPounds:
                 1350,
                 350,
                 {},
-                Thousands_output("q300", 269980, 269.980, [], 1349.9, "C"),
+                Thousands_output("q300", 269.980, [], 1349.9, "C"),
                 "Given config(missing predictive) - outputs adjusted for all target variables",
             ),
             (
@@ -97,7 +96,6 @@ class TestThousandPounds:
                 },
                 Thousands_output(
                     "q410",
-                    8000,
                     0,
                     [
                         Target_variable("q451", 500, None),
@@ -118,7 +116,6 @@ class TestThousandPounds:
                 {"q451": 500, "q452": 1000},
                 Thousands_output(
                     "q450",
-                    8000,
                     0,
                     [
                         Target_variable("q451", 500, None),
@@ -154,7 +151,6 @@ class TestThousandPounds:
                 Thousands_output(
                     "q600",
                     0,
-                    0,
                     [
                         Target_variable("q601", 500, 500),
                         Target_variable("q602", 1000, 1000),
@@ -175,7 +171,6 @@ class TestThousandPounds:
                 Thousands_output(
                     "q700",
                     3500,
-                    3500,
                     [Target_variable("q701", 500, 500)],
                     350,
                     "N",
@@ -192,7 +187,6 @@ class TestThousandPounds:
                 {"q801": 500},
                 Thousands_output(
                     "q800",
-                    13500,
                     13500,
                     [Target_variable("q801", 500, 500)],
                     1350,
@@ -302,7 +296,7 @@ class TestThousandPounds:
     )
     def test__run__given_valid_config__returns_adjusted_figures(
         self,
-        principal_identifier,
+        unique_identifier,
         principal_variable,
         predictive,
         auxiliary,
@@ -315,13 +309,13 @@ class TestThousandPounds:
         if isinstance(expected, Thousands_output):
             try:
                 result = thousand_pounds(
-                    principal_identifier,
-                    principal_variable,
-                    predictive,
-                    auxiliary,
-                    upper_limit,
-                    lower_limit,
-                    target_variables,
+                    unique_identifier=unique_identifier,
+                    principal_variable=principal_variable,
+                    predictive=predictive,
+                    auxiliary=auxiliary,
+                    upper_limit=upper_limit,
+                    lower_limit=lower_limit,
+                    target_variables=target_variables,
                 )
                 assert result == expected
 
@@ -336,13 +330,13 @@ class TestThousandPounds:
         else:
             with pytest.raises(Exception) as exc_info:
                 thousand_pounds(
-                    principal_identifier,
-                    principal_variable,
-                    predictive,
-                    auxiliary,
-                    upper_limit,
-                    lower_limit,
-                    target_variables,
+                    unique_identifier=unique_identifier,
+                    principal_variable=principal_variable,
+                    predictive=predictive,
+                    auxiliary=auxiliary,
+                    upper_limit=upper_limit,
+                    lower_limit=lower_limit,
+                    target_variables=target_variables,
                 )
             assert (str(exc_info.value)) == str(expected)
 
