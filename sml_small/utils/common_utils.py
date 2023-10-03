@@ -3,8 +3,12 @@ Common functionality that can be used by any SML method
 
 For Copyright information, please see LICENCE.
 """
+
 import logging.config
+from cmath import nan
+from decimal import Decimal, getcontext
 from os import path
+from typing import Dict, List
 
 from sml_small.utils.error_utils import get_params_is_not_a_number_error
 
@@ -80,3 +84,63 @@ def is_number(value) -> bool:
         return False
 
     return True
+
+
+def convert_input_to_decimal(
+    keys: List[str],
+    args: List[float],
+    precision: int,
+) -> Dict[str, Decimal]:
+    """
+    convert_input_to_decimal This function will take key value pairs within a dict
+    the values will then be converted to decimal if appropriate.
+
+    :param keys: List of string names associated with the values in the list
+    :type keys: List[str]
+    :param args: Values to be converted to decimal
+    :type args: List[float]
+    :raises ValueError: Error string raised in the event the keys do not
+    have arguments or arguments do not have keys
+    ...
+    :return: key names and their values returned as decimals if appropriate.
+    :rtype: Dict[str, Decimal]
+    """
+    try:
+        if len(keys) != len(args):
+            raise ValueError("Number of keys needs to match the number of arguments")
+
+        getcontext().prec = precision
+        decimal_values = {}
+
+        # Using zip to iterate through the keys and arguments simultaneously
+        for key, arg in zip(keys, args):
+
+            if type(arg) == Decimal:
+                decimal_values[key] = arg
+
+            elif type(arg) == list:
+
+                if arg == []:
+                    decimal_values[key] = arg
+
+                else:
+                    for i in range(len(arg)):
+                        if type(arg[i]) == Decimal:
+                            decimal_values[key] = arg
+
+                        elif arg[i] is None or arg[i] == nan:
+                            decimal_values[key] = arg
+
+                        else:
+                            arg[i] = Decimal(str(arg[i]))
+                            decimal_values[key] = arg
+
+            elif arg is None or arg is nan:
+                decimal_values[key] = arg
+
+            else:
+                decimal_values[key] = Decimal(str(arg))
+
+        return decimal_values
+    except Exception as error:
+        raise error
