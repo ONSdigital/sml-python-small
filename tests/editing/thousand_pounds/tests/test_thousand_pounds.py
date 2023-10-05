@@ -836,7 +836,7 @@ class TestThousandPoundsUAT:
                     21.758,
                     [
                         Target_variable("q42", 97, 0.097),
-                        Target_variable("q43", 3238, 7.753),
+                        Target_variable("q43", 3238, 3.238),
                     ],
                     946,
                     "C",
