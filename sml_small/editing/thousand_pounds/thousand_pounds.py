@@ -414,7 +414,7 @@ def determine_predictive_value(
     """
     if predictive or predictive == 0:
         return predictive
-    if auxiliary:
+    else:
         return auxiliary
 
 
