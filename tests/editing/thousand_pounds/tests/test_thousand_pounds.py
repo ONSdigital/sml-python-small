@@ -37,10 +37,10 @@ class TestThousandPounds:
                     "q100",
                     Decimal("50000.0"),
                     [
-                        Target_variable("q101", Decimal("500"), Decimal("0.50")),
-                        Target_variable("q102", Decimal("1000"), Decimal("1.00")),
-                        Target_variable("q103", Decimal("12345"), Decimal("12.34")),
-                        Target_variable("q104", Decimal("0"), Decimal("0.00")),
+                        Target_variable("q101", Decimal("500"), Decimal("0.5")),
+                        Target_variable("q102", Decimal("1000"), Decimal("1")),
+                        Target_variable("q103", Decimal("12345"), Decimal("12.345")),
+                        Target_variable("q104", Decimal("0"), Decimal("0")),
                     ],
                     Decimal("1000.0"),
                     "C",
@@ -350,7 +350,7 @@ class TestThousandPoundsUAT:
         "expected, test_id",
         [
             (
-                "UAT-SHEET-1-A",
+                "UAT-Sheet-1-A",
                 706, # principal value/variable
                 605, # predictive
                 None, # auxiliary
@@ -359,18 +359,18 @@ class TestThousandPoundsUAT:
                 {"q42": 32, "q43": 97},
                 Thousands_output(
                     "UAT-Sheet-1-A",
-                    706,
+                    Decimal("706"),
                     [
-                        Target_variable("q42", 32, 32),
-                        Target_variable("q43", 97, 97),
+                        Target_variable("q42", Decimal("32"), Decimal("32")),
+                        Target_variable("q43", Decimal("97"), Decimal("97")),
                     ],
-                    1.66942149,
+                    Decimal("1.66942149"),
                     "N",
                 ),
                 "Test 1: If R < 250, then no correction is applied. TPC = N",
             ),
             (
-                "UAT-SHEET-1-B",
+                "UAT-Sheet-1-B",
                 381, # principal value/variable
                 400, # predictive
                 None, # auxiliary
@@ -379,18 +379,18 @@ class TestThousandPoundsUAT:
                 {"q42": 287, "q43": 199},
                 Thousands_output(
                     "UAT-Sheet-1-B",
-                    381,
+                    Decimal("381"),
                     [
-                        Target_variable("q42", 287, 287),
-                        Target_variable("q43", 199, 199),
+                        Target_variable("q42", Decimal("287"), Decimal("287")),
+                        Target_variable("q43", Decimal("199"), Decimal("199")),
                     ],
-                    0.9525,
+                    Decimal("0.9525"),
                     "N",
                 ),
                 "Test 2: If R < 250, then no correction is applied. TPC = N",
             ),
             (
-                "UAT-SHEET-2-A",
+                "UAT-Sheet-2-A",
                 823650, # principal value/variable
                 605, # predictive
                 None, # auxiliary
@@ -399,18 +399,18 @@ class TestThousandPoundsUAT:
                 {"q42": 32, "q43": 97},
                 Thousands_output(
                     "UAT-Sheet-2-A",
-                    823650,
+                    Decimal("823650"),
                     [
-                        Target_variable("q42", 32, 32),
-                        Target_variable("q43", 97, 97),
+                        Target_variable("q42", Decimal("32"), Decimal("32")),
+                        Target_variable("q43", Decimal("97"), Decimal("97")),
                     ],
-                    1361.404959,
+                    Decimal("1361.404959"),
                     "N",
                 ),
                 "Test 3: If R > 1350, then no correction is applied. TPC = N",
             ),
             (
-                "UAT-SHEET-2-B",
+                "UAT-Sheet-2-B",
                 11638071, # principal value/variable
                 3481, # predictive
                 None, # auxiliary
@@ -419,18 +419,18 @@ class TestThousandPoundsUAT:
                 {"q42": 7161, "q43": 759},
                 Thousands_output(
                     "UAT-Sheet-2-B",
-                    11638071,
+                    Decimal("11638071"),
                     [
-                        Target_variable("q42", 7161, 7161),
-                        Target_variable("q43", 759, 759),
+                        Target_variable("q42", Decimal("7161"), Decimal("7161")),
+                        Target_variable("q43", Decimal("759"), Decimal("759")),
                     ],
-                    3343.312554,
+                    Decimal("3343.312554"),
                     "N",
                 ),
                 "Test 4: If R > 1350, then no correction is applied. TPC = N",
             ),
             (
-                "UAT-SHEET-3-A",
+                "UAT-Sheet-3-A",
                 151250, # principal value/variable
                 605, # predictive
                 None, # auxiliary
@@ -439,18 +439,18 @@ class TestThousandPoundsUAT:
                 {"q42": 32, "q43": 97},
                 Thousands_output(
                     "UAT-Sheet-3-A",
-                    151250,
+                    Decimal("151250"),
                     [
-                        Target_variable("q42", 32, 32),
-                        Target_variable("q43", 97, 97),
+                        Target_variable("q42", Decimal("32"), Decimal("32")),
+                        Target_variable("q43", Decimal("97"), Decimal("97")),
                     ],
-                    250,
+                    Decimal("250"),
                     "N",
                 ),
                 "Test 5: If R = 250, then no correction is applied. TPC = N",
             ),
             (
-                "UAT-SHEET-3-B",
+                "UAT-Sheet-3-B",
                 5750, # principal value/variable
                 250, # predictive
                 None, # auxiliary
@@ -459,18 +459,18 @@ class TestThousandPoundsUAT:
                 {"q42": 3900, "q43": 272},
                 Thousands_output(
                     "UAT-Sheet-3-B",
-                    5750,
+                    Decimal("5750"),
                     [
-                        Target_variable("q42", 3900, 3900),
-                        Target_variable("q43", 272, 272),
+                        Target_variable("q42", Decimal("3900"), Decimal("3900")),
+                        Target_variable("q43", Decimal("272"), Decimal("272")),
                     ],
-                    250,
+                    Decimal("250"),
                     "N",
                 ),
                 "Test 6: If R = 250, then no correction is applied. TPC = N",
             ),
             (
-                "UAT-SHEET-4-A",
+                "UAT-Sheet-4-A",
                 816750, # principal value/variable
                 605, # predictive
                 None, # auxiliary
@@ -479,18 +479,18 @@ class TestThousandPoundsUAT:
                 [(32), (97)],
                Thousands_output (
                     "UAT-Sheet-4-A",
-                    816750,
+                    Decimal("816750"),
                     [
-                        Target_variable("q42", 32, 32),
-                        Target_variable("q43", 97, 97),
+                        Target_variable("q42", Decimal("32"), Decimal("32")),
+                        Target_variable("q43", Decimal("97"), Decimal("97")),
                     ],
-                    1350,
+                    Decimal("1350"),
                     "N",
                 ),
                 "Test 7: If R = 1350, then no correction is applied. TPC = N",
             ),
             (
-                "UAT-SHEET-4-B",
+                "UAT-Sheet-4-B",
                 31050, # principal value/variable
                 23, # predictive
                 None, # auxiliary
@@ -499,18 +499,18 @@ class TestThousandPoundsUAT:
                 {"q42": 29, "q43": 7},
                 Thousands_output(
                     "UAT-Sheet-4-B",
-                    31050,
+                    Decimal("31050"),
                     [
-                        Target_variable("q42", 29, 29),
-                        Target_variable("q43", 7, 7),
+                        Target_variable("q42", Decimal("29"), Decimal("29")),
+                        Target_variable("q43", Decimal("7"), Decimal("7")),
                     ],
-                    1350,
+                    Decimal("1350"),
                     "N",
                 ),
                 "Test 8: If R = 1350, then no correction is applied. TPC = N",
             ),
             (
-                "UAT-SHEET-5-A",
+                "UAT-Sheet-5-A",
                 716750, # principal value/variable
                 605, # predictive
                 None, # auxiliary
@@ -519,19 +519,19 @@ class TestThousandPoundsUAT:
                 {"q42": 3238, "q43": 97},
                 Thousands_output(
                     "UAT-Sheet-5-A",
-                    716.75,
+                    Decimal("716.75"),
                     [
-                        Target_variable("q42", 3238, 3.238),
-                        Target_variable("q43", 97, 0.097),
+                        Target_variable("q42", Decimal("3238"), Decimal("3.238")),
+                        Target_variable("q43", Decimal("97"), Decimal("0.097")),
                     ],
-                    1184.710744,
+                    Decimal("1184.710744"),
                     "C",
                 ),
                 """Test 9: If 250 < R < 1350, then a correction value is applied,
                 and all monetary question values are divided by 1000. TPC = C""",
             ),
             (
-                "UAT-SHEET-5-B",
+                "UAT-Sheet-5-B",
                 21758, # principal value/variable
                 23, # predictive
                 None, # auxiliary
@@ -540,19 +540,19 @@ class TestThousandPoundsUAT:
                 {"q42": 29, "q43": 7753},
                 Thousands_output(
                     "UAT-Sheet-5-B",
-                    21.758,
+                    Decimal("21.758"),
                     [
-                        Target_variable("q42", 29, 0.029),
-                        Target_variable("q43", 7753, 7.753),
+                        Target_variable("q42", Decimal("29"), Decimal("0.029")),
+                        Target_variable("q43", Decimal("7753"), Decimal("7.753")),
                     ],
-                    946,
+                    Decimal("946"),
                     "C",
                 ),
                 """Test 10: If 250 < R < 1350, then a correction value is applied,
                 and all monetary question values are divided by 1000. TPC = C""",
             ),
             (
-                "UAT-SHEET-6-A",
+                "UAT-Sheet-6-A",
                 716750, # principal value/variable
                 0, # predictive
                 605, # auxiliary
@@ -561,19 +561,19 @@ class TestThousandPoundsUAT:
                 {"q42": 3238, "q43": 97},
                 Thousands_output(
                     "UAT-Sheet-6-A",
-                    716.75,
+                    Decimal("716.75"),
                     [
-                        Target_variable("q42", 3238, 3.238),
-                        Target_variable("q42", 97, 0.097),
+                        Target_variable("q42", Decimal("3238"), Decimal("3.238")),
+                        Target_variable("q42", Decimal("97"), Decimal("0.097")),
                     ],
-                    1184.710744,
+                    Decimal("1184.710744"),
                     "C",
                 ),
                 """Test 11: If the predictive value is zero and the auxiliary
                 variable is populated, and correction expected. TPC = C""",
             ),
             (
-                "UAT-SHEET-6-B",
+                "UAT-Sheet-6-B",
                 21758, # principal value/variable
                 0, # predictive
                 23, # auxiliary
@@ -582,19 +582,19 @@ class TestThousandPoundsUAT:
                 {"q42": 29, "q43": 7753},
                 Thousands_output(
                     "UAT-Sheet-6-B",
-                    21.758,
+                    Decimal("21.758"),
                     [
-                        Target_variable("q42", 29, 0.029),
-                        Target_variable("q43", 7753, 7.753),
+                        Target_variable("q42", Decimal("29"), Decimal("0.029")),
+                        Target_variable("q43", Decimal("7753"), Decimal("7.753")),
                     ],
-                    946,
+                    Decimal("946"),
                     "C",
                 ),
                 """Test 12: If the predictive value is zero and the auxiliary
                 variable is populated, and correction expected. TPC = C""",
             ),
             (
-                "UAT-SHEET-7-A",
+                "UAT-Sheet-7-A",
                 716750, # principal value/variable
                 0, # predictive
                 None, # auxiliary
@@ -603,10 +603,10 @@ class TestThousandPoundsUAT:
                 {"q42": 3238, "q43": 97},
                 Thousands_output(
                     "UAT-Sheet-7-A",
-                    716750,
+                    Decimal("716750"),
                     [
-                        Target_variable("q42", 3238, 3238),
-                        Target_variable("q43", 97, 97),
+                        Target_variable("q42", Decimal("3238"), Decimal("3238")),
+                        Target_variable("q43", Decimal("97"), Decimal("97")),
                     ],
                     None,
                     "S",
@@ -615,7 +615,7 @@ class TestThousandPoundsUAT:
                 variable is not populated. TPC = S""",
             ),
             (
-                "UAT-SHEET-7-B",
+                "UAT-Sheet-7-B",
                 21758, # principal value/variable
                 0, # predictive
                 None, # auxiliary
@@ -624,10 +624,10 @@ class TestThousandPoundsUAT:
                 {"q42": 29, "q43": 7753},
                 Thousands_output(
                     "UAT-Sheet-7-B",
-                    21758,
+                    Decimal("21758"),
                     [
-                        Target_variable("q42", 29, 29),
-                        Target_variable("q43", 7753, 7753),
+                        Target_variable("q42", Decimal("29"), Decimal("29")),
+                        Target_variable("q43", Decimal("7753"), Decimal("7753")),
                     ],
                     None,
                     "S",
@@ -636,7 +636,7 @@ class TestThousandPoundsUAT:
                 variable is not populated. TPS = S""",
             ),
             (
-                "UAT-SHEET-8-A",
+                "UAT-Sheet-8-A",
                 716750, # principal value/variable
                 0, # predictive
                 0, # auxiliary
@@ -645,10 +645,10 @@ class TestThousandPoundsUAT:
                 {"q42": 3238, "q43": 97},
                 Thousands_output(
                     "UAT-Sheet-8-A",
-                    716750,
+                    Decimal("716750"),
                     [
-                        Target_variable("q42", 3238, 3238),
-                        Target_variable("q43", 97, 97),
+                        Target_variable("q42", Decimal("3238"), Decimal("3238")),
+                        Target_variable("q43", Decimal("97"), Decimal("97")),
                     ],
                     None,
                     "S",
@@ -657,19 +657,19 @@ class TestThousandPoundsUAT:
                 variable is zero. TPC = S""",
             ),
             (
-                "UAT-SHEET-8-B",
+                "UAT-Sheet-8-B",
                 21758, # principal value/variable
-                1350, # predictive
-                250, # auxiliary
+                0, # predictive
+                0, # auxiliary
+                1350,
+                250,
                 {"q42": 29, "q43": 7753},
-                0,
-                0,
                 Thousands_output(
                     "UAT-Sheet-8-B",
-                    21758,
+                    Decimal("21758"),
                     [
-                        Target_variable("q42", 29, 29),
-                        Target_variable("q43", 7753, 7753),
+                        Target_variable("q42", Decimal("29"), Decimal("29")),
+                        Target_variable("q43", Decimal("7753"), Decimal("7753")),
                     ],
                     None,
                     "S",
@@ -678,7 +678,7 @@ class TestThousandPoundsUAT:
                 variable is zero. TPS = S""",
             ),
             (
-                "UAT-SHEET-9-A",
+                "UAT-Sheet-9-A",
                 716750, # principal value/variable
                 None, # predictive
                 605, # auxiliary
@@ -687,19 +687,19 @@ class TestThousandPoundsUAT:
                 {"q42": 3238, "q43": 97},
                 Thousands_output(
                     "UAT-Sheet-9-A",
-                    716750,
+                    Decimal("716750"),
                     [
-                        Target_variable("q42", 3238, 3.238),
-                        Target_variable("q43", 97, 0.097),
+                        Target_variable("q42", Decimal("3238"), Decimal("3.238")),
+                        Target_variable("q43", Decimal("97"), Decimal("0.097")),
                     ],
-                    1184.710744,
+                    Decimal("1184.710744"),
                     "C",
                 ),
                 """Test 17: If the predictive value is missing and the auxiliary
                 variable is populated, and correction expected. TPC = C""",
             ),
             (
-                "UAT-SHEET-9-B",
+                "UAT-Sheet-9-B",
                 21758, # principal value/variable
                 None, # predictive
                 23, # auxiliary
@@ -708,19 +708,19 @@ class TestThousandPoundsUAT:
                 {"q42": 29, "q43": 7753},
                 Thousands_output(
                     "UAT-Sheet-9-B",
-                    21758,
+                    Decimal("21.758"),
                     [
-                        Target_variable("q42", 29, 0.029),
-                        Target_variable("q43", 7753, 7.753),
+                        Target_variable("q42", Decimal("29"), Decimal("0.029")),
+                        Target_variable("q43", Decimal("7753"), Decimal("7.753")),
                     ],
-                    946,
+                    Decimal("946"),
                     "C",
                 ),
                 """Test 18: If the predictive value is missing, and the auxiliary
                 variable is populated, and correction expected. TPC = C""",
             ),
             (
-                "UAT-SHEET-10-A",
+                "UAT-Sheet-10-A",
                 716750, # principal value/variable
                 605, # predictive
                 None, # auxiliary
@@ -729,12 +729,12 @@ class TestThousandPoundsUAT:
                 {"q42": 3238, "q43": None},
                 Thousands_output(
                     "UAT-Sheet-10-A",
-                    716750,
+                    Decimal("716750"),
                     [
-                        Target_variable("q42", 3238, 3.238),
+                        Target_variable("q42", Decimal("3238"), Decimal("3.238")),
                         Target_variable("q43", None, None),
                     ],
-                    1184.710744,
+                    Decimal("1184.710744"),
                     "C",
                 ),
                 """Test 19: Item non-response: If 250 < R < 1350 and at least one 
@@ -743,7 +743,7 @@ class TestThousandPoundsUAT:
                 those with null values)"""
             ), 
             (
-                "UAT-SHEET-10-B",
+                "UAT-Sheet-10-B",
                 21758, # principal value/variable
                 23, # predictive
                 None, # auxiliary
@@ -752,12 +752,12 @@ class TestThousandPoundsUAT:
                 {"q42": None, "q43": 7753},
                 Thousands_output(
                     "UAT-Sheet-10-B",
-                    21758,
+                    Decimal("21.758"),
                     [
                         Target_variable("q42", None, None),
-                        Target_variable("q43", None, 7.753),
+                        Target_variable("q43", 7753, Decimal("7.753")),
                     ],
-                    946,
+                    Decimal("946"),
                     "C",
                 ),
                 """Test 20: variable is missing, but column defined.
@@ -765,7 +765,7 @@ class TestThousandPoundsUAT:
                 those with null values)""",
             ),
             (
-                "UAT-SHEET-11-A",
+                "UAT-Sheet-11-A",
                 716750, # principal value/variable
                 605, # predictive
                 None, # auxiliary
@@ -774,19 +774,19 @@ class TestThousandPoundsUAT:
                 {"q42": None, "q43": None},
                 Thousands_output(
                     "UAT-Sheet-11-A",
-                    716.750,
+                    Decimal("716.750"),
                     [
                         Target_variable("q42", None, None),
                         Target_variable("q43", None, None),
                     ],
-                    1184.710744,
+                    Decimal("1184.710744"),
                     "C",
                 ),
                 """Test 21: If 250 < R < 1350 and target variable columns not defined
                 and no target variables expected. TPC = C""",
             ),
             (
-                "UAT-SHEET-11-B",
+                "UAT-Sheet-11-B",
                 21758, # principal value/variable
                 23, # predictive
                 None, # auxiliary
@@ -795,40 +795,40 @@ class TestThousandPoundsUAT:
                 {"q42": None, "q43": None},
                 Thousands_output(
                     "UAT-Sheet-11-B",
-                    21.758,
+                    Decimal("21.758"),
                     [
                         Target_variable("q42", None, None),
                         Target_variable("q43", None, None),
                     ],
-                    946,
+                    Decimal("946"),
                     "C",
                 ),
                 """Test 22: If 250 < R < 1350 and target variable columns not defined
                 and no target variables expected. TPC = C""",
             ),
             (
-                "UAT-SHEET-12-A",
+                "UAT-Sheet-12-A",
                 716750, # principal value/variable
-                1350, # predictive
-                250, # auxiliary
+                605, # predictive
+                489, # auxiliary
+                1350,
+                250,
                {"q42": 3238, "q43": 97},
-                605,
-                489,
                 Thousands_output(
                     "UAT-Sheet-12-A",
-                    716.75,
+                    Decimal("716.75"),
                     [
-                        Target_variable("q42", 3238, 3.238),
-                        Target_variable("q43", 97, 0.097),
+                        Target_variable("q42", Decimal("3238"), Decimal("3.238")),
+                        Target_variable("q43", Decimal("97"), Decimal("0.097")),
                     ],
-                    1184.710744,
+                    Decimal("1184.710744"),
                     "C",
                 ),
                 """Test 23: If 250 < R < 1350, then a correction is applied,
                 and all monetary question values are divided by 1000. TPC = C""",
             ),
             (
-                "UAT-SHEET-12-B",
+                "UAT-Sheet-12-B",
                 21758, # principal value/variable
                 23, # predictive
                 281, # auxiliary
@@ -837,12 +837,12 @@ class TestThousandPoundsUAT:
                 {"q42": 97, "q43": 3238},
                 Thousands_output(
                     "UAT-Sheet-12-B",
-                    21.758,
+                    Decimal("21.758"),
                     [
-                        Target_variable("q42", 97, 0.097),
-                        Target_variable("q43", 3238, 3.238),
+                        Target_variable("q42", Decimal("97"), Decimal("0.097")),
+                        Target_variable("q43", Decimal("3238"), Decimal("3.238")),
                     ],
-                    946,
+                    Decimal("946"),
                     "C",
                 ),
                 """Test 24: If 250 < R < 1350, then a correction is applied,
@@ -1384,7 +1384,7 @@ class TestAdjustTargetVariables:
                 True,
                 [Target_variable("q501", 500000.4332), Target_variable("q502", 1000)],
                 [
-                    Target_variable("q501", 500000.4332, 500.0),
+                    Target_variable("q501", 500000.4332, 500.00043320000003),
                     Target_variable("q502", 1000, 1.0),
                 ],
                 "Test 1: do_adjustment == True, Target variable is appropriately rounded down",
@@ -1393,7 +1393,7 @@ class TestAdjustTargetVariables:
                 True,
                 [Target_variable("q501", 999999.99999), Target_variable("q502", 1000)],
                 [
-                    Target_variable("q501", 999999.99999, 1000.0),
+                    Target_variable("q501", 999999.99999, 999.99999999),
                     Target_variable("q502", 1000, 1.0),
                 ],
                 "Test 2: Target variable is appropriately rounded up",

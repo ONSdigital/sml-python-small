@@ -345,7 +345,8 @@ def validate_input(
     if float(lower_limit) >= float(upper_limit):
         raise ValueError(get_boundary_error([lower_limit, upper_limit]))
     for key, value in target_variables.items():
-        validate_number(key, value)
+        if value is not None:
+            validate_number(key, value)
     final_precision = validate_precision(precision)
     return final_precision
 
@@ -490,7 +491,7 @@ def adjust_target_variables(
     adjusted_target_variables = []
     for question in target_variables:
         if do_adjustment:
-            final_value = round(adjust_value(question.original_value), 2)
+            final_value = adjust_value(question.original_value)
         else:
             final_value = question.original_value
         adjusted_target_variables.append(
