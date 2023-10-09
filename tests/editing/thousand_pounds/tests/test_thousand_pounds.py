@@ -100,10 +100,10 @@ class TestThousandPounds:
                 },
                 Thousands_output(
                     "q410",
-                    0,
+                    8000,
                     [
-                        Target_variable("q451", 500, None),
-                        Target_variable("q452", 1000, None),
+                        Target_variable("q451", 500, 500),
+                        Target_variable("q452", 1000, 1000),
                     ],
                     None,
                     "S",
@@ -120,10 +120,10 @@ class TestThousandPounds:
                 {"q451": 500, "q452": 1000},
                 Thousands_output(
                     "q450",
-                    0,
+                    8000,
                     [
-                        Target_variable("q451", 500, None),
-                        Target_variable("q452", 1000, None),
+                        Target_variable("q451", 500, 500),
+                        Target_variable("q452", 1000, 1000),
                     ],
                     None,
                     "S",
@@ -564,9 +564,9 @@ class TestThousandPoundsUAT:
                     Decimal("716.75"),
                     [
                         Target_variable("q42", Decimal("3238"), Decimal("3.238")),
-                        Target_variable("q42", Decimal("97"), Decimal("0.097")),
+                        Target_variable("q43", Decimal("97"), Decimal("0.097")),
                     ],
-                    Decimal("1184.710744"),
+                    Decimal("1184.710743801652892561983471"),
                     "C",
                 ),
                 """Test 11: If the predictive value is zero and the auxiliary
@@ -1267,7 +1267,7 @@ class TestDeterminePredictiveValue:
             (50, 100, 50, "Test 1: Both input, Predictive Output"),
             (None, 100, 100, "Test 2: Predictive missing, auxiliary Output"),
             (50, None, 50, "Test 3: Auxiliary missing, Predictive Output"),
-            (0, None, 0, "Test 4: Predictive = 0, Auxiliary missing, 0 Output"),
+            (0, None, None, "Test 4: Predictive = 0, Auxiliary missing, 0 Output"),
         ],
     )
     def test_determine_predictive_value(
