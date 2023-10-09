@@ -364,7 +364,7 @@ class TestThousandPoundsUAT:
                         Target_variable("q42", Decimal("32"), Decimal("32")),
                         Target_variable("q43", Decimal("97"), Decimal("97")),
                     ],
-                    Decimal("1.66942149"),
+                    Decimal("1.166942148760330578512396694"),
                     "N",
                 ),
                 "Test 1: If R < 250, then no correction is applied. TPC = N",
@@ -404,7 +404,7 @@ class TestThousandPoundsUAT:
                         Target_variable("q42", Decimal("32"), Decimal("32")),
                         Target_variable("q43", Decimal("97"), Decimal("97")),
                     ],
-                    Decimal("1361.404959"),
+                    Decimal("1361.404958677685950413223140"),
                     "N",
                 ),
                 "Test 3: If R > 1350, then no correction is applied. TPC = N",
@@ -424,7 +424,7 @@ class TestThousandPoundsUAT:
                         Target_variable("q42", Decimal("7161"), Decimal("7161")),
                         Target_variable("q43", Decimal("759"), Decimal("759")),
                     ],
-                    Decimal("3343.312554"),
+                    Decimal("3343.312553863832232117207699"),
                     "N",
                 ),
                 "Test 4: If R > 1350, then no correction is applied. TPC = N",
@@ -452,7 +452,7 @@ class TestThousandPoundsUAT:
             (
                 "UAT-Sheet-3-B",
                 5750, # principal value/variable
-                250, # predictive
+                23, # predictive
                 None, # auxiliary
                 1350,
                 250,
@@ -476,7 +476,7 @@ class TestThousandPoundsUAT:
                 None, # auxiliary
                 1350,
                 250,
-                [(32), (97)],
+                {"q42": 32, "q43": 97},
                Thousands_output (
                     "UAT-Sheet-4-A",
                     Decimal("816750"),
@@ -524,7 +524,7 @@ class TestThousandPoundsUAT:
                         Target_variable("q42", Decimal("3238"), Decimal("3.238")),
                         Target_variable("q43", Decimal("97"), Decimal("0.097")),
                     ],
-                    Decimal("1184.710744"),
+                    Decimal("1184.710743801652892561983471"),
                     "C",
                 ),
                 """Test 9: If 250 < R < 1350, then a correction value is applied,
@@ -687,12 +687,12 @@ class TestThousandPoundsUAT:
                 {"q42": 3238, "q43": 97},
                 Thousands_output(
                     "UAT-Sheet-9-A",
-                    Decimal("716750"),
+                    Decimal("716.75"),
                     [
                         Target_variable("q42", Decimal("3238"), Decimal("3.238")),
                         Target_variable("q43", Decimal("97"), Decimal("0.097")),
                     ],
-                    Decimal("1184.710744"),
+                    Decimal("1184.710743801652892561983471"),
                     "C",
                 ),
                 """Test 17: If the predictive value is missing and the auxiliary
@@ -729,12 +729,12 @@ class TestThousandPoundsUAT:
                 {"q42": 3238, "q43": None},
                 Thousands_output(
                     "UAT-Sheet-10-A",
-                    Decimal("716750"),
+                    Decimal("716.75"),
                     [
                         Target_variable("q42", Decimal("3238"), Decimal("3.238")),
                         Target_variable("q43", None, None),
                     ],
-                    Decimal("1184.710744"),
+                    Decimal("1184.710743801652892561983471"),
                     "C",
                 ),
                 """Test 19: Item non-response: If 250 < R < 1350 and at least one 
@@ -779,7 +779,7 @@ class TestThousandPoundsUAT:
                         Target_variable("q42", None, None),
                         Target_variable("q43", None, None),
                     ],
-                    Decimal("1184.710744"),
+                    Decimal("1184.710743801652892561983471"),
                     "C",
                 ),
                 """Test 21: If 250 < R < 1350 and target variable columns not defined
@@ -821,7 +821,7 @@ class TestThousandPoundsUAT:
                         Target_variable("q42", Decimal("3238"), Decimal("3.238")),
                         Target_variable("q43", Decimal("97"), Decimal("0.097")),
                     ],
-                    Decimal("1184.710744"),
+                    Decimal("1184.710743801652892561983471"),
                     "C",
                 ),
                 """Test 23: If 250 < R < 1350, then a correction is applied,
