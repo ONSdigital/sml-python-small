@@ -344,6 +344,7 @@ class TestThousandPounds:
                 )
             assert (str(exc_info.value)) == str(expected)
 
+
 class TestThousandPoundsUAT:
     @pytest.mark.parametrize(
         "unique_identifier, principal_variable, predictive, auxiliary, upper_limit, lower_limit, target_variables, "
@@ -351,9 +352,9 @@ class TestThousandPoundsUAT:
         [
             (
                 "UAT-Sheet-1-A",
-                706, # principal value/variable
-                605, # predictive
-                None, # auxiliary
+                706,  # principal value/variable
+                605,  # predictive
+                None,  # auxiliary
                 1350,
                 250,
                 {"q42": 32, "q43": 97},
@@ -371,9 +372,9 @@ class TestThousandPoundsUAT:
             ),
             (
                 "UAT-Sheet-1-B",
-                381, # principal value/variable
-                400, # predictive
-                None, # auxiliary
+                381,  # principal value/variable
+                400,  # predictive
+                None,  # auxiliary
                 1350,
                 250,
                 {"q42": 287, "q43": 199},
@@ -391,9 +392,9 @@ class TestThousandPoundsUAT:
             ),
             (
                 "UAT-Sheet-2-A",
-                823650, # principal value/variable
-                605, # predictive
-                None, # auxiliary
+                823650,  # principal value/variable
+                605,  # predictive
+                None,  # auxiliary
                 1350,
                 250,
                 {"q42": 32, "q43": 97},
@@ -411,9 +412,9 @@ class TestThousandPoundsUAT:
             ),
             (
                 "UAT-Sheet-2-B",
-                11638071, # principal value/variable
-                3481, # predictive
-                None, # auxiliary
+                11638071,  # principal value/variable
+                3481,  # predictive
+                None,  # auxiliary
                 1350,
                 250,
                 {"q42": 7161, "q43": 759},
@@ -431,9 +432,9 @@ class TestThousandPoundsUAT:
             ),
             (
                 "UAT-Sheet-3-A",
-                151250, # principal value/variable
-                605, # predictive
-                None, # auxiliary
+                151250,  # principal value/variable
+                605,  # predictive
+                None,  # auxiliary
                 1350,
                 250,
                 {"q42": 32, "q43": 97},
@@ -451,9 +452,9 @@ class TestThousandPoundsUAT:
             ),
             (
                 "UAT-Sheet-3-B",
-                5750, # principal value/variable
-                23, # predictive
-                None, # auxiliary
+                5750,  # principal value/variable
+                23,  # predictive
+                None,  # auxiliary
                 1350,
                 250,
                 {"q42": 3900, "q43": 272},
@@ -471,13 +472,13 @@ class TestThousandPoundsUAT:
             ),
             (
                 "UAT-Sheet-4-A",
-                816750, # principal value/variable
-                605, # predictive
-                None, # auxiliary
+                816750,  # principal value/variable
+                605,  # predictive
+                None,  # auxiliary
                 1350,
                 250,
                 {"q42": 32, "q43": 97},
-               Thousands_output (
+                Thousands_output(
                     "UAT-Sheet-4-A",
                     Decimal("816750"),
                     [
@@ -491,9 +492,9 @@ class TestThousandPoundsUAT:
             ),
             (
                 "UAT-Sheet-4-B",
-                31050, # principal value/variable
-                23, # predictive
-                None, # auxiliary
+                31050,  # principal value/variable
+                23,  # predictive
+                None,  # auxiliary
                 1350,
                 250,
                 {"q42": 29, "q43": 7},
@@ -511,9 +512,9 @@ class TestThousandPoundsUAT:
             ),
             (
                 "UAT-Sheet-5-A",
-                716750, # principal value/variable
-                605, # predictive
-                None, # auxiliary
+                716750,  # principal value/variable
+                605,  # predictive
+                None,  # auxiliary
                 1350,
                 250,
                 {"q42": 3238, "q43": 97},
@@ -532,9 +533,9 @@ class TestThousandPoundsUAT:
             ),
             (
                 "UAT-Sheet-5-B",
-                21758, # principal value/variable
-                23, # predictive
-                None, # auxiliary
+                21758,  # principal value/variable
+                23,  # predictive
+                None,  # auxiliary
                 1350,
                 250,
                 {"q42": 29, "q43": 7753},
@@ -553,9 +554,9 @@ class TestThousandPoundsUAT:
             ),
             (
                 "UAT-Sheet-6-A",
-                716750, # principal value/variable
-                0, # predictive
-                605, # auxiliary
+                716750,  # principal value/variable
+                0,  # predictive
+                605,  # auxiliary
                 1350,
                 250,
                 {"q42": 3238, "q43": 97},
@@ -574,9 +575,9 @@ class TestThousandPoundsUAT:
             ),
             (
                 "UAT-Sheet-6-B",
-                21758, # principal value/variable
-                0, # predictive
-                23, # auxiliary
+                21758,  # principal value/variable
+                0,  # predictive
+                23,  # auxiliary
                 1350,
                 250,
                 {"q42": 29, "q43": 7753},
@@ -595,9 +596,9 @@ class TestThousandPoundsUAT:
             ),
             (
                 "UAT-Sheet-7-A",
-                716750, # principal value/variable
-                0, # predictive
-                None, # auxiliary
+                716750,  # principal value/variable
+                0,  # predictive
+                None,  # auxiliary
                 1350,
                 250,
                 {"q42": 3238, "q43": 97},
@@ -616,9 +617,9 @@ class TestThousandPoundsUAT:
             ),
             (
                 "UAT-Sheet-7-B",
-                21758, # principal value/variable
-                0, # predictive
-                None, # auxiliary
+                21758,  # principal value/variable
+                0,  # predictive
+                None,  # auxiliary
                 1350,
                 250,
                 {"q42": 29, "q43": 7753},
@@ -637,9 +638,9 @@ class TestThousandPoundsUAT:
             ),
             (
                 "UAT-Sheet-8-A",
-                716750, # principal value/variable
-                0, # predictive
-                0, # auxiliary
+                716750,  # principal value/variable
+                0,  # predictive
+                0,  # auxiliary
                 1350,
                 250,
                 {"q42": 3238, "q43": 97},
@@ -658,9 +659,9 @@ class TestThousandPoundsUAT:
             ),
             (
                 "UAT-Sheet-8-B",
-                21758, # principal value/variable
-                0, # predictive
-                0, # auxiliary
+                21758,  # principal value/variable
+                0,  # predictive
+                0,  # auxiliary
                 1350,
                 250,
                 {"q42": 29, "q43": 7753},
@@ -679,9 +680,9 @@ class TestThousandPoundsUAT:
             ),
             (
                 "UAT-Sheet-9-A",
-                716750, # principal value/variable
-                None, # predictive
-                605, # auxiliary
+                716750,  # principal value/variable
+                None,  # predictive
+                605,  # auxiliary
                 1350,
                 250,
                 {"q42": 3238, "q43": 97},
@@ -700,9 +701,9 @@ class TestThousandPoundsUAT:
             ),
             (
                 "UAT-Sheet-9-B",
-                21758, # principal value/variable
-                None, # predictive
-                23, # auxiliary
+                21758,  # principal value/variable
+                None,  # predictive
+                23,  # auxiliary
                 1350,
                 250,
                 {"q42": 29, "q43": 7753},
@@ -721,9 +722,9 @@ class TestThousandPoundsUAT:
             ),
             (
                 "UAT-Sheet-10-A",
-                716750, # principal value/variable
-                605, # predictive
-                None, # auxiliary
+                716750,  # principal value/variable
+                605,  # predictive
+                None,  # auxiliary
                 1350,
                 250,
                 {"q42": 3238, "q43": None},
@@ -737,16 +738,16 @@ class TestThousandPoundsUAT:
                     Decimal("1184.710743801652892561983471"),
                     "C",
                 ),
-                """Test 19: Item non-response: If 250 < R < 1350 and at least one 
+                """Test 19: Item non-response: If 250 < R < 1350 and at least one
                 target variable is missing, but column defined.
-                TPC = C (all component variable column shown in output, including 
-                those with null values)"""
-            ), 
+                TPC = C (all component variable column shown in output, including
+                those with null values)""",
+            ),
             (
                 "UAT-Sheet-10-B",
-                21758, # principal value/variable
-                23, # predictive
-                None, # auxiliary
+                21758,  # principal value/variable
+                23,  # predictive
+                None,  # auxiliary
                 1350,
                 250,
                 {"q42": None, "q43": 7753},
@@ -761,14 +762,14 @@ class TestThousandPoundsUAT:
                     "C",
                 ),
                 """Test 20: variable is missing, but column defined.
-                TPC = C (all component variable column shown in output, including 
+                TPC = C (all component variable column shown in output, including
                 those with null values)""",
             ),
             (
                 "UAT-Sheet-11-A",
-                716750, # principal value/variable
-                605, # predictive
-                None, # auxiliary
+                716750,  # principal value/variable
+                605,  # predictive
+                None,  # auxiliary
                 1350,
                 250,
                 {"q42": None, "q43": None},
@@ -787,9 +788,9 @@ class TestThousandPoundsUAT:
             ),
             (
                 "UAT-Sheet-11-B",
-                21758, # principal value/variable
-                23, # predictive
-                None, # auxiliary
+                21758,  # principal value/variable
+                23,  # predictive
+                None,  # auxiliary
                 1350,
                 250,
                 {"q42": None, "q43": None},
@@ -808,12 +809,12 @@ class TestThousandPoundsUAT:
             ),
             (
                 "UAT-Sheet-12-A",
-                716750, # principal value/variable
-                605, # predictive
-                489, # auxiliary
+                716750,  # principal value/variable
+                605,  # predictive
+                489,  # auxiliary
                 1350,
                 250,
-               {"q42": 3238, "q43": 97},
+                {"q42": 3238, "q43": 97},
                 Thousands_output(
                     "UAT-Sheet-12-A",
                     Decimal("716.75"),
@@ -829,9 +830,9 @@ class TestThousandPoundsUAT:
             ),
             (
                 "UAT-Sheet-12-B",
-                21758, # principal value/variable
-                23, # predictive
-                281, # auxiliary
+                21758,  # principal value/variable
+                23,  # predictive
+                281,  # auxiliary
                 1350,
                 250,
                 {"q42": 97, "q43": 3238},
@@ -848,7 +849,7 @@ class TestThousandPoundsUAT:
                 """Test 24: If 250 < R < 1350, then a correction is applied,
                 and all monetary question values are divided by 1000. TPC = C""",
             ),
-        ]
+        ],
     )
     def test_thousand_pounds(
         self,
@@ -895,6 +896,7 @@ class TestThousandPoundsUAT:
                     target_variables=target_variables,
                 )
             assert (str(exc_info.value)) == str(expected)
+
 
 class TestCreateTargetVariableObjects:
     @pytest.mark.parametrize(

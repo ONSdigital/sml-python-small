@@ -171,8 +171,11 @@ def thousand_pounds(
             precision,
         )
 
-    
-        (tpc_marker, principal_adjusted_value, target_variables_final) = check_zero_errors(
+        (
+            tpc_marker,
+            principal_adjusted_value,
+            target_variables_final,
+        ) = check_zero_errors(
             input_parameters[InputParameters.PREDICTIVE.value],
             input_parameters[InputParameters.AUXILIARY.value],
             input_parameters[InputParameters.PRINCIPAL_VARIABLE.value],
@@ -353,7 +356,10 @@ def validate_input(
 
 
 def check_zero_errors(
-    predictive: Optional[Decimal], auxiliary: Optional[Decimal], principle_value: Optional[Decimal], target_variables: List[Target_variable]
+    predictive: Optional[Decimal],
+    auxiliary: Optional[Decimal],
+    principle_value: Optional[Decimal],
+    target_variables: List[Target_variable],
 ) -> Tuple[TpcMarker, Decimal, List[Target_variable]]:
     """
     Checks predictive and auxiliary to ensure that there is not only a 0 value available,
@@ -378,7 +384,7 @@ def check_zero_errors(
     ):
         tpc_marker = TpcMarker.STOP
         logger.warning(f"TPCMarker = STOP at line:{sys._getframe().f_back.f_lineno}")
-        
+
         checked_target_variables = []
 
         for question in target_variables:
@@ -390,7 +396,7 @@ def check_zero_errors(
                     final_value=final_value,
                 )
             )
-            
+
     return tpc_marker, checked_principle_value, checked_target_variables
 
 
