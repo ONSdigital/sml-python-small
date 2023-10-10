@@ -358,7 +358,7 @@ def validate_input(
 def check_zero_errors(
     predictive: Optional[Decimal],
     auxiliary: Optional[Decimal],
-    principle_value: Optional[Decimal],
+    principal_variable: Optional[Decimal],
     target_variables: List[Target_variable],
 ) -> Tuple[TpcMarker, Decimal, List[Target_variable]]:
     """
@@ -369,15 +369,23 @@ def check_zero_errors(
     :type predictive: Optional[Decimal]
     :param auxiliary: Calculated response for the 'previous' period
     :type auxiliary: Optional[Decimal]
+    :param principal_variable: Original response value provided for the 'current' period
+    :type principal_variable: Optional[Decimal]
+    :param target_variables: list of Target_variable objects that can be corrected
+    :type target_variables: List[Target_variable],
 
     :return: tpc_marker, either method_proceed or stop
     :rtype: TpcMarker
+    :return: checked_principal_variable, Decimal value
+    :rtype: Decimal
+    :return: checked_target_variables, list of variables
+    :rtype: List[Target_variable]
     """
     tpc_marker = TpcMarker.METHOD_PROCEED
 
     checked_target_variables = target_variables
 
-    checked_principle_value = principle_value
+    checked_principal_variable = principal_variable
 
     if (predictive is None or predictive == 0) and (
         auxiliary is None or auxiliary == 0
@@ -397,7 +405,7 @@ def check_zero_errors(
                 )
             )
 
-    return tpc_marker, checked_principle_value, checked_target_variables
+    return tpc_marker, checked_principal_variable, checked_target_variables
 
 
 def determine_tpc_marker(do_adjustment: bool, tpc_marker: TpcMarker) -> str:
