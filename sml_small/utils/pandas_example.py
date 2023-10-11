@@ -68,7 +68,6 @@ input_dataframe_thousand_pounds = load_csv(
 )
 target_variables = ["q42", "q43"]
 thousand_pounds_output_columns = [
-    "Principal Original Value",
     "Principal Final Value",
     "Target Variables",
     "TPC Ratio",

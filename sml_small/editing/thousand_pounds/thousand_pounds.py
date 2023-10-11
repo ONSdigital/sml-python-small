@@ -1,11 +1,12 @@
 import logging
 import sys
 from dataclasses import dataclass
+from decimal import Decimal
 from enum import Enum
 from os import path
-from typing import List, Optional, Tuple, Union
+from typing import List, Optional
 
-from sml_small.utils.common_utils import log_table, validate_number
+from sml_small.utils.common_utils import convert_input_to_decimal, log_table, validate_number, validate_precision
 from sml_small.utils.error_utils import get_boundary_error, get_mandatory_param_error, get_one_of_params_mandatory_error
 
 # Pick up configuration for logging
@@ -22,12 +23,14 @@ class InputParameters(Enum):
     Enum for use when accessing values from the input parameters tuple
     """
 
-    PREDICTIVE = 0
-    AUXILIARY = 1
-    PRINCIPAL_VARIABLE = 2
-    LOWER_LIMIT = 3
-    UPPER_LIMIT = 4
-    TARGET_VARIABLES = 5
+    PRINCIPAL_VARIABLE = 0
+    LOWER_LIMIT = 1
+    UPPER_LIMIT = 2
+    TARGET_VARIABLES = 3
+    UNIQUE_IDENTIFIER = 4
+    PREDICTIVE = 5
+    AUXILIARY = 6
+    PRECISION = 7
 
 
 class TpcMarker(Enum):
@@ -55,13 +58,13 @@ class Target_variable:
 class Thousands_output:
     unique_identifier: Optional[str]  # Unique identifer e.g. a question code - q500
     principal_final_value: Optional[
-        float
+        Decimal
     ]  # Output value that may or may not be adjusted
     target_variables: List[
         Target_variable
     ]  # Output linked values that may or may not be adjusted
     tpc_ratio: Optional[
-        float
+        Decimal
     ]  # Ratio of the principal variable against good/predictive/aux response
     tpc_marker: str  # C = Correction applied | N = No correction applied | E = Process failure
 
@@ -81,6 +84,7 @@ def thousand_pounds(
     unique_identifier: Optional[str] = None,
     predictive: Optional[float] = None,
     auxiliary: Optional[float] = None,
+    precision: Optional[int] = None,
 ) -> Thousands_output:
     """
     Calculates a pounds thousands error ratio and if the ratio is between the bounds of the given limits will adjust
@@ -100,6 +104,9 @@ def thousand_pounds(
     :type lower_limit: float
     :param target_variables: List of monetary variables that may be automatically corrected
     :type target_variables: List[Target_variable]
+    :param precision: Precision is used by the decimal package to ensure a specified accuracy
+    used throughout method processing
+    :type precision: Optional[int]
 
     :return: Thousands_output: An object containing the
                             following attributes:
@@ -126,17 +133,51 @@ def thousand_pounds(
     do_adjustment = False
     principal_adjusted_value = 0
     try:
-        target_variables = create_target_variable_objects(target_variables)
-        input_parameters = validate_input(
+        precision = validate_input(
             predictive,
             auxiliary,
             principal_variable,
             lower_limit,
             upper_limit,
             target_variables,
+            precision,
         )
-        target_variables_final = target_variables
-        tpc_marker = check_zero_errors(predictive, auxiliary)
+        keys = [
+            "principal_variable",
+            "upper_limit",
+            "lower_limit",
+            "target_variables",
+            "predictive",
+            "auxiliary",
+        ]
+        args = [
+            principal_variable,
+            upper_limit,
+            lower_limit,
+            target_variables,
+            predictive,
+            auxiliary,
+        ]
+
+        decimal_values = convert_input_to_decimal(keys, args, precision)
+        input_parameters = (
+            decimal_values.get("principal_variable"),
+            decimal_values.get("lower_limit"),
+            decimal_values.get("upper_limit"),
+            create_target_variable_objects(decimal_values.get("target_variables")),
+            unique_identifier,
+            decimal_values.get("predictive"),
+            decimal_values.get("auxiliary"),
+            precision,
+        )
+
+        target_variables_final = input_parameters[
+            InputParameters.TARGET_VARIABLES.value
+        ]
+        tpc_marker = check_zero_errors(
+            input_parameters[InputParameters.PREDICTIVE.value],
+            input_parameters[InputParameters.AUXILIARY.value],
+        )
         if tpc_marker == TpcMarker.METHOD_PROCEED:
             predictive_value = determine_predictive_value(
                 input_parameters[InputParameters.PREDICTIVE.value],
@@ -163,26 +204,38 @@ def thousand_pounds(
             )
             log_table(
                 "Thousand Pounds Output",
-                unique_identifier=unique_identifier,
-                principal_variable=principal_variable,
-                predictive=predictive,
-                auxiliary=auxiliary,
-                upper_limit=upper_limit,
-                lower_limit=lower_limit,
-                target_variables=target_variables,
-                tpc_marker=tpc_marker.value
+                unique_identifier=input_parameters[
+                    InputParameters.UNIQUE_IDENTIFIER.value
+                ],
+                principal_variable=input_parameters[
+                    InputParameters.PRINCIPAL_VARIABLE.value
+                ],
+                predictive=input_parameters[InputParameters.PREDICTIVE.value],
+                auxiliary=input_parameters[InputParameters.AUXILIARY.value],
+                upper_limit=input_parameters[InputParameters.UPPER_LIMIT.value],
+                lower_limit=input_parameters[InputParameters.LOWER_LIMIT.value],
+                target_variables=input_parameters[
+                    InputParameters.TARGET_VARIABLES.value
+                ],
+                tpc_marker=tpc_marker.value,
             )
         else:
             log_table(
                 "Thousand Pounds Output",
-                unique_identifier=unique_identifier,
-                principal_variable=principal_variable,
-                predictive=predictive,
-                auxiliary=auxiliary,
-                upper_limit=upper_limit,
-                lower_limit=lower_limit,
-                target_variables=target_variables,
-                tpc_marker=tpc_marker.value
+                unique_identifier=input_parameters[
+                    InputParameters.UNIQUE_IDENTIFIER.value
+                ],
+                principal_variable=input_parameters[
+                    InputParameters.PRINCIPAL_VARIABLE.value
+                ],
+                predictive=input_parameters[InputParameters.PREDICTIVE.value],
+                auxiliary=input_parameters[InputParameters.AUXILIARY.value],
+                upper_limit=input_parameters[InputParameters.UPPER_LIMIT.value],
+                lower_limit=input_parameters[InputParameters.LOWER_LIMIT.value],
+                target_variables=input_parameters[
+                    InputParameters.TARGET_VARIABLES.value
+                ],
+                tpc_marker=tpc_marker.value,
             )
         return Thousands_output(
             unique_identifier=unique_identifier,
@@ -234,15 +287,9 @@ def validate_input(
     principal_variable: float,
     lower_limit: float,
     upper_limit: float,
-    target_variables: List[Target_variable],
-) -> Tuple[
-    Union[float, None],
-    Union[float, None],
-    float,
-    float,
-    float,
-    List[Target_variable],
-]:
+    target_variables: dict,
+    precision: Optional[int],
+) -> int:
     """
     This function is used to validate the data passed to the thousand_pounds
     method ensuring that the values are present when expected and that they are of
@@ -259,8 +306,10 @@ def validate_input(
     :type lower_limit: float
     :param upper_limit: Upper bound of 'error ratio' threshold
     :type upper_limit: float
-    :param target_variables: List of monetary variables that may be automatically corrected
-    :type target_variables: List[Target_variable]
+    :param target_variables: Dictionary of monetary variables that may be automatically corrected
+    :type target_variables: Dictionary
+    :param precision: Precision is used by the decimal package to perform calculations to the specified accuracy.
+    :type precision: int
 
     :return: predictive is returned as a converted float
     :rtype: float | None
@@ -272,63 +321,56 @@ def validate_input(
     :rtype: float
     :return: upper_limit is returned as a converted float
     :rtype: float
-    :return: target_variables, target_variable.original_value is returned as a converted float
-    :rtype: List[Target_variable]
+    :return: computed precision
+    :rtype: int
     """
-    if predictive and validate_number("predictive", predictive):
-        predictive = float(predictive)
-    if auxiliary and validate_number("auxiliary", auxiliary):
-        auxiliary = float(auxiliary)
+    if predictive:
+        validate_number("predictive", predictive)
+    if auxiliary:
+        validate_number("auxiliary", auxiliary)
     if predictive is None and auxiliary is None:
         raise ValueError(get_one_of_params_mandatory_error(["predictive", "auxiliary"]))
     if principal_variable is None:
         raise ValueError(get_mandatory_param_error("principal_variable"))
-    elif validate_number("principal_variable", principal_variable) is True:
-        principal_variable = float(principal_variable)
+    else:
+        validate_number("principal_variable", principal_variable)
     if not lower_limit:
         raise ValueError(get_mandatory_param_error("lower_limit"))
-    elif validate_number("lower_limit", lower_limit) is True:
-        lower_limit = float(lower_limit)
+    else:
+        validate_number("lower_limit", lower_limit)
     if not upper_limit:
         raise ValueError(get_mandatory_param_error("upper_limit"))
-    elif validate_number("upper_limit", upper_limit) is True:
-        upper_limit = float(upper_limit)
+    else:
+        validate_number("upper_limit", upper_limit)
     if float(lower_limit) >= float(upper_limit):
         raise ValueError(get_boundary_error([lower_limit, upper_limit]))
-    for question in target_variables:
-        if validate_number(question.identifier, question.original_value) is True:
-            question.original_value = float(question.original_value)
-    return (
-        predictive,
-        auxiliary,
-        principal_variable,
-        lower_limit,
-        upper_limit,
-        target_variables,
-    )
+    for key, value in target_variables.items():
+        validate_number(key, value)
+    final_precision = validate_precision(precision)
+    return final_precision
 
 
 def check_zero_errors(
-    predictive: Optional[float], auxiliary: Optional[float]
+    predictive: Optional[Decimal], auxiliary: Optional[Decimal]
 ) -> TpcMarker:
     """
     Checks predictive and auxiliary to ensure that there is not only a 0 value available,
     as this will cause a divide by 0 error
 
     :param predictive: Value used for 'previous' response (Returned/Imputed/Constructed)
-    :type predictive: Optional[float]
+    :type predictive: Optional[Decimal]
     :param auxiliary: Calculated response for the 'previous' period
-    :type auxiliary: Optional[float]
+    :type auxiliary: Optional[Decimal]
 
     :return: tpc_marker, either method_proceed or stop
     :rtype: TpcMarker
     """
     tpc_marker = TpcMarker.METHOD_PROCEED
-    if (predictive is None or predictive == 0) and (auxiliary is None or auxiliary == 0):
+    if (predictive is None or predictive == 0) and (
+        auxiliary is None or auxiliary == 0
+    ):
         tpc_marker = TpcMarker.STOP
-        logger.warning(
-            f"TPCMarker = STOP at line:{sys._getframe().f_back.f_lineno}"
-        )
+        logger.warning(f"TPCMarker = STOP at line:{sys._getframe().f_back.f_lineno}")
     return tpc_marker
 
 
@@ -355,55 +397,57 @@ def determine_tpc_marker(do_adjustment: bool, tpc_marker: TpcMarker) -> str:
 
 
 def determine_predictive_value(
-    predictive: Optional[float], auxiliary: Optional[float]
-) -> float:
+    predictive: Optional[Decimal], auxiliary: Optional[Decimal]
+) -> Decimal:
     """
     Determine which value to use as the predictive value, predictive if input or auxiliary if no predictive is
     available
 
     :param predictive: Value used for 'previous' response (Returned/Imputed/Constructed)
-    :type predictive: Optional[float]
+    :type predictive: Optional[Decimal]
     :param auxiliary: Calculated response for the 'previous' period
-    :type auxiliary: Optional[float]
+    :type auxiliary: Optional[Decimal]
 
     :return: Either the input predictive or auxiliary value, which has been determined to used for the rest
      of the method
-    :rtype: float
+    :rtype: Decimal
     """
     if predictive or predictive == 0:
         return predictive
-    if auxiliary:
+    else:
         return auxiliary
 
 
-def calculate_error_ratio(principal_variable: float, predictive_value: float) -> float:
+def calculate_error_ratio(
+    principal_variable: Decimal, predictive_value: Decimal
+) -> Decimal:
     """
     Calculate the ratio for an acceptable error.
 
     :param principal_variable: Original response value provided for the 'current' period
-    :type principal_variable: float
+    :type principal_variable: Decimal
     :param predictive_value: Either the input predictive or auxiliary value
-    :type predictive_value: float
+    :type predictive_value: Decimal
 
     :return: principal_variable / predictive_value, the calculated acceptable error ratio
-    :rtype: float
+    :rtype: Decimal
     """
     return principal_variable / predictive_value  # predictive is already validated
 
 
 # Calculate the error value and determine whether the adjustment should be made
 def is_within_threshold(
-    error_ratio: float, lower_limit: float, upper_limit: float
+    error_ratio: Decimal, lower_limit: Decimal, upper_limit: Decimal
 ) -> bool:
     """
     Determines if the error ratio is within the lower and upper limit input
 
     :param error_ratio: Previously determined error ratio in "calculate_error_ratio"
-    :type error_ratio: float
+    :type error_ratio: Decimal
     :param lower_limit: Lower bound of 'error ratio' threshold
-    :type lower_limit: float
+    :type lower_limit: Decimal
     :param upper_limit: Upper bound of 'error ratio' threshold
-    :type upper_limit: float
+    :type upper_limit: Decimal
 
     :return: Boolean, True if error ratio is between lower and upper limits
     :rtype: Bool
@@ -414,15 +458,15 @@ def is_within_threshold(
 
 
 # Perform the calculation to adjust the response value
-def adjust_value(value: Optional[float]) -> Optional[float]:
+def adjust_value(value: Optional[Decimal]) -> Optional[Decimal]:
     """
     Method to calculate the adjustment of the response value
 
     :param value: response value to adjust
-    :type value: float
+    :type value: Decimal
 
     :return: adjusted value post calculation
-    :rtype: float
+    :rtype: Decimal
     """
     if value is not None:
         return value / 1000  # Do not adjust missing/null responses
