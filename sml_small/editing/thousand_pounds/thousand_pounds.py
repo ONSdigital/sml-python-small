@@ -14,7 +14,7 @@ log_config_path = path.join(path.dirname(path.abspath(__file__)), "../../logging
 logging.config.fileConfig(log_config_path)
 
 # Create logger
-logger = logging.getLogger("thousandPounds")
+logger = logging.getLogger("SmlPythonSmallThousandPounds")
 
 
 # --- Enum Definitions ---
@@ -142,6 +142,7 @@ def thousand_pounds(
             target_variables,
             precision,
         )
+
         keys = [
             "principal_variable",
             "upper_limit",
@@ -150,6 +151,7 @@ def thousand_pounds(
             "predictive",
             "auxiliary",
         ]
+        
         args = [
             principal_variable,
             upper_limit,
@@ -181,7 +183,6 @@ def thousand_pounds(
             input_parameters[InputParameters.PRINCIPAL_VARIABLE.value],
             input_parameters[InputParameters.TARGET_VARIABLES.value],
         )
-
         if tpc_marker == TpcMarker.METHOD_PROCEED:
             predictive_value = determine_predictive_value(
                 input_parameters[InputParameters.PREDICTIVE.value],
@@ -347,7 +348,7 @@ def validate_input(
     else:
         validate_number("upper_limit", upper_limit)
     if float(lower_limit) >= float(upper_limit):
-        raise ValueError(get_boundary_error([lower_limit, upper_limit]))
+        raise ValueError(get_boundary_error([lower_limit, upper_limit]))    
     for key, value in target_variables.items():
         if value is not None:
             validate_number(key, value)
@@ -448,7 +449,7 @@ def determine_predictive_value(
     """
     if predictive:
         return predictive
-    if auxiliary:
+    else:
         return auxiliary
 
 

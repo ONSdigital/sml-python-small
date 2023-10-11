@@ -59,7 +59,11 @@ def run_totals_and_components(
     new_list = []
     # loop through the components columns and create a single input
     for i in components_list_columns:
-        new_list.append(row[i])
+        if i is None:
+            new_list.append('Nan')
+        else:
+            new_list.append(row[i])
+
     # create a dictionary defining the methods keyword names and the relevant columns they refer to
     input_dict = {
         "identifier": unique_identifier_column,
@@ -127,7 +131,10 @@ def run_thousand_pounds(
     """
     target_variables_list = {}
     for value in target_variables_columns:
-        target_variables_list[value] = row[value]
+        if row[value] is None:
+            target_variables_list[value] = 'Nan'
+        else:
+            target_variables_list[value] = row[value]
 
     input_dict = {
         "unique_identifier": unique_identifier_column,
@@ -147,7 +154,6 @@ def run_thousand_pounds(
     thousand_pounds_output = pd.DataFrame(
         {
             "Principal Identifier": output.unique_identifier,
-            "Principal Original Value": output.principal_original_value,
             "Principal Final Value": output.principal_final_value,
             "Target Variables": [output.target_variables],
             "TPC Ratio": output.tpc_ratio,
@@ -205,7 +211,7 @@ def wrapper(
             input_frame[identifier_column].isin(identifier_range)
         ]
 
-    input_frame.fillna("Nan", inplace=True)
+    # input_frame.fillna("Nan", inplace=True)
     input_frame = input_frame.astype(object).where(pd.notnull(input_frame), None)
     # apply our wrapper function per row, adding each row to output dataframe
     output_dataframe = input_frame.apply(
