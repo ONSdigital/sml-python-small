@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from decimal import Decimal
 from enum import Enum
 from os import path
-from typing import List, Optional
+from typing import List, Optional, Tuple
 
 from sml_small.utils.common_utils import convert_input_to_decimal, log_table, validate_number, validate_precision
 from sml_small.utils.error_utils import get_boundary_error, get_mandatory_param_error, get_one_of_params_mandatory_error
@@ -142,6 +142,7 @@ def thousand_pounds(
             target_variables,
             precision,
         )
+
         keys = [
             "principal_variable",
             "upper_limit",
@@ -150,6 +151,7 @@ def thousand_pounds(
             "predictive",
             "auxiliary",
         ]
+
         args = [
             principal_variable,
             upper_limit,
@@ -171,12 +173,15 @@ def thousand_pounds(
             precision,
         )
 
-        target_variables_final = input_parameters[
-            InputParameters.TARGET_VARIABLES.value
-        ]
-        tpc_marker = check_zero_errors(
+        (
+            tpc_marker,
+            principal_adjusted_value,
+            target_variables_final,
+        ) = check_zero_errors(
             input_parameters[InputParameters.PREDICTIVE.value],
             input_parameters[InputParameters.AUXILIARY.value],
+            input_parameters[InputParameters.PRINCIPAL_VARIABLE.value],
+            input_parameters[InputParameters.TARGET_VARIABLES.value],
         )
         if tpc_marker == TpcMarker.METHOD_PROCEED:
             predictive_value = determine_predictive_value(
@@ -345,14 +350,18 @@ def validate_input(
     if float(lower_limit) >= float(upper_limit):
         raise ValueError(get_boundary_error([lower_limit, upper_limit]))
     for key, value in target_variables.items():
-        validate_number(key, value)
+        if value is not None:
+            validate_number(key, value)
     final_precision = validate_precision(precision)
     return final_precision
 
 
 def check_zero_errors(
-    predictive: Optional[Decimal], auxiliary: Optional[Decimal]
-) -> TpcMarker:
+    predictive: Optional[Decimal],
+    auxiliary: Optional[Decimal],
+    principal_variable: Optional[Decimal],
+    target_variables: List[Target_variable],
+) -> Tuple[TpcMarker, Decimal, List[Target_variable]]:
     """
     Checks predictive and auxiliary to ensure that there is not only a 0 value available,
     as this will cause a divide by 0 error
@@ -361,17 +370,43 @@ def check_zero_errors(
     :type predictive: Optional[Decimal]
     :param auxiliary: Calculated response for the 'previous' period
     :type auxiliary: Optional[Decimal]
+    :param principal_variable: Original response value provided for the 'current' period
+    :type principal_variable: Optional[Decimal]
+    :param target_variables: list of Target_variable objects that can be corrected
+    :type target_variables: List[Target_variable],
 
     :return: tpc_marker, either method_proceed or stop
     :rtype: TpcMarker
+    :return: checked_principal_variable, Decimal value
+    :rtype: Decimal
+    :return: checked_target_variables, list of variables
+    :rtype: List[Target_variable]
     """
     tpc_marker = TpcMarker.METHOD_PROCEED
+
+    checked_target_variables = target_variables
+
+    checked_principal_variable = principal_variable
+
     if (predictive is None or predictive == 0) and (
         auxiliary is None or auxiliary == 0
     ):
         tpc_marker = TpcMarker.STOP
         logger.warning(f"TPCMarker = STOP at line:{sys._getframe().f_back.f_lineno}")
-    return tpc_marker
+
+        checked_target_variables = []
+
+        for question in target_variables:
+            final_value = question.original_value
+            checked_target_variables.append(
+                Target_variable(
+                    identifier=question.identifier,
+                    original_value=question.original_value,
+                    final_value=final_value,
+                )
+            )
+
+    return tpc_marker, checked_principal_variable, checked_target_variables
 
 
 def determine_tpc_marker(do_adjustment: bool, tpc_marker: TpcMarker) -> str:
@@ -412,7 +447,7 @@ def determine_predictive_value(
      of the method
     :rtype: Decimal
     """
-    if predictive or predictive == 0:
+    if predictive:
         return predictive
     else:
         return auxiliary
@@ -490,7 +525,7 @@ def adjust_target_variables(
     adjusted_target_variables = []
     for question in target_variables:
         if do_adjustment:
-            final_value = round(adjust_value(question.original_value), 2)
+            final_value = adjust_value(question.original_value)
         else:
             final_value = question.original_value
         adjusted_target_variables.append(

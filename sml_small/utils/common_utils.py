@@ -22,6 +22,10 @@ logger = logging.getLogger("SmlPythonSmallCommonUtils")
 PRECISION_MIN = 1
 PRECISION_MAX = 28
 
+# --- Constant Definitions ---
+PRECISION_MIN = 1
+PRECISION_MAX = 28
+
 
 def log_table(table_name: str, **kwargs):
     """
