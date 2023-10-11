@@ -151,7 +151,7 @@ def thousand_pounds(
             "predictive",
             "auxiliary",
         ]
-        
+
         args = [
             principal_variable,
             upper_limit,
@@ -348,7 +348,7 @@ def validate_input(
     else:
         validate_number("upper_limit", upper_limit)
     if float(lower_limit) >= float(upper_limit):
-        raise ValueError(get_boundary_error([lower_limit, upper_limit]))    
+        raise ValueError(get_boundary_error([lower_limit, upper_limit]))
     for key, value in target_variables.items():
         if value is not None:
             validate_number(key, value)
