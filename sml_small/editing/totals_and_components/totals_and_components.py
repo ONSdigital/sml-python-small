@@ -120,20 +120,20 @@ class TotalsAndComponentsOutput:
     """
 
     identifier: Optional[str] = ""  # unique identifier
-    absolute_difference: Optional[Decimal]  # this is the absolute value showing the
+    absolute_difference: Optional[str]  # this is the absolute value showing the
     # difference between the components input and the predictive total
     low_percent_threshold: Optional[
-        Decimal
+        str
     ] = None  # the sum of the input components minus the absolute percentage difference
     high_percent_threshold: Optional[
-        Decimal
+        str
     ] = None  # the sum of the input components plus the absolute percentage difference
     final_total: Optional[
-        Decimal
+        str
     ] = None  # the output total which may have been corrected based on user input amend_
     # total variable
     final_components: Optional[
-        Decimal
+        str
     ] = None  # the output components which may have been corrected to match the received
     # predictive value. If corrected the components are scaled proportionally
     # based on the input values
@@ -274,6 +274,8 @@ def totals_and_components(
         }
 
         components_list = initialize_components_list(components)
+        low_threshold = None
+        high_threshold = None
 
         #  Check for invalid parameter values and set the precision value
         #  for decimal calculations
@@ -392,8 +394,19 @@ def totals_and_components(
                             total=input_parameters[InputParameters.TOTAL.value],
                         )
 
-        # Return the raw string instead of the enum value
-        output_list["tcc_marker"] = output_list["tcc_marker"].value
+        final_components = [str(component) for component in output_list["final_components"]]
+
+        # Return the values as raw strings instead of decimal
+        output_list = {
+                    "identifier": identifier,
+                    "absolute_difference": str(output_list["absolute_difference"]),
+                    "low_percent_threshold": str(low_threshold),
+                    "high_percent_threshold": str(high_threshold),
+                    "final_total": str(output_list["final_total"]),
+                    "final_components": final_components,
+                    "tcc_marker": output_list["tcc_marker"].value
+                }
+
         output = TotalsAndComponentsOutput(output_list)
 
         # Log the output table with the final values
