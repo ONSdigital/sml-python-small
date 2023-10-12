@@ -60,8 +60,8 @@ class TestTotalsAndComponents:
                 (
                     "A",
                     "0",
-                    "None",
-                    "None",
+                    None,
+                    None,
                     "1625",
                     ["632", "732", "99", "162"],
                     "N",
@@ -88,8 +88,8 @@ class TestTotalsAndComponents:
                 (
                     "B",
                     "6",
-                    "None",
-                    "None",
+                    None,
+                    None,
                     "10811",
                     ["9201", "866", "632", "112"],
                     "T",
@@ -115,7 +115,7 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "C",
-                    "None",
+                    None,
                     "90.0",
                     "110.0",
                     "90",
@@ -198,9 +198,9 @@ class TestTotalsAndComponents:
                 None,
                 (
                     "F",
-                    "None",
-                    "None",
-                    "None",
+                    None,
+                    None,
+                    None,
                     "11",
                     ["0", "0", "0", "0"],
                     "S",
@@ -328,8 +328,8 @@ class TestTotalsAndComponents:
                 (
                     "L",
                     "6",
-                    "None",
-                    "None",
+                    None,
+                    None,
                     "10811",
                     ["9201", "866", "632", "112"],
                     "T",
@@ -357,8 +357,8 @@ class TestTotalsAndComponents:
                 (
                     "M",
                     "0",
-                    "None",
-                    "None",
+                    None,
+                    None,
                     "0",
                     ["0", "0", "0", "0"],
                     "N",
@@ -384,8 +384,8 @@ class TestTotalsAndComponents:
                 (
                     "N",
                     "6",
-                    "None",
-                    "None",
+                    None,
+                    None,
                     "10811",
                     ["9201", "866", "632", "112"],
                     "T",
@@ -406,8 +406,8 @@ class TestTotalsAndComponents:
                 (
                     "O",
                     "5",
-                    "None",
-                    "None",
+                    None,
+                    None,
                     "5",
                     ["1", "2", "3", "4"],
                     "M",
@@ -427,7 +427,7 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "P",
-                    "None",
+                    None,
                     "9.0",
                     "11.0",
                     "10",
@@ -449,7 +449,7 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "Q",
-                    "None",
+                    None,
                     "9.0",
                     "11.0",
                     "5",
@@ -578,9 +578,9 @@ class TestTotalsAndComponents:
                 None,
                 (
                     "UAT-ZERO-CHECK-1",
-                    "None",
-                    "None",
-                    "None",
+                    None,
+                    None,
+                    None,
                     "10817",
                     ["0", "0", "0", "0"],
                     "S",
@@ -604,9 +604,9 @@ class TestTotalsAndComponents:
                 None,
                 (
                     "UAT-ZERO-CHECK-2",
-                    "None",
-                    "None",
-                    "None",
+                    None,
+                    None,
+                    None,
                     "9",
                     ["0", "0", "0", "0"],
                     "S",
@@ -635,8 +635,8 @@ class TestTotalsAndComponents:
                 (
                     "UAT-ZERO-CHECK-3",
                     "11",
-                    "None",
-                    "None",
+                    None,
+                    None,
                     "11",
                     ["7", "0", "2", "2"],
                     "T",
@@ -667,8 +667,8 @@ class TestTotalsAndComponents:
                 (
                     "UAT-ZERO-CHECK-3-B",
                     "10811",
-                    "None",
-                    "None",
+                    None,
+                    None,
                     "0",
                     ["9201", "866", "632", "112"],
                     "M",
@@ -694,8 +694,8 @@ class TestTotalsAndComponents:
                 (
                     "UAT-ZERO-CHECK-4",
                     "11",
-                    "None",
-                    "None",
+                    None,
+                    None,
                     "0",
                     ["0", "0", "0", "0"],
                     "C",
@@ -724,7 +724,7 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "UAT-ZERO-CHECK-4-B",
-                    "None",
+                    None,
                     "9.0",
                     "11.0",
                     "0",
@@ -756,8 +756,8 @@ class TestTotalsAndComponents:
                 (
                     "Z",
                     "7.9",
-                    "None",
-                    "None",
+                    None,
+                    None,
                     "10.9",
                     ["2.4", "2.6", "2.8", "3.1"],
                     "T",
@@ -785,8 +785,8 @@ class TestTotalsAndComponents:
                 (
                     "AA",
                     "8.9",
-                    "None",
-                    "None",
+                    None,
+                    None,
                     "2",
                     [
                         "0.4403669724770642201834862386",
@@ -813,7 +813,7 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "AB",
-                    "None",
+                    None,
                     "9.0",
                     "11.0",
                     "7",
@@ -835,7 +835,7 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "AC",
-                    "None",
+                    None,
                     "9.0",
                     "11.0",
                     "10",
@@ -857,7 +857,7 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "AD",
-                    "None",
+                    None,
                     "9.0",
                     "11.0",
                     "9",
@@ -879,7 +879,7 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "AE",
-                    "None",
+                    None,
                     "9.0",
                     "11.0",
                     "10",
@@ -901,7 +901,7 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "AF",
-                    "None",
+                    None,
                     "9.0",
                     "11.0",
                     "11",
@@ -923,7 +923,7 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "AG",
-                    "None",
+                    None,
                     "9.0",
                     "11.0",
                     "12",
@@ -1019,7 +1019,7 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "AK",
-                    "None",
+                    None,
                     "90.0",
                     "110.0",
                     "90",
@@ -1047,7 +1047,7 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "AL",
-                    "None",
+                    None,
                     "9.81",
                     "11.99",
                     "10",
@@ -1142,8 +1142,8 @@ class TestTotalsAndComponents:
                 (
                     "AO",
                     "0.1",
-                    "None",
-                    "None",
+                    None,
+                    None,
                     "0.7",
                     ["0.1", "0.2", "0.4"],
                     "T",
@@ -1170,7 +1170,7 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "AP",
-                    "None",
+                    None,
                     "0.63",
                     "0.77",
                     "0.7",
@@ -1200,7 +1200,7 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "AQ",
-                    "None",
+                    None,
                     "9.0",
                     "11.0",
                     "10",
@@ -1228,7 +1228,7 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "AR",
-                    "None",
+                    None,
                     "90.0",
                     "110.0",
                     "90",
@@ -1278,9 +1278,9 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "AT",
-                    "None",
-                    "None",
-                    "None",
+                    None,
+                    None,
+                    None,
                     "90",
                     ["90", "0", "4", "6"],
                     "S",
@@ -1306,7 +1306,7 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "AU",
-                    "None",
+                    None,
                     "90.0",
                     "110.0",
                     "90",
@@ -1336,7 +1336,7 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "AV",
-                    "None",
+                    None,
                     "90.0",
                     "110.0",
                     "90",
@@ -1366,7 +1366,7 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "AW",
-                    "None",
+                    None,
                     "90.0",
                     "110.0",
                     "90",
@@ -1394,9 +1394,9 @@ class TestTotalsAndComponents:
                 None,
                 (
                     "AX",
-                    "None",
-                    "None",
-                    "None",
+                    None,
+                    None,
+                    None,
                     "9",
                     ["0", "0", "0", "0"],
                     "S",
@@ -1418,9 +1418,9 @@ class TestTotalsAndComponents:
                 None,
                 (
                     "AY",
-                    "None",
-                    "None",
-                    "None",
+                    None,
+                    None,
+                    None,
                     "8",
                     [],
                     "S",
@@ -1447,9 +1447,9 @@ class TestTotalsAndComponents:
                 None,
                 (
                     "AZ",
-                    "None",
-                    "None",
-                    "None",
+                    None,
+                    None,
+                    None,
                     "10",
                     ["0", "0", "0", "0"],
                     "S",
@@ -1471,9 +1471,9 @@ class TestTotalsAndComponents:
                 None,
                 (
                     "BA",
-                    "None",
-                    "None",
-                    "None",
+                    None,
+                    None,
+                    None,
                     "6",
                     [],
                     "S",
@@ -1500,9 +1500,9 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "BB",
-                    "None",
-                    "None",
-                    "None",
+                    None,
+                    None,
+                    None,
                     "6",
                     ["0", "0", "0", "0"],
                     "S",
@@ -1523,9 +1523,9 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "BC",
-                    "None",
-                    "None",
-                    "None",
+                    None,
+                    None,
+                    None,
                     "9",
                     [],
                     "S",
@@ -1551,9 +1551,9 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "BD",
-                    "None",
-                    "None",
-                    "None",
+                    None,
+                    None,
+                    None,
                     "6",
                     ["0", "0", "0", "0"],
                     "S",
@@ -1574,9 +1574,9 @@ class TestTotalsAndComponents:
                 0.1,
                 (
                     "BE",
-                    "None",
-                    "None",
-                    "None",
+                    None,
+                    None,
+                    None,
                     "9",
                     [],
                     "S",
@@ -1598,8 +1598,8 @@ class TestTotalsAndComponents:
                 (
                     "BF",
                     "9",
-                    "None",
-                    "None",
+                    None,
+                    None,
                     "10705",
                     [
                         "9207.741211667913238593866866",
@@ -1626,8 +1626,8 @@ class TestTotalsAndComponents:
                 (
                     "BH",
                     "6",
-                    "None",
-                    "None",
+                    None,
+                    None,
                     "10705",
                     [
                         "9206.159921487989531731937564",
@@ -1659,8 +1659,8 @@ class TestTotalsAndComponents:
                 (
                     "BI",
                     "4",
-                    "None",
-                    "None",
+                    None,
+                    None,
                     "1621",
                     [
                         "630.4443076923076923076923077",
@@ -1759,8 +1759,8 @@ class TestTotalsAndComponentsUAT:
                 (
                     "UAT-ABD-DIFF-SHEET-A-1001",
                     "0",
-                    "None",
-                    "None",
+                    None,
+                    None,
                     "1625",
                     ["632", "732", "99", "162"],
                     "N",
@@ -1788,8 +1788,8 @@ class TestTotalsAndComponentsUAT:
                 (
                     "UAT-ABD-DIFF-SHEET-A-1002",
                     "0",
-                    "None",
-                    "None",
+                    None,
+                    None,
                     "10811",
                     ["9201", "866", "632", "112"],
                     "N",
@@ -1817,8 +1817,8 @@ class TestTotalsAndComponentsUAT:
                 (
                     "UAT-ABD-DIFF-SHEET-A-1003",
                     "0",
-                    "None",
-                    "None",
+                    None,
+                    None,
                     "108",
                     ["98", "0", "4", "6"],
                     "N",
@@ -1846,8 +1846,8 @@ class TestTotalsAndComponentsUAT:
                 (
                     "UAT-ABD-DIFF-SHEET-A-2001",
                     "22",
-                    "None",
-                    "None",
+                    None,
+                    None,
                     "1603",
                     ["632", "732", "99", "162"],
                     "M",
@@ -1876,8 +1876,8 @@ class TestTotalsAndComponentsUAT:
                 (
                     "UAT-ABD-DIFF-SHEET-A-2002",
                     "66",
-                    "None",
-                    "None",
+                    None,
+                    None,
                     "10745",
                     ["9201", "866", "632", "112"],
                     "M",
@@ -1906,8 +1906,8 @@ class TestTotalsAndComponentsUAT:
                 (
                     "UAT-ABD-DIFF-SHEET-A-2003",
                     "45",
-                    "None",
-                    "None",
+                    None,
+                    None,
                     "153",
                     ["98", "0", "4", "6"],
                     "M",
@@ -1936,8 +1936,8 @@ class TestTotalsAndComponentsUAT:
                 (
                     "UAT-ABD-DIFF-SHEET-A-3001",
                     "11",
-                    "None",
-                    "None",
+                    None,
+                    None,
                     "1625",
                     ["632", "732", "99", "162"],
                     "T",
@@ -1966,8 +1966,8 @@ class TestTotalsAndComponentsUAT:
                 (
                     "UAT-ABD-DIFF-SHEET-A-3002",
                     "11",
-                    "None",
-                    "None",
+                    None,
+                    None,
                     "10811",
                     ["9201", "866", "632", "112"],
                     "T",
@@ -1996,8 +1996,8 @@ class TestTotalsAndComponentsUAT:
                 (
                     "UAT-ABD-DIFF-SHEET-A-3003",
                     "11",
-                    "None",
-                    "None",
+                    None,
+                    None,
                     "108",
                     ["98", "0", "4", "6"],
                     "T",
@@ -2026,8 +2026,8 @@ class TestTotalsAndComponentsUAT:
                 (
                     "UAT-ABD-DIFF-SHEET-A-4001",
                     "11",
-                    "None",
-                    "None",
+                    None,
+                    None,
                     "1614",
                     [
                         "627.7218461538461538461538461",
@@ -2061,8 +2061,8 @@ class TestTotalsAndComponentsUAT:
                 (
                     "UAT-ABD-DIFF-SHEET-A-4002",
                     "11",
-                    "None",
-                    "None",
+                    None,
+                    None,
                     "10822",
                     [
                         "9210.361853667560817685690500",
@@ -2096,8 +2096,8 @@ class TestTotalsAndComponentsUAT:
                 (
                     "UAT-ABD-DIFF-SHEET-A-4003",
                     "11",
-                    "None",
-                    "None",
+                    None,
+                    None,
                     "119",
                     [
                         "107.9814814814814814814814815",
@@ -2131,8 +2131,8 @@ class TestTotalsAndComponentsUAT:
                 (
                     "UAT-ABD-DIFF-SHEET-A-5001",
                     "4",
-                    "None",
-                    "None",
+                    None,
+                    None,
                     "1625",
                     ["632", "732", "99", "162"],
                     "T",
@@ -2161,8 +2161,8 @@ class TestTotalsAndComponentsUAT:
                 (
                     "UAT-ABD-DIFF-SHEET-A-5002",
                     "6",
-                    "None",
-                    "None",
+                    None,
+                    None,
                     "10811",
                     ["9201", "866", "632", "112"],
                     "T",
@@ -2191,8 +2191,8 @@ class TestTotalsAndComponentsUAT:
                 (
                     "UAT-ABD-DIFF-SHEET-A-5003",
                     "5",
-                    "None",
-                    "None",
+                    None,
+                    None,
                     "108",
                     ["98", "0", "4", "6"],
                     "T",
@@ -2221,8 +2221,8 @@ class TestTotalsAndComponentsUAT:
                 (
                     "UAT-ABD-DIFF-SHEET-A-6001",
                     "4",
-                    "None",
-                    "None",
+                    None,
+                    None,
                     "1621",
                     [
                         "630.4443076923076923076923077",
@@ -2251,8 +2251,8 @@ class TestTotalsAndComponentsUAT:
                 (
                     "UAT-ABD-DIFF-SHEET-A-6002",  # identifier
                     "6",  # absolute_difference
-                    "None",  # low_percent_threshold
-                    "None",  # high_percent_threshold
+                    None,  # low_percent_threshold
+                    None,  # high_percent_threshold
                     "10817",  # final_total
                     [
                         "9206.106465636851355101285728",
@@ -2286,8 +2286,8 @@ class TestTotalsAndComponentsUAT:
                 (
                     "UAT-ABD-DIFF-SHEET-A-6003",
                     "5",
-                    "None",
-                    "None",
+                    None,
+                    None,
                     "103",
                     [
                         "93.46296296296296296296296296",
@@ -2315,9 +2315,9 @@ class TestTotalsAndComponentsUAT:
                 None,  # percentage_difference_threshold
                 (
                     "UAT-ABD-DIFF-SHEET-A-7001",  # identifier
-                    "None",  # absolute_difference
-                    "None",  # low_percent_threshold
-                    "None",  # high_percent_threshold
+                    None,  # absolute_difference
+                    None,  # low_percent_threshold
+                    None,  # high_percent_threshold
                     "9",  # final_total
                     [
                         "0",
@@ -2345,9 +2345,9 @@ class TestTotalsAndComponentsUAT:
                 None,
                 (
                     "UAT-ABD-DIFF-SHEET-A-7002",
-                    "None",
-                    "None",
-                    "None",
+                    None,
+                    None,
+                    None,
                     "4",
                     [nan, nan, nan, nan],
                     "S",
@@ -2370,9 +2370,9 @@ class TestTotalsAndComponentsUAT:
                 None,  # percentage_difference_threshold
                 (
                     "UAT-ABD-DIFF-SHEET-A-7003",  # identifier
-                    "None",  # absolute_difference
-                    "None",  # low_percent_threshold
-                    "None",  # high_percent_threshold
+                    None,  # absolute_difference
+                    None,  # low_percent_threshold
+                    None,  # high_percent_threshold
                     "11",  # final_total
                     [
                         "0",
@@ -2405,9 +2405,9 @@ class TestTotalsAndComponentsUAT:
                 None,
                 (
                     "UAT-ABD-DIFF-SHEET-A-8001",
-                    "None",
-                    "None",
-                    "None",
+                    None,
+                    None,
+                    None,
                     "9",
                     ["0", "0", "0", "0"],
                     "S",
@@ -2435,9 +2435,9 @@ class TestTotalsAndComponentsUAT:
                 None,
                 (
                     "UAT-ABD-DIFF-SHEET-A-8002",
-                    "None",
-                    "None",
-                    "None",
+                    None,
+                    None,
+                    None,
                     "4",
                     [nan, nan, nan, nan],
                     "S",
@@ -2465,9 +2465,9 @@ class TestTotalsAndComponentsUAT:
                 None,
                 (
                     "UAT-ABD-DIFF-SHEET-A-8003",
-                    "None",
-                    "None",
-                    "None",
+                    None,
+                    None,
+                    None,
                     "11",
                     ["0", "0", "0", "0"],
                     "S",
@@ -2496,8 +2496,8 @@ class TestTotalsAndComponentsUAT:
                 (
                     "UAT-ABD-DIFF-SHEET-A-9001",
                     "11",
-                    "None",
-                    "None",
+                    None,
+                    None,
                     "11",
                     ["7", "0", "2", "2"],
                     "T",
@@ -2526,8 +2526,8 @@ class TestTotalsAndComponentsUAT:
                 (
                     "UAT-ABD-DIFF-SHEET-A-9002",
                     "10",
-                    "None",
-                    "None",
+                    None,
+                    None,
                     "10",
                     ["2", "4", "3", "1"],
                     "T",
@@ -2556,8 +2556,8 @@ class TestTotalsAndComponentsUAT:
                 (
                     "UAT-ABD-DIFF-SHEET-A-9003",
                     "6",
-                    "None",
-                    "None",
+                    None,
+                    None,
                     "6",
                     ["6", "0", "0", "0"],
                     "T",
@@ -2586,8 +2586,8 @@ class TestTotalsAndComponentsUAT:
                 (
                     "UAT-ABD-DIFF-SHEET-A-10001",
                     "11",
-                    "None",
-                    "None",
+                    None,
+                    None,
                     "0",
                     ["0", "0", "0", "0"],
                     "C",
@@ -2616,8 +2616,8 @@ class TestTotalsAndComponentsUAT:
                 (
                     "UAT-ABD-DIFF-SHEET-A-10002",
                     "10",
-                    "None",
-                    "None",
+                    None,
+                    None,
                     "0",
                     ["0", "0", "0", "0"],
                     "C",
@@ -2646,8 +2646,8 @@ class TestTotalsAndComponentsUAT:
                 (
                     "UAT-ABD-DIFF-SHEET-A-10003",
                     "6",
-                    "None",
-                    "None",
+                    None,
+                    None,
                     "0",
                     ["0", "0", "0", "0"],
                     "C",
@@ -2676,8 +2676,8 @@ class TestTotalsAndComponentsUAT:
                 (
                     "UAT-ABD-DIFF-SHEET-A-11001",
                     "6",
-                    "None",
-                    "None",
+                    None,
+                    None,
                     "1625",
                     ["632", "732", "99", "162"],
                     "T",
@@ -2707,8 +2707,8 @@ class TestTotalsAndComponentsUAT:
                 (
                     "UAT-ABD-DIFF-SHEET-A-11002",
                     "10",
-                    "None",
-                    "None",
+                    None,
+                    None,
                     "10811",
                     ["9201", "866", "632", "112"],
                     "T",
@@ -2738,8 +2738,8 @@ class TestTotalsAndComponentsUAT:
                 (
                     "UAT-ABD-DIFF-SHEET-A-11003",
                     "1",
-                    "None",
-                    "None",
+                    None,
+                    None,
                     "108",
                     ["98", "0", "4", "6"],
                     "T",
@@ -2769,8 +2769,8 @@ class TestTotalsAndComponentsUAT:
                 (
                     "UAT-ABD-DIFF-SHEET-A-12001",
                     "4",
-                    "None",
-                    "None",
+                    None,
+                    None,
                     "1621",
                     ["632", "732", "99", "162"],
                     "M",
@@ -2799,8 +2799,8 @@ class TestTotalsAndComponentsUAT:
                 (
                     "UAT-ABD-DIFF-SHEET-A-12002",
                     "6",
-                    "None",
-                    "None",
+                    None,
+                    None,
                     "10817",
                     ["9201", "866", "632", "112"],
                     "M",
@@ -2829,8 +2829,8 @@ class TestTotalsAndComponentsUAT:
                 (
                     "UAT-ABD-DIFF-SHEET-A-12003",
                     "5",
-                    "None",
-                    "None",
+                    None,
+                    None,
                     "103",
                     ["98", "0", "4", "6"],
                     "M",
@@ -2859,8 +2859,8 @@ class TestTotalsAndComponentsUAT:
                 (
                     "UAT-ABD-DIFF-SHEET-A-13001",
                     "6",
-                    "None",
-                    "None",
+                    None,
+                    None,
                     "1625",
                     ["632", "732", "99", "162"],
                     "T",
@@ -2890,8 +2890,8 @@ class TestTotalsAndComponentsUAT:
                 (
                     "UAT-ABD-DIFF-SHEET-A-13002",
                     "10",
-                    "None",
-                    "None",
+                    None,
+                    None,
                     "10811",
                     ["9201", "866", "632", "112"],
                     "T",
@@ -2921,8 +2921,8 @@ class TestTotalsAndComponentsUAT:
                 (
                     "UAT-ABD-DIFF-SHEET-A-13003",
                     "1",
-                    "None",
-                    "None",
+                    None,
+                    None,
                     "108",
                     ["98", "0", "4", "6"],
                     "T",
@@ -2947,8 +2947,8 @@ class TestTotalsAndComponentsUAT:
                 (
                     "UAT-ABD-DIFF-SHEET-A-14001",
                     "4",
-                    "None",
-                    "None",
+                    None,
+                    None,
                     "1522",
                     [
                         "630.3433813892529488859764090",
@@ -2977,8 +2977,8 @@ class TestTotalsAndComponentsUAT:
                 (
                     "UAT-ABD-DIFF-SHEET-A-14002",
                     "6",
-                    "None",
-                    "None",
+                    None,
+                    None,
                     "10705",
                     [
                         "9206.159921487989531731937564",
@@ -3007,8 +3007,8 @@ class TestTotalsAndComponentsUAT:
                 (
                     "UAT-ABD-DIFF-SHEET-A-14003",
                     "5",
-                    "None",
-                    "None",
+                    None,
+                    None,
                     "103",
                     [
                         "93.46296296296296296296296296",
@@ -3041,7 +3041,7 @@ class TestTotalsAndComponentsUAT:
                 0.1,
                 (
                     "UAT-PERC-DIFF-SHEET-B-1001",
-                    "None",
+                    None,
                     "1462.5",
                     "1787.5",
                     "1625",
@@ -3072,7 +3072,7 @@ class TestTotalsAndComponentsUAT:
                 0.1,
                 (
                     "UAT-PERC-DIFF-SHEET-B-1002",
-                    "None",
+                    None,
                     "9729.9",
                     "11892.1",
                     "10811",
@@ -3103,7 +3103,7 @@ class TestTotalsAndComponentsUAT:
                 0.1,
                 (
                     "UAT-PERC-DIFF-SHEET-B-1003",
-                    "None",
+                    None,
                     "97.2",
                     "118.8",
                     "108",
@@ -3134,7 +3134,7 @@ class TestTotalsAndComponentsUAT:
                 0.1,
                 (
                     "UAT-PERC-DIFF-SHEET-B-2001",
-                    "None",
+                    None,
                     "1462.5",
                     "1787.5",
                     "1964",
@@ -3164,7 +3164,7 @@ class TestTotalsAndComponentsUAT:
                 0.1,
                 (
                     "UAT-PERC-DIFF-SHEET-B-2002",
-                    "None",
+                    None,
                     "9729.9",
                     "11892.1",
                     "12492",
@@ -3194,7 +3194,7 @@ class TestTotalsAndComponentsUAT:
                 0.1,
                 (
                     "UAT-PERC-DIFF-SHEET-B-2003",
-                    "None",
+                    None,
                     "97.2",
                     "118.8",
                     "153",
@@ -3224,7 +3224,7 @@ class TestTotalsAndComponentsUAT:
                 0.1,
                 (
                     "UAT-PERC-DIFF-SHEET-B-3001",
-                    "None",
+                    None,
                     "1458.0",
                     "1782.0",
                     "1620",
@@ -3253,7 +3253,7 @@ class TestTotalsAndComponentsUAT:
                 0.1,
                 (
                     "UAT-PERC-DIFF-SHEET-B-3002",
-                    "None",
+                    None,
                     "9738.0",
                     "11902.0",
                     "10820",
@@ -3282,7 +3282,7 @@ class TestTotalsAndComponentsUAT:
                 0.1,
                 (
                     "UAT-PERC-DIFF-SHEET-B-3003",
-                    "None",
+                    None,
                     "90.0",
                     "110.0",
                     "100",
@@ -3311,7 +3311,7 @@ class TestTotalsAndComponentsUAT:
                 0.1,
                 (
                     "UAT-PERC-DIFF-SHEET-B-4001",
-                    "None",
+                    None,
                     "1458.0",
                     "1782.0",
                     "1458",
@@ -3345,7 +3345,7 @@ class TestTotalsAndComponentsUAT:
                 0.1,
                 (
                     "UAT-PERC-DIFF-SHEET-B-4002",
-                    "None",
+                    None,
                     "9738.0",
                     "11902.0",
                     "11902",
@@ -3379,7 +3379,7 @@ class TestTotalsAndComponentsUAT:
                 0.1,
                 (
                     "UAT-PERC-DIFF-SHEET-B-4003",
-                    "None",
+                    None,
                     "90.0",
                     "110.0",
                     "90",
@@ -3408,7 +3408,7 @@ class TestTotalsAndComponentsUAT:
                 0.1,
                 (
                     "UAT-PERC-DIFF-SHEET-B-5001",
-                    "None",
+                    None,
                     "1462.5",
                     "1787.5",
                     "1625",
@@ -3437,7 +3437,7 @@ class TestTotalsAndComponentsUAT:
                 0.1,
                 (
                     "UAT-PERC-DIFF-SHEET-B-5002",
-                    "None",
+                    None,
                     "9729.9",
                     "11892.1",
                     "10811",
@@ -3466,7 +3466,7 @@ class TestTotalsAndComponentsUAT:
                 0.1,
                 (
                     "UAT-PERC-DIFF-SHEET-B-5003",
-                    "None",
+                    None,
                     "97.2",
                     "118.8",
                     "108",
@@ -3495,7 +3495,7 @@ class TestTotalsAndComponentsUAT:
                 0.1,
                 (
                     "UAT-PERC-DIFF-SHEET-B-6001",
-                    "None",
+                    None,
                     "1462.5",
                     "1787.5",
                     "1621",
@@ -3529,7 +3529,7 @@ class TestTotalsAndComponentsUAT:
                 0.1,
                 (
                     "UAT-PERC-DIFF-SHEET-B-6002",
-                    "None",
+                    None,
                     "9729.9",
                     "11892.1",
                     "10817",
@@ -3563,7 +3563,7 @@ class TestTotalsAndComponentsUAT:
                 0.1,
                 (
                     "UAT-PERC-DIFF-SHEET-B-6003",
-                    "None",
+                    None,
                     "97.2",
                     "118.8",
                     "103",
@@ -3597,9 +3597,9 @@ class TestTotalsAndComponentsUAT:
                 0.1,
                 (
                     "UAT-PERC-DIFF-SHEET-B-7001",
-                    "None",
-                    "None",
-                    "None",
+                    None,
+                    None,
+                    None,
                     "1621",
                     ["0", "0", "0", "0"],
                     "S",
@@ -3626,9 +3626,9 @@ class TestTotalsAndComponentsUAT:
                 0.1,
                 (
                     "UAT-PERC-DIFF-SHEET-B-7002",
-                    "None",
-                    "None",
-                    "None",
+                    None,
+                    None,
+                    None,
                     "10817",
                     ["0", "0", "0", "0"],
                     "S",
@@ -3655,9 +3655,9 @@ class TestTotalsAndComponentsUAT:
                 0.1,
                 (
                     "UAT-PERC-DIFF-SHEET-B-7003",
-                    "None",
-                    "None",
-                    "None",
+                    None,
+                    None,
+                    None,
                     "103",
                     ["0", "0", "0", "0"],
                     "S",
@@ -3684,9 +3684,9 @@ class TestTotalsAndComponentsUAT:
                 0.1,
                 (
                     "UAT-PERC-DIFF-SHEET-B-8001",
-                    "None",
-                    "None",
-                    "None",
+                    None,
+                    None,
+                    None,
                     "1621",
                     ["0", "0", "0", "0"],
                     "S",
@@ -3713,9 +3713,9 @@ class TestTotalsAndComponentsUAT:
                 0.1,
                 (
                     "UAT-PERC-DIFF-SHEET-B-8002",
-                    "None",
-                    "None",
-                    "None",
+                    None,
+                    None,
+                    None,
                     "10817",
                     ["0", "0", "0", "0"],
                     "S",
@@ -3742,9 +3742,9 @@ class TestTotalsAndComponentsUAT:
                 0.1,
                 (
                     "UAT-PERC-DIFF-SHEET-B-8003",
-                    "None",
-                    "None",
-                    "None",
+                    None,
+                    None,
+                    None,
                     "103",
                     ["0", "0", "0", "0"],
                     "S",
@@ -3771,7 +3771,7 @@ class TestTotalsAndComponentsUAT:
                 0.1,
                 (
                     "UAT-PERC-DIFF-SHEET-B-9001",
-                    "None",
+                    None,
                     "1462.5",
                     "1787.5",
                     "1625",
@@ -3801,7 +3801,7 @@ class TestTotalsAndComponentsUAT:
                 0.1,
                 (
                     "UAT-PERC-DIFF-SHEET-B-9002",
-                    "None",
+                    None,
                     "9729.9",
                     "11892.1",
                     "10811",
@@ -3831,7 +3831,7 @@ class TestTotalsAndComponentsUAT:
                 0.1,
                 (
                     "UAT-PERC-DIFF-SHEET-B-9003",
-                    "None",
+                    None,
                     "97.2",
                     "118.8",
                     "108",
@@ -3861,7 +3861,7 @@ class TestTotalsAndComponentsUAT:
                 0,
                 (
                     "UAT-PERC-DIFF-SHEET-B-10001",
-                    "None",
+                    None,
                     "1625",
                     "1625",
                     "1612",
@@ -3894,7 +3894,7 @@ class TestTotalsAndComponentsUAT:
                 0,
                 (
                     "UAT-PERC-DIFF-SHEET-B-10002",
-                    "None",
+                    None,
                     "10811",
                     "10811",
                     "10817",
@@ -3922,7 +3922,7 @@ class TestTotalsAndComponentsUAT:
                 0,
                 (
                     "UAT-PERC-DIFF-SHEET-B-10003",
-                    "None",
+                    None,
                     "108",
                     "108",
                     "103",
@@ -3950,7 +3950,7 @@ class TestTotalsAndComponentsUAT:
                 0.1,
                 (
                     "UAT-PERC-DIFF-SHEET-B-11001",
-                    "None",
+                    None,
                     "1462.5",
                     "1787.5",
                     "1625",
@@ -3981,7 +3981,7 @@ class TestTotalsAndComponentsUAT:
                 0.1,
                 (
                     "UAT-PERC-DIFF-SHEET-B-11002",
-                    "None",
+                    None,
                     "9729.9",
                     "11892.1",
                     "10811",
@@ -4012,7 +4012,7 @@ class TestTotalsAndComponentsUAT:
                 0.1,
                 (
                     "UAT-PERC-DIFF-SHEET-B-11003",
-                    "None",
+                    None,
                     "97.2",
                     "118.8",
                     "108",
@@ -4937,8 +4937,8 @@ class TestTotalsAndComponentsUAT:
                 (
                     "UAT-TOLERANCE-1000",
                     "0",
-                    "None",
-                    "None",
+                    None,
+                    None,
                     "100",
                     ["20", "30", "40", "10"],
                     "N",
@@ -5035,8 +5035,8 @@ class TestTotalsAndComponentsSingleTest:
                 (
                     "BI",
                     "4",
-                    "None",
-                    "None",
+                    None,
+                    None,
                     "1621",
                     [
                         "630.4443076923076923076923077",

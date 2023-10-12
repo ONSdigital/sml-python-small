@@ -395,16 +395,37 @@ def totals_and_components(
                         )
 
         final_components = [
-            str(component) for component in output_list["final_components"]
+            str(component) if component is not None else component
+            for component in output_list["final_components"]
         ]
+
+        absolute_difference = (
+            str(output_list["absolute_difference"])
+            if output_list["absolute_difference"] is not None
+            else output_list["absolute_difference"]
+        )
+
+        low_threshold = (
+            str(low_threshold) if low_threshold is not None else low_threshold
+        )
+
+        high_threshold = (
+            str(high_threshold) if high_threshold is not None else high_threshold
+        )
+
+        final_total = (
+            str(output_list["final_total"])
+            if output_list["final_total"] is not None
+            else output_list["final_total"]
+        )
 
         # Return the values as raw strings instead of decimal
         output_list = {
             "identifier": identifier,
-            "absolute_difference": str(output_list["absolute_difference"]),
-            "low_percent_threshold": str(low_threshold),
-            "high_percent_threshold": str(high_threshold),
-            "final_total": str(output_list["final_total"]),
+            "absolute_difference": absolute_difference,
+            "low_percent_threshold": low_threshold,
+            "high_percent_threshold": high_threshold,
+            "final_total": final_total,
             "final_components": final_components,
             "tcc_marker": output_list["tcc_marker"].value,
         }
