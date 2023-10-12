@@ -28,6 +28,7 @@ EXCEPTION_FAIL_MESSAGE = (
 
 # ---- Class Definitions ----
 
+
 #  Class used to force str() cast during validation to fail as all standard library python types have
 #  valid string conversions
 class NoString:
@@ -5016,7 +5017,7 @@ class TestTotalsAndComponentsSingleTest:
         "auxiliary, absolute_difference_threshold, percentage_difference_threshold,"
         "expected_result, test_id",
         [
-           (
+            (
                 "BI",
                 1621,
                 [
@@ -5033,21 +5034,15 @@ class TestTotalsAndComponentsSingleTest:
                 None,
                 (
                     "BI",
-                    "4"
-                    ,
+                    "4",
                     "None",
                     "None",
-                    "1621"
-                    ,
+                    "1621",
                     [
-                        "630.4443076923076923076923077"
-                        ,
-                        "730.1981538461538461538461539"
-                        ,
-                        "98.75630769230769230769230769"
-                        ,
-                        "161.6012307692307692307692298"
-                        ,
+                        "630.4443076923076923076923077",
+                        "730.1981538461538461538461539",
+                        "98.75630769230769230769230769",
+                        "161.6012307692307692307692298",
                     ],
                     "C",
                 ),
@@ -6705,10 +6700,9 @@ class TestCorrectComponents:
                 [
                     Decimal("115.3846153846153725908152409829199314117431640625"),
                     Decimal("38.4615384615384670041748904623091220855712890625"),
-                    Decimal("46.15384615384615329958251095376908779144287109375")
-                    ],
-
-               "Test 2: Component sum = 130, Total = 200",
+                    Decimal("46.15384615384615329958251095376908779144287109375"),
+                ],
+                "Test 2: Component sum = 130, Total = 200",
             ),
             (
                 100.0,
@@ -6782,9 +6776,7 @@ def compare_results_to_expected_results(
     compare_list_of_decimals(results.final_components, expected_result[5])
 
 
-def compare_list_of_decimals(
-    components: List[str], expected_components: List[str]
-):
+def compare_list_of_decimals(components: List[str], expected_components: List[str]):
     for i, (component, expected) in enumerate(zip(components, expected_components)):
         component = Decimal(component)
         expected = Decimal(expected)

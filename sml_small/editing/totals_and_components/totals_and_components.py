@@ -394,18 +394,20 @@ def totals_and_components(
                             total=input_parameters[InputParameters.TOTAL.value],
                         )
 
-        final_components = [str(component) for component in output_list["final_components"]]
+        final_components = [
+            str(component) for component in output_list["final_components"]
+        ]
 
         # Return the values as raw strings instead of decimal
         output_list = {
-                    "identifier": identifier,
-                    "absolute_difference": str(output_list["absolute_difference"]),
-                    "low_percent_threshold": str(low_threshold),
-                    "high_percent_threshold": str(high_threshold),
-                    "final_total": str(output_list["final_total"]),
-                    "final_components": final_components,
-                    "tcc_marker": output_list["tcc_marker"].value
-                }
+            "identifier": identifier,
+            "absolute_difference": str(output_list["absolute_difference"]),
+            "low_percent_threshold": str(low_threshold),
+            "high_percent_threshold": str(high_threshold),
+            "final_total": str(output_list["final_total"]),
+            "final_components": final_components,
+            "tcc_marker": output_list["tcc_marker"].value,
+        }
 
         output = TotalsAndComponentsOutput(output_list)
 
@@ -852,7 +854,6 @@ def correct_components(
     components: List[ComponentPair],
     total: Decimal,
 ) -> Tuple[Decimal, List[ComponentPair], TccMarker]:
-
     """
     Function to correct the components values to add up to the received total value,
     set the final total as the received total and indicate that the components
