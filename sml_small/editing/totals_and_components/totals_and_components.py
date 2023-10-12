@@ -120,20 +120,20 @@ class TotalsAndComponentsOutput:
     """
 
     identifier: Optional[str] = ""  # unique identifier
-    absolute_difference: Optional[Decimal]  # this is the absolute value showing the
+    absolute_difference: Optional[str]  # this is the absolute value showing the
     # difference between the components input and the predictive total
     low_percent_threshold: Optional[
-        Decimal
+        str
     ] = None  # the sum of the input components minus the absolute percentage difference
     high_percent_threshold: Optional[
-        Decimal
+        str
     ] = None  # the sum of the input components plus the absolute percentage difference
     final_total: Optional[
-        Decimal
+        str
     ] = None  # the output total which may have been corrected based on user input amend_
     # total variable
     final_components: Optional[
-        Decimal
+        str
     ] = None  # the output components which may have been corrected to match the received
     # predictive value. If corrected the components are scaled proportionally
     # based on the input values
@@ -227,18 +227,18 @@ def totals_and_components(
     :return: TotalsAndComponentsOutput: An object containing the
                                        following attributes:
              - identifier (str): Unique identifier.
-             - absolute_difference (float): The absolute value showing the difference between
+             - absolute_difference (str): The absolute value showing the difference between
              the input components and
                the predictive total.
-             - low_percent_threshold (float, optional): The sum of the input components minus
+             - low_percent_threshold (str, optional): The sum of the input components minus
              the absolute percentage
                difference (default: None).
-             - high_percent_threshold (float, optional): The sum of the input components plus
+             - high_percent_threshold (str, optional): The sum of the input components plus
              the absolute percentage
                difference (default: None).
-             - final_total (float): The output total, which may have been corrected based on
+             - final_total (str): The output total, which may have been corrected based on
              the amend_total variable.
-             - final_components (List[float]): The output components, which may have been
+             - final_components (List[str]): The output components, which may have been
              corrected to match the received predictive value. If corrected, the components are
                scaled proportionally
              - Tcc_Marker (str): Indicates what correction (if any) was necessary.
@@ -274,6 +274,8 @@ def totals_and_components(
         }
 
         components_list = initialize_components_list(components)
+        low_threshold = None
+        high_threshold = None
 
         #  Check for invalid parameter values and set the precision value
         #  for decimal calculations
@@ -392,8 +394,42 @@ def totals_and_components(
                             total=input_parameters[InputParameters.TOTAL.value],
                         )
 
-        # Return the raw string instead of the enum value
-        output_list["tcc_marker"] = output_list["tcc_marker"].value
+        final_components = [
+            str(component) if component is not None else component
+            for component in output_list["final_components"]
+        ]
+
+        absolute_difference = (
+            str(output_list["absolute_difference"])
+            if output_list["absolute_difference"] is not None
+            else output_list["absolute_difference"]
+        )
+
+        low_threshold = (
+            str(low_threshold) if low_threshold is not None else low_threshold
+        )
+
+        high_threshold = (
+            str(high_threshold) if high_threshold is not None else high_threshold
+        )
+
+        final_total = (
+            str(output_list["final_total"])
+            if output_list["final_total"] is not None
+            else output_list["final_total"]
+        )
+
+        # Return the values as raw strings instead of decimal
+        output_list = {
+            "identifier": identifier,
+            "absolute_difference": absolute_difference,
+            "low_percent_threshold": low_threshold,
+            "high_percent_threshold": high_threshold,
+            "final_total": final_total,
+            "final_components": final_components,
+            "tcc_marker": output_list["tcc_marker"].value,
+        }
+
         output = TotalsAndComponentsOutput(output_list)
 
         # Log the output table with the final values
@@ -839,7 +875,6 @@ def correct_components(
     components: List[ComponentPair],
     total: Decimal,
 ) -> Tuple[Decimal, List[ComponentPair], TccMarker]:
-
     """
     Function to correct the components values to add up to the received total value,
     set the final total as the received total and indicate that the components

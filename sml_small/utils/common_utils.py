@@ -114,12 +114,10 @@ def convert_input_to_decimal(
 
         # Using zip to iterate through the keys and arguments simultaneously
         for key, arg in zip(keys, args):
-
             if type(arg) == Decimal:
                 decimal_values[key] = arg
 
             elif type(arg) == list:
-
                 if arg == []:
                     decimal_values[key] = arg
 
