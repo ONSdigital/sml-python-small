@@ -6687,7 +6687,7 @@ class TestCorrectComponents:
                 18,
                 100,
                 [
-                    Decimal(10),
+                    Decimal("10"),
                 ]
                 * 10,
                 "Test 1: Component = 90, predictive = 100",
@@ -6702,8 +6702,13 @@ class TestCorrectComponents:
                 200.0,
                 18,
                 200,
-                [Decimal(115.38), Decimal(38.46), Decimal(46.15)],
-                "Test 2: Component sum = 130, Total = 200",
+                [
+                    Decimal("115.3846153846153725908152409829199314117431640625"),
+                    Decimal("38.4615384615384670041748904623091220855712890625"),
+                    Decimal("46.15384615384615329958251095376908779144287109375")
+                    ],
+
+               "Test 2: Component sum = 130, Total = 200",
             ),
             (
                 100.0,
@@ -6712,7 +6717,7 @@ class TestCorrectComponents:
                 1,
                 0,
                 [
-                    Decimal(0),
+                    Decimal("0"),
                 ]
                 * 10,
                 "Test 3: Component = 100, predictive = 0",
@@ -6741,8 +6746,7 @@ class TestCorrectComponents:
                 result[0] == expected_total
             ), f"Test {test_id} failed: Unexpected result"
             for index, component in enumerate(result[1]):
-                # Rounding to 2 decimal places for testing purposes
-                value = round(component.final_value, 2)
+                value = Decimal(component.final_value)
                 assert (
                     value == expected_component[index]
                 ), f"Test {test_id} failed: Unexpected result"

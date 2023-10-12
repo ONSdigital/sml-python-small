@@ -227,18 +227,18 @@ def totals_and_components(
     :return: TotalsAndComponentsOutput: An object containing the
                                        following attributes:
              - identifier (str): Unique identifier.
-             - absolute_difference (float): The absolute value showing the difference between
+             - absolute_difference (str): The absolute value showing the difference between
              the input components and
                the predictive total.
-             - low_percent_threshold (float, optional): The sum of the input components minus
+             - low_percent_threshold (str, optional): The sum of the input components minus
              the absolute percentage
                difference (default: None).
-             - high_percent_threshold (float, optional): The sum of the input components plus
+             - high_percent_threshold (str, optional): The sum of the input components plus
              the absolute percentage
                difference (default: None).
-             - final_total (float): The output total, which may have been corrected based on
+             - final_total (str): The output total, which may have been corrected based on
              the amend_total variable.
-             - final_components (List[float]): The output components, which may have been
+             - final_components (List[str]): The output components, which may have been
              corrected to match the received predictive value. If corrected, the components are
                scaled proportionally
              - Tcc_Marker (str): Indicates what correction (if any) was necessary.
