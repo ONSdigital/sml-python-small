@@ -17,7 +17,7 @@ EXCEPTION_FAIL_MESSAGE = (
 
 class TestThousandPounds:
     @pytest.mark.parametrize(
-        "unique_identifier, principal_variable, predictive, auxiliary, upper_limit, lower_limit, target_variables, "
+        "unique_identifier, principal_variable, predictive, auxiliary, upper_limit, lower_limit, target_variables, precision,"
         "expected, test_id",
         [
             (
@@ -33,6 +33,7 @@ class TestThousandPounds:
                     "q103": 12345,
                     "q104": 0,
                 },
+                28,
                 Thousands_output(
                     "q100",
                     Decimal("50000.0"),
@@ -55,6 +56,7 @@ class TestThousandPounds:
                 1350,
                 350,
                 {},
+                28,
                 Thousands_output("q200", 60000.0, [], 400.0, "C"),
                 "Given config(missing auxiliary) - outputs adjusted for all target variables",
             ),
@@ -66,6 +68,7 @@ class TestThousandPounds:
                 1350,
                 350,
                 {},
+                28,
                 Thousands_output(
                     "q300", Decimal("269.980"), [], Decimal("1349.9"), "C"
                 ),
@@ -79,6 +82,7 @@ class TestThousandPounds:
                 1350,
                 350,
                 {},
+                28,
                 TPException(
                     "identifier: q400",
                     ValueError(
@@ -98,6 +102,7 @@ class TestThousandPounds:
                     "q451": 500,
                     "q452": 1000,
                 },
+                28,
                 Thousands_output(
                     "q410",
                     8000,
@@ -118,6 +123,7 @@ class TestThousandPounds:
                 1350,
                 350,
                 {"q451": 500, "q452": 1000},
+                28,
                 Thousands_output(
                     "q450",
                     8000,
@@ -138,6 +144,7 @@ class TestThousandPounds:
                 1350,
                 350,
                 {"q501": 500, "q502": 1000},
+                28,
                 TPException(
                     "identifier: q500",
                     ValueError(get_mandatory_param_error("principal_variable")),
@@ -152,6 +159,7 @@ class TestThousandPounds:
                 1350,
                 350,
                 {"q601": 500, "q602": 1000},
+                28,
                 Thousands_output(
                     "q600",
                     0,
@@ -172,6 +180,7 @@ class TestThousandPounds:
                 1350,
                 350,
                 {"q701": 500},
+                28,
                 Thousands_output(
                     "q700",
                     3500,
@@ -189,6 +198,7 @@ class TestThousandPounds:
                 1350,  # Upper limit
                 350,  # lower limit
                 {"q801": 500},
+                28,
                 Thousands_output(
                     "q800",
                     13500,
@@ -206,6 +216,7 @@ class TestThousandPounds:
                 0,  # upper limit
                 1,  # lower limit
                 {},
+                28,
                 TPException(
                     "identifier: q900",
                     ValueError(get_mandatory_param_error("upper_limit")),
@@ -220,6 +231,7 @@ class TestThousandPounds:
                 1,  # upper limit
                 0,  # lower limit
                 {},
+                28,
                 TPException(
                     "identifier: q1000",
                     ValueError(get_mandatory_param_error("lower_limit")),
@@ -234,6 +246,7 @@ class TestThousandPounds:
                 3,  # upper limit
                 4,  # lower limit
                 {},
+                28,
                 TPException(
                     "identifier: q1100",
                     ValueError(get_params_is_not_a_number_error("principal_variable")),
@@ -248,6 +261,7 @@ class TestThousandPounds:
                 "3",  # upper limit
                 "4",  # lower limit
                 {},
+                28,
                 TPException(
                     "identifier: q1200",
                     ValueError(get_params_is_not_a_number_error("predictive")),
@@ -262,6 +276,7 @@ class TestThousandPounds:
                 "33 56 767",  # upper limit
                 "4",  # lower limit
                 {},
+                28,
                 TPException(
                     "identifier: q1300",
                     ValueError(get_params_is_not_a_number_error("upper_limit")),
@@ -276,6 +291,7 @@ class TestThousandPounds:
                 "1234",  # upper limit
                 "98123x21",  # lower limit
                 {},
+                28,
                 TPException(
                     "identifier: q1400",
                     ValueError(get_params_is_not_a_number_error("lower_limit")),
@@ -290,6 +306,7 @@ class TestThousandPounds:
                 350,  # upper limit
                 351,  # lower limit
                 {},
+                28,
                 TPException(
                     "identifier: q1500",
                     ValueError(get_boundary_error([351, 350])),
@@ -307,6 +324,7 @@ class TestThousandPounds:
         upper_limit,
         lower_limit,
         target_variables,
+        precision,
         expected,
         test_id,
     ):
@@ -320,6 +338,7 @@ class TestThousandPounds:
                     upper_limit=upper_limit,
                     lower_limit=lower_limit,
                     target_variables=target_variables,
+                    precision=precision,
                 )
                 assert result == expected
 
@@ -341,13 +360,14 @@ class TestThousandPounds:
                     upper_limit=upper_limit,
                     lower_limit=lower_limit,
                     target_variables=target_variables,
+                    precision=precision,
                 )
             assert (str(exc_info.value)) == str(expected)
 
 
 class TestThousandPoundsUAT:
     @pytest.mark.parametrize(
-        "unique_identifier, principal_variable, predictive, auxiliary, upper_limit, lower_limit, target_variables, "
+        "unique_identifier, principal_variable, predictive, auxiliary, upper_limit, lower_limit, target_variables, precision,"
         "expected, test_id",
         [
             (
@@ -358,6 +378,7 @@ class TestThousandPoundsUAT:
                 1350,
                 250,
                 {"q42": 32, "q43": 97},
+                28,
                 Thousands_output(
                     "UAT-Sheet-1-A",
                     Decimal("706"),
@@ -378,6 +399,7 @@ class TestThousandPoundsUAT:
                 1350,
                 250,
                 {"q42": 287, "q43": 199},
+                28,
                 Thousands_output(
                     "UAT-Sheet-1-B",
                     Decimal("381"),
@@ -398,6 +420,7 @@ class TestThousandPoundsUAT:
                 1350,
                 250,
                 {"q42": 32, "q43": 97},
+                28,
                 Thousands_output(
                     "UAT-Sheet-2-A",
                     Decimal("823650"),
@@ -418,6 +441,7 @@ class TestThousandPoundsUAT:
                 1350,
                 250,
                 {"q42": 7161, "q43": 759},
+                28,
                 Thousands_output(
                     "UAT-Sheet-2-B",
                     Decimal("11638071"),
@@ -438,6 +462,7 @@ class TestThousandPoundsUAT:
                 1350,
                 250,
                 {"q42": 32, "q43": 97},
+                28,
                 Thousands_output(
                     "UAT-Sheet-3-A",
                     Decimal("151250"),
@@ -458,6 +483,7 @@ class TestThousandPoundsUAT:
                 1350,
                 250,
                 {"q42": 3900, "q43": 272},
+                28,
                 Thousands_output(
                     "UAT-Sheet-3-B",
                     Decimal("5750"),
@@ -478,6 +504,7 @@ class TestThousandPoundsUAT:
                 1350,
                 250,
                 {"q42": 32, "q43": 97},
+                28,
                 Thousands_output(
                     "UAT-Sheet-4-A",
                     Decimal("816750"),
@@ -498,6 +525,7 @@ class TestThousandPoundsUAT:
                 1350,
                 250,
                 {"q42": 29, "q43": 7},
+                28,
                 Thousands_output(
                     "UAT-Sheet-4-B",
                     Decimal("31050"),
@@ -518,6 +546,7 @@ class TestThousandPoundsUAT:
                 1350,
                 250,
                 {"q42": 3238, "q43": 97},
+                28,
                 Thousands_output(
                     "UAT-Sheet-5-A",
                     Decimal("716.75"),
@@ -539,6 +568,7 @@ class TestThousandPoundsUAT:
                 1350,
                 250,
                 {"q42": 29, "q43": 7753},
+                28,
                 Thousands_output(
                     "UAT-Sheet-5-B",
                     Decimal("21.758"),
@@ -560,6 +590,7 @@ class TestThousandPoundsUAT:
                 1350,
                 250,
                 {"q42": 3238, "q43": 97},
+                28,
                 Thousands_output(
                     "UAT-Sheet-6-A",
                     Decimal("716.75"),
@@ -581,6 +612,7 @@ class TestThousandPoundsUAT:
                 1350,
                 250,
                 {"q42": 29, "q43": 7753},
+                28,
                 Thousands_output(
                     "UAT-Sheet-6-B",
                     Decimal("21.758"),
@@ -602,6 +634,7 @@ class TestThousandPoundsUAT:
                 1350,
                 250,
                 {"q42": 3238, "q43": 97},
+                28,
                 Thousands_output(
                     "UAT-Sheet-7-A",
                     Decimal("716750"),
@@ -623,6 +656,7 @@ class TestThousandPoundsUAT:
                 1350,
                 250,
                 {"q42": 29, "q43": 7753},
+                28,
                 Thousands_output(
                     "UAT-Sheet-7-B",
                     Decimal("21758"),
@@ -644,6 +678,7 @@ class TestThousandPoundsUAT:
                 1350,
                 250,
                 {"q42": 3238, "q43": 97},
+                28,
                 Thousands_output(
                     "UAT-Sheet-8-A",
                     Decimal("716750"),
@@ -665,6 +700,7 @@ class TestThousandPoundsUAT:
                 1350,
                 250,
                 {"q42": 29, "q43": 7753},
+                28,
                 Thousands_output(
                     "UAT-Sheet-8-B",
                     Decimal("21758"),
@@ -686,6 +722,7 @@ class TestThousandPoundsUAT:
                 1350,
                 250,
                 {"q42": 3238, "q43": 97},
+                28,
                 Thousands_output(
                     "UAT-Sheet-9-A",
                     Decimal("716.75"),
@@ -707,6 +744,7 @@ class TestThousandPoundsUAT:
                 1350,
                 250,
                 {"q42": 29, "q43": 7753},
+                28,
                 Thousands_output(
                     "UAT-Sheet-9-B",
                     Decimal("21.758"),
@@ -728,6 +766,7 @@ class TestThousandPoundsUAT:
                 1350,
                 250,
                 {"q42": 3238, "q43": None},
+                28,
                 Thousands_output(
                     "UAT-Sheet-10-A",
                     Decimal("716.75"),
@@ -751,6 +790,7 @@ class TestThousandPoundsUAT:
                 1350,
                 250,
                 {"q42": None, "q43": 7753},
+                28,
                 Thousands_output(
                     "UAT-Sheet-10-B",
                     Decimal("21.758"),
@@ -773,6 +813,7 @@ class TestThousandPoundsUAT:
                 1350,
                 250,
                 {"q42": None, "q43": None},
+                28,
                 Thousands_output(
                     "UAT-Sheet-11-A",
                     Decimal("716.750"),
@@ -794,6 +835,7 @@ class TestThousandPoundsUAT:
                 1350,
                 250,
                 {"q42": None, "q43": None},
+                28,
                 Thousands_output(
                     "UAT-Sheet-11-B",
                     Decimal("21.758"),
@@ -815,6 +857,7 @@ class TestThousandPoundsUAT:
                 1350,
                 250,
                 {"q42": 3238, "q43": 97},
+                28,
                 Thousands_output(
                     "UAT-Sheet-12-A",
                     Decimal("716.75"),
@@ -836,6 +879,7 @@ class TestThousandPoundsUAT:
                 1350,
                 250,
                 {"q42": 97, "q43": 3238},
+                28,
                 Thousands_output(
                     "UAT-Sheet-12-B",
                     Decimal("21.758"),
@@ -860,6 +904,7 @@ class TestThousandPoundsUAT:
         upper_limit,
         lower_limit,
         target_variables,
+        precision,
         expected,
         test_id,
     ):
@@ -873,6 +918,7 @@ class TestThousandPoundsUAT:
                     upper_limit=upper_limit,
                     lower_limit=lower_limit,
                     target_variables=target_variables,
+                    precision=precision,
                 )
                 assert result == expected
 
@@ -894,6 +940,7 @@ class TestThousandPoundsUAT:
                     upper_limit=upper_limit,
                     lower_limit=lower_limit,
                     target_variables=target_variables,
+                    precision=precision,
                 )
             assert (str(exc_info.value)) == str(expected)
 
@@ -927,7 +974,7 @@ class TestCreateTargetVariableObjects:
 
 class TestValidateInput:
     @pytest.mark.parametrize(
-        "predictive, auxiliary, principal_variable, lower_limit, upper_limit, precision, target_variables, "
+        "predictive, auxiliary, principal_variable, lower_limit, upper_limit, target_variables, precision,"
         "expected_result, test_id",
         [
             (
@@ -936,11 +983,11 @@ class TestValidateInput:
                 200,  # principal_variable
                 50,  # lower limit
                 100,  # upper limit
-                28,  # Precision
                 {
                     "q501": 500,
                     "q502": 1000,
                 },  # target variables
+                28,
                 28,
                 "Test 1: Predictive as an interpretable string",
             ),
@@ -950,11 +997,11 @@ class TestValidateInput:
                 200,
                 50,
                 100,
-                28,
                 {
                     "q501": 500,
                     "q502": 1000,
                 },
+                28,
                 ValueError(get_params_is_not_a_number_error("predictive")),
                 "Test 2: Predictive as a non-interpretable string",
             ),
@@ -964,11 +1011,11 @@ class TestValidateInput:
                 200,
                 50,
                 100,
-                28,
                 {
                     "q501": 500,
                     "q502": 1000,
                 },
+                28,
                 28,
                 "Test 3: Auxiliary as an interpretable string",
             ),
@@ -978,11 +1025,11 @@ class TestValidateInput:
                 200,
                 50,
                 100,
-                28,
                 {
                     "q501": 500,
                     "q502": 1000,
                 },
+                28,
                 ValueError(get_params_is_not_a_number_error("auxiliary")),
                 "Test 4: Auxiliary as a non-interpretable string",
             ),
@@ -992,11 +1039,11 @@ class TestValidateInput:
                 200,
                 50,
                 100,
-                28,
                 {
                     "q501": 500,
                     "q502": 1000,
                 },
+                28,
                 ValueError(
                     get_one_of_params_mandatory_error(["predictive", "auxiliary"])
                 ),
@@ -1008,11 +1055,11 @@ class TestValidateInput:
                 None,
                 50,
                 100,
-                28,
                 {
                     "q501": 500,
                     "q502": 1000,
                 },
+                28,
                 ValueError(get_mandatory_param_error("principal_variable")),
                 "Test 6: Principal Variable not input",
             ),
@@ -1022,11 +1069,11 @@ class TestValidateInput:
                 "200",
                 50,
                 100,
-                3,
                 {
                     "q501": 500,
                     "q502": 1000,
                 },
+                3,
                 3,
                 "Test 7: Principal Variable is an interpretable string",
             ),
@@ -1036,11 +1083,11 @@ class TestValidateInput:
                 "two hundred",
                 50,
                 100,
-                28,
                 {
                     "q501": 500,
                     "q502": 1000,
                 },
+                28,
                 ValueError(get_params_is_not_a_number_error("principal_variable")),
                 "Test 8: Principal Variable is a non-interpretable string",
             ),
@@ -1050,11 +1097,11 @@ class TestValidateInput:
                 200,
                 None,
                 100,
-                28,
                 {
                     "q501": 500,
                     "q502": 1000,
                 },
+                28,
                 ValueError(get_mandatory_param_error("lower_limit")),
                 "Test 9: Lower Limit not input",
             ),
@@ -1064,11 +1111,11 @@ class TestValidateInput:
                 200,
                 "50",
                 100,
-                28,
                 {
                     "q501": 500,
                     "q502": 1000,
                 },
+                28,
                 28,
                 "Test 10: Lower Limit is an interpretable string",
             ),
@@ -1078,11 +1125,11 @@ class TestValidateInput:
                 200,
                 "fifty",
                 100,
-                28,
                 {
                     "q501": 500,
                     "q502": 1000,
                 },
+                28,
                 ValueError(get_params_is_not_a_number_error("lower_limit")),
                 "Test 11: Lower Limit is a non-interpretable string",
             ),
@@ -1092,11 +1139,11 @@ class TestValidateInput:
                 200,
                 50,
                 None,
-                28,
                 {
                     "q501": 500,
                     "q502": 1000,
                 },
+                28,
                 ValueError(get_mandatory_param_error("upper_limit")),
                 "Test 12: Upper Limit not input",
             ),
@@ -1106,11 +1153,11 @@ class TestValidateInput:
                 200,
                 50,
                 "100",
-                28,
                 {
                     "q501": 500,
                     "q502": 1000,
                 },
+                28,
                 28,
                 "Test 13: Upper Limit is an interpretable string",
             ),
@@ -1120,11 +1167,11 @@ class TestValidateInput:
                 200,
                 50,
                 "one hundred",
-                28,
                 {
                     "q501": 500,
                     "q502": 1000,
                 },
+                28,
                 ValueError(get_params_is_not_a_number_error("upper_limit")),
                 "Test 14: Upper Limit is a non-interpretable string",
             ),
@@ -1134,11 +1181,11 @@ class TestValidateInput:
                 200,
                 100,
                 50,
-                28,
                 {
                     "q501": 500,
                     "q502": 1000,
                 },
+                28,
                 ValueError(get_boundary_error([100, 50])),
                 "Test 15: Lower Limit is greater than Upper Limit",
             ),
@@ -1148,11 +1195,11 @@ class TestValidateInput:
                 200,
                 100,
                 100,
-                28,
                 {
                     "q501": 500,
                     "q502": 1000,
                 },
+                28,
                 ValueError(get_boundary_error([100, 100])),
                 "Test 16: Lower Limit is equal to Upper Limit",
             ),
@@ -1162,11 +1209,11 @@ class TestValidateInput:
                 200,
                 50,
                 100,
-                28,
                 {
                     "q501": 500,
                     "q502": 1000,
                 },
+                28,
                 28,
                 "Test 17: Target Variable is an interpretable string",
             ),
@@ -1176,11 +1223,11 @@ class TestValidateInput:
                 200,
                 50,
                 100,
-                28,
                 {
                     "q501": "five hundred",
                     "q502": 1000,
                 },
+                28,
                 ValueError(get_params_is_not_a_number_error("q501")),
                 "Test 18: Target Variable is a non-interpretable string",
             ),
@@ -1193,8 +1240,8 @@ class TestValidateInput:
         principal_variable,
         lower_limit,
         upper_limit,
-        precision,
         target_variables,
+        precision,
         expected_result,
         test_id,
     ):
