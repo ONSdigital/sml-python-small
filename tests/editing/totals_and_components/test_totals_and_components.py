@@ -29,7 +29,6 @@ EXCEPTION_FAIL_MESSAGE = (
 # ---- Class Definitions ----
 
 
-
 #  Class used to force str() cast during validation to fail as all standard library python types have
 #  valid string conversions
 class NoString:
