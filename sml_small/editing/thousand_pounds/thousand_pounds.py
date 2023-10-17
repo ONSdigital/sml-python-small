@@ -57,9 +57,7 @@ class Target_variable:
 @dataclass(frozen=True)
 class Thousands_output:
     unique_identifier: Optional[str]  # Unique identifer e.g. a question code - q500
-    principal_final_value: Optional[
-        str
-    ]  # Output value that may or may not be adjusted
+    principal_final_value: Optional[str]  # Output value that may or may not be adjusted
     target_variables: List[
         Target_variable
     ]  # Output linked values that may or may not be adjusted
@@ -245,7 +243,9 @@ def thousand_pounds(
 
         return Thousands_output(
             unique_identifier=str(unique_identifier),
-            principal_final_value=str(principal_adjusted_value) if principal_adjusted_value is not None else principal_adjusted_value,
+            principal_final_value=str(principal_adjusted_value)
+            if principal_adjusted_value is not None
+            else principal_adjusted_value,
             target_variables=target_variables_final,
             tpc_ratio=str(error_ratio) if error_ratio is not None else error_ratio,
             tpc_marker=determine_tpc_marker(do_adjustment, tpc_marker),
@@ -402,8 +402,12 @@ def check_zero_errors(
             checked_target_variables.append(
                 Target_variable(
                     identifier=question.identifier,
-                    original_value=str(question.original_value) if question.original_value is not None else question.original_value,
-                    final_value=str(final_value) if final_value is not None else final_value,
+                    original_value=str(question.original_value)
+                    if question.original_value is not None
+                    else question.original_value,
+                    final_value=str(final_value)
+                    if final_value is not None
+                    else final_value,
                 )
             )
 
@@ -532,8 +536,12 @@ def adjust_target_variables(
         adjusted_target_variables.append(
             Target_variable(
                 identifier=question.identifier,
-                original_value=str(question.original_value) if question.original_value is not None else question.original_value,
-                final_value=str(final_value) if final_value is not None else final_value,
+                original_value=str(question.original_value)
+                if question.original_value is not None
+                else question.original_value,
+                final_value=str(final_value)
+                if final_value is not None
+                else final_value,
             )
         )
     return adjusted_target_variables

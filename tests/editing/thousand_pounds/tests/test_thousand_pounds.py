@@ -1,5 +1,3 @@
-from decimal import Decimal
-
 import pytest
 
 from sml_small.editing.thousand_pounds.thousand_pounds import (Target_variable, Thousands_output, TpcMarker,
@@ -69,9 +67,7 @@ class TestThousandPounds:
                 350,
                 {},
                 28,
-                Thousands_output(
-                    "q300", "269.98", [], "1349.9", "C"
-                ),
+                Thousands_output("q300", "269.98", [], "1349.9", "C"),
                 "Given config(missing predictive) - outputs adjusted for all target variables",
             ),
             (
