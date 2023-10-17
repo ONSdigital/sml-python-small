@@ -49,22 +49,20 @@ class TpcMarker(Enum):
 @dataclass(frozen=False)
 class Target_variable:
     identifier: str  # Unique identifer e.g. a question code - q050
-    original_value: Optional[float]
-    final_value: Optional[float] = None
+    original_value: Optional[str]
+    final_value: Optional[str] = None
 
 
 # Structure of the output dataset
 @dataclass(frozen=True)
 class Thousands_output:
     unique_identifier: Optional[str]  # Unique identifer e.g. a question code - q500
-    principal_final_value: Optional[
-        Decimal
-    ]  # Output value that may or may not be adjusted
+    principal_final_value: Optional[str]  # Output value that may or may not be adjusted
     target_variables: List[
         Target_variable
     ]  # Output linked values that may or may not be adjusted
     tpc_ratio: Optional[
-        Decimal
+        str
     ]  # Ratio of the principal variable against good/predictive/aux response
     tpc_marker: str  # C = Correction applied | N = No correction applied | E = Process failure
 
@@ -242,11 +240,14 @@ def thousand_pounds(
                 ],
                 tpc_marker=tpc_marker.value,
             )
+
         return Thousands_output(
-            unique_identifier=unique_identifier,
-            principal_final_value=principal_adjusted_value,
+            unique_identifier=str(unique_identifier),
+            principal_final_value=str(principal_adjusted_value)
+            if principal_adjusted_value is not None
+            else principal_adjusted_value,
             target_variables=target_variables_final,
-            tpc_ratio=error_ratio,
+            tpc_ratio=str(error_ratio) if error_ratio is not None else error_ratio,
             tpc_marker=determine_tpc_marker(do_adjustment, tpc_marker),
         )
 
@@ -401,8 +402,12 @@ def check_zero_errors(
             checked_target_variables.append(
                 Target_variable(
                     identifier=question.identifier,
-                    original_value=question.original_value,
-                    final_value=final_value,
+                    original_value=str(question.original_value)
+                    if question.original_value is not None
+                    else question.original_value,
+                    final_value=str(final_value)
+                    if final_value is not None
+                    else final_value,
                 )
             )
 
@@ -531,8 +536,12 @@ def adjust_target_variables(
         adjusted_target_variables.append(
             Target_variable(
                 identifier=question.identifier,
-                original_value=question.original_value,
-                final_value=final_value,
+                original_value=str(question.original_value)
+                if question.original_value is not None
+                else question.original_value,
+                final_value=str(final_value)
+                if final_value is not None
+                else final_value,
             )
         )
     return adjusted_target_variables
