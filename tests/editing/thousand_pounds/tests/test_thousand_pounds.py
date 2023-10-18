@@ -874,14 +874,14 @@ class TestThousandPoundsUAT:
                 281,  # auxiliary
                 1350,
                 250,
-                {"q42": 97, "q43": 3238},
+                {"q42": 29, "q43": 7753},
                 28,
                 Thousands_output(
                     "UAT-Sheet-12-B",
                     "21.758",
                     [
-                        Target_variable("q42", "97", "0.097"),
-                        Target_variable("q43", "3238", "3.238"),
+                        Target_variable("q42", "29", "0.029"),
+                        Target_variable("q43", "7753", "7.753"),
                     ],
                     "946",
                     "C",
