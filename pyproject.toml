@@ -1,12 +1,13 @@
 [tool.poetry]
 name = "sml_small"
-version = "1.1.0rc7"
+version = "1.1.0rc8"
 description = "SML Small (Python Pandas methods)"
 authors = []
 readme= "README.md"
 exclude = [
     "sml_small/editing/totals_and_components/example.py",
-    "sml_small/editing/totals_and_components/pandas_example.py"
+    "sml_small/editing/totals_and_components/pandas_example.py",
+    "sml_small/editing/thousand_pounds/example.py"
 ]
 
 [tool.poetry.dependencies]
@@ -21,6 +22,7 @@ coverage = "^7.0"
 pytest-cov = "^4.0.0"
 pytest-dependency = "^0.5.1"
 pytest-tap = "^3.3"
+black = "*"
 tabulate = "^0.9.0"
 bandit = "^1.7.5"
 

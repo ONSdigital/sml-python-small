@@ -7,3 +7,4 @@ This library contains pandas statistical methods that are only suitable for use 
 For further information about the methods contained in this module see the [method specifications](https://github.com/ONSdigital/Statistical-Method-Specifications)
 
 For user documentation and example data relating to the methods in this module see the [supporting information](https://github.com/ONSdigital/sml-supporting-info)
+
