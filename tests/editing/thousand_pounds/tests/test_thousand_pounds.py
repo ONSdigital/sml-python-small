@@ -44,7 +44,7 @@ class TestThousandPounds:
                     "1000",
                     "C",
                 ),
-                "Given full config - outputs adjusted for all target variables",
+                "Test 1: Given full config - outputs adjusted for all target variables",
             ),
             (
                 "q200",
@@ -56,7 +56,7 @@ class TestThousandPounds:
                 {},
                 28,
                 Thousands_output("q200", "60000", [], "400", "C"),
-                "Given config(missing auxiliary) - outputs adjusted for all target variables",
+                "Test 2: Given config(missing auxiliary) - outputs adjusted for all target variables",
             ),
             (
                 "q300",
@@ -68,7 +68,7 @@ class TestThousandPounds:
                 {},
                 28,
                 Thousands_output("q300", "269.98", [], "1349.9", "C"),
-                "Given config(missing predictive) - outputs adjusted for all target variables",
+                "Test 3: Given config(missing predictive) - outputs adjusted for all target variables",
             ),
             (
                 "q400",
@@ -85,7 +85,7 @@ class TestThousandPounds:
                         get_one_of_params_mandatory_error(["predictive", "auxiliary"])
                     ),
                 ),
-                "Given config(missing predictive and auxiliary) - default outputs and error indicated",
+                "Test 4: Given config(missing predictive and auxiliary) - default outputs and error indicated",
             ),
             (
                 "q410",
@@ -109,7 +109,7 @@ class TestThousandPounds:
                     None,
                     "S",
                 ),
-                "Given config(predictive and auxiliary are 0) - No error, not adjusted",
+                "Test 5: Given config(predictive and auxiliary are 0) - No error, not adjusted",
             ),
             (
                 "q450",
@@ -130,7 +130,7 @@ class TestThousandPounds:
                     None,
                     "S",
                 ),
-                "Given config(predictive 0 and auxiliary is None) - No error, not adjusted",
+                "Test 6: Given config(predictive 0 and auxiliary is None) - No error, not adjusted",
             ),
             (
                 "q500",
@@ -145,7 +145,7 @@ class TestThousandPounds:
                     "identifier: q500",
                     ValueError(get_mandatory_param_error("principal_variable")),
                 ),
-                "Given config(missing principal variable) - default outputs and error indicated",
+                "Test 7: Given config(missing principal variable) - default outputs and error indicated",
             ),
             (
                 "q600",
@@ -166,7 +166,7 @@ class TestThousandPounds:
                     "0",
                     "N",
                 ),
-                "Given config(principal variable of 0) - default outputs and error indicated",
+                "Test 8: Given config(principal variable of 0) - default outputs and error indicated",
             ),
             (
                 "q700",
@@ -184,7 +184,7 @@ class TestThousandPounds:
                     "350",
                     "N",
                 ),
-                "Given valid config but exactly on lower limit threshold - do not adjust",
+                "Test 9: Given valid config but exactly on lower limit threshold - do not adjust",
             ),
             (
                 "q800",
@@ -202,7 +202,7 @@ class TestThousandPounds:
                     "1350",
                     "N",
                 ),
-                "Given valid config but exactly on upper limit threshold - do not adjust",
+                "Test 10: Given valid config but exactly on upper limit threshold - do not adjust",
             ),
             (
                 "q900",
@@ -217,7 +217,7 @@ class TestThousandPounds:
                     "identifier: q900",
                     ValueError(get_mandatory_param_error("upper_limit")),
                 ),
-                "Upper limit is 0 - default outputs and error indicated",
+                "Test 11: Upper limit is 0 - default outputs and error indicated",
             ),
             (
                 "q1000",
@@ -232,7 +232,7 @@ class TestThousandPounds:
                     "identifier: q1000",
                     ValueError(get_mandatory_param_error("lower_limit")),
                 ),
-                "Lower limit is 0 - default outputs and error indicated",
+                "Test 12: Lower limit is 0 - default outputs and error indicated",
             ),
             (
                 "q1100",
@@ -247,7 +247,7 @@ class TestThousandPounds:
                     "identifier: q1100",
                     ValueError(get_params_is_not_a_number_error("principal_variable")),
                 ),
-                "Invalid format for principal variable",
+                "Test 13: Invalid format for principal variable",
             ),
             (
                 "q1200",
@@ -262,7 +262,7 @@ class TestThousandPounds:
                     "identifier: q1200",
                     ValueError(get_params_is_not_a_number_error("predictive")),
                 ),
-                "Invalid format for predictive variable",
+                "Test 14: Invalid format for predictive variable",
             ),
             (
                 "q1300",
@@ -277,7 +277,7 @@ class TestThousandPounds:
                     "identifier: q1300",
                     ValueError(get_params_is_not_a_number_error("upper_limit")),
                 ),
-                "Invalid format for upper_limit variable",
+                "Test 15: Invalid format for upper_limit variable",
             ),
             (
                 "q1400",
@@ -292,7 +292,7 @@ class TestThousandPounds:
                     "identifier: q1400",
                     ValueError(get_params_is_not_a_number_error("lower_limit")),
                 ),
-                "Invalid format for lower_limit variable",
+                "Test 16: Invalid format for lower_limit variable",
             ),
             (
                 "q1500",
@@ -307,7 +307,7 @@ class TestThousandPounds:
                     "identifier: q1500",
                     ValueError(get_boundary_error(["351", "350"])),
                 ),
-                "Lower limit is larger than the upper limit",
+                "Test 17: Lower limit is larger than the upper limit",
             ),
         ],
     )
