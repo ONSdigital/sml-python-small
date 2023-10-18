@@ -35,18 +35,15 @@ The calling/wrangling process is also responsible for auditing the metadata abou
 
 Note: ensure that predictor and auxiliary variables are of the same denomination as the current period variables.
 
-* **principal_identifier**: *(String)* - Unique identifier e.g. "q500" (question identifier), or "12345678901-202209" (conrtibutor reference & period)
+* **unique_identifier**: *(String)* - Unique identifier e.g. "q500" (question identifier), or "12345678901-202209" (conrtibutor reference & period)
 * **principal_variable**: *(Float)* - Numeric value that the method is working on
 * **predictive**: *(Float)* - *Optional* - Numeric value used for comparison. A previous 'valid' value (i.e. Returned/Imputed/Constructed)
 * **auxiliary**: *(Float)* - *Optional* - Alternative numeric` value used when a predictive value is not available and required by the user
 * **upper_limit**: *(Float)* - Upper bound of 'error value' threshold
 * **lower_limit**: *(Float)* - Lower bound of 'error value' threshold
-* **target_variables**: *(List of Variables)* - *Optional* - List of linked question and values to potentially be adjusted
-
-*target_variables* consists of the following structure:
-
-* **identifier**: *(String)* - Unique identifer e.g. a question code - q050
-* **value**: *(Float)* - *Optional* - Numeric value that may be adjusted.
+* **target_variables**: *(List of Float)* - *Optional* - List of linked question and values to potentially be adjusted
+* **precision**: *(Int)* - *Optional* - Precision is used by the decimal package to ensure a specified accuracy
+    used throughout method processing
 
 Note:
 
@@ -94,7 +91,6 @@ Outputs
 -------
 
 * **principal_identifier**: *(String)* - Unique identifer. Will contain same as was input to method.
-* **principal_original_value**: *(Float)* - Original provided value
 * **principal_adjusted_value**: *(Float)* - Output value that may or may not have been adjusted
 * **target_variables**: *(List of Variables)* - List of linked questions, original values and adjusted values (if appropriate)
 * **tpc_ratio**: *(Float)* - Calculated ratio of the principal value. Used for testing against the given limits.

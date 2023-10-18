@@ -101,7 +101,7 @@ def thousand_pounds(
     :param lower_limit: Lower bound of 'error ratio' threshold
     :type lower_limit: float
     :param target_variables: List of monetary variables that may be automatically corrected
-    :type target_variables: List[Target_variable]
+    :type target_variables: List[Float]
     :param precision: Precision is used by the decimal package to ensure a specified accuracy
     used throughout method processing
     :type precision: Optional[int]
