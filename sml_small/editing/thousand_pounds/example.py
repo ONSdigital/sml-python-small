@@ -2,7 +2,7 @@ import dataclasses
 import json
 from csv import DictReader
 
-from thousand_pounds import Target_variable, thousand_pounds
+from thousand_pounds import thousand_pounds
 
 
 # Load some local csvs into memory and then run the pounds thousands method
@@ -11,7 +11,9 @@ def invoke_process_with_local_csv():
     with open("../../../tests/editing/thousand_pounds/tests/config.csv") as file:
         config_csv = file.read()
 
-    with open("../../../tests/editing/thousand_pounds/tests/linked_questions.csv") as file:
+    with open(
+            "../../../tests/editing/thousand_pounds/tests/linked_questions.csv"
+    ) as file:
         target_questions_csv = file.read()
 
     return invoke(config_csv, target_questions_csv)
@@ -75,17 +77,16 @@ def invoke_directly_writing_output_to_csv_example():
         auxiliary=30000,
         upper_limit=1350,
         lower_limit=350,
-        target_variables={"q101": 500,
-                          "q102": 1000,
-                          "q103": 1500,
-                          "q104": None}
+        target_variables={"q101": 500, "q102": 1000, "q103": 1500, "q104": None},
     )
     print(f"\nOutput: {output}")
-    print(f"\nOutput json: {json.dumps(dataclasses.asdict(output),indent=4)}")
+    print(f"\nOutput json: {json.dumps(dataclasses.asdict(output), indent=4)}")
 
     header = "unique_identifier,principal_original_value,principal_adjusted_value,tpc_ratio,tpc_marker,error_description"
-    row = f"{output.unique_identifier},{output.principal_final_value}," \
-          f"{output.tpc_ratio},{output.tpc_marker}"
+    row = (
+        f"{output.unique_identifier},{output.principal_final_value},"
+        f"{output.tpc_ratio},{output.tpc_marker}"
+    )
 
     for linkedq in output.target_variables:
         header += (
@@ -150,13 +151,16 @@ def invoke_process_with_inmemory_single_csv_example():
                 lower_limit=config["lower_limit"],
                 target_variables=config["target_variables"],
             )
-            output_row += f"{output.unique_identifier},{output.principal_final_value}," \
-                          f"{output.tpc_ratio},{output.tpc_marker}"
+            output_row += (
+                f"{output.unique_identifier},{output.principal_final_value},"
+                f"{output.tpc_ratio},{output.tpc_marker}"
+            )
             for question in output.target_variables:
                 output_row += f",{question.original_value},{question.final_value}"
             output_row += "\n"
-        except:
+        except Exception as error:
             output_row += f"\nerror in row {config['unique_identifier']}"
+            output_row += f"\n {error}"
 
     print("\nSingle_output csv:")
     print(f"{output_header}")
