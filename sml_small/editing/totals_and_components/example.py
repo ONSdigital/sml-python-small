@@ -44,6 +44,8 @@ def invoke_process_in_memory_data_example():
     # This list is used to keep track of the original data inputted, so we can display this
     # on the command line on a table
 
+    # All the test data below doesn't have precision specified and will default to precision of 28
+
     # The input data below once passed into the T&C method should return
     # a TCC Marker of N = No correction required, i.e., the total is equal to the components sum
     # Meaning we have no correction and the method stops with an output written

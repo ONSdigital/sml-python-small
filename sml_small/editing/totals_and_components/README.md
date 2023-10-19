@@ -29,15 +29,29 @@ The input data below once passed into the T&C method should return a TCC Marker 
 Meaning we have no correction and the method stops with an output written.
 
 ```python
-# Importing the totals_and_components method from the totals_and_components.py file
+# Importing the totals_and_components method from the
+# totals_and_components.py file
 from totals_and_components import totals_and_components
 
 # The data we are going to pass into the T&C method
-data = ["F", "202301", 11, [0, 0, 0, 0], True, 11, "202301", None, 11, None]
+# Should return a TCC Marker of S = Method stops. This may be due
+# to insufficient data to run the method, or one of the relevant
+# zero cases
+data = ["F", 11, [0, 0, 0, 0], True, 11, None, 11, None]
 
-# We can the totals_and_components function and pass in our data and save the return outputted by the T&C method in the variable result
-# We use * to unpack the above list into separate arguments to pass into the T&C method
+# We can the totals_and_components function and pass in our data and
+# save the return outputted by the T&C method in the variable result
+# We use * to unpack the above list into separate arguments to pass
+# into the T&C method
 result = totals_and_components(*data)
+
+# The output will be returned as an object.
+# You will need to destructure the object to extract the values and
+# one way of doing this is using the built-in function vars().
+# vars() is used to return the __dict__attribute for the specified
+# module, class, instance or any other object with a
+# __dict__attribute
+print(vars(result))
 ```
 
 The function *`def invoke_process_in_memory_data_example()`* in the `example.py` file shows how you can pass in a whole dataset stored in a 2D list into the *`totals_and_components`* function,  get the returned result and display it nicely on the command line in a tabular format.
@@ -45,46 +59,59 @@ The function *`def invoke_process_in_memory_data_example()`* in the `example.py`
 ### Method 2: Passing data directly into the T&C method
 
 The input data below once passed into the T&C method should return a TCC Marker of C = Components corrected
-data = ["C", "202301", 90, [90, 0, 4, 6], False, 90, "202301", None, None, 0.1]
+data = ["C", 90, [90, 0, 4, 6], False, 90, None, None, 0.1, None]
 
 ```python
-# Importing the totals_and_components method from the totals_and_components.py file
+# Importing the totals_and_components method from the
+# totals_and_components.py file
 from totals_and_components import totals_and_components
 
-# We can the totals_and_components function and pass in our data and save the return outputted by the T&C method in the variable result
-result = totals_and_components("C", "202301", 90, [90, 0, 4, 6], False, 90, "202301", None, None, 0.1)
+# We can the totals_and_components function and pass in our data and
+# save the return outputted by the T&C method in the variable result
+# Should return a TCC Marker of C = Components corrected
+result = totals_and_components("C", 90, [90, 0, 4, 6], False, 90, None, None, 0.1, None)
+
+# The output will be returned as an object.
+# You will need to destructure the object to extract the values and
+# one way of doing this is using the built-in function vars().
+# vars() is used to return the __dict__attribute for the specified
+# module, class, instance or any other object with a
+# __dict__attribute
+print(vars(result))
 ```
 
 ## Output data examples
 
-Input data example 1: `["F", "202301", 11, [0, 0, 0, 0], True, 11, "202301", None, 11, None]`
+Input data example 1: `["F", 11, [0, 0, 0, 0], True, 11, None, 11, None]`
 
 Output data example 1:
 
 ```bash
-Identifier: F
-Absolute Difference: None
-Low Percent Threshold: None
-High Percent Threshold: None
-Precision: 28
-Final Total: 11
-Final Value: [0, 0, 0, 0]
-TCC Marker: S
+{
+    'identifier': 'F',
+    'absolute_difference': None,
+    'low_percent_threshold': None,
+    'high_percent_threshold': None,
+    'final_total': '11',
+    'final_components': ['0', '0', '0', '0'],
+    'tcc_marker': 'S'
+}
 ```
 
-Input data example 2: `["C", "202301", 90, [90, 0, 4, 6], False, 90, "202301", None, None, 0.1]`
+Input data example 2: `["C", 90, [90, 0, 4, 6], False, 90, None, None, 0.1, None]`
 
 Output data example 2:
 
 ```bash
-Identifier: C
-Absolute Difference: None
-Low Percent Threshold: 90.0
-High Percent Threshold: 110.0
-Precision: 28
-Final Total: 90.0
-Final Value: [81.0, 0.0, 3.6, 5.4]
-TCC Marker: C
+{
+    'identifier': 'C',
+    'absolute_difference': None,
+    'low_percent_threshold': '90.0',
+    'high_percent_threshold': '110.0',
+    'final_total': '90',
+    'final_components': ['81.0', '0', '3.60', '5.40'],
+    'tcc_marker': 'C'
+}
 ```
 
 ## Functionalities the python `example.py` offers
@@ -189,4 +216,3 @@ pip install numpy
 - Where you will have to have to write functions to read a CSV file and pass in the data as a DataFrame into the *`wrapper`* function from the `pandas_wrapper.py` file.
 
 We have an example of how to do this in the `pandas_example.py` file within the `totals_and_components` directory.
-
