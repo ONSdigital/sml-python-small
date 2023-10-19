@@ -58,11 +58,10 @@ output = thousand_pounds(
     auxiliary = "30000",
     upper_limit = "1350",
     lower_limit = "350",
-    target_variables = [
-            Target_variable(identifier="q101", original_value="500"),
-            Target_variable(identifier="q102", original_value="1000"),
-            Target_variable(identifier="q103", original_value="1500"),
-            Target_variable(identifier="q104", original_value=None)],
+    target_variables = {"q101": 500,
+                        "q102": 1000,
+                        "q103": 1500,
+                        "q104": None},
     precision = 1
 )
 ```
