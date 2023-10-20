@@ -85,9 +85,9 @@ Thousands_output(
 
 Alternatively presented: (mixing input and output data for comparisons)
 
-| unique_identifier       |principal_variable|predictive|aux|threshold_upper|threshold_lower|TPC_marker|ratio|principal_adjusted_value|target_variable|target_original_value|target_adjusted_value
-|-------------------------|---|---|---|---|---|---|---|---|---|---|---|
- 12340000001-201409-q100 |50000000|60000|15000|1350|350|C|1000.0|50000.0|q101|500|0.5
- 12340000001-201409-q100 |-|-|-|-|-|-|-|-|q102|1000|1
- 12340000001-201409-q100 |-|-|-|-|-|-|-|-|q103|1500|1.5
- 12340000001-201409-q100 |-|-|-|-|-|-|-|-|q104||
+| unique_identifier       |principal_variable|predictive|aux|threshold_upper|threshold_lower| tpc_marker | tpc_ratio |principal_adjusted_value|target_variable|target_adjusted_value
+|-------------------------|---|---|---|---|---|------------|-----------|---|---|---|
+ 12340000001-201409-q100 |50000000|60000|15000|1350|350| C          | 1000.0    |50000.0|q101|0.5
+ 12340000001-201409-q100 |-|-|-|-|-| -          | -         |-|q102|1
+ 12340000001-201409-q100 |-|-|-|-|-| -          | -         |-|q103|1.5
+ 12340000001-201409-q100 |-|-|-|-|-| -          | -         |-|q104||
