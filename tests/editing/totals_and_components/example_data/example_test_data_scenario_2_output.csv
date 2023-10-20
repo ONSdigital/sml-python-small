@@ -1,2 +1,2 @@
 reference,total,comp_1,comp_2,comp_3,comp_4,amend_total,predictive,auxiliary,abs_threshold,perc_threshold,abs_diff,perc_low,perc_high,TCC_marker,final_total,final_comp_1,final_comp_2,final_comp_3,final_comp_4
-A,1625,632,732,99,162,True,1625,,11,,0.0,,,N,1625,632,732,99,162
+A,1625,632,732,99,162,True,1625,,11,,0,,,N,1625,632,732,99,162
