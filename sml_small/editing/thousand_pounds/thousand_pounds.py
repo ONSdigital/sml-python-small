@@ -48,7 +48,7 @@ class TpcMarker(Enum):
 # Dataset holding all 'linked questions' with their initial response and final/adjusted values
 @dataclass(frozen=False)
 class Target_variable:
-    identifier: str  # Unique identifer e.g. a question code - q050
+    identifier: str  # Unique identifier e.g. a question code - q050
     original_value: Optional[str]
     final_value: Optional[str] = None
 
@@ -56,7 +56,7 @@ class Target_variable:
 # Structure of the output dataset
 @dataclass(frozen=True)
 class Thousands_output:
-    unique_identifier: Optional[str]  # Unique identifer e.g. a question code - q500
+    unique_identifier: Optional[str]  # Unique identifier e.g. a question code - q500
     principal_final_value: Optional[str]  # Output value that may or may not be adjusted
     target_variables: List[
         Target_variable
@@ -108,7 +108,7 @@ def thousand_pounds(
 
     :return: Thousands_output: An object containing the
                             following attributes:
-            - unique_identifier: Unique identifer e.g. a question code - q500
+            - unique_identifier: Unique identifier e.g. a question code - q500
             - principal_original_value: Original provided value
             - principal_final_value: Output value that may or may not be adjusted
             - target_variables: Output linked values that may or may not be adjusted
