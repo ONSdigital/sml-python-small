@@ -5,6 +5,7 @@ import dataclasses
 import json
 # Importing DictReader() class from the CSV module to map the information into a dictionary
 from csv import DictReader
+
 # Importing the thousand_pounds method from the thousand_pounds.py file
 from thousand_pounds import thousand_pounds
 
@@ -74,6 +75,8 @@ def invoke(config_csv: str, linked_question_csv: str):
 
 # In this function we pass in the test data directly into the thousand_pounds function
 # and write the output into a CSV file
+
+
 def invoke_directly_writing_output_to_csv_example():
     output = thousand_pounds(
         unique_identifier="q100",
@@ -110,7 +113,9 @@ def invoke_directly_writing_output_to_csv_example():
         file.write(row)
 
 # In this function we have a in memory CSV data containing the config data and linked questions data in one
-# We also write the output into a CSV file
+# We also write the output into a CSV file
+
+
 def invoke_process_with_inmemory_single_csv_example():
     config_csv = """unique_identifier,principal_variable,predictive,auxiliary,upper_limit,lower_limit,q101,q102,q103,q104
 123A-202203,50000000,60000,30000,1350,250,500,1000,1500,
