@@ -1,13 +1,17 @@
-import dataclasses
-import json
-from csv import DictReader
 
+# dataclasses module provides a decorator and functions for automatically adding generated special methods
+import dataclasses
+# We'll be using json module to convert a subset of python objects into json string
+import json
+# Importing DictReader() class from the CSV module to map the information into a dictionary
+from csv import DictReader
+# Importing the thousand_pounds method from the thousand_pounds.py file
 from thousand_pounds import thousand_pounds
 
 
-# Load some local csvs into memory and then run the pounds thousands method
+# Load some local CSVs into memory and then run the pounds thousands method
 def invoke_process_with_local_csv():
-    # Load the csvs into memory
+    # Load the CSVs into memory
     with open("../../../tests/editing/thousand_pounds/tests/config.csv") as file:
         config_csv = file.read()
 
@@ -19,7 +23,7 @@ def invoke_process_with_local_csv():
     return invoke(config_csv, target_questions_csv)
 
 
-# Use some csvs strings already defined in memory and then run the pounds thousands method
+# Use some CSVs strings already defined in memory and then run the pounds thousands method
 def invoke_process_with_inmemory_csv_example():
     config_csv = """unique_identifier,principal_variable,predictive,auxiliary,upper_limit,lower_limit
 100,50000000,60000,30000,1350,350"""
@@ -34,7 +38,7 @@ def invoke_process_with_inmemory_csv_example():
     return invoke(config_csv, target_questions_csv)
 
 
-# Can be called directly with csvs already loaded into strings or by using the above invoke to load local csvs
+# Can be called directly with CSVs already loaded into strings or by using the above invoke to load local CSVs
 # Example function to take a dataset and wrangle it into a suitable format to support running the method
 # Substitutes missing values with the Python 'None'
 # Does not have any explicit exception/error handling
@@ -50,7 +54,7 @@ def invoke(config_csv: str, linked_question_csv: str):
     linked_question_reader = DictReader(linked_question_csv.splitlines())
     linked_questions = {}
     for linked_row in linked_question_reader:
-        # print(f"Linked row: {linked_row}")
+        print(f"Linked row: {linked_row}")
         if not linked_row["value"]:
             linked_questions[linked_row["identifier"]] = "nan"
         else:
@@ -68,7 +72,8 @@ def invoke(config_csv: str, linked_question_csv: str):
         target_variables=linked_questions,
     )
 
-
+# In this function we pass in the test data directly into the thousand_pounds function
+# and write the output into a CSV file
 def invoke_directly_writing_output_to_csv_example():
     output = thousand_pounds(
         unique_identifier="q100",
@@ -104,7 +109,8 @@ def invoke_directly_writing_output_to_csv_example():
         file.write("\n")
         file.write(row)
 
-
+# In this function we have a in memory CSV data containing the config data and linked questions data in one
+# We also write the output into a CSV file
 def invoke_process_with_inmemory_single_csv_example():
     config_csv = """unique_identifier,principal_variable,predictive,auxiliary,upper_limit,lower_limit,q101,q102,q103,q104
 123A-202203,50000000,60000,30000,1350,250,500,1000,1500,
