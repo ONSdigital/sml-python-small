@@ -36,14 +36,19 @@ The method has the following interface:
 
 ```python
 def thousand_pounds(
-    unique_identifier: Optional[str],  # Unique identifer e.g. a question code/ruref/period/id/combination of all of thse
-    principal_variable: float,  # Original response value provided for the 'current' period
-    predictive: Optional[float],  # Value used for 'previous' response (Returned/Imputed/Constructed)
-    auxiliary: Optional[float],  # Calculated response for the 'previous' period
+    unique_identifier: Optional[str],  # Unique identifer e.g. a question
+    # code/ruref/period/id/combination of all of these
+    principal_variable: float,  # Original response value provided for
+    # the 'current' period
+    predictive: Optional[float],  # Value used for 'previous'
+    # response (Returned/Imputed/Constructed)
+    auxiliary: Optional[float],  # Calculated response for the
+    # 'previous' period
     upper_limit: float,  # Upper bound of 'error value' threshold
     lower_limit: float,  # Lower bound of 'error value' threshold
     target_variables: List[Target_variable], # identifier/value pairs
-    precision: Optional[int],  #Precision is used by the decimal package to ensure a specified accuracy
+    precision: Optional[int],  # Precision is used by the decimal
+    # package to ensure a specified accuracy
     # used throughout method processing
 )
 ```
