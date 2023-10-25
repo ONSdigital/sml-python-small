@@ -56,6 +56,8 @@ def thousand_pounds(
 e.g.
 
 ```python
+from thousand_pounds import thousand_pounds
+
 output = thousand_pounds(
     unique_identifier = "12340000001-201409-q100",
     principal_variable = "50000000",
@@ -96,3 +98,30 @@ Alternatively presented: (mixing input and output data for comparisons)
  12340000001-201409-q100 |-|-|-|-|-| -          | -         |-|q102|1
  12340000001-201409-q100 |-|-|-|-|-| -          | -         |-|q103|1.5
  12340000001-201409-q100 |-|-|-|-|-| -          | -         |-|q104||
+
+## Pandas Wrapper
+
+To view the code of the pandas wrapper you can find the `pandas_wrapper.py` file within the `utils` directory.
+
+### Prerequisites: Pandas Wrapper
+
+In order to run some of the functions in the python `pandas_wrapper.py`, you will need to have `pandas` and `numpy` installed.
+
+To install `pandas`:
+
+```python
+pip install pandas
+```
+
+To install `numpy`:
+
+```python
+pip install numpy
+```
+
+## Pandas Wrapper Usage
+
+- You will have to create a new python file importing in the `pandas_wrapper.py`.
+- Where you will have to have to write functions to read a CSV file and pass in the data as a DataFrame into the *`wrapper`* function from the `pandas_wrapper.py` file.
+
+We have an example of how to do this in the `pandas_example.py` file within the `utils` directory.
