@@ -125,7 +125,7 @@ def invoke_process_with_inmemory_single_csv_example():
 123B-202203,50000000,60000,30000,1350,250,500,1000,1500,12345
 124A-202204,50000,600,300,1350,250,200,5000,3500,300
 125A-202204,0,0,12 0,1350,250,200,5000,3500,300
-126A-202205,,,,1350,250,100,1000,1500,100
+126A-202205,50000000,,,1350,250,100,1000,1500,100
 127A-202205,,1,2,1350,250,100,1000,1500,100
 127B-202206,5000,10,2,1350,250,100,1000,abc,100
 127C-202207,5000,10,2,13 50,250,100,1000,4,100
@@ -159,8 +159,8 @@ def invoke_process_with_inmemory_single_csv_example():
             output = thousand_pounds(
                 unique_identifier=config["unique_identifier"],
                 principal_variable=config["principal_variable"],
-                predictive=config["predictive"],
-                auxiliary=config["auxiliary"],
+                predictive=None if not config["predictive"] else float(config["predictive"]),
+                auxiliary=None if not config["auxiliary"] else float(config["auxiliary"]),
                 upper_limit=config["upper_limit"],
                 lower_limit=config["lower_limit"],
                 target_variables=config["target_variables"],

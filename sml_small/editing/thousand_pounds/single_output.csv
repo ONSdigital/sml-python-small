@@ -4,9 +4,9 @@ unique_identifier,principal_original_value,principal_final_value,tpc_ratio,tpc_m
 124A-202204,50000,83.33333333333333333333333333,N,200,200,5000,5000,3500,3500,300,300
 
 error in row 125A-202204
- ('identifier: 125A-202204', ValueError('auxiliary is not a number'))
+ could not convert string to float: '12 0'
 error in row 126A-202205
- ('identifier: 126A-202205', ValueError('principal_variable is not a number'))
+ ('identifier: 126A-202205', ValueError('one of predictive or auxiliary must be specified'))
 error in row 127A-202205
  ('identifier: 127A-202205', ValueError('principal_variable is not a number'))
 error in row 127B-202206
