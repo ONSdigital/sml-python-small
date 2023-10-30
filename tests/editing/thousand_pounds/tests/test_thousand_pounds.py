@@ -1,6 +1,6 @@
 import pytest
 
-from sml_small.editing.thousand_pounds.thousand_pounds import (Target_variable, Thousands_output, TpcMarker,
+from sml_small.editing.thousand_pounds.thousand_pounds import (TargetVariable, ThousandPoundsOutput, TpcMarker,
                                                                TPException, adjust_target_variables, adjust_value,
                                                                calculate_error_ratio, create_target_variable_objects,
                                                                determine_predictive_value, determine_tpc_marker,
@@ -32,14 +32,14 @@ class TestThousandPounds:
                     "q104": 0,
                 },
                 28,
-                Thousands_output(
+                ThousandPoundsOutput(
                     "q100",
                     "50000",
                     [
-                        Target_variable("q101", "500", "0.5"),
-                        Target_variable("q102", "1000", "1"),
-                        Target_variable("q103", "12345", "12.345"),
-                        Target_variable("q104", "0", "0"),
+                        TargetVariable("q101", "500", "0.5"),
+                        TargetVariable("q102", "1000", "1"),
+                        TargetVariable("q103", "12345", "12.345"),
+                        TargetVariable("q104", "0", "0"),
                     ],
                     "1000",
                     "C",
@@ -55,7 +55,7 @@ class TestThousandPounds:
                 350,
                 {},
                 28,
-                Thousands_output("q200", "60000", [], "400", "C"),
+                ThousandPoundsOutput("q200", "60000", [], "400", "C"),
                 "Test 2: Given config(missing auxiliary) - outputs adjusted for all target variables",
             ),
             (
@@ -67,7 +67,7 @@ class TestThousandPounds:
                 350,
                 {},
                 28,
-                Thousands_output("q300", "269.98", [], "1349.9", "C"),
+                ThousandPoundsOutput("q300", "269.98", [], "1349.9", "C"),
                 "Test 3: Given config(missing predictive) - outputs adjusted for all target variables",
             ),
             (
@@ -99,12 +99,12 @@ class TestThousandPounds:
                     "q452": 1000,
                 },
                 28,
-                Thousands_output(
+                ThousandPoundsOutput(
                     "q410",
                     "8000",
                     [
-                        Target_variable("q451", "500", "500"),
-                        Target_variable("q452", "1000", "1000"),
+                        TargetVariable("q451", "500", "500"),
+                        TargetVariable("q452", "1000", "1000"),
                     ],
                     None,
                     "S",
@@ -120,12 +120,12 @@ class TestThousandPounds:
                 350,
                 {"q451": 500, "q452": 1000},
                 28,
-                Thousands_output(
+                ThousandPoundsOutput(
                     "q450",
                     "8000",
                     [
-                        Target_variable("q451", "500", "500"),
-                        Target_variable("q452", "1000", "1000"),
+                        TargetVariable("q451", "500", "500"),
+                        TargetVariable("q452", "1000", "1000"),
                     ],
                     None,
                     "S",
@@ -156,12 +156,12 @@ class TestThousandPounds:
                 350,
                 {"q601": 500, "q602": 1000},
                 28,
-                Thousands_output(
+                ThousandPoundsOutput(
                     "q600",
                     "0",
                     [
-                        Target_variable("q601", "500", "500"),
-                        Target_variable("q602", "1000", "1000"),
+                        TargetVariable("q601", "500", "500"),
+                        TargetVariable("q602", "1000", "1000"),
                     ],
                     "0",
                     "N",
@@ -177,10 +177,10 @@ class TestThousandPounds:
                 350,
                 {"q701": 500},
                 28,
-                Thousands_output(
+                ThousandPoundsOutput(
                     "q700",
                     "3500",
-                    [Target_variable("q701", "500", "500")],
+                    [TargetVariable("q701", "500", "500")],
                     "350",
                     "N",
                 ),
@@ -195,10 +195,10 @@ class TestThousandPounds:
                 350,  # lower limit
                 {"q801": 500},
                 28,
-                Thousands_output(
+                ThousandPoundsOutput(
                     "q800",
                     "13500",
-                    [Target_variable("q801", "500", "500")],
+                    [TargetVariable("q801", "500", "500")],
                     "1350",
                     "N",
                 ),
@@ -324,7 +324,7 @@ class TestThousandPounds:
         expected,
         test_id,
     ):
-        if isinstance(expected, Thousands_output):
+        if isinstance(expected, ThousandPoundsOutput):
             try:
                 result = thousand_pounds(
                     unique_identifier=unique_identifier,
@@ -375,12 +375,12 @@ class TestThousandPoundsUAT:
                 250,
                 {"q42": 32, "q43": 97},
                 28,
-                Thousands_output(
+                ThousandPoundsOutput(
                     "UAT-Sheet-1-A",
                     "706",
                     [
-                        Target_variable("q42", "32", "32"),
-                        Target_variable("q43", "97", "97"),
+                        TargetVariable("q42", "32", "32"),
+                        TargetVariable("q43", "97", "97"),
                     ],
                     "1.166942148760330578512396694",
                     "N",
@@ -396,12 +396,12 @@ class TestThousandPoundsUAT:
                 250,
                 {"q42": 287, "q43": 199},
                 28,
-                Thousands_output(
+                ThousandPoundsOutput(
                     "UAT-Sheet-1-B",
                     "381",
                     [
-                        Target_variable("q42", "287", "287"),
-                        Target_variable("q43", "199", "199"),
+                        TargetVariable("q42", "287", "287"),
+                        TargetVariable("q43", "199", "199"),
                     ],
                     "0.9525",
                     "N",
@@ -417,12 +417,12 @@ class TestThousandPoundsUAT:
                 250,
                 {"q42": 32, "q43": 97},
                 28,
-                Thousands_output(
+                ThousandPoundsOutput(
                     "UAT-Sheet-2-A",
                     "823650",
                     [
-                        Target_variable("q42", "32", "32"),
-                        Target_variable("q43", "97", "97"),
+                        TargetVariable("q42", "32", "32"),
+                        TargetVariable("q43", "97", "97"),
                     ],
                     "1361.404958677685950413223140",
                     "N",
@@ -438,12 +438,12 @@ class TestThousandPoundsUAT:
                 250,
                 {"q42": 7161, "q43": 759},
                 28,
-                Thousands_output(
+                ThousandPoundsOutput(
                     "UAT-Sheet-2-B",
                     "11638071",
                     [
-                        Target_variable("q42", "7161", "7161"),
-                        Target_variable("q43", "759", "759"),
+                        TargetVariable("q42", "7161", "7161"),
+                        TargetVariable("q43", "759", "759"),
                     ],
                     "3343.312553863832232117207699",
                     "N",
@@ -459,12 +459,12 @@ class TestThousandPoundsUAT:
                 250,
                 {"q42": 32, "q43": 97},
                 28,
-                Thousands_output(
+                ThousandPoundsOutput(
                     "UAT-Sheet-3-A",
                     "151250",
                     [
-                        Target_variable("q42", "32", "32"),
-                        Target_variable("q43", "97", "97"),
+                        TargetVariable("q42", "32", "32"),
+                        TargetVariable("q43", "97", "97"),
                     ],
                     "250",
                     "N",
@@ -480,12 +480,12 @@ class TestThousandPoundsUAT:
                 250,
                 {"q42": 3900, "q43": 272},
                 28,
-                Thousands_output(
+                ThousandPoundsOutput(
                     "UAT-Sheet-3-B",
                     "5750",
                     [
-                        Target_variable("q42", "3900", "3900"),
-                        Target_variable("q43", "272", "272"),
+                        TargetVariable("q42", "3900", "3900"),
+                        TargetVariable("q43", "272", "272"),
                     ],
                     "250",
                     "N",
@@ -501,12 +501,12 @@ class TestThousandPoundsUAT:
                 250,
                 {"q42": 32, "q43": 97},
                 28,
-                Thousands_output(
+                ThousandPoundsOutput(
                     "UAT-Sheet-4-A",
                     "816750",
                     [
-                        Target_variable("q42", "32", "32"),
-                        Target_variable("q43", "97", "97"),
+                        TargetVariable("q42", "32", "32"),
+                        TargetVariable("q43", "97", "97"),
                     ],
                     "1350",
                     "N",
@@ -522,12 +522,12 @@ class TestThousandPoundsUAT:
                 250,
                 {"q42": 29, "q43": 7},
                 28,
-                Thousands_output(
+                ThousandPoundsOutput(
                     "UAT-Sheet-4-B",
                     "31050",
                     [
-                        Target_variable("q42", "29", "29"),
-                        Target_variable("q43", "7", "7"),
+                        TargetVariable("q42", "29", "29"),
+                        TargetVariable("q43", "7", "7"),
                     ],
                     "1350",
                     "N",
@@ -543,12 +543,12 @@ class TestThousandPoundsUAT:
                 250,
                 {"q42": 3238, "q43": 97},
                 28,
-                Thousands_output(
+                ThousandPoundsOutput(
                     "UAT-Sheet-5-A",
                     "716.75",
                     [
-                        Target_variable("q42", "3238", "3.238"),
-                        Target_variable("q43", "97", "0.097"),
+                        TargetVariable("q42", "3238", "3.238"),
+                        TargetVariable("q43", "97", "0.097"),
                     ],
                     "1184.710743801652892561983471",
                     "C",
@@ -565,12 +565,12 @@ class TestThousandPoundsUAT:
                 250,
                 {"q42": 29, "q43": 7753},
                 28,
-                Thousands_output(
+                ThousandPoundsOutput(
                     "UAT-Sheet-5-B",
                     "21.758",
                     [
-                        Target_variable("q42", "29", "0.029"),
-                        Target_variable("q43", "7753", "7.753"),
+                        TargetVariable("q42", "29", "0.029"),
+                        TargetVariable("q43", "7753", "7.753"),
                     ],
                     "946",
                     "C",
@@ -587,12 +587,12 @@ class TestThousandPoundsUAT:
                 250,
                 {"q42": 3238, "q43": 97},
                 28,
-                Thousands_output(
+                ThousandPoundsOutput(
                     "UAT-Sheet-6-A",
                     "716.75",
                     [
-                        Target_variable("q42", "3238", "3.238"),
-                        Target_variable("q43", "97", "0.097"),
+                        TargetVariable("q42", "3238", "3.238"),
+                        TargetVariable("q43", "97", "0.097"),
                     ],
                     "1184.710743801652892561983471",
                     "C",
@@ -609,12 +609,12 @@ class TestThousandPoundsUAT:
                 250,
                 {"q42": 29, "q43": 7753},
                 28,
-                Thousands_output(
+                ThousandPoundsOutput(
                     "UAT-Sheet-6-B",
                     "21.758",
                     [
-                        Target_variable("q42", "29", "0.029"),
-                        Target_variable("q43", "7753", "7.753"),
+                        TargetVariable("q42", "29", "0.029"),
+                        TargetVariable("q43", "7753", "7.753"),
                     ],
                     "946",
                     "C",
@@ -631,12 +631,12 @@ class TestThousandPoundsUAT:
                 250,
                 {"q42": 3238, "q43": 97},
                 28,
-                Thousands_output(
+                ThousandPoundsOutput(
                     "UAT-Sheet-7-A",
                     "716750",
                     [
-                        Target_variable("q42", "3238", "3238"),
-                        Target_variable("q43", "97", "97"),
+                        TargetVariable("q42", "3238", "3238"),
+                        TargetVariable("q43", "97", "97"),
                     ],
                     None,
                     "S",
@@ -653,12 +653,12 @@ class TestThousandPoundsUAT:
                 250,
                 {"q42": 29, "q43": 7753},
                 28,
-                Thousands_output(
+                ThousandPoundsOutput(
                     "UAT-Sheet-7-B",
                     "21758",
                     [
-                        Target_variable("q42", "29", "29"),
-                        Target_variable("q43", "7753", "7753"),
+                        TargetVariable("q42", "29", "29"),
+                        TargetVariable("q43", "7753", "7753"),
                     ],
                     None,
                     "S",
@@ -675,12 +675,12 @@ class TestThousandPoundsUAT:
                 250,
                 {"q42": 3238, "q43": 97},
                 28,
-                Thousands_output(
+                ThousandPoundsOutput(
                     "UAT-Sheet-8-A",
                     "716750",
                     [
-                        Target_variable("q42", "3238", "3238"),
-                        Target_variable("q43", "97", "97"),
+                        TargetVariable("q42", "3238", "3238"),
+                        TargetVariable("q43", "97", "97"),
                     ],
                     None,
                     "S",
@@ -697,12 +697,12 @@ class TestThousandPoundsUAT:
                 250,
                 {"q42": 29, "q43": 7753},
                 28,
-                Thousands_output(
+                ThousandPoundsOutput(
                     "UAT-Sheet-8-B",
                     "21758",
                     [
-                        Target_variable("q42", "29", "29"),
-                        Target_variable("q43", "7753", "7753"),
+                        TargetVariable("q42", "29", "29"),
+                        TargetVariable("q43", "7753", "7753"),
                     ],
                     None,
                     "S",
@@ -719,12 +719,12 @@ class TestThousandPoundsUAT:
                 250,
                 {"q42": 3238, "q43": 97},
                 28,
-                Thousands_output(
+                ThousandPoundsOutput(
                     "UAT-Sheet-9-A",
                     "716.75",
                     [
-                        Target_variable("q42", "3238", "3.238"),
-                        Target_variable("q43", "97", "0.097"),
+                        TargetVariable("q42", "3238", "3.238"),
+                        TargetVariable("q43", "97", "0.097"),
                     ],
                     "1184.710743801652892561983471",
                     "C",
@@ -741,12 +741,12 @@ class TestThousandPoundsUAT:
                 250,
                 {"q42": 29, "q43": 7753},
                 28,
-                Thousands_output(
+                ThousandPoundsOutput(
                     "UAT-Sheet-9-B",
                     "21.758",
                     [
-                        Target_variable("q42", "29", "0.029"),
-                        Target_variable("q43", "7753", "7.753"),
+                        TargetVariable("q42", "29", "0.029"),
+                        TargetVariable("q43", "7753", "7.753"),
                     ],
                     "946",
                     "C",
@@ -763,12 +763,12 @@ class TestThousandPoundsUAT:
                 250,
                 {"q42": 3238, "q43": None},
                 28,
-                Thousands_output(
+                ThousandPoundsOutput(
                     "UAT-Sheet-10-A",
                     "716.75",
                     [
-                        Target_variable("q42", "3238", "3.238"),
-                        Target_variable("q43", None, None),
+                        TargetVariable("q42", "3238", "3.238"),
+                        TargetVariable("q43", None, None),
                     ],
                     "1184.710743801652892561983471",
                     "C",
@@ -787,12 +787,12 @@ class TestThousandPoundsUAT:
                 250,
                 {"q42": None, "q43": 7753},
                 28,
-                Thousands_output(
+                ThousandPoundsOutput(
                     "UAT-Sheet-10-B",
                     "21.758",
                     [
-                        Target_variable("q42", None, None),
-                        Target_variable("q43", "7753", "7.753"),
+                        TargetVariable("q42", None, None),
+                        TargetVariable("q43", "7753", "7.753"),
                     ],
                     "946",
                     "C",
@@ -810,12 +810,12 @@ class TestThousandPoundsUAT:
                 250,
                 {"q42": None, "q43": None},
                 28,
-                Thousands_output(
+                ThousandPoundsOutput(
                     "UAT-Sheet-11-A",
                     "716.75",
                     [
-                        Target_variable("q42", None, None),
-                        Target_variable("q43", None, None),
+                        TargetVariable("q42", None, None),
+                        TargetVariable("q43", None, None),
                     ],
                     "1184.710743801652892561983471",
                     "C",
@@ -832,12 +832,12 @@ class TestThousandPoundsUAT:
                 250,
                 {"q42": None, "q43": None},
                 28,
-                Thousands_output(
+                ThousandPoundsOutput(
                     "UAT-Sheet-11-B",
                     "21.758",
                     [
-                        Target_variable("q42", None, None),
-                        Target_variable("q43", None, None),
+                        TargetVariable("q42", None, None),
+                        TargetVariable("q43", None, None),
                     ],
                     "946",
                     "C",
@@ -854,12 +854,12 @@ class TestThousandPoundsUAT:
                 250,
                 {"q42": 3238, "q43": 97},
                 28,
-                Thousands_output(
+                ThousandPoundsOutput(
                     "UAT-Sheet-12-A",
                     "716.75",
                     [
-                        Target_variable("q42", "3238", "3.238"),
-                        Target_variable("q43", "97", "0.097"),
+                        TargetVariable("q42", "3238", "3.238"),
+                        TargetVariable("q43", "97", "0.097"),
                     ],
                     "1184.710743801652892561983471",
                     "C",
@@ -876,12 +876,12 @@ class TestThousandPoundsUAT:
                 250,
                 {"q42": 29, "q43": 7753},
                 28,
-                Thousands_output(
+                ThousandPoundsOutput(
                     "UAT-Sheet-12-B",
                     "21.758",
                     [
-                        Target_variable("q42", "29", "0.029"),
-                        Target_variable("q43", "7753", "7.753"),
+                        TargetVariable("q42", "29", "0.029"),
+                        TargetVariable("q43", "7753", "7.753"),
                     ],
                     "946",
                     "C",
@@ -904,7 +904,7 @@ class TestThousandPoundsUAT:
         expected,
         test_id,
     ):
-        if isinstance(expected, Thousands_output):
+        if isinstance(expected, ThousandPoundsOutput):
             try:
                 result = thousand_pounds(
                     unique_identifier=unique_identifier,
@@ -947,7 +947,7 @@ class TestCreateTargetVariableObjects:
         [
             (
                 {"Q123": 400, "Q983": 21},
-                [Target_variable("Q123", 400, None), Target_variable("Q983", 21, None)],
+                [TargetVariable("Q123", 400, None), TargetVariable("Q983", 21, None)],
                 "Test 1: Dictionary structure input",
             )
         ],
@@ -1427,28 +1427,28 @@ class TestAdjustTargetVariables:
         [
             (
                 True,
-                [Target_variable("q501", 500000.4332), Target_variable("q502", 1000)],
+                [TargetVariable("q501", 500000.4332), TargetVariable("q502", 1000)],
                 [
-                    Target_variable("q501", "500000.4332", "500.00043320000003"),
-                    Target_variable("q502", "1000", "1.0"),
+                    TargetVariable("q501", "500000.4332", "500.00043320000003"),
+                    TargetVariable("q502", "1000", "1.0"),
                 ],
                 "Test 1: do_adjustment == True, Target variable is appropriately rounded down",
             ),
             (
                 True,
-                [Target_variable("q501", 999999.99999), Target_variable("q502", 1000)],
+                [TargetVariable("q501", 999999.99999), TargetVariable("q502", 1000)],
                 [
-                    Target_variable("q501", "999999.99999", "999.99999999"),
-                    Target_variable("q502", "1000", "1.0"),
+                    TargetVariable("q501", "999999.99999", "999.99999999"),
+                    TargetVariable("q502", "1000", "1.0"),
                 ],
                 "Test 2: Target variable is appropriately rounded up",
             ),
             (
                 False,
-                [Target_variable("q501", 500), Target_variable("q502", 1000)],
+                [TargetVariable("q501", 500), TargetVariable("q502", 1000)],
                 [
-                    Target_variable("q501", "500", "500"),
-                    Target_variable("q502", "1000", "1000"),
+                    TargetVariable("q501", "500", "500"),
+                    TargetVariable("q502", "1000", "1000"),
                 ],
                 "Test 3: do_adjustment == False Target variable is not rounded",
             ),

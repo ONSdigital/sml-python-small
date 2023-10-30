@@ -85,12 +85,12 @@ def run_totals_and_components(
     totals_and_components_output = pd.DataFrame(
         {
             "Identifier": output.identifier,
-            "Absolute Difference": output.absolute_difference,
-            "Low Percent Threshold": output.low_percent_threshold,
-            "High Percent Threshold": output.high_percent_threshold,
-            "Final Total": output.final_total,
-            "Final Components": [output.final_components],
-            "TCC Marker": output.tcc_marker,
+            "abs_diff": output.absolute_difference,
+            "perc_low": output.low_percent_threshold,
+            "perc_high": output.high_percent_threshold,
+            "final_total": output.final_total,
+            "final_components": [output.final_components],
+            "tcc_marker": output.tcc_marker,
         },
         index=[index_number],
     )
@@ -154,10 +154,10 @@ def run_thousand_pounds(
     thousand_pounds_output = pd.DataFrame(
         {
             "Principal Identifier": output.unique_identifier,
-            "Principal Final Value": output.principal_final_value,
-            "Target Variables": [output.target_variables],
-            "TPC Ratio": output.tpc_ratio,
-            "TPC Marker": output.tpc_marker,
+            "principal_final_value": output.principal_final_value,
+            "target_variables": [output.target_variables],
+            "tpc_ratio": output.tpc_ratio,
+            "tpc_marker": output.tpc_marker,
         },
         index=[index_number],
     )
@@ -218,6 +218,7 @@ def wrapper(
         lambda row: function_mappings[method](row, row.name, **method_input),
         axis=1,
     )
+
     output_dataframe = pd.concat(list(output_dataframe), ignore_index=True)
     frames = [input_frame, output_dataframe]
     # concatenate the two dataframes together and output
