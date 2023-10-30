@@ -1,2 +1,0 @@
-unique_identifier,principal_original_value,principal_adjusted_value,tpc_ratio,tpc_marker,error_description,q101_original_value,q101_adjusted_value,q102_original_value,q102_adjusted_value,q103_original_value,q103_adjusted_value,q104_original_value,q104_adjusted_value
-q100,50000,833.3333333333333333333333333,C,500,0.5,1000,1,1500,1.5,None,None

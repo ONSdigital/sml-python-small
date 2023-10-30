@@ -107,7 +107,7 @@ def invoke_directly_writing_output_to_csv_example():
     print(f"{row}")
 
     # now we will open a file for writing
-    with open("output1.csv", "w") as file:
+    with open("../../../tests/editing/thousand_pounds/example_data/output1.csv", "w") as file:
         file.write(header)
         file.write("\n")
         file.write(row)
@@ -181,7 +181,7 @@ def invoke_process_with_inmemory_single_csv_example():
     print(f"{output_row}")
 
     # now we will open a file for writing
-    with open("single_output.csv", "w") as file:
+    with open("../../../tests/editing/thousand_pounds/example_data/single_output.csv", "w") as file:
         file.write(output_header)
         file.write("\n")
         file.write(output_row)
