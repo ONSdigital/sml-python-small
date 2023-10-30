@@ -211,6 +211,6 @@ pip install numpy
 ## Pandas Wrapper Usage
 
 - You will have to create a new python file importing in the `pandas_wrapper.py`.
-- Where you will have to have to write functions to read a CSV file and pass in the data as a DataFrame into the *`wrapper`* function from the `pandas_wrapper.py` file.
+- Where you will have to write functions to read a CSV file and pass in the data as a DataFrame into the *`wrapper`* function from the `pandas_wrapper.py` file.
 
 We have an example of how to do this in the `pandas_example.py` file within the `utils` directory.
