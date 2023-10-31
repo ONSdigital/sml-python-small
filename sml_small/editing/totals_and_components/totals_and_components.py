@@ -132,7 +132,7 @@ class TotalsAndComponentsOutput:
     ] = None  # the output total which may have been corrected based on user input amend_
     # total variable
     final_components: Optional[
-        str
+        List[str]
     ] = None  # the output components which may have been corrected to match the received
     # predictive value. If corrected the components are scaled proportionally
     # based on the input values
@@ -798,7 +798,7 @@ def error_correction(
     :param original_components: List of Components objects so final values can be amended
     :type original_components: list(ComponentPair)
     ...
-    :return: final_total Final Total value to be output
+    :return: final_total final total value to be output
     :rtype: Decimal
     :return: original_components Updated final values list to be output
     :rtype: list(Decimal)
@@ -835,7 +835,7 @@ def correct_total(
     :param original_components: List of Components objects so final values can be amended
     :type original_components: list(Components_list)
     ...
-    :return:  final_total, Final Total value to be output
+    :return:  final_total, final total value to be output
     :rtype: Decimal
     :return: original_components, Input Component list with final values updated
     :rtype: list(Components_list)
@@ -876,7 +876,7 @@ def correct_components(
     :param total: current total
     :type total: Decimal
     ...
-    :return: final_total, Final Total value to be output
+    :return: final_total, final total value to be output
     :rtype: Decimal
     :return: components Input Component list with final values updated
     :rtype: list(Components_list)
