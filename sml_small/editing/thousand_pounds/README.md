@@ -46,9 +46,8 @@ def thousand_pounds(
     # 'previous' period
     upper_limit: float,  # Upper bound of 'error value' threshold
     lower_limit: float,  # Lower bound of 'error value' threshold
-    target_variables: List[Target_variable], # identifier/value pairs
-    precision: Optional[int],  # Precision is used by the decimal
-    # package to ensure a specified accuracy
+    target_variables: List[TargetVariable], # identifier/value pairs
+    precision: Optional[int],  #Precision is used by the decimal package to ensure a specified accuracy
     # used throughout method processing
 )
 ```
@@ -76,14 +75,14 @@ output = thousand_pounds(
 ## Output
 
 ```python
-Thousands_output(
+ThousandPoundsOutput(
     principal_identifier='12340000001-201409-q100',
     principal_adjusted_value="50000.0",
     target_variables=[
-        Target_variable(identifier='101', original_value="500", adjusted_value="0.5"),
-        Target_variable(identifier='102', original_value="1000", adjusted_value="1.0"),
-        Target_variable(identifier='103', original_value="1500", adjusted_value="1.5"),
-        Target_variable(identifier='104', original_value=None, adjusted_value=None)],
+        TargetVariable(identifier='101', original_value="500", adjusted_value="0.5"),
+        TargetVariable(identifier='102', original_value="1000", adjusted_value="1.0"),
+        TargetVariable(identifier='103', original_value="1500", adjusted_value="1.5"),
+        TargetVariable(identifier='104', original_value=None, adjusted_value=None)],
     tpc_ratio="833.3",
     tpc_marker='C',
     error_description=''

@@ -47,19 +47,19 @@ class TpcMarker(Enum):
 # --- Class Definitions  ---
 # Dataset holding all 'linked questions' with their initial response and final/adjusted values
 @dataclass(frozen=False)
-class Target_variable:
-    identifier: str  # Unique identifier e.g. a question code - q050
+class TargetVariable:
+    identifier: str  # Unique identifer e.g. a question code - q050
     original_value: Optional[str]
     final_value: Optional[str] = None
 
 
 # Structure of the output dataset
 @dataclass(frozen=True)
-class Thousands_output:
-    unique_identifier: Optional[str]  # Unique identifier e.g. a question code - q500
+class ThousandPoundsOutput:
+    unique_identifier: Optional[str]  # Unique identifer e.g. a question code - q500
     principal_final_value: Optional[str]  # Output value that may or may not be adjusted
     target_variables: List[
-        Target_variable
+        TargetVariable
     ]  # Output linked values that may or may not be adjusted
     tpc_ratio: Optional[
         str
@@ -83,7 +83,7 @@ def thousand_pounds(
     predictive: Optional[float] = None,
     auxiliary: Optional[float] = None,
     precision: Optional[int] = None,
-) -> Thousands_output:
+) -> ThousandPoundsOutput:
     """
     Calculates a pounds thousands error ratio and if the ratio is between the bounds of the given limits will adjust
     the given principal variable and any linked variables by a factor of 1000.
@@ -106,7 +106,7 @@ def thousand_pounds(
     used throughout method processing
     :type precision: Optional[int]
 
-    :return: Thousands_output: An object containing the
+    :return: ThousandPoundsOutput: An object containing the
                             following attributes:
             - unique_identifier: Unique identifier e.g. a question code - q500
             - principal_original_value: Original provided value
@@ -241,7 +241,7 @@ def thousand_pounds(
                 tpc_marker=tpc_marker.value,
             )
 
-        return Thousands_output(
+        return ThousandPoundsOutput(
             unique_identifier=str(unique_identifier),
             principal_final_value=str(principal_adjusted_value)
             if principal_adjusted_value is not None
@@ -270,20 +270,20 @@ def thousand_pounds(
         raise TPException(f"identifier: {unique_identifier}", error)
 
 
-def create_target_variable_objects(target_variables: dict) -> List[Target_variable]:
+def create_target_variable_objects(target_variables: dict) -> List[TargetVariable]:
     """
     Takes a dictionary of target variables, where key is the identifier and value is the original value and
     creates a list of target_variable objects to be used by the method
 
-    :param target_variables: Dictionary containing values to become Target_variable objects
+    :param target_variables: Dictionary containing values to become TargetVariable objects
     :type target_variables: dict
 
-    :return: target_variables_list, a list of Target_variable objects
-    :rtype: List[Target_variable]
+    :return: target_variables_list, a list of TargetVariable objects
+    :rtype: List[TargetVariable]
     """
     target_variables_list = []
     for key, value in target_variables.items():
-        target_variables_list.append(Target_variable(key, value))
+        target_variables_list.append(TargetVariable(key, value))
     return target_variables_list
 
 
@@ -361,8 +361,8 @@ def check_zero_errors(
     predictive: Optional[Decimal],
     auxiliary: Optional[Decimal],
     principal_variable: Optional[Decimal],
-    target_variables: List[Target_variable],
-) -> Tuple[TpcMarker, Decimal, List[Target_variable]]:
+    target_variables: List[TargetVariable],
+) -> Tuple[TpcMarker, Decimal, List[TargetVariable]]:
     """
     Checks predictive and auxiliary to ensure that there is not only a 0 value available,
     as this will cause a divide by 0 error
@@ -373,15 +373,15 @@ def check_zero_errors(
     :type auxiliary: Optional[Decimal]
     :param principal_variable: Original response value provided for the 'current' period
     :type principal_variable: Optional[Decimal]
-    :param target_variables: list of Target_variable objects that can be corrected
-    :type target_variables: List[Target_variable],
+    :param target_variables: list of TargetVariable objects that can be corrected
+    :type target_variables: List[TargetVariable],
 
     :return: tpc_marker, either method_proceed or stop
     :rtype: TpcMarker
     :return: checked_principal_variable, Decimal value
     :rtype: Decimal
     :return: checked_target_variables, list of variables
-    :rtype: List[Target_variable]
+    :rtype: List[TargetVariable]
     """
     tpc_marker = TpcMarker.METHOD_PROCEED
 
@@ -400,7 +400,7 @@ def check_zero_errors(
         for question in target_variables:
             final_value = question.original_value
             checked_target_variables.append(
-                Target_variable(
+                TargetVariable(
                     identifier=question.identifier,
                     original_value=str(question.original_value)
                     if question.original_value is not None
@@ -513,19 +513,19 @@ def adjust_value(value: Optional[Decimal]) -> Optional[Decimal]:
 
 
 def adjust_target_variables(
-    do_adjustment: bool, target_variables: List[Target_variable]
-) -> List[Target_variable]:
+    do_adjustment: bool, target_variables: List[TargetVariable]
+) -> List[TargetVariable]:
     """
     Method to amend the variables within the target_variables list and append the new values to the individual objects
 
     :param do_adjustment: Determines if the values should be corrected
     :type do_adjustment: bool
-    :param target_variables: list of Target_variable objects that can be corrected
-    :type target_variables: List[Target_variable]
+    :param target_variables: list of TargetVariable objects that can be corrected
+    :type target_variables: List[TargetVariable]
 
     :return: A returned list of target variables with the final_value updated with either the corrected value, or the
     original value if no correction is to be made
-    :rtype: List[Target_variable]
+    :rtype: List[TargetVariable]
     """
     adjusted_target_variables = []
     for question in target_variables:
@@ -534,7 +534,7 @@ def adjust_target_variables(
         else:
             final_value = question.original_value
         adjusted_target_variables.append(
-            Target_variable(
+            TargetVariable(
                 identifier=question.identifier,
                 original_value=str(question.original_value)
                 if question.original_value is not None
