@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "sml_small"
-version = "1.1.0rc8"
+version = "1.1.0rc9"
 description = "SML Small (Python Pandas methods)"
 authors = []
 readme= "README.md"
@@ -29,9 +29,6 @@ bandit = "^1.7.5"
 [tool.bandit]
 exclude_dirs = ["tests"]
 
-[tool.pytest.ini_options]
-junit_test_suite_name = "sml_small"
-addopts = "--cov=sml_small --cov-fail-under=90 --cov-config=.coveragerc"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
