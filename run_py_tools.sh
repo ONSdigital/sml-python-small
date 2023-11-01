@@ -1,6 +1,6 @@
 #!/bin/sh
 
-CMDS=("black --check --diff sml_small" "pylint sml_small" "flake8 sml_small features" "isort --check-only ." "bandit -c pyproject.toml -r .")
+CMDS=("black --check --diff sml_small tests" "pylint sml_small tests" "flake8 sml_small tests" "isort --check-only ." "bandit -c pyproject.toml -r .")
 
 for i in "${CMDS[@]}"
 do 
