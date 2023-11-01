@@ -1,13 +1,18 @@
+
+# dataclasses module provides a decorator and functions for automatically adding generated special methods
 import dataclasses
+# We'll be using json module to convert a subset of python objects into json string
 import json
+# Importing DictReader() class from the CSV module to map the information into a dictionary
 from csv import DictReader
 
+# Importing the thousand_pounds method from the thousand_pounds.py file
 from thousand_pounds import thousand_pounds
 
 
-# Load some local csvs into memory and then run the pounds thousands method
+# Load some local CSVs into memory and then run the pounds thousands method
 def invoke_process_with_local_csv():
-    # Load the csvs into memory
+    # Load the CSVs into memory
     with open("../../../tests/editing/thousand_pounds/tests/config.csv") as file:
         config_csv = file.read()
 
@@ -19,7 +24,7 @@ def invoke_process_with_local_csv():
     return invoke(config_csv, target_questions_csv)
 
 
-# Use some csvs strings already defined in memory and then run the pounds thousands method
+# Use some CSVs strings already defined in memory and then run the pounds thousands method
 def invoke_process_with_inmemory_csv_example():
     config_csv = """unique_identifier,principal_variable,predictive,auxiliary,upper_limit,lower_limit
 100,50000000,60000,30000,1350,350"""
@@ -34,7 +39,7 @@ def invoke_process_with_inmemory_csv_example():
     return invoke(config_csv, target_questions_csv)
 
 
-# Can be called directly with csvs already loaded into strings or by using the above invoke to load local csvs
+# Can be called directly with CSVs already loaded into strings or by using the above invoke to load local CSVs
 # Example function to take a dataset and wrangle it into a suitable format to support running the method
 # Substitutes missing values with the Python 'None'
 # Does not have any explicit exception/error handling
@@ -50,7 +55,7 @@ def invoke(config_csv: str, linked_question_csv: str):
     linked_question_reader = DictReader(linked_question_csv.splitlines())
     linked_questions = {}
     for linked_row in linked_question_reader:
-        # print(f"Linked row: {linked_row}")
+        print(f"Linked row: {linked_row}")
         if not linked_row["value"]:
             linked_questions[linked_row["identifier"]] = "nan"
         else:
@@ -67,6 +72,9 @@ def invoke(config_csv: str, linked_question_csv: str):
         lower_limit=float(config["lower_limit"]),
         target_variables=linked_questions,
     )
+
+# In this function we pass in the test data directly into the thousand_pounds function
+# and write the output into a CSV file
 
 
 def invoke_directly_writing_output_to_csv_example():
@@ -99,10 +107,16 @@ def invoke_directly_writing_output_to_csv_example():
     print(f"{row}")
 
     # now we will open a file for writing
-    with open("output1.csv", "w") as file:
+    with open("../../../tests/editing/thousand_pounds/example_data/output1.csv", "w") as file:
         file.write(header)
         file.write("\n")
         file.write(row)
+
+# In this function we have a in memory CSV data containing the config data and linked questions data in one
+# We also write the output into a CSV file
+
+# Some of the rows of the in memory data below are missing some values, so we can demonstrate
+# the error handling of the method
 
 
 def invoke_process_with_inmemory_single_csv_example():
@@ -111,7 +125,7 @@ def invoke_process_with_inmemory_single_csv_example():
 123B-202203,50000000,60000,30000,1350,250,500,1000,1500,12345
 124A-202204,50000,600,300,1350,250,200,5000,3500,300
 125A-202204,0,0,12 0,1350,250,200,5000,3500,300
-126A-202205,,,,1350,250,100,1000,1500,100
+126A-202205,50000000,,,1350,250,100,1000,1500,100
 127A-202205,,1,2,1350,250,100,1000,1500,100
 127B-202206,5000,10,2,1350,250,100,1000,abc,100
 127C-202207,5000,10,2,13 50,250,100,1000,4,100
@@ -145,8 +159,8 @@ def invoke_process_with_inmemory_single_csv_example():
             output = thousand_pounds(
                 unique_identifier=config["unique_identifier"],
                 principal_variable=config["principal_variable"],
-                predictive=config["predictive"],
-                auxiliary=config["auxiliary"],
+                predictive=None if not config["predictive"] else float(config["predictive"]),
+                auxiliary=None if not config["auxiliary"] else float(config["auxiliary"]),
                 upper_limit=config["upper_limit"],
                 lower_limit=config["lower_limit"],
                 target_variables=config["target_variables"],
@@ -167,7 +181,7 @@ def invoke_process_with_inmemory_single_csv_example():
     print(f"{output_row}")
 
     # now we will open a file for writing
-    with open("single_output.csv", "w") as file:
+    with open("../../../tests/editing/thousand_pounds/example_data/single_output.csv", "w") as file:
         file.write(output_header)
         file.write("\n")
         file.write(output_row)

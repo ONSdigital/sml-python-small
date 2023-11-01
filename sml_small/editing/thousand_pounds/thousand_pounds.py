@@ -108,7 +108,7 @@ def thousand_pounds(
 
     :return: ThousandPoundsOutput: An object containing the
                             following attributes:
-            - unique_identifier: Unique identifer e.g. a question code - q500
+            - unique_identifier: Unique identifier e.g. a question code - q500
             - principal_original_value: Original provided value
             - principal_final_value: Output value that may or may not be adjusted
             - target_variables: Output linked values that may or may not be adjusted
