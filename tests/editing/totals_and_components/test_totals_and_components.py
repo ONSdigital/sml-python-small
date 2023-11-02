@@ -2426,7 +2426,7 @@ class TestTotalsAndComponentsUAT:
                     (float("NaN")),
                     (float("NaN")),
                     (float("NaN")),
-                    (float("NaN")),
+                    (None),
                 ],
                 False,
                 4,

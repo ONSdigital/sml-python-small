@@ -470,6 +470,8 @@ def initialize_components_list(
     """
     component_object_list = []
     for component in component_list:
+        if component == "" or component is None:
+            component = math.nan
         component_object_list.append(ComponentPair(component))
     return component_object_list
 

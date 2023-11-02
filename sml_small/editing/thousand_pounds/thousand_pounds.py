@@ -1,4 +1,5 @@
 import logging
+import math
 import sys
 from dataclasses import dataclass
 from decimal import Decimal
@@ -283,6 +284,8 @@ def create_target_variable_objects(target_variables: dict) -> List[TargetVariabl
     """
     target_variables_list = []
     for key, value in target_variables.items():
+        if value == "" or value is None:
+            value = math.nan
         target_variables_list.append(TargetVariable(key, value))
     return target_variables_list
 
@@ -532,7 +535,10 @@ def adjust_target_variables(
         if do_adjustment:
             final_value = adjust_value(question.original_value)
         else:
-            final_value = question.original_value
+            if math.isnan(final_value):
+                final_value = None
+            else:
+                final_value = question.original_value
         adjusted_target_variables.append(
             TargetVariable(
                 identifier=question.identifier,

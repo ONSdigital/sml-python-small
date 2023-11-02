@@ -131,7 +131,7 @@ def run_thousand_pounds(
     """
     target_variables_list = {}
     for value in target_variables_columns:
-        if row[value] is None:
+        if value is None:
             target_variables_list[value] = 'Nan'
         else:
             target_variables_list[value] = row[value]
