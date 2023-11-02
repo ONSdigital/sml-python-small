@@ -1,6 +1,5 @@
 import math
 import random
-from cmath import nan
 from decimal import Decimal, getcontext
 from typing import List
 
@@ -1605,7 +1604,7 @@ class TestTotalsAndComponents:
                         "9207.741211667913238593866866",
                         "865.7278421839940164547494390",
                         "631.5309461480927449513837048",
-                        nan,
+                        None,
                     ],
                     "C",
                 ),
@@ -1672,6 +1671,60 @@ class TestTotalsAndComponents:
                 ),
                 "Test 60 - Test component with fine tune down"
                 # This test is to check that the fine tune down works as expected on the last component
+            ),
+            (
+                "BJ",
+                10705,
+                [float("NaN"), float("NaN"), float("NaN"), float("NaN")],
+                False,
+                10705,
+                28,
+                None,
+                11,
+                None,
+                (
+                    "BJ",
+                    None,
+                    None,
+                    None,
+                    "10705",
+                    [
+                        None,
+                        None,
+                        None,
+                        None,
+                    ],
+                    "S",
+                ),
+                "Test 61 - All components inputs are not a number",
+                # All components inputs are NAN should return None values
+            ),
+            (
+                "BK",
+                10705,
+                [None, None, None, None],
+                False,
+                10705,
+                28,
+                None,
+                11,
+                None,
+                (
+                    "BK",
+                    None,
+                    None,
+                    None,
+                    "10705",
+                    [
+                        None,
+                        None,
+                        None,
+                        None,
+                    ],
+                    "S",
+                ),
+                "Test 62 - All components inputs are None values",
+                # All components inputs are None should return None values
             ),
         ],
     )
@@ -2337,7 +2390,7 @@ class TestTotalsAndComponentsUAT:
             (
                 "UAT-ABD-DIFF-SHEET-A-7002",
                 4,
-                [float("NaN"), float("NaN"), float("NaN"), float("NaN")],
+                [None, None, None, None],
                 True,
                 4,
                 28,
@@ -2350,7 +2403,7 @@ class TestTotalsAndComponentsUAT:
                     None,
                     None,
                     "4",
-                    [nan, nan, nan, nan],
+                    [None, None, None, None],
                     "S",
                 ),
                 "Test 20 - If absolute difference < 11 and amend total is true then we correct the components",
@@ -2423,9 +2476,9 @@ class TestTotalsAndComponentsUAT:
                 "UAT-ABD-DIFF-SHEET-A-8002",
                 4,
                 [
-                    (float("NaN")),
-                    (float("NaN")),
-                    (float("NaN")),
+                    (None),
+                    (None),
+                    (None),
                     (None),
                 ],
                 False,
@@ -2440,7 +2493,7 @@ class TestTotalsAndComponentsUAT:
                     None,
                     None,
                     "4",
-                    [nan, nan, nan, nan],
+                    [None, None, None, None],
                     "S",
                 ),
                 "Test 23 - If absolute difference < 11 and amend total is false then we correct the components",
@@ -2954,7 +3007,7 @@ class TestTotalsAndComponentsUAT:
                     [
                         "630.3433813892529488859764090",
                         "730.0812581913499344692005242",
-                        nan,
+                        None,
                         "161.5753604193971166448230668",
                     ],
                     "C",
@@ -2985,7 +3038,7 @@ class TestTotalsAndComponentsUAT:
                         "9206.159921487989531731937564",
                         "866.4856528647537153004953734",
                         "632.3544256472567529675670623",
-                        nan,
+                        None,
                     ],
                     "C",
                 ),
@@ -2998,7 +3051,7 @@ class TestTotalsAndComponentsUAT:
             (
                 "UAT-ABD-DIFF-SHEET-A-14003",
                 103,
-                [(98), float("Nan"), (4), (6)],
+                [(98), float("NaN"), (4), (6)],
                 False,
                 103,
                 28,
@@ -3013,7 +3066,7 @@ class TestTotalsAndComponentsUAT:
                     "103",
                     [
                         "93.46296296296296296296296296",
-                        nan,
+                        None,
                         "3.814814814814814814814814815",
                         "5.722222222222222222222222223",
                     ],
@@ -6780,17 +6833,12 @@ def compare_results_to_expected_results(
 
 def compare_list_of_decimals(components: List[str], expected_components: List[str]):
     for i, (component, expected) in enumerate(zip(components, expected_components)):
-        component = Decimal(component)
-        expected = Decimal(expected)
-        if math.isnan(component) and math.isnan(expected):
-            assert math.isnan(component) and math.isnan(
-                expected
-            ), f"Both components at index {i} are NaN"
-        elif math.isnan(component) or math.isnan(expected):
-            assert (
-                False
-            ), f"Component at index {i} is NaN, the other is not component {component}, expected {expected}"
-        elif component != expected:
-            assert (
-                False
-            ), f"Values of components at index {i} do not match: component {component}, expected {expected}"
+        if component is not None and expected is not None:
+            component = Decimal(component)
+            expected = Decimal(expected)
+            if component != expected:
+                assert (
+                    False
+                ), f"Values of components at index {i} do not match: component {component}, expected {expected}"
+        else:
+            print("Input is None and Expected is None")

@@ -398,6 +398,11 @@ def totals_and_components(
             for component in output_list["final_components"]
         ]
 
+        final_components = [
+            None if component is math.nan else component
+            for component in final_components
+        ]
+
         absolute_difference = (
             str(output_list["absolute_difference"])
             if output_list["absolute_difference"] is not None

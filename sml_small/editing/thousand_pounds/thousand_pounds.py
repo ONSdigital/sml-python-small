@@ -401,7 +401,10 @@ def check_zero_errors(
         checked_target_variables = []
 
         for question in target_variables:
-            final_value = question.original_value
+            if math.isnan(question.original_value):
+                final_value = None
+            else:
+                final_value = question.original_value
             checked_target_variables.append(
                 TargetVariable(
                     identifier=question.identifier,
@@ -532,11 +535,12 @@ def adjust_target_variables(
     """
     adjusted_target_variables = []
     for question in target_variables:
-        if do_adjustment:
+        if do_adjustment and not math.isnan(question.original_value):
             final_value = adjust_value(question.original_value)
         else:
-            if math.isnan(final_value):
+            if math.isnan(question.original_value):
                 final_value = None
+                question.original_value = None
             else:
                 final_value = question.original_value
         adjusted_target_variables.append(

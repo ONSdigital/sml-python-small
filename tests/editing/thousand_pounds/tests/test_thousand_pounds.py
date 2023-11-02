@@ -830,7 +830,7 @@ class TestThousandPoundsUAT:
                 None,  # auxiliary
                 1350,
                 250,
-                {"q42": None, "q43": None},
+                {"q42": float("Nan"), "q43": float("Nan")},
                 28,
                 ThousandPoundsOutput(
                     "UAT-Sheet-11-B",
@@ -843,7 +843,7 @@ class TestThousandPoundsUAT:
                     "C",
                 ),
                 """Test 22: If 250 < R < 1350 and target variable columns not defined
-                and no target variables expected. TPC = C""",
+                and not a number target variables expected. TPC = C""",
             ),
             (
                 "UAT-Sheet-12-A",

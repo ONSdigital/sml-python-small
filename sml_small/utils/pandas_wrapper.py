@@ -59,10 +59,7 @@ def run_totals_and_components(
     new_list = []
     # loop through the components columns and create a single input
     for i in components_list_columns:
-        if i is None:
-            new_list.append('Nan')
-        else:
-            new_list.append(row[i])
+        new_list.append(row[i])
 
     # create a dictionary defining the methods keyword names and the relevant columns they refer to
     input_dict = {
@@ -131,10 +128,7 @@ def run_thousand_pounds(
     """
     target_variables_list = {}
     for value in target_variables_columns:
-        if value is None:
-            target_variables_list[value] = 'Nan'
-        else:
-            target_variables_list[value] = row[value]
+        target_variables_list[value] = row[value]
 
     input_dict = {
         "unique_identifier": unique_identifier_column,
