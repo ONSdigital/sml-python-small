@@ -31,7 +31,6 @@ exclude_dirs = ["tests"]
 
 [tool.isort]
 profile="black"
-line_length=88
 
 
 [build-system]
