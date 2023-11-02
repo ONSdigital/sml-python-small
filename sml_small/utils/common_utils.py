@@ -188,6 +188,17 @@ def convert_input_to_decimal(
 def get_check_if_input_is_nan(
     input: Any,
 ) -> Any:
+    """
+    get_check_if_input_is_nan This will take an input and if the value of the input
+    is NaN then it will set the final_value and input as None.
+
+    :param input: Input Value can be any type as value returned will either be None or
+    the original value.
+    :type input: Any
+    :return: Return value can be any type as value returned will either be None or
+    the original value.
+    :rtype: Any
+    """
     if math.isnan(input):
         final_value = None
         input = None
@@ -199,6 +210,17 @@ def get_check_if_input_is_nan(
 def get_check_if_input_is_missing_or_none(
     value: Any,
 ) -> Any:
+    """
+    get_check_if_input_is_missing_or_none This will take an input and if the value of the input
+    is NaN or missing then it will set the value as NaN.
+
+    :param value: Input Value can be any type as value returned will either be NaN or
+    the original value.
+    :type value: Any
+    :return: _description_
+    :rtype: Return value can be any type as value returned will either be NaN or
+    the original value.
+    """
     if value == "" or value is None:
         value = math.nan
 
