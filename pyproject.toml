@@ -31,6 +31,7 @@ exclude_dirs = ["tests"]
 
 [tool.isort]
 profile="black"
+known_third_party=["boto3","moto","pandas","numpy"]
 
 
 [build-system]
