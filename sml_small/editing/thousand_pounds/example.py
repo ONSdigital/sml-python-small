@@ -1,8 +1,9 @@
-
 # dataclasses module provides a decorator and functions for automatically adding generated special methods
 import dataclasses
+
 # We'll be using json module to convert a subset of python objects into json string
 import json
+
 # Importing DictReader() class from the CSV module to map the information into a dictionary
 from csv import DictReader
 
@@ -73,6 +74,7 @@ def invoke(config_csv: str, linked_question_csv: str):
         target_variables=linked_questions,
     )
 
+
 # In this function we pass in the test data directly into the thousand_pounds function
 # and write the output into a CSV file
 
@@ -107,10 +109,13 @@ def invoke_directly_writing_output_to_csv_example():
     print(f"{row}")
 
     # now we will open a file for writing
-    with open("../../../tests/editing/thousand_pounds/example_data/output1.csv", "w") as file:
+    with open(
+        "../../../tests/editing/thousand_pounds/example_data/output1.csv", "w"
+    ) as file:
         file.write(header)
         file.write("\n")
         file.write(row)
+
 
 # In this function we have a in memory CSV data containing the config data and linked questions data in one
 # We also write the output into a CSV file
@@ -159,8 +164,12 @@ def invoke_process_with_inmemory_single_csv_example():
             output = thousand_pounds(
                 unique_identifier=config["unique_identifier"],
                 principal_variable=config["principal_variable"],
-                predictive=None if not config["predictive"] else float(config["predictive"]),
-                auxiliary=None if not config["auxiliary"] else float(config["auxiliary"]),
+                predictive=None
+                if not config["predictive"]
+                else float(config["predictive"]),
+                auxiliary=None
+                if not config["auxiliary"]
+                else float(config["auxiliary"]),
                 upper_limit=config["upper_limit"],
                 lower_limit=config["lower_limit"],
                 target_variables=config["target_variables"],
@@ -181,7 +190,9 @@ def invoke_process_with_inmemory_single_csv_example():
     print(f"{output_row}")
 
     # now we will open a file for writing
-    with open("../../../tests/editing/thousand_pounds/example_data/single_output.csv", "w") as file:
+    with open(
+        "../../../tests/editing/thousand_pounds/example_data/single_output.csv", "w"
+    ) as file:
         file.write(output_header)
         file.write("\n")
         file.write(output_row)
