@@ -7,7 +7,8 @@ from enum import Enum
 from os import path
 from typing import List, Optional, Tuple
 
-from sml_small.utils.common_utils import convert_input_to_decimal, log_table, validate_number, validate_precision
+from sml_small.utils.common_utils import (convert_input_to_decimal, get_check_if_input_is_missing_or_none,
+                                          get_check_if_input_is_nan, log_table, validate_number, validate_precision)
 from sml_small.utils.error_utils import get_boundary_error, get_mandatory_param_error, get_one_of_params_mandatory_error
 
 # Pick up configuration for logging
@@ -284,8 +285,7 @@ def create_target_variable_objects(target_variables: dict) -> List[TargetVariabl
     """
     target_variables_list = []
     for key, value in target_variables.items():
-        if value == "" or value is None:
-            value = math.nan
+        value = get_check_if_input_is_missing_or_none(value)
         target_variables_list.append(TargetVariable(key, value))
     return target_variables_list
 
@@ -401,10 +401,9 @@ def check_zero_errors(
         checked_target_variables = []
 
         for question in target_variables:
-            if math.isnan(question.original_value):
-                final_value = None
-            else:
-                final_value = question.original_value
+            final_value, question.original_value = get_check_if_input_is_nan(
+                question.original_value
+            )
             checked_target_variables.append(
                 TargetVariable(
                     identifier=question.identifier,
@@ -538,11 +537,9 @@ def adjust_target_variables(
         if do_adjustment and not math.isnan(question.original_value):
             final_value = adjust_value(question.original_value)
         else:
-            if math.isnan(question.original_value):
-                final_value = None
-                question.original_value = None
-            else:
-                final_value = question.original_value
+            final_value, question.original_value = get_check_if_input_is_nan(
+                question.original_value
+            )
         adjusted_target_variables.append(
             TargetVariable(
                 identifier=question.identifier,

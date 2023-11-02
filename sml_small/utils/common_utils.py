@@ -4,10 +4,11 @@ Common functionality that can be used by any SML method
 For Copyright information, please see LICENCE.
 """
 import logging.config
+import math
 from cmath import nan
 from decimal import Decimal, getcontext
 from os import path
-from typing import Dict, List
+from typing import Any, Dict, List
 
 from sml_small.utils.error_utils import get_param_outside_range_error, get_params_is_not_a_number_error
 
@@ -182,3 +183,23 @@ def convert_input_to_decimal(
         return decimal_values
     except Exception as error:
         raise error
+
+
+def get_check_if_input_is_nan(
+    input: Any,
+) -> Any:
+    if math.isnan(input):
+        final_value = None
+        input = None
+    else:
+        final_value = input
+    return final_value, input
+
+
+def get_check_if_input_is_missing_or_none(
+    value: Any,
+) -> Any:
+    if value == "" or value is None:
+        value = math.nan
+
+    return value

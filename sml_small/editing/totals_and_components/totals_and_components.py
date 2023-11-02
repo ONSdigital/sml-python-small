@@ -13,7 +13,8 @@ from enum import Enum
 from os import path
 from typing import List, Optional, Tuple, Union
 
-from sml_small.utils.common_utils import convert_input_to_decimal, log_table, validate_number, validate_precision
+from sml_small.utils.common_utils import (convert_input_to_decimal, get_check_if_input_is_missing_or_none, log_table,
+                                          validate_number, validate_precision)
 from sml_small.utils.error_utils import get_mandatory_param_error, get_one_of_params_mandatory_error
 
 # Pick up configuration for logging
@@ -475,8 +476,7 @@ def initialize_components_list(
     """
     component_object_list = []
     for component in component_list:
-        if component == "" or component is None:
-            component = math.nan
+        component = get_check_if_input_is_missing_or_none(component)
         component_object_list.append(ComponentPair(component))
     return component_object_list
 
