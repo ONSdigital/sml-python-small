@@ -190,13 +190,11 @@ invoke_process_in_memory_data_example_2()
 
 ## Pandas Wrapper
 
-To view the code of the pandas wrapper you can find the `pandas_wrapper.py` file within the `totals_and_components` directory.
+To view the code of the pandas wrapper you can find the `pandas_wrapper.py` file within the `utils` directory.
 
 ### Prerequisites: Pandas Wrapper
 
 In order to run some of the functions in the python `pandas_wrapper.py`, you will need to have `pandas` and `numpy` installed.
-
-Tabulate is used to pretty-print tabular data in python on the command line.
 
 To install `pandas`:
 
@@ -213,6 +211,6 @@ pip install numpy
 ## Pandas Wrapper Usage
 
 - You will have to create a new python file importing in the `pandas_wrapper.py`.
-- Where you will have to have to write functions to read a CSV file and pass in the data as a DataFrame into the *`wrapper`* function from the `pandas_wrapper.py` file.
+- Where you will have to write functions to read a CSV file and pass in the data as a DataFrame into the *`wrapper`* function from the `pandas_wrapper.py` file.
 
-We have an example of how to do this in the `pandas_example.py` file within the `totals_and_components` directory.
+We have an example of how to do this in the `pandas_example.py` file within the `utils` directory.

@@ -6,7 +6,7 @@ An example of running the method directly and using csv data (in-memory and from
 
 Example input data: (2 csv files)
 
-```
+```bash
 unique_identifier,principal_variable,predictive,auxiliary,upper_limit,lower_limit,precision
 12340000001-201409-q100,50000000,60000,30000,1350,350,2
 
@@ -23,11 +23,11 @@ i.e.
 |---|---|---|---|---|---|---|
 12340000001-201409-q100|50000000|60000|30000|1350|350|2
 
-|identifier| value 
+|identifier| value
 |---|----|
-q101| 500 
-q102| 1000 
-q103| 1500 
+q101| 500
+q102| 1000
+q103| 1500
 q104|
 
 ## Calling the method
@@ -36,10 +36,14 @@ The method has the following interface:
 
 ```python
 def thousand_pounds(
-    unique_identifier: Optional[str],  # Unique identifer e.g. a question code/ruref/period/id/combination of all of thse
-    principal_variable: float,  # Original response value provided for the 'current' period
-    predictive: Optional[float],  # Value used for 'previous' response (Returned/Imputed/Constructed)
-    auxiliary: Optional[float],  # Calculated response for the 'previous' period
+    unique_identifier: Optional[str],  # Unique identifier e.g. a question
+    # code/ruref/period/id/combination of all of these
+    principal_variable: float,  # Original response value provided for
+    # the 'current' period
+    predictive: Optional[float],  # Value used for 'previous'
+    # response (Returned/Imputed/Constructed)
+    auxiliary: Optional[float],  # Calculated response for the
+    # 'previous' period
     upper_limit: float,  # Upper bound of 'error value' threshold
     lower_limit: float,  # Lower bound of 'error value' threshold
     target_variables: List[TargetVariable], # identifier/value pairs
@@ -51,6 +55,8 @@ def thousand_pounds(
 e.g.
 
 ```python
+from thousand_pounds import thousand_pounds
+
 output = thousand_pounds(
     unique_identifier = "12340000001-201409-q100",
     principal_variable = "50000000",
@@ -91,3 +97,30 @@ Alternatively presented: (mixing input and output data for comparisons)
  12340000001-201409-q100 |-|-|-|-|-| -          | -         |-|q102|1
  12340000001-201409-q100 |-|-|-|-|-| -          | -         |-|q103|1.5
  12340000001-201409-q100 |-|-|-|-|-| -          | -         |-|q104||
+
+## Pandas Wrapper
+
+To view the code of the pandas wrapper you can find the `pandas_wrapper.py` file within the `utils` directory.
+
+### Prerequisites: Pandas Wrapper
+
+In order to run some of the functions in the python `pandas_wrapper.py`, you will need to have `pandas` and `numpy` installed.
+
+To install `pandas`:
+
+```python
+pip install pandas
+```
+
+To install `numpy`:
+
+```python
+pip install numpy
+```
+
+## Pandas Wrapper Usage
+
+- You will have to create a new python file importing in the `pandas_wrapper.py`.
+- Where you will have to write functions to read a CSV file and pass in the data as a DataFrame into the *`wrapper`* function from the `pandas_wrapper.py` file.
+
+We have an example of how to do this in the `pandas_example.py` file within the `utils` directory.
