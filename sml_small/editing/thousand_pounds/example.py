@@ -12,7 +12,7 @@ def invoke_process_with_local_csv():
         config_csv = file.read()
 
     with open(
-            "../../../tests/editing/thousand_pounds/tests/linked_questions.csv"
+        "../../../tests/editing/thousand_pounds/tests/linked_questions.csv"
     ) as file:
         target_questions_csv = file.read()
 

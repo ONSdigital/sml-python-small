@@ -13,6 +13,7 @@ import csv
 # from the T&C method in a tabular format
 # This import isn't necessary to work with the T&C method
 from tabulate import tabulate
+
 # Importing the totals_and_components method from the totals_and_components.py file
 from totals_and_components import totals_and_components
 
@@ -40,7 +41,6 @@ test_data = [
 
 # In this function we pass in the test data directly into the totals_and_components function
 def invoke_process_in_memory_data_example():
-
     # This list is used to keep track of the original data inputted, so we can display this
     # on the command line on a table
 
@@ -81,7 +81,6 @@ def invoke_process_in_memory_data_example():
 
 # In this example we pass a dataset stored in a 2D List[] into the T&C method by unpacking it into separate arguments
 def invoke_process_in_memory_data_example_2():
-
     # We use * to unpack the above list into separate arguments to pass into the T&C method
     for data in test_data:
         result = totals_and_components(*data)
@@ -91,6 +90,7 @@ def invoke_process_in_memory_data_example_2():
 # The two functions below are solely used to create a pretty table on the command line
 # to display the data in a nice format/ table
 # They aren't essential to work with the T&C method
+
 
 # Filter the results returned from T&C method
 # This function is used to wrangle the results returned so we can pass the results
@@ -137,6 +137,7 @@ def filter_data(result, original_data):
 # Function below is not needed to work with the T&C method
 # This is solely for displaying the input and output data from the T&C method
 # in a pretty table format on the command line
+
 
 # This function is used to display the input data and output data returned from the
 # T&C method in a pretty table format on the command line
