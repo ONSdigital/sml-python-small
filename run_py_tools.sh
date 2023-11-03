@@ -1,7 +1,7 @@
 #!/bin/sh
 
 CMDS=("black --check --diff sml_small tests" "flake8 sml_small tests" "isort --check-only ." "bandit -c pyproject.toml -r .")
-
+ 
 GREEN='\033[0;32m'
 RED='\033[0;31m'
 NC='\033[0m'  # No color
