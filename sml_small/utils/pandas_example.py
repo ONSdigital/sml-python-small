@@ -7,9 +7,27 @@ For Copyright information, please see LICENCE.
 import re
 
 import pandas as pd
+import os
 
 # We import the wrapper function from the pandas_wrapper
 from sml_small.utils.pandas_wrapper import wrapper
+
+
+# Function to take a directory and run the provided method against
+# all CSVs that do not contain output in the filename
+def run_all_csvs(directory, function):
+    for filename in os.listdir(directory):
+        if filename.endswith(".csv") and "output" not in filename:
+            input_filename = filename
+            filename_without_extension, file_extension = os.path.splitext(filename)
+            output_filename = f"{filename_without_extension}_output.csv"
+
+            # Call your function for each CSV file
+            if (function == "totals_and_components"):
+                run_totals_components_with_pandas(directory, input_filename, output_filename)
+
+            elif (function == "thousand_pounds"):
+                run_thousand_pounds_with_pandas(directory, input_filename, output_filename)
 
 
 # Function below is used to read a CSV file from the given
@@ -165,5 +183,14 @@ def run_thousand_pounds_with_pandas(path, input_csv, output_csv):
     final_df.to_csv(csv_filename, index=False)
 
 
+# Run example data for Totals and Components
 run_totals_components_with_pandas("../../tests/editing/totals_and_components/example_data/", "example_test_data.csv", "example_test_data_pandas_output.csv")
+
+# Run Totals and Components UAT
+run_all_csvs("../../tests/editing/totals_and_components/example_data/uat/", "totals_and_components")
+
+# Run example data for Thousands Pounds
 run_thousand_pounds_with_pandas("../../tests/editing/thousand_pounds/example_data/", "example_test_data.csv", "example_test_data_pandas_output.csv")
+
+# Run Thousand Pounds UAT
+run_all_csvs("../../tests/editing/thousand_pounds/example_data/uat/", "thousand_pounds")

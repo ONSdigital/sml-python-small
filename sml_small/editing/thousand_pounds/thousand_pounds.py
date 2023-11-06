@@ -1,4 +1,5 @@
 import logging
+import math
 import sys
 from dataclasses import dataclass
 from decimal import Decimal
@@ -181,6 +182,7 @@ def thousand_pounds(
             input_parameters[InputParameters.PRINCIPAL_VARIABLE.value],
             input_parameters[InputParameters.TARGET_VARIABLES.value],
         )
+
         if tpc_marker == TpcMarker.METHOD_PROCEED:
             predictive_value = determine_predictive_value(
                 input_parameters[InputParameters.PREDICTIVE.value],
@@ -241,6 +243,8 @@ def thousand_pounds(
                 tpc_marker=tpc_marker.value,
             )
 
+        target_variables_final = clean_target_variables(target_variables_final)
+
         return ThousandPoundsOutput(
             unique_identifier=str(unique_identifier),
             principal_final_value=str(principal_adjusted_value)
@@ -270,6 +274,27 @@ def thousand_pounds(
         raise TPException(f"identifier: {unique_identifier}", error)
 
 
+def clean_target_variables(target_variables_final: List[TargetVariable]) -> List[TargetVariable]:
+    """
+    Takes a list of target variables and updates not a number values to be returned as nan
+
+    :param target_variables_final: List containing values to become TargetVariable objects
+    :type target_variables: List[TargetVariables]
+
+    :return: target_variables_final, a list of TargetVariable objects
+    :rtype: List[TargetVariable]
+    """
+    for target_variable in target_variables_final:
+        # Check and update the values recorded as NaN
+        if str(target_variable.original_value) == 'NaN':
+            target_variable.original_value = float('NaN')
+
+        if str(target_variable.final_value) == 'NaN':
+            target_variable.final_value = float('NaN')
+
+    return target_variables_final
+
+
 def create_target_variable_objects(target_variables: dict) -> List[TargetVariable]:
     """
     Takes a dictionary of target variables, where key is the identifier and value is the original value and
@@ -284,6 +309,7 @@ def create_target_variable_objects(target_variables: dict) -> List[TargetVariabl
     target_variables_list = []
     for key, value in target_variables.items():
         target_variables_list.append(TargetVariable(key, value))
+
     return target_variables_list
 
 
@@ -528,6 +554,7 @@ def adjust_target_variables(
     :rtype: List[TargetVariable]
     """
     adjusted_target_variables = []
+
     for question in target_variables:
         if do_adjustment:
             final_value = adjust_value(question.original_value)
@@ -537,10 +564,10 @@ def adjust_target_variables(
             TargetVariable(
                 identifier=question.identifier,
                 original_value=str(question.original_value)
-                if question.original_value is not None
+                if question.original_value is not None and not math.isnan(question.original_value)
                 else question.original_value,
                 final_value=str(final_value)
-                if final_value is not None
+                if final_value is not None and not math.isnan(final_value)
                 else final_value,
             )
         )

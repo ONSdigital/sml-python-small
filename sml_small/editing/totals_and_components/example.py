@@ -8,6 +8,7 @@ For Copyright information, please see LICENCE.
 """
 
 import csv
+import math
 
 # Importing tabulate function from tabulate to pretty print the input and output results
 # from the T&C method in a tabular format
@@ -222,10 +223,10 @@ def invoke_process_with_local_csv():
                 (row["reference"]),
                 (row["total"]),
                 [
-                    (row["comp_1"]),
-                    (row["comp_2"]),
-                    (row["comp_3"]),
-                    (row["comp_4"]),
+                    float('Nan') if not row["comp_1"] else (row["comp_1"]),
+                    float('Nan') if not row["comp_2"] else (row["comp_2"]),
+                    float('Nan') if not row["comp_3"] else (row["comp_3"]),
+                    float('Nan') if not row["comp_4"] else (row["comp_4"]),
                 ],
                 True if not row["amend_total"] == "FALSE" else False,
                 (row["predictive"]),
@@ -244,6 +245,11 @@ def invoke_process_with_local_csv():
                     "tcc_marker": result.tcc_marker,
                 }
             }
+
+            # Interpret nan as empty cell
+            for i, component in enumerate(result.final_components):
+                if isinstance(component, float) and math.isnan(component):
+                    result.final_components[i] = ''
 
             new_result_comp = result.final_components
             new_result[result.identifier]["comp"] = new_result_comp
@@ -281,6 +287,11 @@ def invoke_process_with_local_csv():
         ]
 
         writer = csv.DictWriter(csv_file, fieldnames=field_names, extrasaction="ignore")
+
+        # Interpret nan as empty cell in output CSV
+        for i, component in enumerate(input_data[2]):
+            if isinstance(component, float) and math.isnan(component):
+                input_data[2][i] = ''
 
         writer.writeheader()
         for identifier in results:
