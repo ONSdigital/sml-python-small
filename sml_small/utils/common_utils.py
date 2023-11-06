@@ -15,7 +15,7 @@ log_config_path = path.join(path.dirname(path.abspath(__file__)), "../logging.co
 logging.config.fileConfig(log_config_path)
 
 # Create logger
-logger = logging.getLogger("commonUtils")
+logger = logging.getLogger("SmlPythonSmallCommonUtils")
 
 # --- Constant Definitions ---
 PRECISION_MIN = 1
