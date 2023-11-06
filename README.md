@@ -49,3 +49,7 @@ bandit -c pyproject.toml -r .           : Success
 Everything up-to-date
 ```
 - If any of the linting tests or pytest files fail then the push will be aborted.
+
+#### Notes
+ - In order to push, you need to run the __git push__ command in a poetry shell, otherwise all of the tests will fail.
+ - You also need to ensure that your current working directory in the terminal is within the sml-python-small repository.
