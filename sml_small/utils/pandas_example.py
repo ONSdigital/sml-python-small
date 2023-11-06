@@ -4,10 +4,10 @@ currently this includes Totals and Components, and Thousand Pounds Correction
 
 For Copyright information, please see LICENCE.
 """
+import os
 import re
 
 import pandas as pd
-import os
 
 # We import the wrapper function from the pandas_wrapper
 from sml_small.utils.pandas_wrapper import wrapper
