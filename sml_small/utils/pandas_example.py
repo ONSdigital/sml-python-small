@@ -178,7 +178,6 @@ def run_totals_components_with_pandas(path, input_csv, output_csv):
 
 # ---------------------------------------
 # Thousand Pounds usage with Pandas
-# Thousand Pounds usage with Pandas
 # ---------------------------------------
 def run_thousand_pounds_with_pandas(path, input_csv, output_csv):
 
