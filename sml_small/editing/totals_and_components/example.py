@@ -364,7 +364,7 @@ A,1625,632,732,99,162,TRUE,1625,,11,,,"""  # noqa: E501
         # Interpret nan as empty cell
         for i, component in enumerate(result.final_components):
             if isinstance(component, float) and math.isnan(component):
-                result.final_components[i] = ''        
+                result.final_components[i] = ''
 
         new_result_comp = result.final_components
         new_result[result.identifier]["comp"] = new_result_comp
