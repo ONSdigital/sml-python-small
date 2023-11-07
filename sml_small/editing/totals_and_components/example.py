@@ -337,10 +337,10 @@ A,1625,632,732,99,162,TRUE,1625,,11,,,"""  # noqa: E501
             (row["reference"]),
             (row["total"]),
             [
-                (row["comp_1"]),
-                (row["comp_2"]),
-                (row["comp_3"]),
-                (row["comp_4"]),
+                float('Nan') if not row["comp_1"] else (row["comp_1"]),
+                float('Nan') if not row["comp_2"] else (row["comp_2"]),
+                float('Nan') if not row["comp_3"] else (row["comp_3"]),
+                float('Nan') if not row["comp_4"] else (row["comp_4"]),
             ],
             True if not row["amend_total"] == "FALSE" else False,
             (row["predictive"]),
@@ -360,6 +360,11 @@ A,1625,632,732,99,162,TRUE,1625,,11,,,"""  # noqa: E501
                 "tcc_marker": result.tcc_marker,
             }
         }
+
+        # Interpret nan as empty cell
+        for i, component in enumerate(result.final_components):
+            if isinstance(component, float) and math.isnan(component):
+                result.final_components[i] = ''        
 
         new_result_comp = result.final_components
         new_result[result.identifier]["comp"] = new_result_comp
