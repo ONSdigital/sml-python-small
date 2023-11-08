@@ -7,14 +7,12 @@ build/
 dist/
 .DS_Store
 *~
-/tests/fixtures/date_adjustment/testing_output.csv
-/tests/testing_output.csv
-/tests/editing/thousand_pounds/example_data/output1.csv
-/tests/editing/thousand_pounds/example_data/single_output.csv
-/tests/editing/thousand_pounds/example_data/example_test_data_pandas_output.csv
-/tests/editing/totals_and_components/example_data/example_test_data_scenario_1_output.csv
-/tests/editing/totals_and_components/example_data/example_test_data_scenario_2_output.csv
-/tests/editing/totals_and_components/example_data/example_test_data_pandas_output.csv
+/tests/fixtures/date_adjustment/*output.csv
+/tests/*output.csv
+/tests/editing/thousand_pounds/example_data/*output.csv
+/tests/editing/totals_and_components/example_data/*output.csv
+/tests/editing/thousand_pounds/example_data/uat/*output.csv
+/tests/editing/totals_and_components/example_data/uat/*output.csv
 .venv/
 
 # Unit test / coverage reports

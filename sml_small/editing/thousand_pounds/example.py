@@ -107,7 +107,7 @@ def invoke_directly_writing_output_to_csv_example():
     print(f"{row}")
 
     # now we will open a file for writing
-    with open("../../../tests/editing/thousand_pounds/example_data/output1.csv", "w") as file:
+    with open("../../../tests/editing/thousand_pounds/example_data/write_to_csv_output.csv", "w") as file:
         file.write(header)
         file.write("\n")
         file.write(row)

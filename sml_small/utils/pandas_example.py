@@ -4,12 +4,30 @@ currently this includes Totals and Components, and Thousand Pounds Correction
 
 For Copyright information, please see LICENCE.
 """
+import os
 import re
 
 import pandas as pd
 
 # We import the wrapper function from the pandas_wrapper
 from sml_small.utils.pandas_wrapper import wrapper
+
+
+# Function to take a directory and run the provided method against
+# all CSVs that do not contain output in the filename
+def run_all_csvs(directory, function):
+    for filename in os.listdir(directory):
+        if filename.endswith(".csv") and "output" not in filename:
+            input_filename = filename
+            filename_without_extension, file_extension = os.path.splitext(filename)
+            output_filename = f"{filename_without_extension}_output.csv"
+
+            # Call your function for each CSV file
+            if (function == "totals_and_components"):
+                run_totals_components_with_pandas(directory, input_filename, output_filename)
+
+            elif (function == "thousand_pounds"):
+                run_thousand_pounds_with_pandas(directory, input_filename, output_filename)
 
 
 # Function below is used to read a CSV file from the given
@@ -60,6 +78,7 @@ def run_totals_components_with_pandas(path, input_csv, output_csv):
     )
 
     list_column_pattern = r'comp_\d+'
+
     # Use a regular expression to select columns that match the pattern 'comp_' followed by one or more digits.
     components = filter_columns_by_pattern(input_dataframe_totals_and_components, list_column_pattern)
 
@@ -87,6 +106,52 @@ def run_totals_components_with_pandas(path, input_csv, output_csv):
         absolute_threshold_column="abs_threshold",
         percentage_threshold_column="perc_threshold",
     )
+    # We call the wrapper function from pandas_wrapper python file
+    # passing in the required arguments, which in this case are
+    # column names
+    totals_and_components_output_columns = [
+        "abs_diff",
+        "perc_low",
+        "perc_high",
+        "tcc_marker",
+        "final_total",
+        "final_components",
+    ]
+    test_totals_and_components = wrapper(
+        input_dataframe_totals_and_components,
+        "totals_and_components",
+        output_columns=totals_and_components_output_columns,
+        unique_identifier_column="reference",
+        total_column="total",
+        components_list_columns=components,
+        amend_total_column="amend_total",
+        predictive_column="predictive",
+        auxiliary_column="auxiliary",
+        absolute_threshold_column="abs_threshold",
+        percentage_threshold_column="perc_threshold",
+    )
+
+    # Loop through columns that have list and extract as separate columns
+    final_data = expand_list_column(df=test_totals_and_components, list_column_name="final_components", custom_prefix="final_component")
+
+    # Create a new DataFrame from the final_data list
+    final_df = pd.DataFrame(final_data)
+
+    # Drop the "final_components" column
+    final_df.drop(columns=["final_components"], inplace=True)
+
+    # Move the tpc_marker to be the last column
+    column_to_move = "tcc_marker"
+
+    # Define the desired column order with the specified column at the end
+    column_order = [col for col in final_df.columns if col != column_to_move] + [column_to_move]
+
+    # Create a new DataFrame with the columns in the desired order
+    final_df = final_df[column_order]
+
+    # Write the DataFrame to a CSV, excluding the index column
+    csv_filename = path+output_csv
+    final_df.to_csv(csv_filename, index=False)
 
     # Loop through columns that have list and extract as separate columns
     final_data = expand_list_column(df=test_totals_and_components, list_column_name="final_components", custom_prefix="final_component")
@@ -165,5 +230,14 @@ def run_thousand_pounds_with_pandas(path, input_csv, output_csv):
     final_df.to_csv(csv_filename, index=False)
 
 
+# Run example data for Totals and Components
 run_totals_components_with_pandas("../../tests/editing/totals_and_components/example_data/", "example_test_data.csv", "example_test_data_pandas_output.csv")
+
+# Run Totals and Components UAT
+run_all_csvs("../../tests/editing/totals_and_components/example_data/uat/", "totals_and_components")
+
+# Run example data for Thousands Pounds
 run_thousand_pounds_with_pandas("../../tests/editing/thousand_pounds/example_data/", "example_test_data.csv", "example_test_data_pandas_output.csv")
+
+# Run Thousand Pounds UAT
+run_all_csvs("../../tests/editing/thousand_pounds/example_data/uat/", "thousand_pounds")

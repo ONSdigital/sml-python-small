@@ -393,10 +393,7 @@ def totals_and_components(
                             total=input_parameters[InputParameters.TOTAL.value],
                         )
 
-        final_components = [
-            str(component) if component is not None else component
-            for component in output_list["final_components"]
-        ]
+        final_components = clean_component_list(output_list["final_components"])
 
         absolute_difference = (
             str(output_list["absolute_difference"])
@@ -454,6 +451,27 @@ def totals_and_components(
             exc_info=True,
         )
         raise TACException(f"identifier: {identifier}", error)
+
+
+def clean_component_list(components: List[Decimal]):
+    """
+    Takes a list of components and ensures that any empty values are treated as nan
+
+    :param components: list of components
+    :type components: List[]
+    :return: cleaned_components
+    :rtype: List[]
+    """
+    for i, component in enumerate(components):
+        if isinstance(component, Decimal) and math.isnan(component):
+            components[i] = float('nan')
+
+    cleaned_components = [
+        str(component) if component is not None and not math.isnan(component) else component
+        for component in components
+    ]
+
+    return cleaned_components
 
 
 def initialize_components_list(

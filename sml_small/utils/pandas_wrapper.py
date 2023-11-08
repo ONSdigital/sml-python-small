@@ -59,8 +59,8 @@ def run_totals_and_components(
     new_list = []
     # loop through the components columns and create a single input
     for i in components_list_columns:
-        if i is None:
-            new_list.append('Nan')
+        if row[i] is None:
+            new_list.append(float('NaN'))
         else:
             new_list.append(row[i])
 
@@ -132,7 +132,7 @@ def run_thousand_pounds(
     target_variables_list = {}
     for value in target_variables_columns:
         if row[value] is None:
-            target_variables_list[value] = 'Nan'
+            target_variables_list[value] = float('NaN')
         else:
             target_variables_list[value] = row[value]
 
@@ -150,6 +150,7 @@ def run_thousand_pounds(
             final_inputs[key] = row[value]
     # run totals and components on current row
     output = thousand_pounds(**final_inputs, target_variables=target_variables_list)
+
     # construct a new dataframe containing our output data
     thousand_pounds_output = pd.DataFrame(
         {
