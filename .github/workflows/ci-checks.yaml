@@ -98,6 +98,37 @@ jobs:
           poetry check
       - name: run flake8
         run: poetry run flake8 .
+  black:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 5
+      matrix:
+        python-version: [3.9]
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Run image
+        uses: abatilo/actions-poetry@v2.1.4
+        with:
+          poetry-version: 1.3.2
+      - name: setup netrc
+        run: |-
+          echo "machine github.com login ${GITHUB_PAT} password x-oauth-basic" > ~/.netrc
+          chmod 600 ~/.netrc
+        env:
+          GITHUB_PAT: ${{ secrets.CONCOURSE_PAT }}
+      - name: Install dependencies
+        run: poetry install --sync
+      - name: Check if project.toml file and poetry.lock file are in sync
+        run: |
+          source $(poetry env info --path)/bin/activate
+          poetry check
+      - name: run black
+        run: poetry run black .
   isort:
     runs-on: ubuntu-latest
     strategy:
