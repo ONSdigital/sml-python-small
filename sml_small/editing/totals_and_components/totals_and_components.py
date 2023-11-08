@@ -472,10 +472,12 @@ def clean_component_list(components: List[Decimal]):
     """
     for i, component in enumerate(components):
         if isinstance(component, Decimal) and math.isnan(component):
-            components[i] = float('nan')
+            components[i] = float("nan")
 
     cleaned_components = [
-        str(component) if component is not None and not math.isnan(component) else component
+        str(component)
+        if component is not None and not math.isnan(component)
+        else component
         for component in components
     ]
 

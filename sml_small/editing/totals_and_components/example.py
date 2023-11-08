@@ -224,10 +224,10 @@ def invoke_process_with_local_csv():
                 (row["reference"]),
                 (row["total"]),
                 [
-                    float('NaN') if not row["comp_1"] else (row["comp_1"]),
-                    float('NaN') if not row["comp_2"] else (row["comp_2"]),
-                    float('NaN') if not row["comp_3"] else (row["comp_3"]),
-                    float('NaN') if not row["comp_4"] else (row["comp_4"]),
+                    float("NaN") if not row["comp_1"] else (row["comp_1"]),
+                    float("NaN") if not row["comp_2"] else (row["comp_2"]),
+                    float("NaN") if not row["comp_3"] else (row["comp_3"]),
+                    float("NaN") if not row["comp_4"] else (row["comp_4"]),
                 ],
                 True if not row["amend_total"] == "FALSE" else False,
                 (row["predictive"]),
@@ -250,7 +250,7 @@ def invoke_process_with_local_csv():
             # Interpret nan as empty cell
             for i, component in enumerate(result.final_components):
                 if isinstance(component, float) and math.isnan(component):
-                    result.final_components[i] = ''
+                    result.final_components[i] = ""
 
             new_result_comp = result.final_components
             new_result[result.identifier]["comp"] = new_result_comp
@@ -292,7 +292,7 @@ def invoke_process_with_local_csv():
         # Interpret nan as empty cell in output CSV
         for i, component in enumerate(input_data[2]):
             if isinstance(component, float) and math.isnan(component):
-                input_data[2][i] = ''
+                input_data[2][i] = ""
 
         writer.writeheader()
         for identifier in results:
@@ -338,10 +338,10 @@ A,1625,632,732,99,162,TRUE,1625,,11,,,"""  # noqa: E501
             (row["reference"]),
             (row["total"]),
             [
-                float('NaN') if not row["comp_1"] else (row["comp_1"]),
-                float('NaN') if not row["comp_2"] else (row["comp_2"]),
-                float('NaN') if not row["comp_3"] else (row["comp_3"]),
-                float('NaN') if not row["comp_4"] else (row["comp_4"]),
+                float("NaN") if not row["comp_1"] else (row["comp_1"]),
+                float("NaN") if not row["comp_2"] else (row["comp_2"]),
+                float("NaN") if not row["comp_3"] else (row["comp_3"]),
+                float("NaN") if not row["comp_4"] else (row["comp_4"]),
             ],
             True if not row["amend_total"] == "FALSE" else False,
             (row["predictive"]),
@@ -365,7 +365,7 @@ A,1625,632,732,99,162,TRUE,1625,,11,,,"""  # noqa: E501
         # Interpret nan as empty cell
         for i, component in enumerate(result.final_components):
             if isinstance(component, float) and math.isnan(component):
-                result.final_components[i] = ''
+                result.final_components[i] = ""
 
         new_result_comp = result.final_components
         new_result[result.identifier]["comp"] = new_result_comp

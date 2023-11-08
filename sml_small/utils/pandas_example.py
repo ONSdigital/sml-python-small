@@ -23,11 +23,15 @@ def run_all_csvs(directory, function):
             output_filename = f"{filename_without_extension}_output.csv"
 
             # Call your function for each CSV file
-            if (function == "totals_and_components"):
-                run_totals_components_with_pandas(directory, input_filename, output_filename)
+            if function == "totals_and_components":
+                run_totals_components_with_pandas(
+                    directory, input_filename, output_filename
+                )
 
-            elif (function == "thousand_pounds"):
-                run_thousand_pounds_with_pandas(directory, input_filename, output_filename)
+            elif function == "thousand_pounds":
+                run_thousand_pounds_with_pandas(
+                    directory, input_filename, output_filename
+                )
 
 
 # Function below is used to read a CSV file from the given
@@ -161,7 +165,11 @@ def run_totals_components_with_pandas(path, input_csv, output_csv):
     )
 
     # Loop through columns that have list and extract as separate columns
-    final_data = expand_list_column(df=test_totals_and_components, list_column_name="final_components", custom_prefix="final_component")
+    final_data = expand_list_column(
+        df=test_totals_and_components,
+        list_column_name="final_components",
+        custom_prefix="final_component",
+    )
 
     # Create a new DataFrame from the final_data list
     final_df = pd.DataFrame(final_data)
@@ -173,13 +181,15 @@ def run_totals_components_with_pandas(path, input_csv, output_csv):
     column_to_move = "tcc_marker"
 
     # Define the desired column order with the specified column at the end
-    column_order = [col for col in final_df.columns if col != column_to_move] + [column_to_move]
+    column_order = [col for col in final_df.columns if col != column_to_move] + [
+        column_to_move
+    ]
 
     # Create a new DataFrame with the columns in the desired order
     final_df = final_df[column_order]
 
     # Write the DataFrame to a CSV, excluding the index column
-    csv_filename = path+output_csv
+    csv_filename = path + output_csv
     final_df.to_csv(csv_filename, index=False)
 
     # Loop through columns that have list and extract as separate columns
@@ -301,13 +311,24 @@ def run_thousand_pounds_with_pandas(path, input_csv, output_csv):
 
 
 # Run example data for Totals and Components
-run_totals_components_with_pandas("../../tests/editing/totals_and_components/example_data/", "example_test_data.csv", "example_test_data_pandas_output.csv")
+run_totals_components_with_pandas(
+    "../../tests/editing/totals_and_components/example_data/",
+    "example_test_data.csv",
+    "example_test_data_pandas_output.csv",
+)
 
 # Run Totals and Components UAT
-run_all_csvs("../../tests/editing/totals_and_components/example_data/uat/", "totals_and_components")
+run_all_csvs(
+    "../../tests/editing/totals_and_components/example_data/uat/",
+    "totals_and_components",
+)
 
 # Run example data for Thousands Pounds
-run_thousand_pounds_with_pandas("../../tests/editing/thousand_pounds/example_data/", "example_test_data.csv", "example_test_data_pandas_output.csv")
+run_thousand_pounds_with_pandas(
+    "../../tests/editing/thousand_pounds/example_data/",
+    "example_test_data.csv",
+    "example_test_data_pandas_output.csv",
+)
 
 # Run Thousand Pounds UAT
 run_all_csvs("../../tests/editing/thousand_pounds/example_data/uat/", "thousand_pounds")
