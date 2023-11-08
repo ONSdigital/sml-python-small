@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Selectiveedit - sml_small docs</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../css/theme.css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+  <link href="../assets/_mkdocstrings.css" rel="stylesheet" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Selectiveedit";
+    var mkdocs_page_input_path = "selectiveedit.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> sml_small docs</a>
+        
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../content/">Content</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">sml_small docs</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Selectiveedit</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+
+          <div role="main">
+            <div class="section">
+              
+                <div class="doc doc-object doc-module">
+
+
+<a id="sml_small.selective_editing"></a>
+  <div class="doc doc-contents first">
+  
+      <p>For Copyright information, please see LICENCE.</p>
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h2 class="doc doc-heading" id="sml_small.selective_editing.selective_editing">
+<code class="highlight language-python">selective_editing(input_dataframe, reference_col, design_weight_col, threshold_col, question_list, combination_method='maximum', minkowski_distance=0, show_sums=0)</code>
+
+</h2>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>A selective editing score will be calculated for each reporting unit i at each time period t.</p>
+<p>:param input_dataframe:  DataFrame - Input DataFrame.
+:param reference_col: String - Column that holds the contributor reference.
+:param design_weight_col: String - Column that holds the design weight for the contributor.
+:param threshold_col: String - Column that holds the threshold for the contributor.
+:param question_list: List of strings - Column that holds the question names that are to be scored.
+:param combination_method: String - The combination method to be used, defaults to 'maximum'
+:param minkowski_distance: The minkowski distance to be used when calculating final score with the minkowski
+combination method; Defaults to 0.
+:param show_sums: 0/1 switch to provide additional data on score calculation for bau support, defaults to 0 (off).</p>
+<p>:return: DataFrame</p>
+
+      <details class="quote">
+        <summary>Source code in <code>sml_small/selective_editing.py</code></summary>
+        <pre class="highlight"><code class="language-python">def selective_editing(input_dataframe: pd.DataFrame,
+                      reference_col: str,
+                      design_weight_col: str,
+                      threshold_col: str,
+                      question_list: List,
+                      combination_method='maximum',
+                      minkowski_distance=0,
+                      show_sums=0) -&gt; pd.DataFrame:
+    """
+    A selective editing score will be calculated for each reporting unit i at each time period t.
+
+    :param input_dataframe:  DataFrame - Input DataFrame.
+    :param reference_col: String - Column that holds the contributor reference.
+    :param design_weight_col: String - Column that holds the design weight for the contributor.
+    :param threshold_col: String - Column that holds the threshold for the contributor.
+    :param question_list: List of strings - Column that holds the question names that are to be scored.
+    :param combination_method: String - The combination method to be used, defaults to 'maximum'
+    :param minkowski_distance: The minkowski distance to be used when calculating final score with the minkowski
+    combination method; Defaults to 0.
+    :param show_sums: 0/1 switch to provide additional data on score calculation for bau support, defaults to 0 (off).
+
+    :return: DataFrame
+    """
+    suffix_list = ['_ar', '_pv', '_apv', '_sf']
+    basic_reference_data = [reference_col, design_weight_col, threshold_col]
+
+    # Validate input is a dataframe
+    if not isinstance(input_dataframe, pd.DataFrame):
+        msg = f'Param "input_dataframe" should be of type DataFrame, ' \
+              f'not{type(input_dataframe)}.'
+        raise TypeError(msg)
+
+    input_columns = list(input_dataframe.columns)
+    input_dataframe = input_dataframe.fillna(np.nan)
+    output_dataframe = pd.DataFrame
+
+    # Validate reference data columns are present as specified, and contain data
+    for col_name in basic_reference_data:
+        if not isinstance(col_name, str):
+            msg = f'Values for column names should be of type string, ' \
+                  f'not{type(col_name)}.'
+            raise TypeError(msg)
+        if col_name not in input_columns:
+            msg = f'Column "{col_name}" not present in input_dataframe.'
+            raise KeyError(msg)
+        if input_dataframe[col_name].isnull().values.any():
+            msg = f'Column "{col_name}" has rows with blank values.'
+            raise ValueError(msg)
+
+        # Put basic reference data at start of output dataframe
+        if output_dataframe.empty:
+            output_dataframe = input_dataframe.filter([col_name], axis=1)
+        else:
+            col_df = input_dataframe.filter([col_name], axis=1)
+            output_dataframe = pd.concat([output_dataframe, col_df], axis=1)
+
+    # Validate combination_method.
+
+    if not isinstance(combination_method, str):
+        msg = f'Param "combination_method" should be of type string, ' \
+              f'not{type(combination_method)}.'
+        raise TypeError(msg)
+
+    combination_method = combination_method.lower()
+
+    if combination_method not in ['maximum', 'mean', 'weighted', 'minkowski']:
+        msg = f"Param 'combination_method' must be one of 'maximum', 'mean', " \
+              f"'weighted' or 'minkowski'. " \
+              f"It was passed as {combination_method}"
+        raise ValueError(msg)
+
+    if combination_method == "weighted":
+        suffix_list.append('_wt')
+
+    if combination_method == "minkowski":
+        if (not isinstance(minkowski_distance, int) and
+                not isinstance(minkowski_distance, float)):
+            msg = f'Param "minkowski_distance" should be of type int or float, ' \
+                  f'not{type(minkowski_distance)}.'
+            raise TypeError(msg)
+
+        if minkowski_distance &lt; 1:
+            msg = f'Param "minkowski_distance" must be a value &gt;= 1, ' \
+                  f'not{minkowski_distance}.'
+            raise ValueError(msg)
+
+    # Validate question_list is a list
+    if not isinstance(question_list, list):
+        msg = f'Param "question_list" should be of type List, ' \
+              f'not{type(question_list)}.'
+        raise TypeError(msg)
+
+    if not question_list:
+        msg = 'Param "question_list" should not be empty.'
+        raise ValueError(msg)
+
+    for question_name in question_list:
+        # Validate question references are strings
+        if not isinstance(question_name, str):
+            msg = f'Values in parameter question_list" should be of type string, ' \
+                  f'not{type(question_name)}.'
+            raise TypeError(msg)
+
+        # Validate reference data columns are present as specified.
+        # NB: content validation carried out at top of _process_single_question function.
+        for suffix in suffix_list:
+            col_name = f"{question_name}{suffix}"
+            if col_name not in input_columns:
+                msg = f'Column "{col_name}" not present in input_dataframe.'
+                raise KeyError(msg)
+
+    # Check cols for reserved names (ones that method adds later) to prevent overwrite.
+    cols = list(input_dataframe.columns)
+    reserved = ['final_score',
+                'input_flag',
+                'output_flag']
+    for col in cols:
+        if col in reserved:
+            msg = f"Reserved column name of {col} found in input dataframe column names."
+            raise ValueError(msg)
+
+    # Loop through questions in question_list to score them singularly.
+
+    for question_name in question_list:
+        question_dataframe = input_dataframe.filter(basic_reference_data, axis=1)
+        for suffix in suffix_list:
+            col_name = f"{question_name}{suffix}"
+            col_df = input_dataframe.filter([col_name], axis=1)
+            question_dataframe = pd.concat([question_dataframe, col_df], axis=1)
+
+        question_dataframe = _process_single_question(question_dataframe,
+                                                      question_name,
+                                                      design_weight_col,
+                                                      threshold_col,
+                                                      reference_col,
+                                                      combination_method,
+                                                      minkowski_distance)
+
+        output_dataframe = pd.concat([output_dataframe, question_dataframe], axis=1)
+
+    # Process scores according to selected combination method
+    #  NB: Not using list comprehension on the dataframe as _s in the question name can
+    #  spoof it. ie: score_cols = [col for col in output_dataframe.columns if '_s' in col]
+    score_cols = [f"{question}_s"for question in question_list]
+
+    if combination_method == "maximum":
+        output_dataframe['final_score'] = output_dataframe[score_cols].max(axis=1)
+
+    elif combination_method == "mean":
+        output_dataframe['final_score'] = output_dataframe[score_cols].mean(axis=1)
+
+    elif combination_method == "weighted":
+        weight_cols = [f"{question}_wt"for question in question_list]
+        score_cols = [f"{question}_wts" for question in question_list]
+
+        if show_sums:
+            output_dataframe['sum_scores'] = output_dataframe[score_cols].sum(axis=1)
+            output_dataframe['sum_weights'] = output_dataframe[weight_cols].sum(axis=1)
+
+        output_dataframe['final_score'] = (output_dataframe[score_cols].sum(axis=1)
+                                           / output_dataframe[weight_cols].sum(axis=1))
+
+    else:  # combination_method == "minkowski"
+        score_cols = [f"{question}_mks" for question in question_list]
+        if show_sums:
+            output_dataframe['sum_scores'] = (output_dataframe[score_cols].sum(axis=1))
+        minkowski_inverted = 1 / minkowski_distance
+        output_dataframe['final_score'] = (output_dataframe[score_cols].sum(axis=1)
+                                           ** minkowski_inverted)
+
+    # Assess the final score against the threshold
+    output_dataframe['selective_editing_marker'] = (np.where(
+        output_dataframe['final_score'] &lt;
+        output_dataframe[threshold_col], True, False))
+
+    return output_dataframe</code></pre>
+      </details>
+  </div>
+
+</div>
+
+
+
+  </div>
+
+  </div>
+
+</div>
+              
+            </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>
