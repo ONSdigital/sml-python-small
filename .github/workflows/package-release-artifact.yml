@@ -30,7 +30,6 @@ jobs:
         run: poetry install --no-dev
       - name: build
         run: poetry build
-      - name: echo version
       - id: echo_version
         run: |
           poetry version -s > sml-python-small.version
