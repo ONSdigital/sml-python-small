@@ -62,7 +62,7 @@ Everything up-to-date
  - In order to push, you need to run the __git push__ command in a poetry shell, otherwise all of the tests will fail.
  - You also need to ensure that your current working directory in the terminal is within the sml-python-small repository.
  - While the script is running, any non-committed changes will be stashed. This means that any work after the commit has been made may seem to disappear for a moment during the tests. After the file has finished running, the stashed changes will be automatically restored. This is to ensure that the tests are being run on the code within the commits, rather than any non-committed changes.
- - If for any reason the script exits unexpectedly, you can restore the stashed changes manually by running th following command:
+ - If for any reason the script exits unexpectedly, you can restore the stashed changes manually by running the following command:
 ```bash
 git stash apply
 ```
