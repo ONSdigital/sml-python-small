@@ -34,7 +34,7 @@ jobs:
         run: |
           poetry version -s > sml-python-small.version
           if ! grep -i -q "rc" sml-python-small.version; then
-            echo "upload=yes" $GITHUB_OUTPUT
+            echo "upload=yes" >> $GITHUB_OUTPUT
           fi
       - name: Archive dist
         uses: actions/upload-artifact@v3
