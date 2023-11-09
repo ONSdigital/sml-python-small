@@ -128,7 +128,7 @@ jobs:
           source $(poetry env info --path)/bin/activate
           poetry check
       - name: run black
-        run: poetry run black --check .
+        run: poetry run black --check --diff .
   isort:
     runs-on: ubuntu-latest
     strategy:
