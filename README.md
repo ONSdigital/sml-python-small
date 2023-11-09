@@ -19,20 +19,24 @@ Git hooks cannot be pushed to the remote repository so if you would like this sc
  - Run __cd .git/hooks__ and open the file marked __pre-push.sample__ in a code editor
  - Replace the content of this file with the following code:
  ```bash
- #!/bin/sh
+#!/bin/sh
 GREEN='\033[0;32m'
 RED='\033[0;31m'
 NC='\033[0m'
 
+git stash
 testing_script="./run_py_tools.sh"
 
 if "$testing_script"; then
     echo "${GREEN}./run_py_tools script passes, proceeding with push...${NC}"
+    git stash apply
     exit 0
 else
     echo "${RED}./run_py_tools script fails, push aborted.${NC}"
+    git stash apply
     exit 1
 fi
+
 ```
 - Save the file and __rename it to pre-push__ (i.e. remove the .sample suffix from the filename)
 - Run __cd ../..__ to change the current working directory back to the root directory of the sml-python-small repository
@@ -50,6 +54,8 @@ Everything up-to-date
 ```
 - If any of the linting tests or pytest files fail then the push will be aborted.
 
-#### Notes
+#### Troubleshooting
  - In order to push, you need to run the __git push__ command in a poetry shell, otherwise all of the tests will fail.
  - You also need to ensure that your current working directory in the terminal is within the sml-python-small repository.
+ - While the script is running, any non-committed changes will be stashed. This means that any work after the commit has been made may seem to disappear for a moment during the tests. After the file has finished running, the stashed changes will be restored.
+ - If for any reason the script exits unexpectedly, you can restore the stashed changes manually by running th following command:
