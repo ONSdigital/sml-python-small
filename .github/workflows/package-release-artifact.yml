@@ -15,7 +15,7 @@ jobs:
         python-version: [3.7]
       fail-fast: false
     outputs:
-      upload: ${{ steps.set.outputs.upload }}
+      upload: ${{ steps.echo_version.outputs.upload }}
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python ${{ matrix.python-version }}
@@ -31,10 +31,13 @@ jobs:
       - name: build
         run: poetry build
       - name: echo version
+      - id: echo_version
         run: |
           poetry version -s > sml-python-small.version
           if ! grep -i -q "rc" sml-python-small.version; then
-            echo "upload=yes" >> $GITHUB_OUTPUT
+            echo "upload=yes" >> "$GITHUB_OUTPUT"
+          else
+            echo "upload=no" >> "$GITHUB_OUTPUT"
           fi
       - name: Archive dist
         uses: actions/upload-artifact@v3
@@ -75,7 +78,6 @@ jobs:
     name: Upload to pypi
     runs-on: ubuntu-latest
     needs: build-and-release
-    if: needs.build-and-release.outputs.upload == 'yes'
     environment:
       name: pypi
       url: https://pypi.org/p/sml-small
@@ -87,9 +89,12 @@ jobs:
         python-version: [ 3.7 ]
       fail-fast: false
     steps:
+      - env:
+          upload: ${{ needs.build-and-release-.outputs.upload }}
       - name: Download all workflow run artifacts
         uses: actions/download-artifact@v3
       - name: Publish package distributions to PyPI
+        if: $upload == "yes"
         uses: pypa/gh-action-pypi-publish@v1.8.10
         with:
           user: ${{ secrets.PYPI_USERNAME }}
