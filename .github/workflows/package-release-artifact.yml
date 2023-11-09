@@ -78,6 +78,7 @@ jobs:
     name: Upload to pypi
     runs-on: ubuntu-latest
     needs: build-and-release
+    if: needs.build-and-release.outputs.upload == 'yes'
     environment:
       name: pypi
       url: https://pypi.org/p/sml-small
@@ -89,12 +90,9 @@ jobs:
         python-version: [ 3.7 ]
       fail-fast: false
     steps:
-      - env:
-          upload: ${{ needs.build-and-release-.outputs.upload }}
       - name: Download all workflow run artifacts
         uses: actions/download-artifact@v3
       - name: Publish package distributions to PyPI
-        if: $upload == "yes"
         uses: pypa/gh-action-pypi-publish@v1.8.10
         with:
           user: ${{ secrets.PYPI_USERNAME }}
