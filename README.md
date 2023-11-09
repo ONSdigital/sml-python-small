@@ -24,6 +24,10 @@ GREEN='\033[0;32m'
 RED='\033[0;31m'
 NC='\033[0m'
 
+git stash clear # in case there is nothing to stash,
+# then the stash needs to be empty, else previously 
+# stashed changes will be incorrectly restored
+
 git stash
 testing_script="./run_py_tools.sh"
 
@@ -57,5 +61,8 @@ Everything up-to-date
 #### Troubleshooting
  - In order to push, you need to run the __git push__ command in a poetry shell, otherwise all of the tests will fail.
  - You also need to ensure that your current working directory in the terminal is within the sml-python-small repository.
- - While the script is running, any non-committed changes will be stashed. This means that any work after the commit has been made may seem to disappear for a moment during the tests. After the file has finished running, the stashed changes will be restored.
+ - While the script is running, any non-committed changes will be stashed. This means that any work after the commit has been made may seem to disappear for a moment during the tests. After the file has finished running, the stashed changes will be automatically restored. This is to ensure that the tests are being run on the code within the commits, rather than any non-committed changes.
  - If for any reason the script exits unexpectedly, you can restore the stashed changes manually by running th following command:
+```bash
+git stash apply
+```
