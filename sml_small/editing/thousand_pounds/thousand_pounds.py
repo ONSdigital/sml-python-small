@@ -60,8 +60,8 @@ class TpcMarker(Enum):
 class TargetVariable:
     identifier: str  # Unique identifer e.g. a question code - q050
     original_value: Optional[str]
-    final_value: Optional[str] = None 
- 
+    final_value: Optional[str] = None
+
 
 # Structure of the output dataset
 @dataclass(frozen=True)
