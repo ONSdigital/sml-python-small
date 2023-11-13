@@ -65,7 +65,7 @@ class TargetVariable:
 
 # Structure of the output dataset
 @dataclass(frozen=True)
-class ThousandPoundsOutput: 
+class ThousandPoundsOutput:
     unique_identifier: Optional[str]  # Unique identifer e.g. a question code - q500
     principal_final_value: Optional[str]  # Output value that may or may not be adjusted
     target_variables: List[
