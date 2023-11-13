@@ -8,6 +8,7 @@ For Copyright information, please see LICENCE.
 """
 
 import csv
+import math
 
 # Importing tabulate function from tabulate to pretty print the input and output results
 # from the T&C method in a tabular format
@@ -16,6 +17,7 @@ from tabulate import tabulate
 # Importing the totals_and_components method from the totals_and_components.py file
 from totals_and_components import totals_and_components
 
+# All the test data below doesn't have precision specified and will default to precision of 28
 test_data = [
     # The input data below once passed into the T&C method should return
     # a TCC Marker of N = No correction required, i.e., the total is equal to the components sum
@@ -42,6 +44,8 @@ def invoke_process_in_memory_data_example():
 
     # This list is used to keep track of the original data inputted, so we can display this
     # on the command line on a table
+
+    # All the test data below doesn't have precision specified and will default to precision of 28
 
     # The input data below once passed into the T&C method should return
     # a TCC Marker of N = No correction required, i.e., the total is equal to the components sum
@@ -79,21 +83,6 @@ def invoke_process_in_memory_data_example():
 # In this example we pass a dataset stored in a 2D List[] into the T&C method by unpacking it into separate arguments
 def invoke_process_in_memory_data_example_2():
 
-    # The input data below once passed into the T&C method should return
-    # a TCC Marker of C = Components corrected
-    # data = [
-    #     "C",
-    #     "202301",
-    #     90,
-    #     [90, 0, 4, 6],
-    #     False,
-    #     90,
-    #     "202301",
-    #     None,
-    #     None,
-    #     0.1
-    # ]
-
     # We use * to unpack the above list into separate arguments to pass into the T&C method
     for data in test_data:
         result = totals_and_components(*data)
@@ -125,7 +114,6 @@ def filter_data(result, original_data):
         result.absolute_difference,
         result.low_percent_threshold,
         result.high_percent_threshold,
-        result.precision,
         result.final_total,
         result.tcc_marker,
     ]
@@ -179,7 +167,6 @@ def display_results(results):
             "Absolute Difference",
             "Low Percent Threshold",
             "High Percent Threshold",
-            "Precision",
             "Final Total",
             "TCC Marker",
         ],
@@ -232,15 +219,14 @@ def invoke_process_with_local_csv():
     ) as csv_file:
         csv_reader = csv.DictReader(csv_file)
         for row in csv_reader:
-            print("Data type:::::::", type(row["comp_1"]))
             input_data = [
                 (row["reference"]),
                 (row["total"]),
                 [
-                    (row["comp_1"]),
-                    (row["comp_2"]),
-                    (row["comp_3"]),
-                    (row["comp_4"]),
+                    float('NaN') if not row["comp_1"] else (row["comp_1"]),
+                    float('NaN') if not row["comp_2"] else (row["comp_2"]),
+                    float('NaN') if not row["comp_3"] else (row["comp_3"]),
+                    float('NaN') if not row["comp_4"] else (row["comp_4"]),
                 ],
                 True if not row["amend_total"] == "FALSE" else False,
                 (row["predictive"]),
@@ -260,7 +246,10 @@ def invoke_process_with_local_csv():
                 }
             }
 
-            # print(new_result)
+            # Interpret nan as empty cell
+            for i, component in enumerate(result.final_components):
+                if isinstance(component, float) and math.isnan(component):
+                    result.final_components[i] = ''
 
             new_result_comp = result.final_components
             new_result[result.identifier]["comp"] = new_result_comp
@@ -299,9 +288,13 @@ def invoke_process_with_local_csv():
 
         writer = csv.DictWriter(csv_file, fieldnames=field_names, extrasaction="ignore")
 
+        # Interpret nan as empty cell in output CSV
+        for i, component in enumerate(input_data[2]):
+            if isinstance(component, float) and math.isnan(component):
+                input_data[2][i] = ''
+
         writer.writeheader()
         for identifier in results:
-            # print(results[identifier])
             writer.writerow(
                 {
                     "reference": identifier,
@@ -337,7 +330,6 @@ def invoke_process_with_in_memory_csv():
 A,1625,632,732,99,162,TRUE,1625,,11,,,"""  # noqa: E501
 
     csv_reader = csv.DictReader(in_memory_csv_data.splitlines())
-    print("CSV reader", csv_reader)
 
     results = {}
     for row in csv_reader:
@@ -345,10 +337,10 @@ A,1625,632,732,99,162,TRUE,1625,,11,,,"""  # noqa: E501
             (row["reference"]),
             (row["total"]),
             [
-                (row["comp_1"]),
-                (row["comp_2"]),
-                (row["comp_3"]),
-                (row["comp_4"]),
+                float('NaN') if not row["comp_1"] else (row["comp_1"]),
+                float('NaN') if not row["comp_2"] else (row["comp_2"]),
+                float('NaN') if not row["comp_3"] else (row["comp_3"]),
+                float('NaN') if not row["comp_4"] else (row["comp_4"]),
             ],
             True if not row["amend_total"] == "FALSE" else False,
             (row["predictive"]),
@@ -368,6 +360,11 @@ A,1625,632,732,99,162,TRUE,1625,,11,,,"""  # noqa: E501
                 "tcc_marker": result.tcc_marker,
             }
         }
+
+        # Interpret nan as empty cell
+        for i, component in enumerate(result.final_components):
+            if isinstance(component, float) and math.isnan(component):
+                result.final_components[i] = ''
 
         new_result_comp = result.final_components
         new_result[result.identifier]["comp"] = new_result_comp

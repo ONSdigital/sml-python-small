@@ -7,8 +7,12 @@ build/
 dist/
 .DS_Store
 *~
-/tests/fixtures/date_adjustment/testing_output.csv
-/tests/testing_output.csv
+/tests/fixtures/date_adjustment/*output.csv
+/tests/*output.csv
+/tests/editing/thousand_pounds/example_data/*output.csv
+/tests/editing/totals_and_components/example_data/*output.csv
+/tests/editing/thousand_pounds/example_data/uat/*output.csv
+/tests/editing/totals_and_components/example_data/uat/*output.csv
 .venv/
 
 # Unit test / coverage reports
@@ -23,3 +27,6 @@ coverage.xml
 .hypothesis/
 .pytest_cache/
 junit.xml
+
+# pyenv
+.python-version
