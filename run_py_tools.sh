@@ -1,6 +1,6 @@
 #!/bin/sh
 
-CMDS=("black --diff sml_small tests" "flake8 sml_small tests" "isort ." "bandit -c pyproject.toml -r .")
+CMDS=("black --diff sml_small tests" "isort ." "flake8 sml_small tests" "bandit -c pyproject.toml -r .")
  
 GREEN='\033[0;32m'
 RED='\033[0;31m'
