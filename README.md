@@ -31,12 +31,17 @@ git stash clear # in case there is nothing to stash,
 git stash
 testing_script="./run_py_tools.sh"
 
+
 if "$testing_script"; then
     echo "${GREEN}./run_py_tools script passes, proceeding with push...${NC}"
+    git add . # commit any changes made by the pytools script
+    git commit -m "run_py_tools auto-formatting"
+    git push --no-verify # push any changes, avoiding recursion
     git stash apply
     exit 0
 else
     echo "${RED}./run_py_tools script fails, push aborted.${NC}"
+    git checkout . # revert any changes made by the pytools script
     git stash apply
     exit 1
 fi
