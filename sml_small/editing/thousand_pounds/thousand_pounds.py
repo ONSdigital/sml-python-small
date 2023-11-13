@@ -4,8 +4,8 @@ import sys
 from dataclasses import dataclass
 from decimal import Decimal
 from enum import Enum
-from os import path
 from typing import List, Optional, Tuple
+from os import path
 
 from sml_small.utils.common_utils import (
     convert_input_to_decimal,
@@ -522,7 +522,7 @@ def is_within_threshold(
     :param error_ratio: Previously determined error ratio in "calculate_error_ratio"
     :type error_ratio: Decimal
     :param lower_limit: Lower bound of 'error ratio' threshold
-    :type lower_limit: Decimal
+    :type lower_limit: Decimal 
     :param upper_limit: Upper bound of 'error ratio' threshold
     :type upper_limit: Decimal
 
