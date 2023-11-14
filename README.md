@@ -72,3 +72,4 @@ Everything up-to-date
 ```bash
 git stash apply
 ```
+ - If any changes are made by the auto-formatting tool, then these will automatically be committed, but it is not possible to automatically push these changes. You can check by running __git log__. If the most recent commit is titled 'run_py_tools auto-formatting', then you will need to run __git push__ again (or __git push --no-verify__ if you don't want to run the test suite again).
