@@ -39,6 +39,8 @@ if "$testing_script"; then
     git commit -m "run_py_tools auto-formatting"
     git stash apply
     echo "${YELLOW}NOTE: If any commits were made by the auto-formatting tool, then they will not be automatically pushed. You will need to run git push again (or git push --no-verify if you don't want to run the test suite again).${NC}"
+    # uncomment the line below if you would like the commits to be pushed automatically.
+    # git push --no-verify # NOTE: this will cause git to throw an error, but the functionality is correct.
     exit 0
 else
     echo "${RED}./run_py_tools script fails, push aborted.${NC}"
@@ -73,3 +75,4 @@ Everything up-to-date
 git stash apply
 ```
  - If any changes are made by the auto-formatting tool, then these will automatically be committed, but it is not possible to automatically push these changes. You can check by running __git log__. If the most recent commit is titled 'run_py_tools auto-formatting', then you will need to run __git push__ again (or __git push --no-verify__ if you don't want to run the test suite again).
+ - If you would like these commits to be pushed automatically, then you can uncomment the __git push --no-verify__ line in the code. This is optional, since pushing during the pre-push hook will cause git to throw an error, however the functionality is correct.
