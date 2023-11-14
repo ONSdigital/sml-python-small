@@ -20,8 +20,9 @@ Git hooks cannot be pushed to the remote repository so if you would like this sc
  - Replace the content of this file with the following code:
  ```bash
 #!/bin/sh
-GREEN='\033[0;32m'
-RED='\033[0;31m'
+GREEN='\033[1;32m'
+RED='\033[1;31m'
+YELLOW='\033[1;33m'
 NC='\033[0m'
 
 git stash clear # in case there is nothing to stash,
@@ -36,8 +37,8 @@ if "$testing_script"; then
     echo "${GREEN}./run_py_tools script passes, proceeding with push...${NC}"
     git add . # commit any changes made by the pytools script
     git commit -m "run_py_tools auto-formatting"
-    git push --no-verify # push any changes, avoiding recursion
     git stash apply
+    echo "${YELLOW}NOTE: If any commits were made by the auto-formatting tool, then they will not be automatically pushed. You will need to run git push again (or git push --no-verify if you don't want to run the test suite again).${NC}"
     exit 0
 else
     echo "${RED}./run_py_tools script fails, push aborted.${NC}"
