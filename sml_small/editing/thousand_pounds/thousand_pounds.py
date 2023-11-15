@@ -7,8 +7,17 @@ from enum import Enum
 from os import path
 from typing import List, Optional, Tuple
 
-from sml_small.utils.common_utils import convert_input_to_decimal, log_table, validate_number, validate_precision
-from sml_small.utils.error_utils import get_boundary_error, get_mandatory_param_error, get_one_of_params_mandatory_error
+from sml_small.utils.common_utils import (
+    convert_input_to_decimal,
+    log_table,
+    validate_number,
+    validate_precision,
+)
+from sml_small.utils.error_utils import (
+    get_boundary_error,
+    get_mandatory_param_error,
+    get_one_of_params_mandatory_error,
+)
 
 # Pick up configuration for logging
 log_config_path = path.join(path.dirname(path.abspath(__file__)), "../../logging.conf")
@@ -274,7 +283,9 @@ def thousand_pounds(
         raise TPException(f"identifier: {unique_identifier}", error)
 
 
-def clean_target_variables(target_variables_final: List[TargetVariable]) -> List[TargetVariable]:
+def clean_target_variables(
+    target_variables_final: List[TargetVariable],
+) -> List[TargetVariable]:
     """
     Takes a list of target variables and updates not a number values to be returned as nan
 
@@ -286,11 +297,11 @@ def clean_target_variables(target_variables_final: List[TargetVariable]) -> List
     """
     for target_variable in target_variables_final:
         # Check and update the values recorded as NaN
-        if str(target_variable.original_value) == 'NaN':
-            target_variable.original_value = float('NaN')
+        if str(target_variable.original_value) == "NaN":
+            target_variable.original_value = float("NaN")
 
-        if str(target_variable.final_value) == 'NaN':
-            target_variable.final_value = float('NaN')
+        if str(target_variable.final_value) == "NaN":
+            target_variable.final_value = float("NaN")
 
     return target_variables_final
 
@@ -564,7 +575,8 @@ def adjust_target_variables(
             TargetVariable(
                 identifier=question.identifier,
                 original_value=str(question.original_value)
-                if question.original_value is not None and not math.isnan(question.original_value)
+                if question.original_value is not None
+                and not math.isnan(question.original_value)
                 else question.original_value,
                 final_value=str(final_value)
                 if final_value is not None and not math.isnan(final_value)

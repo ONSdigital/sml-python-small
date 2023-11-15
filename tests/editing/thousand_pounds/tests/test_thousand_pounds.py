@@ -1,12 +1,26 @@
 import pytest
 
-from sml_small.editing.thousand_pounds.thousand_pounds import (TargetVariable, ThousandPoundsOutput, TpcMarker,
-                                                               TPException, adjust_target_variables, adjust_value,
-                                                               calculate_error_ratio, create_target_variable_objects,
-                                                               determine_predictive_value, determine_tpc_marker,
-                                                               is_within_threshold, thousand_pounds, validate_input)
-from sml_small.utils.error_utils import (get_boundary_error, get_mandatory_param_error,
-                                         get_one_of_params_mandatory_error, get_params_is_not_a_number_error)
+from sml_small.editing.thousand_pounds.thousand_pounds import (
+    TargetVariable,
+    ThousandPoundsOutput,
+    TpcMarker,
+    TPException,
+    adjust_target_variables,
+    adjust_value,
+    calculate_error_ratio,
+    create_target_variable_objects,
+    determine_predictive_value,
+    determine_tpc_marker,
+    is_within_threshold,
+    thousand_pounds,
+    validate_input,
+)
+from sml_small.utils.error_utils import (
+    get_boundary_error,
+    get_mandatory_param_error,
+    get_one_of_params_mandatory_error,
+    get_params_is_not_a_number_error,
+)
 
 EXCEPTION_FAIL_MESSAGE = (
     "{test_id} : Expected no exception, but got {exception_type}: {exception_msg}"
