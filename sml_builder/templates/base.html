@@ -1,0 +1,62 @@
+{% extends "layout/_template.njk" %}
+{%- if page_title -%} {%- set page_title_value = page_title + ' - Sml Python Small Library Reference - Office for National Statistics' -%} {%- else -%} {%- set page_title_value = 'Sml Python Small Library Reference - Office for National Statistics' -%} {%- endif -%}
+
+{% set pageConfig = {
+    "meta": {
+        "canonicalUrl": "/",
+        "description": "/",
+    },
+
+    "title": page_title_value,
+    "header": {
+        "title": 'Sml Python Small Library Reference',
+        "orgLogoHref": 'https://www.ons.gov.uk',
+        "titleLogoHref": "/",
+        "mastheadLogo": "/",
+        "titleLogo": "/",
+    },
+    "pageColNumber": "12",
+    "sidebarColNumber": sidebarCols if sidebarCols else 12,
+    "mainClasses": "ons-u-mt-m",
+    "breadcrumbs": breadcrumbs,
+    "footer": {
+      "OGLLink": true,
+      "legal": [
+
+      ]
+    },
+  }
+ %}
+{%- block htmltitle %}
+    <title>{% if page and page.title and not page.is_homepage %}{{ page.title }} - {% endif %}{{ config.site_name }}</title>
+{%- endblock %}
+
+{%- block site_meta %}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    {% if page and page.is_homepage %}<meta name="description" content="{{ config['site_description'] }}">{% endif %}
+    {% if page and page.canonical_url %}<link rel="canonical" href="{{ page.canonical_url }}">{% endif %}
+    {% if config.site_author %}<meta name="author" content="{{ config.site_author }}">{% endif %}
+{%- endblock %}
+
+
+<!-- block sidebar -->
+{%- block sidebar %}
+    {% include "sidebar.html" %}
+
+{%- endblock %}
+    <!-- endblock -->
+
+{%- block main -%}
+    {%- block content %}
+        {% include "/modules/content.html" %}
+        {% for nav_item in nav %}
+            {% include "modules/nav.html" %}
+          {% endfor %}
+    {%- endblock %}
+{%- endblock main -%}
+<!-- block content -->
+
+<!-- endblock -->

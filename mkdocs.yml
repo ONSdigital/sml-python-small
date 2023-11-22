@@ -2,7 +2,9 @@ site_name: sml_small docs
 nav:
   - Home: index.md
   - Content: content.md
-theme: readthedocs
+theme:
+  name: mkdocs
+  custom_dir: sml_builder/templates/
 plugins:
 - mkdocstrings:
     handlers:

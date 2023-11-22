@@ -1,0 +1,18 @@
+{% extends "core.html" %}
+{% block main %}
+    <div class="ons-container">
+        <div class="ons-grid ons-grid--column">
+            <div class="ons-grid__col ons-col-{{ pageConfig.sidebarColNumber }}@m">
+                {% block mainContent %}
+                {% endblock mainContent %}
+            </div>
+            {% block sidebar %}
+                <div class="ons-grid__col ons-col-{{ 12 - pageConfig.sidebarColNumber }}@m ons-u-mt-l ons-u-mb-l ons-push-1@m">
+                    {% block sidebarContent %}
+                    {% endblock sidebarContent %}
+                </div>
+            {% endblock sidebar %}
+        </div>
+    </div>
+{% endblock main %}
+
