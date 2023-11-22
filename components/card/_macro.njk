@@ -1,0 +1,52 @@
+{%- macro onsCard(params) -%}
+
+  {% from "components/lists/_macro.njk" import onsList %}
+
+  {% set titleSize = params.titleSize | default('2') %}
+
+  <div class="ons-card" aria-describedBy="{{ params.textId }}">
+
+    {%- if params.image -%}
+      {%- if params.url -%}
+        <a href="{{ params.url }}" class="ons-card__link ons-u-db">
+      {%- endif -%}
+          {% if params.image.smallSrc %}
+            <img class="ons-card__image ons-u-mb-s" height="200" width="303"{% if params.image.largeSrc %} srcset="{{ params.image.smallSrc }} 1x, {{ params.image.largeSrc }} 2x"{% endif %} src="{{ params.image.smallSrc }}" alt="{{ params.image.alt }}" loading="lazy">
+          {% elif params.image == true or params.image.placeholderURL %}
+            <img class="ons-card__image ons-u-mb-s" height="100" width="303" srcset="{{ params.image.placeholderURL if params.image.placeholderURL }}/img/small/placeholder-card.png 1x, {{ params.image.placeholderURL if params.image.placeholderURL }}/img/large/placeholder-card.png 2x" src="{{ params.image.placeholderURL if params.image.placeholderURL }}/img/small/placeholder-card.png" alt="" loading="lazy">
+          {% endif %}
+
+          <h{{ titleSize }} class="ons-card__title {{ params.titleClasses | default('ons-u-fs-m')}}" id="{{ params.id }}">
+            {{ params.title }}
+          </h{{ titleSize }}>
+      {%- if params.url -%}
+        </a>
+      {%- endif -%}
+
+    {%- else -%}
+
+      <h{{ titleSize }} class="ons-card__title {{ params.titleClasses | default('ons-u-fs-m') }}" id="{{ params.id }}">
+        {%- if params.url -%}
+          <a class="ons-card__link" href="{{ params.url }}">
+        {%- endif -%}
+          {{ params.title }}
+        {%- if params.url -%}
+          </a>
+        {%- endif -%}
+      </h{{ titleSize }}>
+
+    {%- endif -%}
+
+    <p id="{{ params.textId }}">{{ params.text }}</p>
+
+    {% if params.itemsList -%}
+      {{
+          onsList({
+              "variants": 'dashed',
+              "itemsList": params.itemsList
+          })
+      }}
+    {% endif %}
+
+  </div>
+{%- endmacro -%}

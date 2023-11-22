@@ -1,0 +1,73 @@
+{% from "components/input/_macro.njk" import onsInput %}
+
+{% macro onsAutosuggest(params) %}
+    <div
+        id="{{ params.id }}-container"
+        class="{% if not params.externalInitialiser %}ons-js-autosuggest {% endif %}{% if params.isEditable == false %}ons-js-address-not-editable{% endif %}{% if params.mandatory == true %} ons-js-address-mandatory{% endif %} {% if params.containerClasses %} {{ params.containerClasses }}{% endif %} ons-autosuggest-input"
+        data-instructions="{{ params.instructions }}"
+        data-aria-you-have-selected="{{ params.ariaYouHaveSelected }}"
+        data-min-chars="{{ params.minChars }}"
+        data-aria-min-chars="{{ params.ariaMinChars }}"
+        data-aria-one-result="{{ params.ariaOneResult }}"
+        data-aria-n-results="{{ params.ariaNResults }}"
+        data-aria-limited-results="{{ params.ariaLimitedResults }}"
+        data-more-results="{{ params.moreResults }}"
+        data-results-title="{{ params.resultsTitle }}"
+        data-no-results="{{ params.noResults }}"
+        data-type-more="{{ params.typeMore }}"
+        {% if params.APIDomain %}data-api-domain="{{ params.APIDomain }}"{% endif %}
+        {% if params.APIDomainBearerToken %}data-authorization-token="{{ params.APIDomainBearerToken }}"{% endif %}
+        {% if params.APIManualQueryParams == true %}data-query-params=""{% endif %}
+        {% if params.allowMultiple == true %}data-allow-multiple="true"{% endif %}
+        {% if params.autosuggestData %}data-autosuggest-data="{{ params.autosuggestData }}"{% endif %}
+        {% if params.errorTitle %}data-error-title="{{ params.errorTitle }}"{% endif %}
+        {% if params.errorMessageEnter %}data-error-enter="{{ params.errorMessageEnter }}"{% endif %}
+        {% if params.errorMessageSelect %}data-error-select="{{ params.errorMessageSelect }}"{% endif %}
+        {% if params.ariaGroupedResults %}data-aria-grouped-results="{{ params.ariaGroupedResults }}"{% endif %}
+        {% if params.groupCount %}data-group-count="{{ params.groupCount }}"{% endif %}
+        {% if params.tooManyResults %}data-too-many-results="{{ params.tooManyResults }}"{% endif %}
+        {% if params.errorMessageAPI %}data-error-api="{{ params.errorMessageAPI }}"{% endif %}
+        {% if params.errorMessageAPILinkText %}data-error-api-link-text="{{ params.errorMessageAPILinkText }}"{% endif %}
+        {% if params.options %}
+            {% if params.options.oneYearAgo %}data-options-one-year-ago="true"{% endif %}
+            {% if params.options.regionCode %}data-options-region-code="{{ params.options.regionCode }}"{% endif %}
+            {% if params.options.addressType %}data-options-address-type="{{ params.options.addressType }}"{% endif %}
+        {% endif %}
+    >
+
+        {% set autosuggestResults %}
+            <div class="ons-autosuggest-input__results ons-js-autosuggest-results">
+                <header id="{{ params.resultsTitleId }}" class="ons-autosuggest-input__results-title ons-u-fs-s">{{ params.resultsTitle }}</header>
+                <ul class="ons-autosuggest-input__listbox ons-js-autosuggest-listbox" title="{{ params.resultsTitle }}" role="listbox" id="{{ params.id }}-listbox" tabindex="-1"></ul>
+            </div>
+            <div class="ons-autosuggest-input__instructions ons-u-vh ons-js-autosuggest-instructions" id="{{ params.id }}-instructions" tabindex="-1">{{ params.instructions }}</div>
+            <div class="ons-autosuggest-input__status ons-u-vh ons-js-autosuggest-aria-status" aria-live="assertive" role="status" tabindex="-1"></div>
+        {% endset %}
+
+        {{ onsInput({
+            "id": params.id,
+            "classes": "ons-js-autosuggest-input " + (params.classes if params.classes else ''),
+            "width": params.width,
+            "label": {
+                "text": params.label.text,
+                "description": params.label.description,
+                "id": params.label.id,
+                "classes": params.label.classes
+            },
+            "autocomplete": params.autocomplete,
+            "legend": params.legend,
+            "legendClasses": params.legendClasses,
+            "value": params.value,
+            "attributes": params.attributes,
+            "error": params.error,
+            "mutuallyExclusive": params.mutuallyExclusive,
+            "accessiblePlaceholder": params.accessiblePlaceholder,
+            "name": params.name,
+            "autosuggestResults": autosuggestResults
+         }) }}
+
+         {% if not params.mutuallyExclusive %}
+            {{ autosuggestResults | safe }}
+         {% endif %}
+    </div>
+{% endmacro %}

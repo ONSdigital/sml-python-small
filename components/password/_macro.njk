@@ -1,0 +1,41 @@
+{% macro onsPassword(params) %}
+    {% from "components/field/_macro.njk" import onsField %}
+    {% from "components/label/_macro.njk" import onsLabel %}
+    {% from "components/checkboxes/_checkbox-macro.njk" import onsCheckbox %}
+    {% from "components/input/_macro.njk" import onsInput %}
+
+    {% call onsField({
+        "id": params.fieldId,
+        "classes": "ons-js-password" + (" " + params.fieldClasses if params.fieldClasses else ""),
+        "error": params.error
+    }) %}
+        {{
+            onsLabel({
+                "for": params.id,
+                "text": params.label.text,
+                "description": params.label.description,
+                "classes": params.label.classes
+            })
+        }}
+        {{
+            onsCheckbox({
+                "id": params.id + "-toggle",
+                "classes": "ons-js-password-toggle-wrap ons-checkbox--toggle ons-u-d-no",
+                "inputClasses": "ons-js-password-toggle",
+                "name": "show-password",
+                "label": {
+                    "text": params.showPasswordText
+                }
+            })
+        }}
+        {{
+            onsInput({
+                "id": params.id,
+                "name": params.name,
+                "type": "password",
+                "classes": "ons-u-mt-xs ons-js-password-input" + (" ons-input--error" if params.error else ""),
+                "dontWrap": true
+            })
+        }}
+    {% endcall %}
+{% endmacro %}

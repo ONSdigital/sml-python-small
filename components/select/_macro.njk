@@ -1,0 +1,40 @@
+{% macro onsSelect(params) %}
+    {% from "components/field/_macro.njk" import onsField %}
+    {% from "components/label/_macro.njk" import onsLabel %}
+
+    {% call onsField({
+        "id": params.fieldId,
+        "classes": params.fieldClasses,
+        "legendClasses": params.legendClasses,
+        "dontWrap": params.dontWrap,
+        "error": params.error,
+        "inline": params.label.inline if params.label else ''
+    }) %}
+        {{
+            onsLabel({
+                "for": params.id,
+                "text": params.label.text,
+                "description": params.label.description,
+                "classes": params.label.classes
+            })
+        }}
+        <select
+            id="{{ params.id }}"
+            name="{{ params.name }}"
+            class="ons-input ons-input--select{% if params.classes %} {{ params.classes }}{% endif %}{% if params.error %} ons-input--error{% endif %}"
+            {% if params.value %}value="{{ params.value}}" {% endif %}
+            {% if params.attributes %}{% for attribute, value in (params.attributes.items() if params.attributes is mapping and params.attributes.items else params.attributes) %}{{ attribute }}{% if value %}="{{ value }}"{% endif %} {% endfor %}{% endif %}
+        >
+            {% for option in params.options %}
+            <option value="{{ option.value | default(option.text) }}"
+                {% if option.id %}id="{{ option.id }}" {% endif %}
+                {% if option.selected %}selected {% endif %}
+                {% if option.disabled %}disabled {% endif %}
+                {% if params.attributes %}{% for attribute, value in option.attributes %}{{ attribute }}="{{ value }}"{% endfor %}{% endif %}
+            >
+                {{- option.text -}}
+            </option>
+            {% endfor %}
+        </select>
+    {% endcall %}
+{% endmacro %}

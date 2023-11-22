@@ -1,0 +1,43 @@
+{% macro onsAccordion(params) %}
+    {% from "components/details/_macro.njk" import onsDetails %}
+
+    <div id="{{params.id}}" class="ons-accordion{{ ' ' + params.classes if params.classes }}">
+        {% if params.allButton %}
+            {% from "components/button/_macro.njk" import onsButton %}
+            {% set attributes = params.allButton.attributes | default({}) %}
+
+            {% set attributes = attributes | setAttributes({
+                "data-close-all": params.allButton.close,
+                "data-group": params.id
+            }) %}
+
+            {{
+                onsButton({
+                    "type": "button",
+                    "text": params.allButton.open,
+                    "classes": "ons-js-accordion-all ons-u-mb-s ons-u-d-no",
+                    "variants": ["secondary", "small"],
+                    "innerClasses": "ons-js-accordion-all-inner",
+                    "attributes": attributes
+                })
+            }}
+        {% endif %}
+        {% for item in (params.itemsList if params.itemsList is iterable else params.itemsList.items()) %}
+            {{
+                onsDetails({
+                    "isAccordion": true,
+                    "id": params.id + "-" + (loop.index | string),
+                    "attributes": item.attributes,
+                    "headingAttributes": item.headingAttributes,
+                    "contentAttributes": item.contentAttributes,
+                    "title": item.title,
+                    "titleTag": item.titleTag,
+                    "content": item.content,
+                    "group": params.id,
+                    "saveState": params.saveState,
+                    "open": params.open
+                })
+            }}
+        {% endfor %}
+    </div>
+{% endmacro %}

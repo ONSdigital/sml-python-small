@@ -1,0 +1,13 @@
+{% macro onsStatus(params) %}
+    {% if params.type %}
+        {% set typeClass = ' ons-status--' + params.type %}
+    {% else %}
+        {% set typeClass = ' ons-status--info' %}
+    {% endif %}
+
+    {% if params.size == 'small' %}
+        {% set sizeClass = ' ons-status--small' %}
+    {% endif %}
+
+    <span class="ons-status{{typeClass}}{{sizeClass}}">{{ params.label }}</span>
+{% endmacro %}

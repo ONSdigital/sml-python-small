@@ -1,0 +1,30 @@
+{% macro onsReply(params) %}
+    {% from "components/textarea/_macro.njk" import onsTextarea %}
+    {% from "components/button/_macro.njk" import onsButton %}
+    <div class="ons-reply ons-js-reply">
+        {{
+            onsTextarea({
+                "id": params.textarea.id,
+                "name": params.textarea.name,
+                "label": {
+                    "text": params.textarea.label.text
+                }
+            })
+        }}
+        <div class="ons-grid ons-grid--flex ons-grid--gutterless ons-grid--vertical-center ons-grid--no-wrap@s ons-u-mt-m ons-u-mb-m">
+            <div class="ons-grid__col ons-u-mr-m ons-u-mb-s">
+                {{
+                    onsButton({
+                        "id": params.button.id,
+                        "type": params.button.type,
+                        "text": params.button.text,
+                        "classes": params.button.classes
+                    })
+                }}
+            </div>
+            <div class="ons-grid__col ons-u-mb-s">
+                <a class="ons-reply__link" href="{{ params.closeLinkUrl }}">{{ params.closeLinkText }}</a>
+            </div>
+        </div>
+    </div>
+{% endmacro %}
