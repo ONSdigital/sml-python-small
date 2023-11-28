@@ -25,6 +25,7 @@ pytest-tap = "^3.3"
 mkdocs = "*"
 mkdocstrings = "*"
 importlib-metadata="4.2.0"
+mkdocs-embed-external-markdown="*"
 
 [project]
 dependencies = [

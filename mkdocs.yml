@@ -1,7 +1,16 @@
 site_name: sml_small docs
 nav:
   - Home: index.md
-  - Content: content.md
+  - Date Adjustment: api-docs/date-adjustment.md
+  - Selective Editing: api-docs/selective-edit.md
+  - Thousand Pound Correction: api-docs/thousand-pounds.md
+  - Totals and Components: api-docs/totals-and-components.md
+  - "Technical Specifications":
+      - Date Adjustment: technical-specifications/date-adjustment.md
+      - Selective Editing: technical-specifications/selective-edit.md
+      - Thousand Pound Correction: technical-specifications/thousand-pounds.md
+      - Totals and Components: technical-specifications/totals-and-components.md
+
 theme:
   name: mkdocs
   custom_dir: sml_builder/templates/
@@ -10,4 +19,5 @@ plugins:
     handlers:
       python:
         paths: [./sml_small]
+- external-markdown
 

@@ -1,4 +1,7 @@
 {% extends "layout/_template.njk" %}
+{% from "components/related-content/_macro.njk" import onsRelatedContent %}
+{% from "components/related-content/_section-macro.njk" import onsRelatedContentSection %}
+{%- set sidebarCols = 8 -%}
 {%- if page_title -%} {%- set page_title_value = page_title + ' - Sml Python Small Library Reference - Office for National Statistics' -%} {%- else -%} {%- set page_title_value = 'Sml Python Small Library Reference - Office for National Statistics' -%} {%- endif -%}
 
 {% set pageConfig = {
@@ -41,22 +44,21 @@
     {% if config.site_author %}<meta name="author" content="{{ config.site_author }}">{% endif %}
 {%- endblock %}
 
-
-<!-- block sidebar -->
-{%- block sidebar %}
-    {% include "sidebar.html" %}
-
-{%- endblock %}
-    <!-- endblock -->
-
-{%- block main -%}
-    {%- block content %}
-        {% include "/modules/content.html" %}
-        {% for nav_item in nav %}
-            {% include "modules/nav.html" %}
-          {% endfor %}
-    {%- endblock %}
-{%- endblock main -%}
-<!-- block content -->
-
-<!-- endblock -->
+{% block main %}
+    <div class="ons-container">
+        <div class="ons-grid ons-grid--column">
+            <div class="ons-grid__col ons-col-{{ pageConfig.sidebarColNumber }}@m">
+                {% block mainContent %}
+                    {% include "/modules/content.html" %}
+                {% endblock mainContent %}
+            </div>
+                {% block sidebar %}
+                <div class="ons-grid__col ons-col-{{ 12 - pageConfig.sidebarColNumber }}@m ons-u-mt-l ons-u-mb-l ons-push-1@m">
+                    {% block sidebarContent -%}
+                        {% include "/modules/sidebar.html" %}
+                    {%- endblock sidebarContent %}
+                </div>
+                {% endblock sidebar %}
+        </div>
+    </div>
+{% endblock main %}
