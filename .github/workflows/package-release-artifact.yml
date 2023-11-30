@@ -41,7 +41,7 @@ jobs:
       - name: Zip API docs
         uses: montudor/action-zip@v1
         with:
-          args: zip -qq -r api-docs.zip . -i api-docs
+          args: zip -qq -r api-docs.zip api-docs
       - name: Archive api-docs
         uses: actions/upload-artifact@v3
         with:
