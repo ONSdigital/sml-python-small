@@ -66,7 +66,7 @@ jobs:
       - name: Zip API docs
         uses: montudor/action-zip@v1
         with:
-          args: zip -qq -r api-docs.zip api-docs
+          args: zip -qq -r api-docs.zip . -i api-docs
       - name: Create GitHub release
         uses: softprops/action-gh-release@v1
         with:
