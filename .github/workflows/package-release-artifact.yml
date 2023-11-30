@@ -63,13 +63,19 @@ jobs:
     steps:
       - name: Download all workflow run artifacts
         uses: actions/download-artifact@v3
+      - name: Zip API docs
+        uses: montudor/action-zip@v1
+        with:
+          args: zip -qq -r api-docs.zip api-docs
       - name: Create GitHub release
         uses: softprops/action-gh-release@v1
         with:
           files: |
             dist/*.whl
             dist/*.tar.gz
+            api-docs.zip
             sml-python-small.version
+
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
