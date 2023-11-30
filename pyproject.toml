@@ -26,6 +26,8 @@ mkdocs = "*"
 mkdocstrings = "*"
 importlib-metadata="4.2.0"
 mkdocs-embed-external-markdown="*"
+mkdocs-markdownextradata-plugin="*"
+mkgendocs="*"
 
 [project]
 dependencies = [

@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en"> 
+
+    <body>
+            <div class="container">
+                
+
+            </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-9" role="main"><section class="p-md-5 section-content">
+    <article>
+        <p><h1 id="date-adjustment-technical-specification">Date Adjustment technical specification</h1>
+<h2 id="finding-and-installing-the-method">Finding and Installing the Method</h2>
+<p>You can find instructions on downloading and installing the method in the <a href="https://statisticalmethodslibrary.ons.gov.uk/help-centre/index">Help centre</a> of the <a href="https://statisticalmethodslibrary.ons.gov.uk">ONS Statistical Methods Library</a></p>
+<h2 id="using-the-method">Using the Method</h2>
+<p>Once the date adjustment method is available on your computer you will be able
+to call the method and perform date adjustment on a dataset. The basic date
+adjustment method is:</p>
+<p>Adjusted response = Original response * Sum of the weights of the desired period / Sum of the weights of the response</p>
+<p>Below is a snapshot of an example dataset and how the input data should look
+like:</p>
+<table>
+<thead>
+<tr>
+<th>Reference</th>
+<th>Contributors start date</th>
+<th>Contributors end date</th>
+<th>Q20</th>
+<th>Expected start date</th>
+<th>Expected end date</th>
+<th>Domain</th>
+<th>Mid-point</th>
+<th>Equal-weighted</th>
+<th>Calendar days</th>
+<th>Average Weekly</th>
+<th>Short period</th>
+<th>Long period</th>
+<th>Error Column</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>20220601</td>
+<td>20220630</td>
+<td>1184</td>
+<td>20220601</td>
+<td>20220630</td>
+<td>A</td>
+<td>N</td>
+<td>N</td>
+<td>N</td>
+<td>N</td>
+<td>24</td>
+<td>42</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>20220604</td>
+<td>20220630</td>
+<td>2045</td>
+<td>20220601</td>
+<td>20220630</td>
+<td>A</td>
+<td>N</td>
+<td>N</td>
+<td>N</td>
+<td>N</td>
+<td>24</td>
+<td>42</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>20220601</td>
+<td>20220624</td>
+<td>2013</td>
+<td>20220601</td>
+<td>20220630</td>
+<td>A</td>
+<td>N</td>
+<td>N</td>
+<td>N</td>
+<td>N</td>
+<td>24</td>
+<td>42</td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>20220601</td>
+<td>20220704</td>
+<td>1992</td>
+<td>20220601</td>
+<td>20220630</td>
+<td>A</td>
+<td>N</td>
+<td>N</td>
+<td>N</td>
+<td>N</td>
+<td>24</td>
+<td>42</td>
+<td></td>
+</tr>
+<tr>
+<td>5</td>
+<td>20220530</td>
+<td>20220628</td>
+<td>1027</td>
+<td>20220601</td>
+<td>20220630</td>
+<td>A</td>
+<td>N</td>
+<td>N</td>
+<td>N</td>
+<td>N</td>
+<td>24</td>
+<td>42</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Below is a snapshot of an example data and how the trading day data should
+look like:</p>
+<table>
+<thead>
+<tr>
+<th>date</th>
+<th>domain</th>
+<th>weight</th>
+<th>period</th>
+<th>period_start</th>
+<th>period_end</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>20220528</td>
+<td>A</td>
+<td>0</td>
+<td>202205</td>
+<td>20220501</td>
+<td>20220531</td>
+</tr>
+<tr>
+<td>20220529</td>
+<td>A</td>
+<td>0</td>
+<td>202205</td>
+<td>20220501</td>
+<td>20220531</td>
+</tr>
+<tr>
+<td>20220530</td>
+<td>A</td>
+<td>0.2</td>
+<td>202205</td>
+<td>20220501</td>
+<td>20220531</td>
+</tr>
+<tr>
+<td>20220531</td>
+<td>A</td>
+<td>0.2</td>
+<td>202205</td>
+<td>20220501</td>
+<td>20220531</td>
+</tr>
+<tr>
+<td>20220601</td>
+<td>A</td>
+<td>0.2</td>
+<td>202206</td>
+<td>20220601</td>
+<td>20220630</td>
+</tr>
+<tr>
+<td>20220602</td>
+<td>A</td>
+<td>0.2</td>
+<td>202206</td>
+<td>20220601</td>
+<td>20220630</td>
+</tr>
+<tr>
+<td>20220603</td>
+<td>A</td>
+<td>0.2</td>
+<td>202206</td>
+<td>20220601</td>
+<td>20220630</td>
+</tr>
+<tr>
+<td>20220604</td>
+<td>A</td>
+<td>0</td>
+<td>202206</td>
+<td>20220601</td>
+<td>20220630</td>
+</tr>
+<tr>
+<td>20220605</td>
+<td>A</td>
+<td>0</td>
+<td>202206</td>
+<td>20220601</td>
+<td>20220630</td>
+</tr>
+<tr>
+<td>20220606</td>
+<td>A</td>
+<td>0.2</td>
+<td>202206</td>
+<td>20220601</td>
+<td>20220630</td>
+</tr>
+<tr>
+<td>20220607</td>
+<td>A</td>
+<td>0.2</td>
+<td>202206</td>
+<td>20220601</td>
+<td>20220630</td>
+</tr>
+<tr>
+<td>20220608</td>
+<td>A</td>
+<td>0.2</td>
+<td>202206</td>
+<td>20220601</td>
+<td>20220630</td>
+</tr>
+<tr>
+<td>20220609</td>
+<td>A</td>
+<td>0.2</td>
+<td>202206</td>
+<td>20220601</td>
+<td>20220630</td>
+</tr>
+<tr>
+<td>20220610</td>
+<td>A</td>
+<td>0.2</td>
+<td>202206</td>
+<td>20220601</td>
+<td>20220630</td>
+</tr>
+<tr>
+<td>20220611</td>
+<td>A</td>
+<td>0</td>
+<td>202206</td>
+<td>20220601</td>
+<td>20220630</td>
+</tr>
+<tr>
+<td>20220612</td>
+<td>A</td>
+<td>0</td>
+<td>202206</td>
+<td>20220601</td>
+<td>20220630</td>
+</tr>
+<tr>
+<td>20220613</td>
+<td>A</td>
+<td>0.2</td>
+<td>202206</td>
+<td>20220601</td>
+<td>20220630</td>
+</tr>
+<tr>
+<td>20220614</td>
+<td>A</td>
+<td>0.2</td>
+<td>202206</td>
+<td>20220601</td>
+<td>20220630</td>
+</tr>
+<tr>
+<td>20220615</td>
+<td>A</td>
+<td>0.2</td>
+<td>202206</td>
+<td>20220601</td>
+<td>20220630</td>
+</tr>
+<tr>
+<td>20220616</td>
+<td>A</td>
+<td>0.2</td>
+<td>202206</td>
+<td>20220601</td>
+<td>20220630</td>
+</tr>
+<tr>
+<td>20220617</td>
+<td>A</td>
+<td>0.2</td>
+<td>202206</td>
+<td>20220601</td>
+<td>20220630</td>
+</tr>
+<tr>
+<td>20220618</td>
+<td>A</td>
+<td>0</td>
+<td>202206</td>
+<td>20220601</td>
+<td>20220630</td>
+</tr>
+<tr>
+<td>20220619</td>
+<td>A</td>
+<td>0</td>
+<td>202206</td>
+<td>20220601</td>
+<td>20220630</td>
+</tr>
+<tr>
+<td>20220620</td>
+<td>A</td>
+<td>0.2</td>
+<td>202206</td>
+<td>20220601</td>
+<td>20220630</td>
+</tr>
+<tr>
+<td>20220621</td>
+<td>A</td>
+<td>0.2</td>
+<td>202206</td>
+<td>20220601</td>
+<td>20220630</td>
+</tr>
+<tr>
+<td>20220622</td>
+<td>A</td>
+<td>0.2</td>
+<td>202206</td>
+<td>20220601</td>
+<td>20220630</td>
+</tr>
+<tr>
+<td>20220623</td>
+<td>A</td>
+<td>0.2</td>
+<td>202206</td>
+<td>20220601</td>
+<td>20220630</td>
+</tr>
+<tr>
+<td>20220624</td>
+<td>A</td>
+<td>0.2</td>
+<td>202206</td>
+<td>20220601</td>
+<td>20220630</td>
+</tr>
+<tr>
+<td>20220625</td>
+<td>A</td>
+<td>0</td>
+<td>202206</td>
+<td>20220601</td>
+<td>20220630</td>
+</tr>
+<tr>
+<td>20220626</td>
+<td>A</td>
+<td>0</td>
+<td>202206</td>
+<td>20220601</td>
+<td>20220630</td>
+</tr>
+<tr>
+<td>20220627</td>
+<td>A</td>
+<td>0.2</td>
+<td>202206</td>
+<td>20220601</td>
+<td>20220630</td>
+</tr>
+<tr>
+<td>20220628</td>
+<td>A</td>
+<td>0.2</td>
+<td>202206</td>
+<td>20220601</td>
+<td>20220630</td>
+</tr>
+<tr>
+<td>20220629</td>
+<td>A</td>
+<td>0.2</td>
+<td>202206</td>
+<td>20220601</td>
+<td>20220630</td>
+</tr>
+<tr>
+<td>20220630</td>
+<td>A</td>
+<td>0.2</td>
+<td>202206</td>
+<td>20220601</td>
+<td>20220630</td>
+</tr>
+<tr>
+<td>20220701</td>
+<td>A</td>
+<td>0.2</td>
+<td>202207</td>
+<td>20220701</td>
+<td>20220731</td>
+</tr>
+<tr>
+<td>20220702</td>
+<td>A</td>
+<td>0</td>
+<td>202207</td>
+<td>20220701</td>
+<td>20220731</td>
+</tr>
+<tr>
+<td>20220703</td>
+<td>A</td>
+<td>0</td>
+<td>202207</td>
+<td>20220701</td>
+<td>20220731</td>
+</tr>
+<tr>
+<td>20220704</td>
+<td>A</td>
+<td>0.2</td>
+<td>202207</td>
+<td>20220701</td>
+<td>20220731</td>
+</tr>
+</tbody>
+</table>
+<p>Here we have 5 respondents with all the columns needed to perform the date
+adjustment method:</p>
+<ul>
+<li>Reference: Unique to each respondent</li>
+<li>Contributors start date: Start date returned by the contributor.</li>
+<li>Contributors end date: End date returned by the contributor.</li>
+<li>Q20: Variable response that needs to be date adjusted.</li>
+<li>Expected start date: Start date the user is expecting from the
+contributor.</li>
+<li>Expected end date: End date the user is expecting from the contributor</li>
+<li>Domain: Domain classification.</li>
+<li>Mid-point: Indicator as to whether the mid-point method needs to be used.</li>
+<li>Equal-weighted: Indicator as to whether the equal-weighted method needs
+to be used.</li>
+<li>Calendar days: Indicator as to whether the calendar days method needs to
+be used.</li>
+<li>Average weekly: Indicator as to whether the average weekly method needs
+to be used.</li>
+<li>Short period: A value that shows the user whether a response is of a short
+time frame.</li>
+<li>Long period: A value that shows the user whether a response is of a
+long-time frame.</li>
+<li>Error column: A column that will be populated if any errors occur.</li>
+</ul>
+<p>We also have trading day weights for all dates present and for the domain we
+are interested in:</p>
+<ul>
+<li>Date: Date we are interested in</li>
+<li>Domain: Domain classification</li>
+<li>Weight: Weight for the specific trading day</li>
+<li>Period: An indicator of the period.</li>
+<li>Period_start: Start date of the period</li>
+<li>Period_end: End date of the period</li>
+</ul>
+<p>We can then run the method as shown below ensuring that we are calling the
+right columns from the dataframe:</p>
+<pre><code>import pandas as pd
+import date_adjustment as date_adjust
+
+# Import datafile containing the respondent's data
+datafile = &quot;date_adjustment_input_data_example_1.csv&quot;
+
+df = pd.read_csv(datafile)
+
+# Import trading day weights file
+trading_day_datafile = &quot;date_adjustment_trading_day_weights_example_1.csv&quot;
+
+trading_df = pd.read_csv(trading_day_datafile)
+
+# Match up column names with with variables below
+output = date_adjust.date_adjustment(input_dataframe = df, # Respondent's input dataframe
+                    trading_weights = trading_df, # trading day weights dataframe
+                    target_columns = ['Q20'], # The variable that needs to be date adjusted
+                    contributor_returned_start_date_col = &quot;Contributors start date&quot;, # Contributor returned start date
+                    contributor_returned_end_date_col = &quot;Contributors end date&quot;, # Contributor returned end date
+                    expected_start_date_col = &quot;Expected start date&quot;, # Expected start date
+                    expected_end_date_col = &quot;Expected end date&quot;, # Expected end date
+                    domain_col = &quot;Domain&quot;, # Domain classification
+                    short_period_parameter_col = &quot;Short period&quot;, # Short period
+                    long_period_parameter_col = &quot;Long period&quot;, # Long period
+                    equal_weighted_col = &quot;Equal-weighted&quot;, # Equal-weighted column
+                    set_to_mid_point_col = &quot;Mid-point&quot;, # Mid-point indicator column
+                    use_calendar_days_col = &quot;Calendar days&quot;, # Calendar days column
+                    average_weekly_col = &quot;Average Weekly&quot;, # Average weekly indicator
+                    da_error_flag_col = &quot;Error column&quot;, # Column for errors to be populated
+                    trading_date_col = &quot;date&quot;, # Date in the trading day dataframe
+                    trading_period_start_col = &quot;period_start&quot;, # Start date column in trading day dataframe
+                    trading_period_end_col = &quot;period_end&quot;, # End date column in trading day dataframe
+                    trading_weights_col = &quot;weight&quot;, # Weight values for each date
+                    trading_domain_col = &quot;domain&quot; # Domain for each date and weight
+                    )
+
+# Exporting the output file to csv
+output.to_csv(&quot;date_adjustment_output_data_example_1.csv&quot;)
+</code></pre>
+<p>The output gets exported as a csv file and will give you the adjusted responses
+along with the sum of the weights.</p>
+<p>New columns are produced from running the method and are described below:</p>
+<ul>
+<li>Sum of trading day weights over contributors period: The trading day weights
+will be summed over the dates returned, all dates are inclusive.</li>
+<li>Number of days in contributors returned period: The number of days returned
+by the contributor, all dates are inclusive.</li>
+<li>Actual period start date: The start date the user is looking for (usually
+similar to expected start date).</li>
+<li>Actual period end date: The end date the user is looking for (usually similar
+to expected end date).</li>
+<li>Number of days in actual returned period: The number of days the user set</li>
+<li>Sum of trading day weights over actual period: The sum of the trading weights
+over the days set by the user.</li>
+<li>Date adjusted Q20: The adjusted question value based on the sum of the trading
+days weights ratio.</li>
+</ul>
+<h2 id="test-data">Test Data</h2>
+<p>The test data mentioned in the example above can be found alongside this user documentation</p>
+<h2 id="additional-information">Additional Information</h2>
+<p>The ONS Statistical Methods Library at <a href="https://statisticalmethodslibrary.ons.gov.uk/">https://statisticalmethodslibrary.ons.gov.uk/</a> contains further information about the methods including:
+- a methodological specification, which contains further detail about the mathematical definition of the method algorithm
+- a link to the github repository which contains detailed API information as part of the method code</p>
+<h2 id="license">License</h2>
+<p>Unless stated otherwise, the SML codebase is released under the <a href="https://github.com/ONSdigital/sml-python-small/blob/main/LICENSE">MIT License</a>. This covers both the codebase and any sample code in the documentation.</p>
+<p>The documentation is available under the terms of the <a href="https://github.com/ONSdigital/sml-supporting-info/blob/main/LICENSE">Open Government 3.0 license</a>.</p></p>
+    </article>
+</section></div>
+            </div>
+        </div>
+    </body>
+</html>

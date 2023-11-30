@@ -1,9 +1,21 @@
-
-{% from "components/section-navigation/_macro.njk" import onsSectionNavigation %}
-{{
-    onsSectionNavigation({
-        "variants": "vertical",
-        "id": "section-menu",
-        "itemsList": nav
-    })
-}}
+ {%- if nav|length>1 %}
+    <!-- Main navigation -->
+    <ul class="nav navbar-nav">
+    {%- for nav_item in nav %}
+    {%- if nav_item.children %}
+        <li class="dropdown{% if nav_item.active %} active{% endif %}">
+            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">{{ nav_item.title }} <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+            {%- for nav_item in nav_item.children %}
+                {% include "nav-sub.html" %}
+            {%- endfor %}
+            </ul>
+        </li>
+    {%- else %}
+        <li class="navitem{% if nav_item.active %} active{% endif %}">
+            <a href="{{ nav_item.url|url }}" class="nav-link">{{ nav_item.title }}</a>
+        </li>
+    {%- endif %}
+    {%- endfor %}
+    </ul>
+{%- endif %}

@@ -4,6 +4,7 @@ __pycache__/
 *.pyo
 *.swp
 build/
+site/
 dist/
 .DS_Store
 *~

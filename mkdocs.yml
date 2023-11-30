@@ -20,4 +20,8 @@ plugins:
       python:
         paths: [./sml_small]
 - external-markdown
+extra:
+  navigation:
+
+
 

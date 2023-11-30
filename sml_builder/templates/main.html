@@ -1,3 +1,5 @@
+{% extends "base.html" %}
+
 <!DOCTYPE html>
 <html lang="{{ config.theme.locale|default('en') }}">
       {%- block site_meta %}
@@ -35,6 +37,7 @@
         <div class="container">
             <div class="row">
                 {%- block content %}
+                    <div class="col-md-9" role="main">{% include "modules/content.html" %}</div>
                 {%- endblock %}
             </div>
         </div>

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en"> 
+
+    <body>
+            <div class="container">
+                
+
+            </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-9" role="main"><section class="p-md-5 section-content">
+    <article>
+        <p><h1 id="totals-and-components-technical-specification">Totals and Components technical specification</h1>
+<h2 id="finding-and-installing-the-method">Finding and Installing the Method</h2>
+<p>You can find instructions on downloading and installing the method in the <a href="https://statisticalmethodslibrary.ons.gov.uk/help-centre/access/run-a-method">Help centre</a> of the <a href="https://statisticalmethodslibrary.ons.gov.uk">ONS Statistical Methods Library</a></p>
+<h2 id="using-the-method">Using the Method</h2>
+<h3 id="overview">Overview</h3>
+<p>Once you have downloaded the sml-small wheel package you will be able to import the T&amp;C method and pass in data.</p>
+<p>The TCC markers returned determine if and what the method has corrected.</p>
+<ul>
+<li>"S" is when the method stops early or the method is not completed</li>
+<li>"N" is for no correction</li>
+<li>"M" is for manual editing this is where the record needs to be reviewed by a user</li>
+<li>"C" is for component correction where the final components are corrected</li>
+<li>"T" is for totals correction where the final totals are corrected</li>
+</ul>
+<p>The core mathematical corrections are total correction and component correction shown below respectively from the methodology specification.</p>
+<pre><code class="language-bash">final_total = sum_of_components
+</code></pre>
+<p>and</p>
+<pre><code class="language-bash">final_component = (original_component / sum_of_components) * total
+</code></pre>
+<p>It is worth noting these are mutually exclusive and a result of many mathematical and logical steps. Therefore, to get a complete understanding of the above equations it is advisable to read the methodology specification.</p>
+<p>From the methodology specification we can see that the method accepts a structured input. The input parameters determine how the method operates and what kind of outputs we would expect from it.</p>
+<h3 id="example-run-through">Example Run Through</h3>
+<p>Below is a snapshot of an example dataset and how the input data should
+look like:</p>
+<table>
+<thead>
+<tr>
+<th>identifier</th>
+<th>total</th>
+<th>components</th>
+<th>amend_total</th>
+<th>predictive</th>
+<th>precision</th>
+<th>auxiliary</th>
+<th>absolute_difference_threshold</th>
+<th>percentage_difference_threshold</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>1689</td>
+<td>[632,732,101,165]</td>
+<td>False</td>
+<td>1689</td>
+<td>10</td>
+<td>None</td>
+<td>28</td>
+<td>0.1</td>
+</tr>
+<tr>
+<td>2</td>
+<td>0</td>
+<td>[7,0,2,2]</td>
+<td>True</td>
+<td>0</td>
+<td>28</td>
+<td>None</td>
+<td>11</td>
+<td>None</td>
+</tr>
+<tr>
+<td>3</td>
+<td>11</td>
+<td>[0,0,0,0]</td>
+<td>False</td>
+<td>11</td>
+<td>28</td>
+<td>None</td>
+<td>11</td>
+<td>None</td>
+</tr>
+<tr>
+<td>4</td>
+<td>10811</td>
+<td>[9201,866,632,112]</td>
+<td>True</td>
+<td>10811</td>
+<td>28</td>
+<td>None</td>
+<td>None</td>
+<td>0.1</td>
+</tr>
+<tr>
+<td>5</td>
+<td>12492</td>
+<td>[9201,866,632,112]</td>
+<td>True</td>
+<td>12492</td>
+<td>28</td>
+<td>None</td>
+<td>None</td>
+<td>0.1</td>
+</tr>
+</tbody>
+</table>
+<p>This is constructed from the following:</p>
+<ul>
+<li>Unique Identifier – Any e.g. Business Reporting Unit</li>
+<li>Total Variable – Target period total, numeric</li>
+<li>Components Variable – Corresponding list of Total variable's components,
+ numeric – nulls allowed</li>
+<li>Amend Total – Select whether Total Variable for the target period should be
+ automatically corrected, Boolean</li>
+<li>Predictive Variable – Previous or current period total, numeric</li>
+<li>Precision - The precision value determines the level of accuracy for our floating point calculations</li>
+<li>Auxiliary Variable – optional, numeric – nulls allowed</li>
+<li>Absolute Difference Threshold - represented as a decimal</li>
+<li>Percentage Difference Threshold - represented as a decimal</li>
+</ul>
+<p>To run the method using the example data above you can create a python file in your desired IDE and do the following below:</p>
+<pre><code class="language-python"># To import this method we are first navigating to the
+# sml_small/editing/totals_and_components directory and
+# the totals_and_components python file
+# to import the totals_and_components function.
+from sml_small.editing.totals_and_components.totals_and_components import totals_and_components
+
+# We can pass our data into the method and save the output to the
+# results variable.
+result = totals_and_components(
+    identifier=&quot;1&quot;,
+    total=1689,
+    components=
+    [
+        (632),
+        (732),
+        (101),
+        (165)
+    ],
+    amend_total=False,
+    predictive=1689,
+    precision=10,
+    auxiliary=None,
+    absolute_difference_threshold=28,
+    percentage_difference_threshold=0.1
+)
+
+# The output will be returned as an object.
+# You will need to destructure the object to extract the values and
+# one way of doing this is using the built-in function vars().
+# vars() is used to return the __dict__attribute for the specified
+# module, class, instance or any other object with a
+# __dict__attribute
+print(vars(result))
+</code></pre>
+<p>Running this command will then give you the results from the totals and components area.</p>
+<h3 id="example-output">Example Output</h3>
+<p>The output data is determined by the TCC marker. Some values would be returned as None if they are not calculated.
+The output is as follows:</p>
+<table>
+<thead>
+<tr>
+<th>identifier</th>
+<th>absolute_difference</th>
+<th>lower_percentage_threshold</th>
+<th>upper_percentage_threshold</th>
+<th>final_total</th>
+<th>final_components</th>
+<th>tcc_marker</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>"59"</td>
+<td>"1467"</td>
+<td>"1793"</td>
+<td>"1689"</td>
+<td>["654.8760735" ,"758.4957055", "104.6558282", "170.9723927"]</td>
+<td>"C"</td>
+</tr>
+<tr>
+<td>2</td>
+<td>"11"</td>
+<td>"None"</td>
+<td>"None"</td>
+<td>"11"</td>
+<td>["7", "0", "2", "2"]</td>
+<td>"T"</td>
+</tr>
+<tr>
+<td>3</td>
+<td>"None"</td>
+<td>"None"</td>
+<td>"None"</td>
+<td>"11"</td>
+<td>["0", "0", "0", "0"]</td>
+<td>"S"</td>
+</tr>
+<tr>
+<td>4</td>
+<td>"None"</td>
+<td>"9729.9"</td>
+<td>"11892.1"</td>
+<td>"10811"</td>
+<td>["9201", "866", "632", "112"]</td>
+<td>"N"</td>
+</tr>
+<tr>
+<td>5</td>
+<td>"None"</td>
+<td>"9729.9"</td>
+<td>"11892.1"</td>
+<td>"12492"</td>
+<td>["9201", "866", "632", "112"]</td>
+<td>"M"</td>
+</tr>
+</tbody>
+</table>
+<p>The breakdown of the received outputs are as follows:</p>
+<ul>
+<li>Unique Identifier – Any e.g. Business Reporting Unit</li>
+<li>Absolute difference - the absolute difference between the predictive value and the sum of the original components returned as a string, None or NaN type</li>
+<li>Lower percentage threshold - the lower threshold calculated for the percentage range returned as a string, None or NaN type</li>
+<li>Higher percentage threshold - the higher threshold calculated for the percentage range returned as a string, None or NaN type</li>
+<li>Final total - the final total will be corrected if applicable or will remain as the original if not returned as a string, None or NaN type</li>
+<li>Final component - the final components will be corrected if applicable, if not it will remain as original components returned as a string, None or NaN type</li>
+</ul>
+<h3 id="additional-examples">Additional Examples</h3>
+<p>For more examples of using this method with CSV files or by implementing the pandas package see the totals_and_components source code <a href="https://github.com/ONSdigital/sml-python-small/blob/main/sml_small/editing/totals_and_components">documentation page</a>.</p>
+<h2 id="test-data">Test Data</h2>
+<p>The <a href="https://github.com/ONSdigital/sml-supporting-info/blob/main/method-info/totals-and-components/example-data">test data mentioned in the example above</a> can be found alongside this user documentation.</p>
+<h2 id="additional-information">Additional Information</h2>
+<p>The ONS Statistical Methods Library website <a href="https://statisticalmethodslibrary.ons.gov.uk/methods">methods page</a> contains further information about the methods including a methodological specification, which contains further detail about the mathematical definition of the method algorithm
+and a link to the github repository which contains detailed API information as part of the method code.</p>
+<h2 id="license">License</h2>
+<p>Unless stated otherwise, the SML codebase is released under the <a href="https://github.com/ONSdigital/sml-python-small/blob/main/LICENSE">MIT License</a>. This covers both the codebase and any sample code in the documentation.</p>
+<p>The documentation is available under the terms of the <a href="https://github.com/ONSdigital/sml-supporting-info/blob/main/LICENSE">Open Government 3.0 license</a>.</p></p>
+    </article>
+</section></div>
+            </div>
+        </div>
+    </body>
+</html>

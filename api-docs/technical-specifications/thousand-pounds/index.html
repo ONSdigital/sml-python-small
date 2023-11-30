@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en"> 
+
+    <body>
+            <div class="container">
+                
+
+            </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-9" role="main"><section class="p-md-5 section-content">
+    <article>
+        <p><h1 id="thousand-pounds-technical-specification">Thousand Pounds technical specification</h1>
+<h2 id="finding-and-installing-the-method">Finding and Installing the Method</h2>
+<p>You can find instructions on downloading and installing the method in the <a href="https://statisticalmethodslibrary.ons.gov.uk/help-centre/access/run-a-method">Help centre</a> of the <a href="https://statisticalmethodslibrary.ons.gov.uk">ONS Statistical Methods Library</a></p>
+<h2 id="using-the-method">Using the Method</h2>
+<h3 id="overview">Overview</h3>
+<p>Once you have downloaded the sml-small wheel package you will be able to import the Thousand Pound Correction method and pass in data.</p>
+<p>The TPC markers returned determine if and what the method has corrected.</p>
+<ul>
+<li>"S" is when the method stops early or the method is not completed</li>
+<li>"N" is for no correction</li>
+<li>"C" is for correction, where a correction has been applied to the principal variable and selected target variables</li>
+</ul>
+<p>The core mathematical correction applied to the principal variable and selected target variables is shown below.</p>
+<pre><code class="language-bash">corrected_value = value / 1000
+</code></pre>
+<p>It is worth noting that this correction is only applied if a target variable has been selected for correction. The process by which a target variable is selected for correction is a result of many mathematical and logical steps. Therefore, to get a complete understanding of when the above correction is applied, it is advisable to read the methodology specification.</p>
+<p>From the methodology specification we can see that the method accepts a structured input. The input parameters determine how the method operates and what kind of outputs we would expect from it.</p>
+<h3 id="example-usage">Example Usage</h3>
+<p>Below is a snapshot of an example dataset for the Thousand Pound Correction method:</p>
+<table>
+<thead>
+<tr>
+<th>unique_identifier</th>
+<th>principal_variable</th>
+<th>predictive</th>
+<th>auxiliary</th>
+<th>upper_limit</th>
+<th>lower_limit</th>
+<th>precision</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>12340000001-201409-q100</td>
+<td>50000000</td>
+<td>60000</td>
+<td>30000</td>
+<td>1350</td>
+<td>350</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+<p>Target variables are stored in this format:</p>
+<table>
+<thead>
+<tr>
+<th>identifier</th>
+<th>value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>q101</td>
+<td>500</td>
+</tr>
+<tr>
+<td>q102</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>q103</td>
+<td>1500</td>
+</tr>
+<tr>
+<td>q104</td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+<p>The method has the following interface:</p>
+<pre><code class="language-python">def thousand_pounds(
+    unique_identifier: Optional[str],  # Unique identifier e.g. a question
+    # code/ruref/period/id/combination of all of these
+    principal_variable: float,  # Original response value provided for
+    # the 'current' period
+    predictive: Optional[float],  # Value used for 'previous'
+    # response (Returned/Imputed/Constructed)
+    auxiliary: Optional[float],  # Calculated response for the
+    # 'previous' period
+    upper_limit: float,  # Upper bound of 'error value' threshold
+    lower_limit: float,  # Lower bound of 'error value' threshold
+    target_variables: List[TargetVariable], # identifier/value pairs
+    precision: Optional[int],  # Precision is used by the decimal
+    # package to ensure a specified accuracy
+    # used throughout method processing
+)
+</code></pre>
+<p>Calling the method with the example data:</p>
+<pre><code class="language-python">from thousand_pounds import thousand_pounds
+
+output = thousand_pounds(
+    unique_identifier = &quot;12340000001-201409-q100&quot;,
+    principal_variable = &quot;50000000&quot;,
+    predictive = &quot;60000&quot;,
+    auxiliary = &quot;30000&quot;,
+    upper_limit = &quot;1350&quot;,
+    lower_limit = &quot;350&quot;,
+    target_variables = {&quot;q101&quot;: 500,
+                        &quot;q102&quot;: 1000,
+                        &quot;q103&quot;: 1500,
+                        &quot;q104&quot;: None},
+    precision = 2
+)
+</code></pre>
+<p>The output will be returned as an object. You will need to destructure the object to extract the values and one way of doing this is using the built-in function vars(). vars() is used to return the __dict__ attribute for the specified module, class, instance or any other object with a __dict__ attribute.</p>
+<pre><code class="language-python">print(vars(output))
+</code></pre>
+<pre><code class="language-bash">{'unique_identifier': '12340000001-201409-q100', 'principal_final_value': '5.0E+4', 'target_variables': [TargetVariable(identifier='q101', original_value='500', final_value='0.5'), TargetVariable(identifier='q102', original_value='1000', final_value='1'), TargetVariable(identifier='q103', original_value='1500', final_value='1.5'), TargetVariable(identifier='q104', original_value=None, final_value=None)], 'tpc_ratio': '8.3E+2', 'tpc_marker': 'C'}
+
+</code></pre>
+<p>Example output table:</p>
+<table>
+<thead>
+<tr>
+<th>unique_identifier</th>
+<th>principal_final_value</th>
+<th>target_variables</th>
+<th>tpc_ratio</th>
+<th>tpc_marker</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>'12340000001-201409-q100'</td>
+<td>'5.0E+4'</td>
+<td>[TargetVariable(identifier='q101', original_value='500', final_value='0.5'), TargetVariable(identifier='q102', original_value='1000', final_value='1'), TargetVariable(identifier='q103', original_value='1500', final_value='1.5'), TargetVariable(identifier='q104', original_value=None, final_value=None)]</td>
+<td>'8.3E+2'</td>
+<td>'C'</td>
+</tr>
+</tbody>
+</table>
+<p>Output attributes:
+* unique_identifier - Unique identifier e.g. a question code/ruref/period/id/combination of all of these
+* principal_final_value – Output value that may or may not be adjusted
+* target_variables - adjusted identifier/value pairs which may or may not be adjusted (returned as TargetVariable objects)
+* tpc_ratio – Ratio of the principal variable against good/predictive/aux response
+* tpc_marker - 'C' for correction applied, 'N' for no correction applied, 'S' for method stop / error
+An example output CSV file has been provided in the example_data folder.</p>
+<h2 id="pandas-wrapper">Pandas Wrapper</h2>
+<p>To view the code of the pandas wrapper you can find the <code>pandas_wrapper.py</code> file within the <code>utils</code> directory.</p>
+<h3 id="prerequisites-pandas-wrapper">Prerequisites: Pandas Wrapper</h3>
+<p>In order to run some of the functions in the python <code>pandas_wrapper.py</code>, you will need to have <code>pandas</code> and <code>numpy</code> installed.</p>
+<p>To install <code>pandas</code>:</p>
+<pre><code class="language-python">pip install pandas
+</code></pre>
+<p>To install <code>numpy</code>:</p>
+<pre><code class="language-python">pip install numpy
+</code></pre>
+<h2 id="pandas-wrapper-usage">Pandas Wrapper Usage</h2>
+<ul>
+<li>You will have to create a new python file importing in the <code>pandas_wrapper.py</code>.</li>
+<li>Where you will have to write functions to read a CSV file and pass in the data as a DataFrame into the <em><code>wrapper</code></em> function from the <code>pandas_wrapper.py</code> file.</li>
+</ul>
+<p>We have an example of how to do this in the <code>pandas_example.py</code> file within the <code>utils</code> directory.</p>
+<h3 id="additional-examples">Additional Examples</h3>
+<p>For more examples of using this method with CSV files or by implementing the pandas package see the thousand_pounds source code <a href="https://github.com/ONSdigital/sml-python-small/blob/main/sml_small/editing/thousand_pounds">documentation page</a>.</p>
+<h2 id="test-data">Test Data</h2>
+<p>The <a href="https://github.com/ONSdigital/sml-supporting-info/tree/b42cf2d112bee6937efd54171aada5346e4df532/method-info/thousand-pound-correction/example_data">test data mentioned in the example above</a> can be found alongside this user documentation.</p>
+<h2 id="additional-information">Additional Information</h2>
+<p>The ONS Statistical Methods Library at <a href="https://statisticalmethodslibrary.ons.gov.uk/">https://statisticalmethodslibrary.ons.gov.uk/</a> contains further information about the methods including:
+- a methodological specification, which contains further detail about the mathematical definition of the method algorithm
+- a link to the github repository which contains detailed API information as part of the method code</p>
+<h2 id="license">License</h2>
+<p>Unless stated otherwise, the SML codebase is released under the <a href="https://github.com/ONSdigital/sml-python-small/blob/main/LICENSE">MIT License</a>. This covers both the codebase and any sample code in the documentation.</p>
+<p>The documentation is available under the terms of the <a href="https://github.com/ONSdigital/sml-supporting-info/blob/main/LICENSE">Open Government 3.0 license</a>.</p></p>
+    </article>
+</section></div>
+            </div>
+        </div>
+    </body>
+</html>
