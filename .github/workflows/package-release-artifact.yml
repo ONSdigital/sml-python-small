@@ -45,8 +45,8 @@ jobs:
       - name: Archive api-docs
         uses: actions/upload-artifact@v3
         with:
-          name: api-docs.zip
-          path: api-docs.zip
+          name: api-docs
+          path: api-docs
           retention-days: 1
       - name: Archive dist
         uses: actions/upload-artifact@v3
@@ -79,7 +79,7 @@ jobs:
           files: |
             dist/*.whl
             dist/*.tar.gz
-            *.zip
+            api-docs/*.zip
             sml-python-small.version
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
