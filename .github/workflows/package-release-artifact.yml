@@ -79,7 +79,7 @@ jobs:
           files: |
             dist/*.whl
             dist/*.tar.gz
-            sml-python-small/api-docs.zip
+            /api-docs.zip
             sml-python-small.version
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
