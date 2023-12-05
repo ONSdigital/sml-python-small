@@ -21,7 +21,7 @@ def run_all_csvs(directory, function):
         if filename.endswith(".csv") and "output" not in filename:
             input_filename = filename
             filename_without_extension, file_extension = os.path.splitext(filename)
-            output_filename = f"{filename_without_extension}_temp_output.csv"
+            output_filename = f"{filename_without_extension}_output.csv"
 
             # Call your function for each CSV file
             if function == "totals_and_components":
@@ -91,8 +91,6 @@ def run_totals_components_with_pandas(path, input_csv, output_csv):
     components = filter_columns_by_pattern(
         input_dataframe_totals_and_components, list_column_pattern
     )
-
-    print("components", components)
 
     # We call the wrapper function from pandas_wrapper python file
     # passing in the required arguments, which in this case are
@@ -171,7 +169,7 @@ def run_totals_components_with_pandas(path, input_csv, output_csv):
     final_data = expand_list_column(
         df=test_totals_and_components,
         list_column_name="final_components",
-        custom_prefix="final_component",
+        custom_prefix="final_comp",
     )
 
     # Create a new DataFrame from the final_data list
@@ -337,70 +335,112 @@ run_all_csvs("TCC_test_data/", "totals_and_components")
 
 
 # UAT Testing
+fill_value = 'default_value'
 
-@pytest.fixture(scope="module")
-@dt.working_directory(__file__)
-def df_input():
-    return pd.read_csv("TCC_test_data/TCC_test_data_case_a1.csv")
+# @pytest.fixture(scope="module")
+# @dt.working_directory(__file__)
+# def df_input():
+#     return pd.read_csv("TCC_test_data/TCC_test_data_case_a1.csv")
 
 
-@pytest.fixture(scope="module")
-@dt.working_directory(__file__)
-def df_temp_output():
-    return pd.read_csv("TCC_test_output_data/TCC_test_data_case_a1_temp_output.csv")
+# @pytest.fixture(scope="module")
+# @dt.working_directory(__file__)
+# def df_temp_output():
+#     df = pd.read_csv("TCC_test_output_data/TCC_test_data_case_a1_temp_output.csv")
+#     df = df.fillna(fill_value)
 
-@pytest.mark.mandatory
-def test_input_columns(df_input):
-    dt.validate(
-        df_input.columns,
-        {
-            "reference",
-            "period",
-            "total",
-            "comp_1",
-            "comp_2",
-            "comp_3",
-            "comp_4",
-            "amend_total",
-            "predictive",
-            "auxiliary",
-            "abs_threshold",
-            "perc_threshold"
-        }
-    )
+#     return df
+
+# @pytest.fixture(scope="module")
+# @dt.working_directory(__file__)
+# def df_correct_output():
+#     df = pd.read_csv("TCC_test_data/TCC_test_data_case_a1_output.csv")
+#     df = df.drop(columns=['period'])
+#     df = df.fillna(fill_value)
+#     df.loc[df["TCC_marker"] == "N", "TCC_marker"] = fill_value
+#     column_to_move = df.pop("TCC_marker")
+#     df.insert(19, "TCC_marker", column_to_move)
+
+#     return df
 
 
 @pytest.mark.mandatory
-def test_output_columns(df_temp_output):
-    dt.validate(
-        df_temp_output.columns,
-        {
-            "reference",
-            "total",
-            "comp_1",
-            "comp_2",
-            "comp_3",
-            "comp_4",
-            "amend_total",
-            "predictive",
-            "auxiliary",
-            "abs_threshold",
-            "perc_threshold",
-            "abs_diff",
-            "perc_low",
-            "perc_high",
-            "TCC_marker",
-            "final_total",
-            "final_comp_1",
-            "final_comp_2",
-            "final_comp_3",
-            "final_comp_4"
-        }
-    )
+def test_input_columns():
+    for filename in os.listdir("TCC_test_data/"):
+        if filename.endswith(".csv") and "output" not in filename:
+            print(filename)
+            df_input = pd.read_csv("TCC_test_data/" + filename)
+            dt.validate(
+                df_input.columns,
+                {
+                    "reference",
+                    "period",
+                    "total",
+                    "comp_1",
+                    "comp_2",
+                    "comp_3",
+                    "comp_4",
+                    "amend_total",
+                    "predictive",
+                    "auxiliary",
+                    "abs_threshold",
+                    "perc_threshold"
+                }
+            )
 
-# def test_values(df_output):
-#     dt.validate.superset(
-#         df[""],
-#         {"", "", "", "", "", "", "", "", "",}
-#     )
 
+@pytest.mark.mandatory
+def test_output_columns():
+    for filename in os.listdir("TCC_test_output_data/"):
+        df_processed_output = pd.read_csv("TCC_test_output_data/" + filename)
+        dt.validate(
+            df_processed_output.columns,
+            {
+                "reference",
+                "total",
+                "comp_1",
+                "comp_2",
+                "comp_3",
+                "comp_4",
+                "amend_total",
+                "predictive",
+                "auxiliary",
+                "abs_threshold",
+                "perc_threshold",
+                "abs_diff",
+                "perc_low",
+                "perc_high",
+                "TCC_marker",
+                "final_total",
+                "final_comp_1",
+                "final_comp_2",
+                "final_comp_3",
+                "final_comp_4"
+            }
+        )
+
+def test_values():
+    tcc_test_output_data = os.listdir("TCC_test_output_data/")
+    TCC_test_data = os.listdir("TCC_test_data/")
+
+    for file1 in tcc_test_output_data:
+        for file2 in TCC_test_data:
+            if file1 == file2:
+                print(f"Filename '{file1}' and '{file2}' is present in both directories.")
+                df_processed_output = pd.read_csv("TCC_test_output_data/" + file1)
+                df_processed_output = df_processed_output.fillna(fill_value)
+
+                df_correct_output = pd.read_csv("TCC_test_data/" + file2)
+                df_correct_output = df_correct_output.fillna(fill_value)
+                df_correct_output.loc[df_correct_output["TCC_marker"] == "N", "TCC_marker"] = fill_value
+                column_to_move = df_correct_output.pop("TCC_marker")
+                df_correct_output.insert(20, "TCC_marker", column_to_move)
+
+                with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
+                    print("Correct output")
+                    print(df_correct_output)
+                    print("\n")
+                    print("Temp output")
+                    print(df_processed_output)
+
+                dt.validate.superset(df_processed_output, df_correct_output)
