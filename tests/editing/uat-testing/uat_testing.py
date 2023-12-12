@@ -116,54 +116,6 @@ def run_totals_components_with_pandas(path, input_csv, output_csv):
         absolute_threshold_column="abs_threshold",
         percentage_threshold_column="perc_threshold",
     )
-    # We call the wrapper function from pandas_wrapper python file
-    # passing in the required arguments, which in this case are
-    # column names
-    totals_and_components_output_columns = [
-        "abs_diff",
-        "perc_low",
-        "perc_high",
-        "TCC_marker",
-        "final_total",
-        "final_components",
-    ]
-    test_totals_and_components = wrapper(
-        input_dataframe_totals_and_components,
-        "totals_and_components",
-        output_columns=totals_and_components_output_columns,
-        unique_identifier_column="reference",
-        total_column="total",
-        components_list_columns=components,
-        amend_total_column="amend_total",
-        predictive_column="predictive",
-        auxiliary_column="auxiliary",
-        absolute_threshold_column="abs_threshold",
-        percentage_threshold_column="perc_threshold",
-    )
-    # We call the wrapper function from pandas_wrapper python file
-    # passing in the required arguments, which in this case are
-    # column names
-    totals_and_components_output_columns = [
-        "abs_diff",
-        "perc_low",
-        "perc_high",
-        "TCC_marker",
-        "final_total",
-        "final_components",
-    ]
-    test_totals_and_components = wrapper(
-        input_dataframe_totals_and_components,
-        "totals_and_components",
-        output_columns=totals_and_components_output_columns,
-        unique_identifier_column="reference",
-        total_column="total",
-        components_list_columns=components,
-        amend_total_column="amend_total",
-        predictive_column="predictive",
-        auxiliary_column="auxiliary",
-        absolute_threshold_column="abs_threshold",
-        percentage_threshold_column="perc_threshold",
-    )
 
     # Loop through columns that have list and extract as separate columns
     final_data = expand_list_column(
@@ -190,63 +142,7 @@ def run_totals_components_with_pandas(path, input_csv, output_csv):
     final_df = final_df[column_order]
 
     # Write the DataFrame to a CSV, excluding the index column
-    csv_filename = "TCC_test_output_data/" + output_csv
-    final_df.to_csv(csv_filename, index=False)
-
-    # Loop through columns that have list and extract as separate columns
-    final_data = expand_list_column(
-        df=test_totals_and_components,
-        list_column_name="final_components",
-        custom_prefix="final_comp",
-    )
-
-    # Create a new DataFrame from the final_data list
-    final_df = pd.DataFrame(final_data)
-
-    # Drop the "final_components" column
-    final_df.drop(columns=["final_components"], inplace=True)
-
-    # Move the tpc_marker to be the last column
-    column_to_move = "TCC_marker"
-
-    # Define the desired column order with the specified column at the end
-    column_order = [col for col in final_df.columns if col != column_to_move] + [
-        column_to_move
-    ]
-
-    # Create a new DataFrame with the columns in the desired order
-    final_df = final_df[column_order]
-
-    # Write the DataFrame to a CSV, excluding the index column
-    csv_filename = "TCC_test_output_data/" + output_csv
-    final_df.to_csv(csv_filename, index=False)
-
-    # Loop through columns that have list and extract as separate columns
-    final_data = expand_list_column(
-        df=test_totals_and_components,
-        list_column_name="final_components",
-        custom_prefix="final_comp",
-    )
-
-    # Create a new DataFrame from the final_data list
-    final_df = pd.DataFrame(final_data)
-
-    # Drop the "final_components" column
-    final_df.drop(columns=["final_components"], inplace=True)
-
-    # Move the tpc_marker to be the last column
-    column_to_move = "TCC_marker"
-
-    # Define the desired column order with the specified column at the end
-    column_order = [col for col in final_df.columns if col != column_to_move] + [
-        column_to_move
-    ]
-
-    # Create a new DataFrame with the columns in the desired order
-    final_df = final_df[column_order]
-
-    # Write the DataFrame to a CSV, excluding the index column
-    csv_filename = "TCC_test_output_data/" + output_csv
+    csv_filename = "tcc_test_data_processed/" + output_csv
     final_df.to_csv(csv_filename, index=False)
 
 
@@ -319,7 +215,7 @@ def run_thousand_pounds_with_pandas(path, input_csv, output_csv):
 # )
 
 # Run Totals and Components UAT
-run_all_csvs("TCC_test_data/", "totals_and_components")
+run_all_csvs("tcc_test_data_original/", "totals_and_components")
 
 # # Run example data for Thousands Pounds
 # run_thousand_pounds_with_pandas(
@@ -366,10 +262,10 @@ fill_value = 'default_value'
 
 @pytest.mark.mandatory
 def test_input_columns():
-    for filename in os.listdir("TCC_test_data/"):
+    for filename in os.listdir("tcc_test_data_original/"):
         if filename.endswith(".csv") and "output" not in filename:
             print(filename)
-            df_input = pd.read_csv("TCC_test_data/" + filename)
+            df_input = pd.read_csv("tcc_test_data_original/" + filename)
             dt.validate(
                 df_input.columns,
                 {
@@ -391,8 +287,8 @@ def test_input_columns():
 
 @pytest.mark.mandatory
 def test_output_columns():
-    for filename in os.listdir("TCC_test_output_data/"):
-        df_processed_output = pd.read_csv("TCC_test_output_data/" + filename)
+    for filename in os.listdir("tcc_test_data_processed/"):
+        df_processed_output = pd.read_csv("tcc_test_data_processed/" + filename)
         dt.validate(
             df_processed_output.columns,
             {
@@ -420,19 +316,19 @@ def test_output_columns():
         )
 
 def test_values():
-    tcc_test_output_data = os.listdir("TCC_test_output_data/")
-    TCC_test_data = os.listdir("TCC_test_data/")
+    tcc_test_data_original = os.listdir("tcc_test_data_original/")
+    tcc_test_data_processed = os.listdir("tcc_test_data_processed/")
 
-    for file1 in tcc_test_output_data:
-        for file2 in TCC_test_data:
+    for file1 in tcc_test_data_processed:
+        for file2 in tcc_test_data_original:
             if file1 == file2:
                 print(f"Filename '{file1}' and '{file2}' is present in both directories.")
-                df_processed_output = pd.read_csv("TCC_test_output_data/" + file1)
-                df_processed_output = df_processed_output.fillna(fill_value)
+                df_processed_output = pd.read_csv("tcc_test_data_processed/" + file1)
+                # df_processed_output = df_processed_output.fillna(fill_value)
 
-                df_correct_output = pd.read_csv("TCC_test_data/" + file2)
-                df_correct_output = df_correct_output.fillna(fill_value)
-                df_correct_output.loc[df_correct_output["TCC_marker"] == "N", "TCC_marker"] = fill_value
+                df_correct_output = pd.read_csv("tcc_test_data_original/" + file2)
+                # df_correct_output = df_correct_output.fillna(fill_value)
+                # df_correct_output.loc[df_correct_output["TCC_marker"] == "N", "TCC_marker"] = fill_value
                 column_to_move = df_correct_output.pop("TCC_marker")
                 df_correct_output.insert(20, "TCC_marker", column_to_move)
 
