@@ -1,0 +1,19 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: sml-python-small
+  description: Statistical Methods Library for Python Pandas methods used in the Statistical Production Platform (SPP).
+  annotations:
+    jira/project-key: SPP
+    github.com/project-slug: ONSdigital/sml-python-small
+  tags:
+    - python
+    - sml
+  links:
+    - url: https://statisticalmethodslibrary.ons.gov.uk
+      title: SML Website
+      icon: search
+spec:
+  type: library
+  lifecycle: production
+  owner: group:spp-sml
