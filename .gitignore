@@ -13,6 +13,8 @@ dist/
 /tests/editing/totals_and_components/example_data/*output.csv
 /tests/editing/thousand_pounds/example_data/uat/*output.csv
 /tests/editing/totals_and_components/example_data/uat/*output.csv
+/tests/editing/uat-testing/tcc_test_data_original
+/tests/editing/uat-testing/tcc_test_data_processed
 .venv/
 
 # Unit test / coverage reports
