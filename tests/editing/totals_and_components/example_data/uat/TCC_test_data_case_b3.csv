@@ -1,0 +1,4 @@
+﻿reference,period,total,comp_1,comp_2,comp_3,comp_4,amend_total,predictive,auxiliary,abs_threshold,perc_threshold
+3001,202301,1458,632,732,99,157,TRUE,1458,,,0.1
+3002,202301,11902,9201,866,641,112,TRUE,11902,,,0.1
+3003,202301,90,90,0,4,6,TRUE,90,,,0.1

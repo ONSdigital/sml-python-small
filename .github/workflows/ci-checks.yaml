@@ -6,7 +6,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
-      max-parallel: 4
+      max-parallel: 5
       matrix:
         python-version: [3.7]
       fail-fast: false
@@ -21,13 +21,17 @@ jobs:
         with:
           poetry-version: 1.3.2
       - name: Install dependencies
-        run: poetry install
+        run: poetry install --sync
+      - name: Check if project.toml file and poetry.lock file are in sync
+        run: |
+          source $(poetry env info --path)/bin/activate
+          poetry check
       - name: build
         run: poetry build
   test:
     runs-on: ubuntu-latest
     strategy:
-      max-parallel: 4
+      max-parallel: 5
       matrix:
         python-version: [3.7]
       fail-fast: false
@@ -42,7 +46,11 @@ jobs:
         with:
           poetry-version: 1.3.2
       - name: Install dependencies
-        run: poetry install
+        run: poetry install --sync
+      - name: Check if project.toml file and poetry.lock file are in sync
+        run: |
+          source $(poetry env info --path)/bin/activate
+          poetry check
       - name: test
         run: cd tests && poetry run pytest --tap-stream --cov-report=html --junitxml=junit.xml
       - name: Upload Test report
@@ -62,7 +70,7 @@ jobs:
   flake8:
     runs-on: ubuntu-latest
     strategy:
-      max-parallel: 4
+      max-parallel: 5
       matrix:
         python-version: [3.9]
       fail-fast: false
@@ -83,13 +91,17 @@ jobs:
         env:
           GITHUB_PAT: ${{ secrets.CONCOURSE_PAT }}
       - name: Install dependencies
-        run: poetry install
+        run: poetry install --sync
+      - name: Check if project.toml file and poetry.lock file are in sync
+        run: |
+          source $(poetry env info --path)/bin/activate
+          poetry check
       - name: run flake8
         run: poetry run flake8 .
   isort:
     runs-on: ubuntu-latest
     strategy:
-      max-parallel: 4
+      max-parallel: 5
       matrix:
         python-version: [3.9]
       fail-fast: false
@@ -110,6 +122,42 @@ jobs:
         env:
           GITHUB_PAT: ${{ secrets.CONCOURSE_PAT }}
       - name: Install dependencies
-        run: poetry install
+        run: poetry install --sync
+      - name: Check if project.toml file and poetry.lock file are in sync
+        run: |
+          source $(poetry env info --path)/bin/activate
+          poetry check
       - name: run isort
         run: poetry run isort --check-only .
+  bandit:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 5
+      matrix:
+        python-version: [3.9]
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Run image
+        uses: abatilo/actions-poetry@v2.1.4
+        with:
+          poetry-version: 1.3.2
+      - name: setup netrc
+        run: |-
+          echo "machine github.com login ${GITHUB_PAT} password x-oauth-basic" > ~/.netrc
+          chmod 600 ~/.netrc
+        env:
+          GITHUB_PAT: ${{ secrets.CONCOURSE_PAT }}
+      - name: Install dependencies
+        run: poetry install --sync
+      - name: Check if project.toml file and poetry.lock file are in sync
+        run: |
+          source $(poetry env info --path)/bin/activate
+          poetry check
+      - name: run bandit
+        run: poetry run bandit -c pyproject.toml -r .
+
