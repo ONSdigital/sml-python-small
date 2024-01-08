@@ -14,6 +14,7 @@ import math
 # from the T&C method in a tabular format
 # This import isn't necessary to work with the T&C method
 from tabulate import tabulate
+
 # Importing the totals_and_components method from the totals_and_components.py file
 from totals_and_components import totals_and_components
 
@@ -41,7 +42,6 @@ test_data = [
 
 # In this function we pass in the test data directly into the totals_and_components function
 def invoke_process_in_memory_data_example():
-
     # This list is used to keep track of the original data inputted, so we can display this
     # on the command line on a table
 
@@ -82,7 +82,6 @@ def invoke_process_in_memory_data_example():
 
 # In this example we pass a dataset stored in a 2D List[] into the T&C method by unpacking it into separate arguments
 def invoke_process_in_memory_data_example_2():
-
     # We use * to unpack the above list into separate arguments to pass into the T&C method
     for data in test_data:
         result = totals_and_components(*data)
@@ -92,6 +91,7 @@ def invoke_process_in_memory_data_example_2():
 # The two functions below are solely used to create a pretty table on the command line
 # to display the data in a nice format/ table
 # They aren't essential to work with the T&C method
+
 
 # Filter the results returned from T&C method
 # This function is used to wrangle the results returned so we can pass the results
@@ -138,6 +138,7 @@ def filter_data(result, original_data):
 # Function below is not needed to work with the T&C method
 # This is solely for displaying the input and output data from the T&C method
 # in a pretty table format on the command line
+
 
 # This function is used to display the input data and output data returned from the
 # T&C method in a pretty table format on the command line
@@ -223,10 +224,10 @@ def invoke_process_with_local_csv():
                 (row["reference"]),
                 (row["total"]),
                 [
-                    float('NaN') if not row["comp_1"] else (row["comp_1"]),
-                    float('NaN') if not row["comp_2"] else (row["comp_2"]),
-                    float('NaN') if not row["comp_3"] else (row["comp_3"]),
-                    float('NaN') if not row["comp_4"] else (row["comp_4"]),
+                    float("NaN") if not row["comp_1"] else (row["comp_1"]),
+                    float("NaN") if not row["comp_2"] else (row["comp_2"]),
+                    float("NaN") if not row["comp_3"] else (row["comp_3"]),
+                    float("NaN") if not row["comp_4"] else (row["comp_4"]),
                 ],
                 True if not row["amend_total"] == "FALSE" else False,
                 (row["predictive"]),
@@ -249,7 +250,7 @@ def invoke_process_with_local_csv():
             # Interpret nan as empty cell
             for i, component in enumerate(result.final_components):
                 if isinstance(component, float) and math.isnan(component):
-                    result.final_components[i] = ''
+                    result.final_components[i] = ""
 
             new_result_comp = result.final_components
             new_result[result.identifier]["comp"] = new_result_comp
@@ -291,7 +292,7 @@ def invoke_process_with_local_csv():
         # Interpret nan as empty cell in output CSV
         for i, component in enumerate(input_data[2]):
             if isinstance(component, float) and math.isnan(component):
-                input_data[2][i] = ''
+                input_data[2][i] = ""
 
         writer.writeheader()
         for identifier in results:
@@ -337,10 +338,10 @@ A,1625,632,732,99,162,TRUE,1625,,11,,,"""  # noqa: E501
             (row["reference"]),
             (row["total"]),
             [
-                float('NaN') if not row["comp_1"] else (row["comp_1"]),
-                float('NaN') if not row["comp_2"] else (row["comp_2"]),
-                float('NaN') if not row["comp_3"] else (row["comp_3"]),
-                float('NaN') if not row["comp_4"] else (row["comp_4"]),
+                float("NaN") if not row["comp_1"] else (row["comp_1"]),
+                float("NaN") if not row["comp_2"] else (row["comp_2"]),
+                float("NaN") if not row["comp_3"] else (row["comp_3"]),
+                float("NaN") if not row["comp_4"] else (row["comp_4"]),
             ],
             True if not row["amend_total"] == "FALSE" else False,
             (row["predictive"]),
@@ -364,7 +365,7 @@ A,1625,632,732,99,162,TRUE,1625,,11,,,"""  # noqa: E501
         # Interpret nan as empty cell
         for i, component in enumerate(result.final_components):
             if isinstance(component, float) and math.isnan(component):
-                result.final_components[i] = ''
+                result.final_components[i] = ""
 
         new_result_comp = result.final_components
         new_result[result.identifier]["comp"] = new_result_comp

@@ -10,7 +10,9 @@ from typing import List, Optional
 import pandas as pd
 
 from sml_small.editing.thousand_pounds.thousand_pounds import thousand_pounds
-from sml_small.editing.totals_and_components.totals_and_components import totals_and_components
+from sml_small.editing.totals_and_components.totals_and_components import (
+    totals_and_components,
+)
 
 
 # Runner methods, takes input csv, manipulates data into correct format as needed and runs method row by row
@@ -60,7 +62,7 @@ def run_totals_and_components(
     # loop through the components columns and create a single input
     for i in components_list_columns:
         if row[i] is None:
-            new_list.append(float('NaN'))
+            new_list.append(float("NaN"))
         else:
             new_list.append(row[i])
 
@@ -132,7 +134,7 @@ def run_thousand_pounds(
     target_variables_list = {}
     for value in target_variables_columns:
         if row[value] is None:
-            target_variables_list[value] = float('NaN')
+            target_variables_list[value] = float("NaN")
         else:
             target_variables_list[value] = row[value]
 

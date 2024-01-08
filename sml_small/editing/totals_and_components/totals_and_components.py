@@ -13,8 +13,16 @@ from enum import Enum
 from os import path
 from typing import List, Optional, Tuple, Union
 
-from sml_small.utils.common_utils import convert_input_to_decimal, log_table, validate_number, validate_precision
-from sml_small.utils.error_utils import get_mandatory_param_error, get_one_of_params_mandatory_error
+from sml_small.utils.common_utils import (
+    convert_input_to_decimal,
+    log_table,
+    validate_number,
+    validate_precision,
+)
+from sml_small.utils.error_utils import (
+    get_mandatory_param_error,
+    get_one_of_params_mandatory_error,
+)
 
 # Pick up configuration for logging
 log_config_path = path.join(path.dirname(path.abspath(__file__)), "../../logging.conf")
@@ -464,10 +472,12 @@ def clean_component_list(components: List[Decimal]):
     """
     for i, component in enumerate(components):
         if isinstance(component, Decimal) and math.isnan(component):
-            components[i] = float('nan')
+            components[i] = float("nan")
 
     cleaned_components = [
-        str(component) if component is not None and not math.isnan(component) else component
+        str(component)
+        if component is not None and not math.isnan(component)
+        else component
         for component in components
     ]
 
