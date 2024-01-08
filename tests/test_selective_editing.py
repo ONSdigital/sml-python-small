@@ -54,9 +54,9 @@ def load_csv(filepath):
 #    constant, you can amend data in the tests without needing new test data.
 # ====================================================================================
 
+
 # noinspection PyTypeChecker
 class TestSelectiveEditing(TestCase):
-
     # --- Test fails with type error if no input ---
 
     def test_input_provided(self):

@@ -5,11 +5,19 @@ import numpy as np
 import pandas as pd
 
 # noinspection PyProtectedMember
-from sml_small.date_adjustment import (_convert_question_string_to_list, _generate_error_code_list, _set_dtypes,
-                                       average_weekly_subfunction, date_adjustment, date_adjustment_subfunction,
-                                       generate_average_weekly_questions, midpoint_subfunction,
-                                       missing_value_subfunction, primary_wrangler_subfunction,
-                                       secondary_wrangler_subfunction)
+from sml_small.date_adjustment import (
+    _convert_question_string_to_list,
+    _generate_error_code_list,
+    _set_dtypes,
+    average_weekly_subfunction,
+    date_adjustment,
+    date_adjustment_subfunction,
+    generate_average_weekly_questions,
+    midpoint_subfunction,
+    missing_value_subfunction,
+    primary_wrangler_subfunction,
+    secondary_wrangler_subfunction,
+)
 
 pd.options.mode.chained_assignment = None
 pd.set_option("display.max_columns", 30)
@@ -114,9 +122,9 @@ trading_weights = load_csv(f"{fxt}/da_trading_weights_data.csv")
 # TESTS: DATE ADJUSTMENT MAIN METHOD
 # --------------------------------------------------------------------------------------
 
+
 # noinspection PyTypeChecker
 class TestDateAdjustment(TestCase):
-
     # --- Test fails with type error if no input. ---
 
     def test_input_provided(self):
@@ -1017,7 +1025,6 @@ class TestDateAdjustment(TestCase):
 
 
 class TestGenerateAverageWeeklyQuestions(TestCase):
-
     # --- Test fails with type error if no input. ---
 
     # noinspection PyArgumentList
@@ -1095,7 +1102,6 @@ class TestGenerateAverageWeeklyQuestions(TestCase):
 
 
 class MissingValueSubfunction(TestCase):
-
     # --- Test fails with type error if no input ---
 
     # noinspection PyArgumentList
@@ -1201,7 +1207,6 @@ class MissingValueSubfunction(TestCase):
 
 
 class TestPrimaryWranglerSubfunction(TestCase):
-
     # --- Test fails with type error if no input ---
 
     # noinspection PyArgumentList
@@ -1739,7 +1744,6 @@ class TestPrimaryWranglerSubfunction(TestCase):
 
 
 class TestMidpointSubfunction(TestCase):
-
     # --- Test fails with type error if no input ---
 
     def test_input_provided(self):
@@ -2090,7 +2094,6 @@ class TestMidpointSubfunction(TestCase):
         )
         for _idx, row in ret_val.iterrows():
             if row[set_to_mid_point_col] != "N" and row[equal_weighted_col] == "N":
-
                 non_zero_after_crps = trading_weights[
                     (trading_weights[trading_weights_col] > 0)
                     & (
@@ -2131,7 +2134,6 @@ class TestMidpointSubfunction(TestCase):
         )
         for _idx, row in ret_val.iterrows():
             if row[set_to_mid_point_col] != "N" and row[equal_weighted_col] == "N":
-
                 non_zero_before_crpe = trading_weights[
                     (trading_weights[trading_weights_col] > 0)
                     & (
@@ -2175,7 +2177,6 @@ class TestMidpointSubfunction(TestCase):
                 row["date_change_in_return_period_flag"] == "C"
                 and row[use_calendar_days_col] == "N"
             ):
-
                 midpoint_data = trading_weights[
                     (trading_weights[trading_date_col] == row["midpoint_date"])
                     & (trading_weights[trading_domain_col] == row[domain_col])
@@ -2738,7 +2739,6 @@ class TestSecondaryWranglerSubfunction(TestCase):
 
 
 class TestDateAdjustmentSubfunction(TestCase):
-
     # --- Test fails with type error if no input ---
 
     def test_input_provided(self):
@@ -2865,7 +2865,6 @@ class TestDateAdjustmentSubfunction(TestCase):
 
 
 class TestAverageWeeklySubfunction(TestCase):
-
     # --- Test fails with type error if no input ---
 
     def test_input_provided(self):
@@ -2980,7 +2979,6 @@ class TestAverageWeeklySubfunction(TestCase):
 
 
 class UserAcceptanceTesting(TestCase):
-
     # noinspection PyMethodMayBeStatic
     def test_uat_fix_1(self):
         # Failure caused by all rows being in error flagged stat before secondary

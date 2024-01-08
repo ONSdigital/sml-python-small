@@ -570,7 +570,6 @@ def primary_wrangler_subfunction(
     # Rule 3.1 & 3.2
 
     def fix_dates(row):
-
         #  Ensure we have the EPS and EPE dates and they are valid.
         if pd.isnull(row[expected_start_date_col]):
             row = _apply_error_flag(row, "E14", da_error_flag_col, target_columns)
@@ -1035,7 +1034,6 @@ def secondary_wrangler_subfunction(
     )
 
     def create_weights_n(row):
-
         if row[equal_weighted_col] == "Y":
             row["sum_of_trading_day_weights_over_actual_returned_period"] = row[
                 "number_of_days_in_actual_returned_period"
@@ -1154,7 +1152,6 @@ def date_adjustment_subfunction(
     )
 
     def da_method(row):
-
         # SPP83 - AC 3
         if row["sum_of_trading_day_weights_over_contributors_returned_period"] == 0:
             row = _apply_error_flag(row, "E10", da_error_flag_col, target_columns)

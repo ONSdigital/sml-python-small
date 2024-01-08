@@ -29,6 +29,10 @@ bandit = "^1.7.5"
 [tool.bandit]
 exclude_dirs = ["tests"]
 
+[tool.isort]
+profile="black"
+known_third_party=["boto3","moto","pandas","numpy"]
+
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
