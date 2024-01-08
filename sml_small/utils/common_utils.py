@@ -9,7 +9,10 @@ from decimal import Decimal, getcontext
 from os import path
 from typing import Dict, List
 
-from sml_small.utils.error_utils import get_param_outside_range_error, get_params_is_not_a_number_error
+from sml_small.utils.error_utils import (
+    get_param_outside_range_error,
+    get_params_is_not_a_number_error,
+)
 
 log_config_path = path.join(path.dirname(path.abspath(__file__)), "../logging.conf")
 logging.config.fileConfig(log_config_path)
