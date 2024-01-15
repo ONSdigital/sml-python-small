@@ -203,7 +203,7 @@ fill_value = 'default_value'
 def test_input_columns():
     for filename in os.listdir("tcc_test_data_original/"):
         if filename.endswith(".csv") and "output" not in filename:
-            print(filename)
+            # print(filename)
             df_input = pd.read_csv("tcc_test_data_original/" + filename)
             dt.validate(
                 df_input.columns,
@@ -254,6 +254,7 @@ def test_output_columns():
             }
         )
 
+@pytest.mark.mandatory
 def test_values():
     tcc_test_data_original = os.listdir("tcc_test_data_original/")
     tcc_test_data_processed = os.listdir("tcc_test_data_processed/")
@@ -261,6 +262,8 @@ def test_values():
     for file1 in tcc_test_data_processed:
         for file2 in tcc_test_data_original:
             if file1 == file2:
+                print("\n")
+                print("====================================================================================================================")
                 print(f"Filename '{file1}' and '{file2}' is present in both directories.")
                 df_processed_output = pd.read_csv("tcc_test_data_processed/" + file1)
 
@@ -270,6 +273,7 @@ def test_values():
                 df_correct_output = df_correct_output.fillna(0)
 
                 with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
+                    print("\n")
                     print("Correct output")
                     print(df_correct_output)
                     print("\n")
