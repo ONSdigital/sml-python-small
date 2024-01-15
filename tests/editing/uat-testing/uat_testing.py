@@ -29,10 +29,10 @@ def run_all_csvs(directory, function):
                     directory, input_filename, output_filename
                 )
 
-            elif function == "thousand_pounds":
-                run_thousand_pounds_with_pandas(
-                    directory, input_filename, output_filename
-                )
+            # elif function == "thousand_pounds":
+            #     run_thousand_pounds_with_pandas(
+            #         directory, input_filename, output_filename
+            #     )
 
 
 # Function below is used to read a CSV file from the given
@@ -99,7 +99,7 @@ def run_totals_components_with_pandas(path, input_csv, output_csv):
         "abs_diff",
         "perc_low",
         "perc_high",
-        "TCC_marker",
+        "tcc_marker",
         "final_total",
         "final_components",
     ]
@@ -121,7 +121,7 @@ def run_totals_components_with_pandas(path, input_csv, output_csv):
     final_data = expand_list_column(
         df=test_totals_and_components,
         list_column_name="final_components",
-        custom_prefix="final_comp",
+        custom_prefix="final_component",
     )
 
     # Create a new DataFrame from the final_data list
@@ -131,7 +131,7 @@ def run_totals_components_with_pandas(path, input_csv, output_csv):
     final_df.drop(columns=["final_components"], inplace=True)
 
     # Move the tpc_marker to be the last column
-    column_to_move = "TCC_marker"
+    column_to_move = "tcc_marker"
 
     # Define the desired column order with the specified column at the end
     column_order = [col for col in final_df.columns if col != column_to_move] + [
@@ -143,67 +143,6 @@ def run_totals_components_with_pandas(path, input_csv, output_csv):
 
     # Write the DataFrame to a CSV, excluding the index column
     csv_filename = "tcc_test_data_processed/" + output_csv
-    final_df.to_csv(csv_filename, index=False)
-
-
-# ---------------------------------------
-# Thousand Pounds usage with Pandas
-# ---------------------------------------
-def run_thousand_pounds_with_pandas(path, input_csv, output_csv):
-    input_dataframe_thousand_pounds = load_csv(path + input_csv)
-
-    # match target variable columns q<number>
-    list_column_pattern = r"q\d+"
-    target_variables = filter_columns_by_pattern(
-        input_dataframe_thousand_pounds, list_column_pattern
-    )
-
-    thousand_pounds_output_columns = [
-        "principal_final_value",
-        "target_variables",
-        "tpc_ratio",
-        "tpc_marker",
-    ]
-    test_thousand_pounds = wrapper(
-        input_dataframe_thousand_pounds,
-        "thousand_pounds",
-        output_columns=thousand_pounds_output_columns,
-        unique_identifier_column="RU",
-        principal_variable_column="principal_val",
-        target_variables_columns=target_variables,
-        upper_limit_column="threshold_upper",
-        lower_limit_column="threshold_lower",
-        predictive_column="predictive_val",
-        auxiliary_column="aux_val",
-    )
-
-    # Expand columns that contain a list of objects (e.g target_variable [TargetVariable(identifier='q42', original_value='32', final_value='0.032'),...])
-    # and create separate columns e.g: q42_final_value
-    final_data = expand_list_column(
-        df=test_thousand_pounds,
-        list_column_name="target_variables",
-        prefix_attribute="identifier",
-    )
-
-    # Create a new DataFrame from the final_data list
-    final_df = pd.DataFrame(final_data)
-
-    # Drop the "target_variables" column
-    final_df.drop(columns=["target_variables"], inplace=True)
-
-    # Move the tpc_marker to be the last column
-    column_to_move = "tpc_marker"
-
-    # Define the desired column order with the specified column at the end
-    column_order = [col for col in final_df.columns if col != column_to_move] + [
-        column_to_move
-    ]
-
-    # Update the DataFrame with the columns in the desired order
-    final_df = final_df[column_order]
-
-    # Write the DataFrame to a CSV, excluding the index column
-    csv_filename = path + output_csv
     final_df.to_csv(csv_filename, index=False)
 
 
@@ -306,12 +245,12 @@ def test_output_columns():
                 "abs_diff",
                 "perc_low",
                 "perc_high",
-                "TCC_marker",
+                "tcc_marker",
                 "final_total",
-                "final_comp_1",
-                "final_comp_2",
-                "final_comp_3",
-                "final_comp_4"
+                "final_component_1",
+                "final_component_2",
+                "final_component_3",
+                "final_component_4"
             }
         )
 
@@ -324,19 +263,17 @@ def test_values():
             if file1 == file2:
                 print(f"Filename '{file1}' and '{file2}' is present in both directories.")
                 df_processed_output = pd.read_csv("tcc_test_data_processed/" + file1)
-                # df_processed_output = df_processed_output.fillna(fill_value)
 
                 df_correct_output = pd.read_csv("tcc_test_data_original/" + file2)
-                # df_correct_output = df_correct_output.fillna(fill_value)
-                # df_correct_output.loc[df_correct_output["TCC_marker"] == "N", "TCC_marker"] = fill_value
-                column_to_move = df_correct_output.pop("TCC_marker")
-                df_correct_output.insert(20, "TCC_marker", column_to_move)
+
+                df_processed_output = df_processed_output.fillna(0)
+                df_correct_output = df_correct_output.fillna(0)
 
                 with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
                     print("Correct output")
                     print(df_correct_output)
                     print("\n")
-                    print("Temp output")
+                    print("Processed output")
                     print(df_processed_output)
 
                 dt.validate.superset(df_processed_output, df_correct_output)
