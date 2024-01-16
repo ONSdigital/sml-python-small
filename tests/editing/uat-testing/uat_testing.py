@@ -9,6 +9,7 @@ import pandas as pd
 import datatest as dt
 import os
 import re
+import numpy as np
 
 # We import the wrapper function from the pandas_wrapper
 from sml_small.utils.pandas_wrapper import wrapper
@@ -272,12 +273,25 @@ def test_values():
                 df_processed_output = df_processed_output.fillna(0)
                 df_correct_output = df_correct_output.fillna(0)
 
-                with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
-                    print("\n")
-                    print("Correct output")
-                    print(df_correct_output)
-                    print("\n")
-                    print("Processed output")
-                    print(df_processed_output)
+                # with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
+                #     print("\n")
+                #     print("Correct output")
+                #     print(df_correct_output)
+                #     print("\n")
+                #     print("Processed output")
+                #     print(df_processed_output)
 
-                dt.validate.superset(df_processed_output, df_correct_output)
+                # dt.validate.superset(df_processed_output, df_correct_output)
+
+                # Compare the dataframes
+                comparison = df_processed_output == df_correct_output
+                if comparison.all().all():
+                    print("CSV files match.")
+                    dt.validate.superset(df_processed_output, df_correct_output)
+                else:
+                    mismatch_locations = np.where(comparison == False)
+                    for row, col in zip(*mismatch_locations):
+                        print(f"Value mismatch at row {row}, column {col}.")
+                        print(f"Correct output: {df_correct_output.iloc[row, col]}")
+                        print(f"Processed output: {df_processed_output.iloc[row, col]}")
+                        dt.validate.superset(df_processed_output, df_correct_output)
