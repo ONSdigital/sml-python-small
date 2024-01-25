@@ -213,9 +213,8 @@ def display_results(results):
 def invoke_process_with_local_csv():
     # Read the CSV file and extract the input data and pass into the
     # T&C method
-    read_csv_file = "../../../tests/editing/totals_and_components/example_data/example_test_data.csv",
     with open(
-        read_csv_file,
+        "../../../tests/editing/totals_and_components/example_data/example_test_data.csv",
         mode="r",
     ) as read_csv_file:
         read_file = csv.DictReader(read_csv_file)
@@ -223,7 +222,7 @@ def invoke_process_with_local_csv():
 
     # Write the results returned by the T&C into the CSV file
     write_file_location = "../../../tests/editing/totals_and_components/example_data/example_test_data_scenario_1_output.csv"
-    write_results_to_file = write_results_to_file(input_data, results, write_file_location)
+    write_results_to_file(input_data, results, write_file_location)
 
 
 # In this function we read the CSV file and extract the input data and pass into the totals_and_components function.
@@ -238,8 +237,8 @@ A,1625,632,732,99,162,TRUE,1625,,11,,,"""  # noqa: E501
     input_data, results = extract_data_from_file(csv_data)
 
     # Write the results returned by the T&C into the CSV file
-    write_results_to_file = write_results_to_file(input_data, results, write_file_location)
-    write_file_location = "../../../tests/editing/totals_and_components/example_data/example_test_data_scenario_2_output.csv",
+    write_file_location = "../../../tests/editing/totals_and_components/example_data/example_test_data_scenario_2_output.csv"
+    write_results_to_file(input_data, results, write_file_location)
     
 
 def extract_data_from_file(read_file_data):
@@ -290,7 +289,7 @@ def extract_data_from_file(read_file_data):
 def write_results_to_file(input_data, results, write_file_location):
     # Write the results into the CSV file
     with open(
-        write_file_location,
+        str(write_file_location),
         mode="w",
     ) as read_csv_file:
         field_names = [
@@ -349,6 +348,8 @@ def write_results_to_file(input_data, results, write_file_location):
                     "TCC_marker": results[identifier]["tcc_marker"],
                 }
             )
+    return True
+
 
 # You can run the functions invoke_process_in_memory_data_example or invoke_process_in_memory_data_example_2 below
 invoke_process_with_local_csv()
