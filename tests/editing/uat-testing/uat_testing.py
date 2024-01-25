@@ -134,13 +134,13 @@ def run_totals_components_with_pandas(path, input_csv, output_csv):
     # Move the tcc_marker to be the last column
     column_to_move = "tcc_marker"
 
-    # Define the desired column order with the specified column at the end
-    # column_order = [col for col in final_df.columns if col != column_to_move] + [
-    #     column_to_move
-    # ]
+    # Define the desired column order with the specified column at the end
+    column_order = [col for col in final_df.columns if col != column_to_move] + [
+        column_to_move
+    ]
 
-    # # Create a new DataFrame with the columns in the desired order
-    # final_df = final_df[column_order]
+    # Create a new DataFrame with the columns in the desired order
+    final_df = final_df[column_order]
 
     # Write the DataFrame to a CSV, excluding the index column
     csv_filename = "tcc_test_data_processed/" + output_csv
@@ -266,23 +266,23 @@ def test_values_tcc():
             if file1 == file2:
                 print("\n")
                 print("====================================================================================================================")
-                print(f"Filename '{file1}' and '{file2}' is present in both directories.")
+                print(f"Filename '{file1}' and '{file2}' are present in both directories (tcc_test_data_original & tcc_test_data_processed).")
                 df_processed_output = pd.read_csv("tcc_test_data_processed/" + file1)
 
-                df_processed_output.rename(columns={
-                    "tcc_marker": "TCC_marker", 
-                    "final_component_1": "final_comp_1",
-                    "final_component_2": "final_comp_2",
-                    "final_component_3": "final_comp_3",
-                    "final_component_4": "final_comp_4",
-                    }, inplace=True)
+                # df_processed_output.rename(columns={
+                #     "tcc_marker": "TCC_marker", 
+                #     "final_component_1": "final_comp_1",
+                #     "final_component_2": "final_comp_2",
+                #     "final_component_3": "final_comp_3",
+                #     "final_component_4": "final_comp_4",
+                #     }, inplace=True)
 
                 df_correct_output = pd.read_csv("tcc_test_data_original/" + file2)
 
                 df_processed_output = df_processed_output.fillna(0)
                 df_correct_output = df_correct_output.fillna(0)
 
-                df_correct_output.drop("period", axis=1, inplace=True)
+                # df_correct_output.drop("period", axis=1, inplace=True)
 
 
                 # with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
@@ -302,12 +302,14 @@ def test_values_tcc():
                     dt.validate.superset(df_processed_output, df_correct_output)
                 else:
                     mismatch_locations = np.where(comparison == False)
+                    # print(mismatch_locations)
                     for row, col in zip(*mismatch_locations):
-                        print(f"Value mismatch at row {row}, column {col}.")
-                        print(f"Correct output: {df_correct_output.iloc[row, col]}")
+                        print(f"Value mismatch at reference {df_processed_output.loc[row, 'reference']}, row {row+1} and column {col}.")
+                        print(f"Expected output: {df_correct_output.iloc[row, col]}")
                         print(f"Processed output: {df_processed_output.iloc[row, col]}")
+                        print("\n")
+                        print(f"The file with the error is '{file2}' within the tcc_test_data_processed directory.")
                         dt.validate.superset(df_processed_output, df_correct_output)
-
 
 @pytest.mark.mandatory
 def test_output_columns_tcc():
