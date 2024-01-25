@@ -213,57 +213,86 @@ def display_results(results):
 def invoke_process_with_local_csv():
     # Read the CSV file and extract the input data and pass into the
     # T&C method
-    results = {}
+    read_csv_file = "../../../tests/editing/totals_and_components/example_data/example_test_data.csv",
     with open(
-        "../../../tests/editing/totals_and_components/example_data/example_test_data.csv",
+        read_csv_file,
         mode="r",
-    ) as csv_file:
-        csv_reader = csv.DictReader(csv_file)
-        for row in csv_reader:
-            input_data = [
-                (row["reference"]),
-                (row["total"]),
-                [
-                    float("NaN") if not row["comp_1"] else (row["comp_1"]),
-                    float("NaN") if not row["comp_2"] else (row["comp_2"]),
-                    float("NaN") if not row["comp_3"] else (row["comp_3"]),
-                    float("NaN") if not row["comp_4"] else (row["comp_4"]),
-                ],
-                True if not row["amend_total"] == "FALSE" else False,
-                (row["predictive"]),
-                None if not row["auxiliary"] else (row["auxiliary"]),
-                None if not row["abs_threshold"] else (row["abs_threshold"]),
-                None if not row["perc_threshold"] else (row["perc_threshold"]),
-            ]
-
-            result = totals_and_components(*input_data)
-            new_result = {
-                result.identifier: {
-                    "absolute_difference": result.absolute_difference,
-                    "low_percent_threshold": result.low_percent_threshold,
-                    "high_percent_threshold": result.high_percent_threshold,
-                    "final_total": result.final_total,
-                    "tcc_marker": result.tcc_marker,
-                }
-            }
-
-            # Interpret nan as empty cell
-            for i, component in enumerate(result.final_components):
-                if isinstance(component, float) and math.isnan(component):
-                    result.final_components[i] = ""
-
-            new_result_comp = result.final_components
-            new_result[result.identifier]["comp"] = new_result_comp
-            new_result[result.identifier]["input_data"] = input_data
-
-            results.update(new_result)
-        print(results)
+    ) as read_csv_file:
+        read_file = csv.DictReader(read_csv_file)
+        input_data, results = extract_data_from_file(read_file)
 
     # Write the results returned by the T&C into the CSV file
+    write_file_location = "../../../tests/editing/totals_and_components/example_data/example_test_data_scenario_1_output.csv"
+    write_results_to_file = write_results_to_file(input_data, results, write_file_location)
+
+
+# In this function we read the CSV file and extract the input data and pass into the totals_and_components function.
+# Write the results returned by the T&C method into the CSV file.
+def invoke_process_with_in_memory_csv():
+    # Take the CSV data and pass into the
+    # T&C method
+    in_memory_csv_data = """reference,total,comp_1,comp_2,comp_3,comp_4,amend_total,predictive,auxiliary,abs_threshold,perc_threshold
+A,1625,632,732,99,162,TRUE,1625,,11,,,"""  # noqa: E501
+
+    csv_data = csv.DictReader(in_memory_csv_data.splitlines())
+    input_data, results = extract_data_from_file(csv_data)
+
+    # Write the results returned by the T&C into the CSV file
+    write_results_to_file = write_results_to_file(input_data, results, write_file_location)
+    write_file_location = "../../../tests/editing/totals_and_components/example_data/example_test_data_scenario_2_output.csv",
+    
+
+def extract_data_from_file(read_file_data):
+    # Read the CSV file and extract the input data and pass into the
+    # T&C method
+    results = {}
+    for row in read_file_data:
+        input_data = [
+            (row["reference"]),
+            (row["total"]),
+            [
+                float("NaN") if not row["comp_1"] else (row["comp_1"]),
+                float("NaN") if not row["comp_2"] else (row["comp_2"]),
+                float("NaN") if not row["comp_3"] else (row["comp_3"]),
+                float("NaN") if not row["comp_4"] else (row["comp_4"]),
+            ],
+            True if not row["amend_total"] == "FALSE" else False,
+            (row["predictive"]),
+            None if not row["auxiliary"] else (row["auxiliary"]),
+            None if not row["abs_threshold"] else (row["abs_threshold"]),
+            None if not row["perc_threshold"] else (row["perc_threshold"]),
+        ]
+
+        result = totals_and_components(*input_data)
+        new_result = {
+            result.identifier: {
+                "absolute_difference": result.absolute_difference,
+                "low_percent_threshold": result.low_percent_threshold,
+                "high_percent_threshold": result.high_percent_threshold,
+                "final_total": result.final_total,
+                "tcc_marker": result.tcc_marker,
+            }
+        }
+
+        # Interpret nan as empty cell
+        for i, component in enumerate(result.final_components):
+            if isinstance(component, float) and math.isnan(component):
+                result.final_components[i] = ""
+
+        new_result_comp = result.final_components
+        new_result[result.identifier]["comp"] = new_result_comp
+        new_result[result.identifier]["input_data"] = input_data
+
+        results.update(new_result)
+    print(results)
+    return input_data, results
+
+def write_results_to_file(input_data, results, write_file_location):
+    # Write the results into the CSV file
     with open(
-        "../../../tests/editing/totals_and_components/example_data/example_test_data_scenario_1_output.csv",
+        write_file_location,
         mode="w",
-    ) as csv_file:
+    ) as read_csv_file:
         field_names = [
             "reference",
             "total",
@@ -287,7 +316,7 @@ def invoke_process_with_local_csv():
             "final_comp_4",
         ]
 
-        writer = csv.DictWriter(csv_file, fieldnames=field_names, extrasaction="ignore")
+        writer = csv.DictWriter(read_csv_file, fieldnames=field_names, extrasaction="ignore")
 
         # Interpret nan as empty cell in output CSV
         for i, component in enumerate(input_data[2]):
@@ -320,117 +349,6 @@ def invoke_process_with_local_csv():
                     "TCC_marker": results[identifier]["tcc_marker"],
                 }
             )
-
-
-# In this function we read the CSV file and extract the input data and pass into the totals_and_components function.
-# Write the results returned by the T&C method into the CSV file.
-def invoke_process_with_in_memory_csv():
-    # Read the CSV file and extract the input data and pass into the
-    # T&C method
-    in_memory_csv_data = """reference,total,comp_1,comp_2,comp_3,comp_4,amend_total,predictive,auxiliary,abs_threshold,perc_threshold
-A,1625,632,732,99,162,TRUE,1625,,11,,,"""  # noqa: E501
-
-    csv_reader = csv.DictReader(in_memory_csv_data.splitlines())
-
-    results = {}
-    for row in csv_reader:
-        input_data = [
-            (row["reference"]),
-            (row["total"]),
-            [
-                float("NaN") if not row["comp_1"] else (row["comp_1"]),
-                float("NaN") if not row["comp_2"] else (row["comp_2"]),
-                float("NaN") if not row["comp_3"] else (row["comp_3"]),
-                float("NaN") if not row["comp_4"] else (row["comp_4"]),
-            ],
-            True if not row["amend_total"] == "FALSE" else False,
-            (row["predictive"]),
-            None if not row["auxiliary"] else (row["auxiliary"]),
-            None if not row["abs_threshold"] else (row["abs_threshold"]),
-            None if not row["perc_threshold"] else (row["perc_threshold"]),
-        ]
-
-        result = totals_and_components(*input_data)
-
-        new_result = {
-            result.identifier: {
-                "absolute_difference": result.absolute_difference,
-                "low_percent_threshold": result.low_percent_threshold,
-                "high_percent_threshold": result.high_percent_threshold,
-                "final_total": result.final_total,
-                "tcc_marker": result.tcc_marker,
-            }
-        }
-
-        # Interpret nan as empty cell
-        for i, component in enumerate(result.final_components):
-            if isinstance(component, float) and math.isnan(component):
-                result.final_components[i] = ""
-
-        new_result_comp = result.final_components
-        new_result[result.identifier]["comp"] = new_result_comp
-        new_result[result.identifier]["input_data"] = input_data
-
-        results.update(new_result)
-    print(results)
-
-    # Write the results returned by the T&C into the CSV file
-    with open(
-        "../../../tests/editing/totals_and_components/example_data/example_test_data_scenario_2_output.csv",
-        mode="w",
-    ) as csv_file:
-        field_names = [
-            "reference",
-            "total",
-            "comp_1",
-            "comp_2",
-            "comp_3",
-            "comp_4",
-            "amend_total",
-            "predictive",
-            "auxiliary",
-            "abs_threshold",
-            "perc_threshold",
-            "abs_diff",
-            "perc_low",
-            "perc_high",
-            "TCC_marker",
-            "final_total",
-            "final_comp_1",
-            "final_comp_2",
-            "final_comp_3",
-            "final_comp_4",
-        ]
-
-        writer = csv.DictWriter(csv_file, fieldnames=field_names, extrasaction="ignore")
-
-        writer.writeheader()
-        for identifier in results:
-            writer.writerow(
-                {
-                    "reference": identifier,
-                    "total": results[identifier]["input_data"][1],
-                    "comp_1": results[identifier]["input_data"][2][0],
-                    "comp_2": results[identifier]["input_data"][2][1],
-                    "comp_3": results[identifier]["input_data"][2][2],
-                    "comp_4": results[identifier]["input_data"][2][3],
-                    "amend_total": results[identifier]["input_data"][3],
-                    "predictive": results[identifier]["input_data"][4],
-                    "auxiliary": results[identifier]["input_data"][5],
-                    "abs_threshold": results[identifier]["input_data"][6],
-                    "perc_threshold": results[identifier]["input_data"][7],
-                    "abs_diff": results[identifier]["absolute_difference"],
-                    "perc_low": results[identifier]["low_percent_threshold"],
-                    "perc_high": results[identifier]["high_percent_threshold"],
-                    "final_total": results[identifier]["final_total"],
-                    "final_comp_1": results[identifier]["comp"][0],
-                    "final_comp_2": results[identifier]["comp"][1],
-                    "final_comp_3": results[identifier]["comp"][2],
-                    "final_comp_4": results[identifier]["comp"][3],
-                    "TCC_marker": results[identifier]["tcc_marker"],
-                }
-            )
-
 
 # You can run the functions invoke_process_in_memory_data_example or invoke_process_in_memory_data_example_2 below
 invoke_process_with_local_csv()
