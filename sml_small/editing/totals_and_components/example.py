@@ -208,10 +208,10 @@ def display_results(results):
         print("\n")
 
 
-# In this function we read the CSV file and extract the input data and pass into the totals_and_components function.
+# In this function we read the CSV file, extract the input data and pass into the totals_and_components function.
 # Write the results returned by the T&C method into the CSV file.
 def invoke_process_with_local_csv():
-    # Read the CSV file and extract the input data and pass into the
+    # Read the CSV file, extract the input data and pass into the
     # T&C method
     with open(
         "../../../tests/editing/totals_and_components/example_data/example_test_data.csv",
@@ -225,13 +225,12 @@ def invoke_process_with_local_csv():
     write_results_to_file(input_data, results, write_file_location)
 
 
-# In this function we read the CSV file and extract the input data and pass into the totals_and_components function.
+# In this function we read the CSV file, extract the input data and pass into the totals_and_components function.
 # Write the results returned by the T&C method into the CSV file.
 def invoke_process_with_in_memory_csv():
-    # Take the CSV data and pass into the
-    # T&C method
+    # Take the CSV data and pass it into the T&C method
     in_memory_csv_data = """reference,total,comp_1,comp_2,comp_3,comp_4,amend_total,predictive,auxiliary,abs_threshold,perc_threshold
-A,1625,632,732,99,162,TRUE,1625,,11,,,"""  # noqa: E501
+                            A,1625,632,732,99,162,TRUE,1625,,11,,,"""  # noqa: E501
 
     csv_data = csv.DictReader(in_memory_csv_data.splitlines())
     input_data, results = input_data_to_tac_method(csv_data)
