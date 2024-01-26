@@ -239,7 +239,7 @@ A,1625,632,732,99,162,TRUE,1625,,11,,,"""  # noqa: E501
     # Write the results returned by the T&C into the CSV file
     write_file_location = "../../../tests/editing/totals_and_components/example_data/example_test_data_scenario_2_output.csv"
     write_results_to_file(input_data, results, write_file_location)
-    
+
 
 def input_data_to_tac_method(read_file_data):
     # Pass data into the T&C method
@@ -285,6 +285,7 @@ def input_data_to_tac_method(read_file_data):
     print(results)
     return input_data, results
 
+
 def write_results_to_file(input_data, results, write_file_location):
     # Write the results into the CSV file
     with open(
@@ -314,7 +315,9 @@ def write_results_to_file(input_data, results, write_file_location):
             "final_comp_4",
         ]
 
-        writer = csv.DictWriter(read_csv_file, fieldnames=field_names, extrasaction="ignore")
+        writer = csv.DictWriter(
+            read_csv_file, fieldnames=field_names, extrasaction="ignore"
+        )
 
         # Interpret nan as empty cell in output CSV
         for i, component in enumerate(input_data[2]):
