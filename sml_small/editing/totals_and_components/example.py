@@ -218,7 +218,7 @@ def invoke_process_with_local_csv():
         mode="r",
     ) as read_csv_file:
         read_file = csv.DictReader(read_csv_file)
-        input_data, results = extract_data_from_file(read_file)
+        input_data, results = input_data_to_tac_method(read_file)
 
     # Write the results returned by the T&C into the CSV file
     write_file_location = "../../../tests/editing/totals_and_components/example_data/example_test_data_scenario_1_output.csv"
@@ -234,16 +234,15 @@ def invoke_process_with_in_memory_csv():
 A,1625,632,732,99,162,TRUE,1625,,11,,,"""  # noqa: E501
 
     csv_data = csv.DictReader(in_memory_csv_data.splitlines())
-    input_data, results = extract_data_from_file(csv_data)
+    input_data, results = input_data_to_tac_method(csv_data)
 
     # Write the results returned by the T&C into the CSV file
     write_file_location = "../../../tests/editing/totals_and_components/example_data/example_test_data_scenario_2_output.csv"
     write_results_to_file(input_data, results, write_file_location)
     
 
-def extract_data_from_file(read_file_data):
-    # Read the CSV file and extract the input data and pass into the
-    # T&C method
+def input_data_to_tac_method(read_file_data):
+    # Pass data into the T&C method
     results = {}
     for row in read_file_data:
         input_data = [
