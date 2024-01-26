@@ -632,7 +632,7 @@ def set_predictive_value(
         else:
             tcc_marker = TccMarker.STOP
             logger.warning(
-                f"TCCMarker = STOP at line:{sys._getframe().f_back.f_lineno}"
+                f"TCCMarker = STOP at line: {sys._getframe().f_back.f_lineno}"
             )
     else:
         tcc_marker = TccMarker.METHOD_PROCEED
@@ -654,7 +654,7 @@ def check_zero_errors(predictive: Decimal, components_sum: Decimal) -> TccMarker
     """
     if predictive > 0 and (components_sum == 0 or math.isnan(components_sum)):
         tcc_marker = TccMarker.STOP
-        logger.warning(f"TCCMarker = STOP at line:{sys._getframe().f_back.f_lineno}")
+        logger.warning(f"TCCMarker = STOP at line: {sys._getframe().f_back.f_lineno}")
     else:
         tcc_marker = TccMarker.METHOD_PROCEED
     return tcc_marker
