@@ -229,33 +229,84 @@ run_all_csvs("tcc_test_data_original/", "totals_and_components")
 # run_all_csvs("tpc_test_data_original/", "thousand_pounds")
 
 
+tcc_original_input_column_names = {
+    "reference",
+    "period",
+    "total",
+    "comp_1",
+    "comp_2",
+    "comp_3",
+    "comp_4",
+    "amend_total",
+    "predictive",
+    "auxiliary",
+    "abs_threshold",
+    "perc_threshold"
+}
+
+tcc_processed_output_column_names = {
+    "reference",
+    "total",
+    "comp_1",
+    "comp_2",
+    "comp_3",
+    "comp_4",
+    "amend_total",
+    "predictive",
+    "auxiliary",
+    "abs_threshold",
+    "perc_threshold",
+    "abs_diff",
+    "perc_low",
+    "perc_high",
+    "final_total",
+    "final_component_1",
+    "final_component_2",
+    "final_component_3",
+    "final_component_4",
+    "tcc_marker"
+}
+
+
+# Use the parametrize decorator to run the test with different arguments
+@pytest.mark.parametrize("directory,type_to_test,column_names", [
+    ("tcc_test_data_original/", "input", tcc_original_input_column_names),
+    ("tcc_test_data_processed/", "output", tcc_processed_output_column_names)
+])
+
+
+def test_column_names(directory, type_to_test, column_names):
+    for filename in os.listdir(directory):
+        if type_to_test == "input":
+            if filename.endswith(".csv") and "output" not in filename:
+                df_input = pd.read_csv(directory + filename)
+                print(f"{directory}: {filename}")
+                dt.validate(
+                    df_input.columns, column_names)
+        else:
+            df_processed_output = pd.read_csv("tcc_test_data_processed/" + filename)
+            print(f"{directory}: {filename}")
+            dt.validate(
+                df_processed_output.columns, column_names)
+
+
+def check_decimal_values(df_processed_output, df_expected_output):
+    for index, row in df_processed_output.iterrows():
+        for column in df_processed_output.columns:
+            value = row[column]
+            if isinstance(value, float) and value % 1 != 0:
+                print(f"Decimal value found at row {index+1}, column {column}: {value}")
+                expected_value = df_expected_output.loc[index, column]
+                if isinstance(expected_value, float) and expected_value % 1 != 0:
+                    print(f"Expected decimal value found at row {index+1}, column {column}: {expected_value}")
+                    decimal_places = len(str(expected_value).split('.')[1])
+                    print(f"Number of decimal places: {decimal_places}")
+                    df_processed_output.loc[index, column] = round(value, decimal_places)
+                    print(f"Updated value: {df_processed_output.loc[index, column]}")
+
+
 # UAT CSV files are used to run with example Pandas code for Totals and Components and Thousand Pounds Correction
 # Output generated is checked against the expected output files
-@pytest.mark.mandatory
-def test_input_columns_tcc():
-    for filename in os.listdir("tcc_test_data_original/"):
-        if filename.endswith(".csv") and "output" not in filename:
-            df_input = pd.read_csv("tcc_test_data_original/" + filename)
-            print("TCC Test Input Columns, Filename: ", filename)
-            dt.validate(
-                df_input.columns,
-                {
-                   "reference",
-                   "period",
-                   "total",
-                   "comp_1",
-                   "comp_2",
-                   "comp_3",
-                   "comp_4",
-                   "amend_total",
-                   "predictive",
-                   "auxiliary",
-                   "abs_threshold",
-                   "perc_threshold"
-                }
-            )
-
-
 @pytest.mark.mandatory
 def test_values_tcc():
     tcc_test_data_original = os.listdir("tcc_test_data_original/")
@@ -263,84 +314,44 @@ def test_values_tcc():
 
     for file1 in tcc_test_data_processed:
         for file2 in tcc_test_data_original:
-            if file1 == file2:
+            if file2.endswith("output.csv") and file1 == file2:
                 print("\n")
                 print("====================================================================================================================")
                 print(f"Filename '{file1}' and '{file2}' are present in both directories (tcc_test_data_original & tcc_test_data_processed).")
                 df_processed_output = pd.read_csv("tcc_test_data_processed/" + file1)
 
-                # df_processed_output.rename(columns={
-                #     "tcc_marker": "TCC_marker", 
-                #     "final_component_1": "final_comp_1",
-                #     "final_component_2": "final_comp_2",
-                #     "final_component_3": "final_comp_3",
-                #     "final_component_4": "final_comp_4",
-                #     }, inplace=True)
-
-                df_correct_output = pd.read_csv("tcc_test_data_original/" + file2)
+                df_expected_output = pd.read_csv("tcc_test_data_original/" + file2)
 
                 df_processed_output = df_processed_output.fillna(0)
-                df_correct_output = df_correct_output.fillna(0)
+                df_expected_output = df_expected_output.fillna(0)
 
-                # df_correct_output.drop("period", axis=1, inplace=True)
-
+                check_decimal_values(df_processed_output, df_expected_output)
 
                 # with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
                 #     print("\n")
                 #     print("Correct output")
-                #     print(df_correct_output)
+                #     print(df_expected_output)
                 #     print("\n")
                 #     print("Processed output")
                 #     print(df_processed_output)
 
-                # dt.validate.superset(df_processed_output, df_correct_output)
+                # dt.validate.superset(df_processed_output, df_expected_output)
 
                 # Compare the dataframes
-                comparison = df_processed_output == df_correct_output
+                comparison = df_processed_output == df_expected_output
                 if comparison.all().all():
                     print("TCC Test Data Original output CSV and TCC Test Data Processed output CSV files match.")
-                    dt.validate.superset(df_processed_output, df_correct_output)
+                    dt.validate.superset(df_processed_output, df_expected_output)
                 else:
                     mismatch_locations = np.where(comparison == False)
                     # print(mismatch_locations)
                     for row, col in zip(*mismatch_locations):
-                        print(f"Value mismatch at reference {df_processed_output.loc[row, 'reference']}, row {row+1} and column {col}.")
-                        print(f"Expected output: {df_correct_output.iloc[row, col]}")
+                        print(f"Value mismatch at reference {df_processed_output.loc[row, 'reference']}, row {row+1} and column {col+1}.")
+                        print(f"Expected output: {df_expected_output.iloc[row, col]}")
                         print(f"Processed output: {df_processed_output.iloc[row, col]}")
                         print("\n")
                         print(f"The file with the error is '{file2}' within the tcc_test_data_processed directory.")
-                        dt.validate.superset(df_processed_output, df_correct_output)
-
-@pytest.mark.mandatory
-def test_output_columns_tcc():
-    for filename in os.listdir("tcc_test_data_processed/"):
-        df_processed_output = pd.read_csv("tcc_test_data_processed/" + filename)
-        print("TCC Test Output Columns, Filename: ", filename)
-        dt.validate(
-            df_processed_output.columns,
-            {
-                "reference",
-                "total",
-                "comp_1",
-                "comp_2",
-                "comp_3",
-                "comp_4",
-                "amend_total",
-                "predictive",
-                "auxiliary",
-                "abs_threshold",
-                "perc_threshold",
-                "abs_diff",
-                "perc_low",
-                "perc_high",
-                "tcc_marker",
-                "final_total",
-                "final_component_1",
-                "final_component_2",
-                "final_component_3",
-                "final_component_4"
-            }
-        )
+                        # dt.validate.superset(df_processed_output, df_expected_output)
 
 
 # @pytest.mark.mandatory
