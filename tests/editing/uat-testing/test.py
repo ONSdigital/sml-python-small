@@ -1,4 +1,14 @@
 from datatest import validate
-data = ['A', 'B', 'C']
-requirement = {'A', 'B', 'C', 'D'}
-print(validate.superset(data, requirement))
+letters = [['A'], ['B'], ['C'], ['D'], ['E'], ['F'], ['G'], ['H'], ['I'], ['J']]
+requirements = ['A', 'B', 'C']
+# validate(letters, requirement)
+
+for letter in letters:
+    for requirement in requirements:
+        if letter[0] == requirement:
+            print("Correct", letter[0], requirement)
+            validate(letter, requirement)
+        else:
+            print("Incorrect", letter[0], requirement)
+            validate(letter, requirement)
+
