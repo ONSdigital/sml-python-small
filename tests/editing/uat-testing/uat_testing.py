@@ -4,6 +4,7 @@ currently this includes Totals and Components, and Thousand Pounds Correction
 
 For Copyright information, please see LICENCE.
 """
+import itertools
 import os
 import re
 
@@ -229,8 +230,8 @@ run_all_csvs("tcc_test_data_original/", "totals_and_components")
 # Run Thousand Pounds UAT
 # run_all_csvs("tpc_test_data_original/", "thousand_pounds")
 
-# Set of column names for the original input CSV files that we will use to test against
-# the original input CSV files that is in the tcc_test_data_original directory
+# Set of column names for the original input CSV files that we will use to test against
+# the original input CSV files that is in the tcc_test_data_original directory
 tcc_original_input_column_names = [
     "reference",
     "period",
@@ -246,7 +247,7 @@ tcc_original_input_column_names = [
     "perc_threshold",
 ]
 
-# Set of column names for the processed output CSV files that we will use to test against
+# Set of column names for the processed output CSV files that we will use to test against
 # the processed output CSV files that is in the tcc_test_data_processed directory
 tcc_processed_output_column_names = [
     "reference",
@@ -281,15 +282,19 @@ tcc_processed_output_column_names = [
     ],
 )
 
-# This function is used to test the column names in a CSV file
-# It takes directory, type_to_test, and column_names as parameters
-# directory is the location of the CSV files we want to test
+# This function is used to test the column names in a CSV file
+# It takes directory, type_to_test, and column_names as parameters
+# directory is the location of the CSV files we want to test
 # type_of_test specifies if it's the input files or output files we want to test
-# column_names takes in the column_names we want to test against the CSV files
+# column_names takes in the column_names we want to test against the CSV files
 @pytest.mark.mandatory
 def test_column_names(directory, type_to_test, column_names):
     for filename in os.listdir(directory):
-        if type_to_test == "input" and filename.endswith(".csv") and "output" not in filename:
+        if (
+            type_to_test == "input"
+            and filename.endswith(".csv")
+            and "output" not in filename
+        ):
             df_input = pd.read_csv(directory + filename)
             print(f"Testing {directory}: {filename} input column names")
             dt.validate(df_input.columns, column_names)
@@ -309,24 +314,42 @@ def test_column_names(directory, type_to_test, column_names):
 # This is to ensure that the values match when comparing the processed output CSV file
 # against the expected output CSV file
 def check_decimal_values(df_processed_output, df_expected_output):
+    # This code iterates over each row and column in the processed output DataFrame.
+    print(df_processed_output.iterrows())
     for index, row in df_processed_output.iterrows():
         for column in df_processed_output.columns:
             value = row[column]
+            # It checks if the value in a cell is a float and has decimal places.
             if isinstance(value, float) and value % 1 != 0:
-                # print(f"Decimal value found at row {index+1}, column {column}: {value}")
+                # If the value has decimal places, it retrieves the corresponding expected value from the expected output DataFrame.
                 expected_value = df_expected_output.loc[index, column]
+                # If the expected value is also a float and has decimal places, it determines the number of decimal places.
                 if isinstance(expected_value, float) and expected_value % 1 != 0:
-                    # print(
-                    #     f"Expected decimal value found at row {index+1}, column {column}: {expected_value}"
-                    # )
                     expected_decimal_places = len(str(expected_value).split(".")[1])
-                    # print(f"Number of decimal places: {expected_decimal_places}")
+                    # The value in the processed output DataFrame is then rounded to the same number of decimal places as the expected value.
+                    # This ensures that the values match when comparing the processed output against the expected output.
                     df_processed_output.loc[index, column] = round(
                         value, expected_decimal_places
                     )
-                    # print(f"Rounded value: {df_processed_output.loc[index, column]}")
-                    # print("\n")
+
     return df_processed_output
+
+
+def output_failures(failures):
+    # Print all the failures
+    for failure in failures:
+        print("\n")
+        print(
+            "===================================================================================================================="
+        )
+        print(f"Filename with the error '{failure['file_name']}'.")
+        for failure_details in failure["failures"]:
+            print(
+                f"Value mismatch at reference {failure_details['reference']}, row {failure_details['row']} and column {failure_details['col']}."
+            )
+            print(f"Expected output: {failure_details['expected_output']}")
+            print(f"Processed output: {failure_details['processed_output']}")
+            print("\n")
 
 
 # UAT CSV files are used to run with example Pandas code for Totals and Components and Thousand Pounds Correction
@@ -338,57 +361,62 @@ def test_values_tcc():
 
     failures = []  # Store the failures
 
-    for file1 in tcc_test_data_processed:
-        for file2 in tcc_test_data_original:
-            if file2.endswith("output.csv") and file1 == file2:
-                df_processed_output = pd.read_csv("tcc_test_data_processed/" + file1)
+    # Iterate through each combination of file1 and file2 from tcc_test_data_processed and tcc_test_data_original
+    for file1, file2 in itertools.product(
+        tcc_test_data_processed, tcc_test_data_original
+    ):
+        if file2.endswith("output.csv") and file1 == file2:
+            df_processed_output = pd.read_csv("tcc_test_data_processed/" + file1)
+            df_expected_output = pd.read_csv("tcc_test_data_original/" + file2)
 
-                df_expected_output = pd.read_csv("tcc_test_data_original/" + file2)
+            # Comparing nan values is problematic when using the datatest library
+            # so we make all the nan values in the processed and expected output 0
+            # so we can easily compare it without being thrown an error when comparing nan values
+            df_processed_output = df_processed_output.fillna(0)
+            df_expected_output = df_expected_output.fillna(0)
 
-                # Comparing nan values is problematic when using the datatest library
-                # so we make all the nan values in the processed and expected output 0
-                # so we can easily compare it without being thrown an error when comparing nan values
-                df_processed_output = df_processed_output.fillna(0)
-                df_expected_output = df_expected_output.fillna(0)
+            # Round the decimal values in the df_processed_output dataframe to the same number of decimal
+            # places as the df_expected_output dataframe
+            df_processed_output = check_decimal_values(
+                df_processed_output, df_expected_output
+            )
 
-                # Round the decimal values in the df_processed_output dataframe to the same number of decimal
-                # places as the df_expected_output dataframe
-                df_processed_output = check_decimal_values(df_processed_output, df_expected_output)
+            # Compare the dataframes
+            comparison = df_processed_output == df_expected_output
 
-                # Compare the dataframes
-                comparison = df_processed_output == df_expected_output
+            # This section of code is responsible for comparing the processed output dataframe with the expected output dataframe.
+            # It uses the datatest library to perform the comparison.
+            # If there are any mismatches between the two dataframes, a ValidationError is raised.
+            # The code catches the ValidationError and identifies the locations of the mismatches.
+            # It then stores the details of each failure in a list called file_failures.
+            # The failure details include the reference, row number, column number, expected output, and processed output.
+            # Finally, the list of failures is appended to the failures list.
+            # The failures list will be printed later to display all the failures encountered during the comparison.
+            try:
+                dt.validate(df_processed_output, df_expected_output)
+            except dt.ValidationError as e:
+                mismatch_locations = np.where(comparison == False)
+                file_failures = []  # Store the failures for each file
+                for row, col in zip(*mismatch_locations):
+                    failure = {
+                        "reference": df_processed_output.loc[row, "reference"],
+                        "row": row + 1,
+                        "col": col + 1,
+                        "expected_output": df_expected_output.iloc[row, col],
+                        "processed_output": df_processed_output.iloc[row, col],
+                    }
+                    file_failures.append(failure)
+                    # print(file_failures)
 
-                try:
-                    dt.validate(df_processed_output, df_expected_output)
-                except dt.ValidationError as e:
-                    mismatch_locations = np.where(comparison == False)
-                    for row, col in zip(*mismatch_locations):
-                        failure = {
-                            "file1": file1,
-                            "file2": file2,
-                            "reference": df_processed_output.loc[row, "reference"],
-                            "row": row + 1,
-                            "col": col + 1,
-                            "expected_output": df_expected_output.iloc[row, col],
-                            "processed_output": df_processed_output.iloc[row, col],
-                        }
-                        failures.append(failure)
+                # If there are any failures in the file, create a dictionary with the file name and the list of failures
+                if len(file_failures) > 0:
+                    file_failure = {"file_name": file1, "failures": file_failures}
+                    # Append the file_failure dictionary to the list of failures
+                    failures.append(file_failure)
 
-    # Print all the failures
-    for failure in failures:
-        print("\n")
-        print(
-            "===================================================================================================================="
-        )
-        print(
-            f"Filename '{failure['file1']}' and '{failure['file2']}' are present in both directories (tcc_test_data_original & tcc_test_data_processed)."
-        )
-        print(
-            f"Value mismatch at reference {failure['reference']}, row {failure['row']} and column {failure['col']}."
-        )
-        print(f"Expected output: {failure['expected_output']}")
-        print(f"Processed output: {failure['processed_output']}")
-        print("\n")
+    # print(failures)
+
+    output_failures(failures)
 
     assert len(failures) == 0, f"{len(failures)} test(s) failed"
 
