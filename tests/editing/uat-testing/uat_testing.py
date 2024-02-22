@@ -228,7 +228,8 @@ run_all_csvs("tcc_test_data_original/", "totals_and_components")
 # )
 
 # Run Thousand Pounds UAT
-# run_all_csvs("tpc_test_data_original/", "thousand_pounds")
+run_all_csvs("tpc_test_data_original/", "thousand_pounds")
+
 
 # Set of column names for the original input CSV files that we will use to test against
 # the original input CSV files that is in the tcc_test_data_original directory
@@ -244,7 +245,7 @@ tcc_original_input_column_names = [
     "predictive",
     "auxiliary",
     "abs_threshold",
-    "perc_threshold",
+    "perc_threshold"
 ]
 
 # Set of column names for the processed output CSV files that we will use to test against
@@ -269,9 +270,40 @@ tcc_processed_output_column_names = [
     "final_component_2",
     "final_component_3",
     "final_component_4",
-    "tcc_marker",
+    "tcc_marker"
 ]
 
+# Set of column names for the original input CSV files that we will use to test against
+# the original input CSV files that is in the tpc_test_data_original directory
+tpc_original_input_column_names = [
+    "RU",
+    "period",
+    "principal_val",
+    "q42",
+    "q43",
+    "predictive_val",
+    "aux_val",
+    "threshold_upper",
+    "threshold_lower"
+]
+
+# Set of column names for the processed output CSV files that we will use to test against
+# the processed output CSV files that is in the tpc_test_data_processed directory
+tpc_processed_output_column_names = [
+    "RU",
+    "principal_val",
+    "q42",
+    "q43",
+    "threshold_upper",
+    "threshold_lower",
+    "predictive_val",
+    "aux_val",
+    "principal_final_value",
+    "tpc_ratio",
+    "q42_final_value",
+    "q43_final_value",
+    "tpc_marker"
+]
 
 # Use the parametrize decorator to run the test with different arguments
 @pytest.mark.parametrize(
@@ -279,6 +311,8 @@ tcc_processed_output_column_names = [
     [
         ("tcc_test_data_original/", "input", tcc_original_input_column_names),
         ("tcc_test_data_processed/", "output", tcc_processed_output_column_names),
+        ("tpc_test_data_original/", "input", tpc_original_input_column_names),
+        ("tpc_test_data_processed/", "output", tpc_processed_output_column_names),
     ],
 )
 
@@ -290,6 +324,7 @@ tcc_processed_output_column_names = [
 @pytest.mark.mandatory
 def test_column_names(directory, type_to_test, column_names):
     for filename in os.listdir(directory):
+        # print(filename)
         if (
             type_to_test == "input"
             and filename.endswith(".csv")
@@ -315,7 +350,6 @@ def test_column_names(directory, type_to_test, column_names):
 # against the expected output CSV file
 def check_decimal_values(df_processed_output, df_expected_output):
     # This code iterates over each row and column in the processed output DataFrame.
-    print(df_processed_output.iterrows())
     for index, row in df_processed_output.iterrows():
         for column in df_processed_output.columns:
             value = row[column]
@@ -406,7 +440,6 @@ def test_values_tcc():
                         "processed_output": df_processed_output.iloc[row, col],
                     }
                     file_failures.append(failure)
-                    # print(file_failures)
 
                 # If there are any failures in the file, create a dictionary with the file name and the list of failures
                 if len(file_failures) > 0:
@@ -414,100 +447,72 @@ def test_values_tcc():
                     # Append the file_failure dictionary to the list of failures
                     failures.append(file_failure)
 
-    # print(failures)
-
     output_failures(failures)
 
     assert len(failures) == 0, f"{len(failures)} test(s) failed"
 
 
-# @pytest.mark.mandatory
-# def test_input_columns_tpc():
-#     for filename in os.listdir("tpc_test_data_original/"):
-#         if filename.endswith(".csv") and "output" not in filename:
-#             print(filename)
-#             df_input = pd.read_csv("tpc_test_data_original/" + filename)
+# UAT CSV files are used to run with example Pandas code for Totals and Components and Thousand Pounds Correction
+# Output generated is checked against the expected output files
+@pytest.mark.mandatory
+def test_values_tpc():
+    tpc_test_data_original = os.listdir("tpc_test_data_original/")
+    tpc_test_data_processed = os.listdir("tpc_test_data_processed/")
 
-#             ignore_columns = ["q42", "q43"]
-#             for col in ignore_columns:
-#                 if col in df_input.columns:
-#                     df_input = df_input.drop(columns=ignore_columns)
+    failures = []  # Store the failures
 
-#             dt.validate(
-#                 df_input.columns,
-#                 {
-#                     "RU",
-#                     "period",
-#                     "principal_val",
-#                     "predictive_val",
-#                     "aux_val",
-#                     "threshold_upper",
-#                     "threshold_lower"
-#                 }
-#             )
+    # Iterate through each combination of file1 and file2 from tpc_test_data_processed and tpc_test_data_original
+    for file1, file2 in itertools.product(
+        tpc_test_data_processed, tpc_test_data_original
+    ):
+        if file2.endswith("output.csv") and file1 == file2:
+            df_processed_output = pd.read_csv("tpc_test_data_processed/" + file1)
+            df_expected_output = pd.read_csv("tpc_test_data_original/" + file2)
 
+            # Comparing nan values is problematic when using the datatest library
+            # so we make all the nan values in the processed and expected output 0
+            # so we can easily compare it without being thrown an error when comparing nan values
+            df_processed_output = df_processed_output.fillna(0)
+            df_expected_output = df_expected_output.fillna(0)
 
-# @pytest.mark.mandatory
-# def test_values_tpc():
-#     tcc_test_data_original = os.listdir("tpc_test_data_original/")
-#     tcc_test_data_processed = os.listdir("tpc_test_data_processed/")
+            # Round the decimal values in the df_processed_output dataframe to the same number of decimal
+            # places as the df_expected_output dataframe
+            df_processed_output = check_decimal_values(
+                df_processed_output, df_expected_output
+            )
 
-#     for file1 in tcc_test_data_processed:
-#         for file2 in tcc_test_data_original:
-#             if file1 == file2:
-#                 print("\n")
-#                 print("====================================================================================================================")
-#                 print(f"Filename '{file1}' and '{file2}' is present in both directories.")
-#                 df_processed_output = pd.read_csv("tpc_test_data_processed/" + file1)
+            # Compare the dataframes
+            comparison = df_processed_output == df_expected_output
 
-#                 df_correct_output = pd.read_csv("tpc_test_data_original/" + file2)
+            # This section of code is responsible for comparing the processed output dataframe with the expected output dataframe.
+            # It uses the datatest library to perform the comparison.
+            # If there are any mismatches between the two dataframes, a ValidationError is raised.
+            # The code catches the ValidationError and identifies the locations of the mismatches.
+            # It then stores the details of each failure in a list called file_failures.
+            # The failure details include the reference, row number, column number, expected output, and processed output.
+            # Finally, the list of failures is appended to the failures list.
+            # The failures list will be printed later to display all the failures encountered during the comparison.
+            try:
+                dt.validate(df_processed_output, df_expected_output)
+            except dt.ValidationError as e:
+                mismatch_locations = np.where(comparison == False)
+                file_failures = []  # Store the failures for each file
+                for row, col in zip(*mismatch_locations):
+                    failure = {
+                        "RU": df_processed_output.loc[row, "RU"],
+                        "row": row + 1,
+                        "col": col + 1,
+                        "expected_output": df_expected_output.iloc[row, col],
+                        "processed_output": df_processed_output.iloc[row, col],
+                    }
+                    file_failures.append(failure)
 
-#                 df_processed_output = df_processed_output.fillna(0)
-#                 df_correct_output = df_correct_output.fillna(0)
+                # If there are any failures in the file, create a dictionary with the file name and the list of failures
+                if len(file_failures) > 0:
+                    file_failure = {"file_name": file1, "failures": file_failures}
+                    # Append the file_failure dictionary to the list of failures
+                    failures.append(file_failure)
 
-#                 # with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
-#                 #     print("\n")
-#                 #     print("Correct output")
-#                 #     print(df_correct_output)
-#                 #     print("\n")
-#                 #     print("Processed output")
-#                 #     print(df_processed_output)
+    output_failures(failures)
 
-#                 # dt.validate.superset(df_processed_output, df_correct_output)
-
-#                 # Compare the dataframes
-#                 comparison = df_processed_output == df_correct_output
-#                 if comparison.all().all():
-#                     print("CSV files match.")
-#                     dt.validate.superset(df_processed_output, df_correct_output)
-#                 else:
-#                     mismatch_locations = np.where(comparison == False)
-#                     for row, col in zip(*mismatch_locations):
-#                         print(f"Value mismatch at row {row}, column {col}.")
-#                         print(f"Correct output: {df_correct_output.iloc[row, col]}")
-#                         print(f"Processed output: {df_processed_output.iloc[row, col]}")
-#                         dt.validate.superset(df_processed_output, df_correct_output)
-
-# @pytest.mark.mandatory
-# def test_output_columns_tpc():
-#     for filename in os.listdir("tpc_test_data_processed/"):
-#         df_processed_output = pd.read_csv("tpc_test_data_processed/" + filename)
-#         dt.validate(
-#             df_processed_output.columns,
-#             {
-#                 "RU",
-#                 "period",
-#                 "principal_val",
-#                 "q42",
-#                 "q43",
-#                 "predictive_val",
-#                 "aux_val",
-#                 "threshold_upper",
-#                 "threshold_lower",
-#                 "tpc_ratio",
-#                 "final_principal",
-#                 "final_q42",
-#                 "final_q43",
-#                 "tpc_marker"
-#             }
-#         )
+    assert len(failures) == 0, f"{len(failures)} test(s) failed"

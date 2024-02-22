@@ -1,6 +1,7 @@
 from datatest import validate
-letters = [['A'], ['B'], ['C'], ['D'], ['E'], ['F'], ['G'], ['H'], ['I'], ['J']]
-requirements = ['A', 'B', 'C']
+
+letters = [["A"], ["B"], ["C"], ["D"], ["E"], ["F"], ["G"], ["H"], ["I"], ["J"]]
+requirements = ["A", "B", "C"]
 # validate(letters, requirement)
 
 for letter in letters:
@@ -11,4 +12,3 @@ for letter in letters:
         else:
             print("Incorrect", letter[0], requirement)
             validate(letter, requirement)
-
