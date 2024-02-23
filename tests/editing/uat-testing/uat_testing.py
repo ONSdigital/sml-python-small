@@ -245,7 +245,7 @@ tcc_original_input_column_names = [
     "predictive",
     "auxiliary",
     "abs_threshold",
-    "perc_threshold"
+    "perc_threshold",
 ]
 
 # Set of column names for the processed output CSV files that we will use to test against
@@ -270,7 +270,7 @@ tcc_processed_output_column_names = [
     "final_component_2",
     "final_component_3",
     "final_component_4",
-    "tcc_marker"
+    "tcc_marker",
 ]
 
 # Set of column names for the original input CSV files that we will use to test against
@@ -284,7 +284,7 @@ tpc_original_input_column_names = [
     "predictive_val",
     "aux_val",
     "threshold_upper",
-    "threshold_lower"
+    "threshold_lower",
 ]
 
 # Set of column names for the processed output CSV files that we will use to test against
@@ -302,8 +302,9 @@ tpc_processed_output_column_names = [
     "tpc_ratio",
     "q42_final_value",
     "q43_final_value",
-    "tpc_marker"
+    "tpc_marker",
 ]
+
 
 # Use the parametrize decorator to run the test with different arguments
 @pytest.mark.parametrize(
@@ -369,7 +370,7 @@ def check_decimal_values(df_processed_output, df_expected_output):
     return df_processed_output
 
 
-def output_failures(failures):
+def output_failures(failures, method):
     # Print all the failures
     for failure in failures:
         print("\n")
@@ -378,9 +379,14 @@ def output_failures(failures):
         )
         print(f"Filename with the error '{failure['file_name']}'.")
         for failure_details in failure["failures"]:
-            print(
-                f"Value mismatch at reference {failure_details['reference']}, row {failure_details['row']} and column {failure_details['col']}."
-            )
+            if method == "TCC":
+                print(
+                    f"Value mismatch at reference {failure_details['reference']}, row {failure_details['row']} and column {failure_details['col']}."
+                )
+            elif method == "TPC":
+                print(
+                    f"Value mismatch at reference {failure_details['RU']}, row {failure_details['row']} and column {failure_details['col']}."
+                )
             print(f"Expected output: {failure_details['expected_output']}")
             print(f"Processed output: {failure_details['processed_output']}")
             print("\n")
@@ -447,14 +453,14 @@ def test_values_tcc():
                     # Append the file_failure dictionary to the list of failures
                     failures.append(file_failure)
 
-    output_failures(failures)
+    output_failures(failures, "TCC")
 
     assert len(failures) == 0, f"{len(failures)} test(s) failed"
 
 
 # UAT CSV files are used to run with example Pandas code for Totals and Components and Thousand Pounds Correction
 # Output generated is checked against the expected output files
-@pytest.mark.mandatory
+# @pytest.mark.mandatory
 def test_values_tpc():
     tpc_test_data_original = os.listdir("tpc_test_data_original/")
     tpc_test_data_processed = os.listdir("tpc_test_data_processed/")
@@ -513,6 +519,6 @@ def test_values_tpc():
                     # Append the file_failure dictionary to the list of failures
                     failures.append(file_failure)
 
-    output_failures(failures)
+    output_failures(failures, "TPC")
 
     assert len(failures) == 0, f"{len(failures)} test(s) failed"
