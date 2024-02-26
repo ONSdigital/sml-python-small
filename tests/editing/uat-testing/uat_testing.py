@@ -409,7 +409,9 @@ def output_failures(failures):
             print(f"Processed output: {failure_details['processed_output']}")
             print("\n")
 
+
 failures = []  # Store the failures
+
 
 def compare_dataframes(df_processed_output, df_expected_output, method, file1):
     # Comparing nan values is problematic when using the datatest library
@@ -420,9 +422,7 @@ def compare_dataframes(df_processed_output, df_expected_output, method, file1):
 
     # Round the decimal values in the df_processed_output dataframe to the same number of decimal
     # places as the df_expected_output dataframe
-    df_processed_output = check_decimal_values(
-        df_processed_output, df_expected_output
-    )
+    df_processed_output = check_decimal_values(df_processed_output, df_expected_output)
 
     # Compare the dataframes
     comparison = df_processed_output == df_expected_output
@@ -498,7 +498,11 @@ def test_values(test_data):
 #     test_values("TPC", "tpc_test_data_original/", "tpc_test_data_processed/")
 
 
-@pytest.fixture(params=[("TCC", "tcc_test_data_original/", "tcc_test_data_processed/"),
-                        ("TPC", "tpc_test_data_original/", "tpc_test_data_processed/")])
+@pytest.fixture(
+    params=[
+        ("TCC", "tcc_test_data_original/", "tcc_test_data_processed/"),
+        ("TPC", "tpc_test_data_original/", "tpc_test_data_processed/"),
+    ]
+)
 def test_data(request):
     return request.param
