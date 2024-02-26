@@ -486,18 +486,6 @@ def test_values(test_data):
     assert len(failures) == 0, f"{len(failures)} test(s) failed"
 
 
-# # UAT CSV files are used to run with example Pandas code for Totals and Components and Thousand Pounds Correction
-# # Output generated is checked against the expected output files
-# def test_values_tcc():
-#     test_values("TCC", "tcc_test_data_original/", "tcc_test_data_processed/")
-
-
-# # UAT CSV files are used to run with example Pandas code for Totals and Components and Thousand Pounds Correction
-# # Output generated is checked against the expected output files
-# def test_values_tpc():
-#     test_values("TPC", "tpc_test_data_original/", "tpc_test_data_processed/")
-
-
 @pytest.fixture(
     params=[
         ("TCC", "tcc_test_data_original/", "tcc_test_data_processed/"),
