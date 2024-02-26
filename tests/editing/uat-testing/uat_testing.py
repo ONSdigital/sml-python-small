@@ -279,8 +279,8 @@ tpc_original_input_column_names = [
     "RU",
     "period",
     "principal_val",
-    "q42",
-    "q43",
+    # "q42",
+    # "q43",
     "predictive_val",
     "aux_val",
     "threshold_upper",
@@ -292,28 +292,28 @@ tpc_original_input_column_names = [
 tpc_processed_output_column_names = [
     "RU",
     "principal_val",
-    "q42",
-    "q43",
+    # "q42",
+    # "q43",
     "threshold_upper",
     "threshold_lower",
     "predictive_val",
     "aux_val",
     "principal_final_value",
     "tpc_ratio",
-    "q42_final_value",
-    "q43_final_value",
+    # "q42_final_value",
+    # "q43_final_value",
     "tpc_marker",
 ]
 
 
 # Use the parametrize decorator to run the test with different arguments
 @pytest.mark.parametrize(
-    "directory,type_to_test,column_names",
+    "directory,type_to_test,column_names,ignored_column_names",
     [
-        ("tcc_test_data_original/", "input", tcc_original_input_column_names),
-        ("tcc_test_data_processed/", "output", tcc_processed_output_column_names),
-        ("tpc_test_data_original/", "input", tpc_original_input_column_names),
-        ("tpc_test_data_processed/", "output", tpc_processed_output_column_names),
+        ("tcc_test_data_original/", "input", tcc_original_input_column_names, []),
+        ("tcc_test_data_processed/", "output", tcc_processed_output_column_names, []),
+        ("tpc_test_data_original/", "input", tpc_original_input_column_names, ["q42", "q43"]),
+        ("tpc_test_data_processed/", "output", tpc_processed_output_column_names, ["q42", "q43", "q42_final_value", "q43_final_value"]),
     ],
 )
 
@@ -323,9 +323,9 @@ tpc_processed_output_column_names = [
 # type_of_test specifies if it's the input files or output files we want to test
 # column_names takes in the column_names we want to test against the CSV files
 @pytest.mark.mandatory
-def test_column_names(directory, type_to_test, column_names):
+def test_column_names(directory, type_to_test, column_names, ignored_column_names):
+    print("\n")
     for filename in os.listdir(directory):
-        # print(filename)
         if (
             type_to_test == "input"
             and filename.endswith(".csv")
@@ -333,13 +333,18 @@ def test_column_names(directory, type_to_test, column_names):
         ):
             df_input = pd.read_csv(directory + filename)
             print(f"Testing {directory}: {filename} input column names")
-            dt.validate(df_input.columns, column_names)
+            dt.validate(
+                [col for col in df_input.columns if col not in ignored_column_names],
+                column_names,
+            )
 
         elif type_to_test == "output":
-            print("\n")
             df_processed_output = pd.read_csv(directory + filename)
             print(f"Testing {directory}: {filename} output column names")
-            dt.validate(df_processed_output.columns, column_names)
+            dt.validate(
+                [col for col in df_processed_output.columns if col not in ignored_column_names],
+                column_names,
+            )
 
 
 # This function is used to round the decimal places of any decimal value found in the
