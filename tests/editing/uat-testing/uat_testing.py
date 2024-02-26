@@ -312,11 +312,20 @@ tpc_processed_output_column_names = [
     [
         ("tcc_test_data_original/", "input", tcc_original_input_column_names, []),
         ("tcc_test_data_processed/", "output", tcc_processed_output_column_names, []),
-        ("tpc_test_data_original/", "input", tpc_original_input_column_names, ["q42", "q43"]),
-        ("tpc_test_data_processed/", "output", tpc_processed_output_column_names, ["q42", "q43", "q42_final_value", "q43_final_value"]),
+        (
+            "tpc_test_data_original/",
+            "input",
+            tpc_original_input_column_names,
+            ["q42", "q43"],
+        ),
+        (
+            "tpc_test_data_processed/",
+            "output",
+            tpc_processed_output_column_names,
+            ["q42", "q43", "q42_final_value", "q43_final_value"],
+        ),
     ],
 )
-
 # This function is used to test the column names in a CSV file
 # It takes directory, type_to_test, and column_names as parameters
 # directory is the location of the CSV files we want to test
@@ -342,7 +351,11 @@ def test_column_names(directory, type_to_test, column_names, ignored_column_name
             df_processed_output = pd.read_csv(directory + filename)
             print(f"Testing {directory}: {filename} output column names")
             dt.validate(
-                [col for col in df_processed_output.columns if col not in ignored_column_names],
+                [
+                    col
+                    for col in df_processed_output.columns
+                    if col not in ignored_column_names
+                ],
                 column_names,
             )
 
@@ -439,8 +452,8 @@ def test_values_tcc():
             # The failures list will be printed later to display all the failures encountered during the comparison.
             try:
                 dt.validate(df_processed_output, df_expected_output)
-            except dt.ValidationError as e:
-                mismatch_locations = np.where(comparison == False)
+            except dt.ValidationError:
+                mismatch_locations = np.where(~comparison)
                 file_failures = []  # Store the failures for each file
                 for row, col in zip(*mismatch_locations):
                     failure = {
@@ -505,8 +518,8 @@ def test_values_tpc():
             # The failures list will be printed later to display all the failures encountered during the comparison.
             try:
                 dt.validate(df_processed_output, df_expected_output)
-            except dt.ValidationError as e:
-                mismatch_locations = np.where(comparison == False)
+            except dt.ValidationError:
+                mismatch_locations = np.where(~comparison)
                 file_failures = []  # Store the failures for each file
                 for row, col in zip(*mismatch_locations):
                     failure = {
