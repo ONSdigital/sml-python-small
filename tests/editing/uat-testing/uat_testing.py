@@ -412,7 +412,6 @@ def output_failures(failures, method):
 
 # UAT CSV files are used to run with example Pandas code for Totals and Components and Thousand Pounds Correction
 # Output generated is checked against the expected output files
-@pytest.mark.mandatory
 def test_values_tcc():
     tcc_test_data_original = os.listdir("tcc_test_data_original/")
     tcc_test_data_processed = os.listdir("tcc_test_data_processed/")
@@ -478,7 +477,6 @@ def test_values_tcc():
 
 # UAT CSV files are used to run with example Pandas code for Totals and Components and Thousand Pounds Correction
 # Output generated is checked against the expected output files
-# @pytest.mark.mandatory
 def test_values_tpc():
     tpc_test_data_original = os.listdir("tpc_test_data_original/")
     tpc_test_data_processed = os.listdir("tpc_test_data_processed/")
