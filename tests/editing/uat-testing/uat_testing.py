@@ -388,7 +388,7 @@ def check_decimal_values(df_processed_output, df_expected_output):
     return df_processed_output
 
 
-def output_failures(failures, method):
+def output_failures(failures):
     # Print all the failures
     for failure in failures:
         print("\n")
@@ -397,144 +397,108 @@ def output_failures(failures, method):
         )
         print(f"Filename with the error '{failure['file_name']}'.")
         for failure_details in failure["failures"]:
-            if method == "TCC":
+            if "reference" in failure_details:
                 print(
                     f"Value mismatch at reference {failure_details['reference']}, row {failure_details['row']} and column {failure_details['col']}."
                 )
-            elif method == "TPC":
+            elif "RU" in failure_details:
                 print(
-                    f"Value mismatch at reference {failure_details['RU']}, row {failure_details['row']} and column {failure_details['col']}."
+                    f"Value mismatch at RU {failure_details['RU']}, row {failure_details['row']} and column {failure_details['col']}."
                 )
             print(f"Expected output: {failure_details['expected_output']}")
             print(f"Processed output: {failure_details['processed_output']}")
             print("\n")
 
+failures = []  # Store the failures
 
-# UAT CSV files are used to run with example Pandas code for Totals and Components and Thousand Pounds Correction
-# Output generated is checked against the expected output files
-def test_values_tcc():
-    tcc_test_data_original = os.listdir("tcc_test_data_original/")
-    tcc_test_data_processed = os.listdir("tcc_test_data_processed/")
+def compare_dataframes(df_processed_output, df_expected_output, method, file1):
+    # Comparing nan values is problematic when using the datatest library
+    # so we make all the nan values in the processed and expected output 0
+    # so we can easily compare it without being thrown an error when comparing nan values
+    df_processed_output = df_processed_output.fillna(0)
+    df_expected_output = df_expected_output.fillna(0)
 
-    failures = []  # Store the failures
+    # Round the decimal values in the df_processed_output dataframe to the same number of decimal
+    # places as the df_expected_output dataframe
+    df_processed_output = check_decimal_values(
+        df_processed_output, df_expected_output
+    )
 
-    # Iterate through each combination of file1 and file2 from tcc_test_data_processed and tcc_test_data_original
-    for file1, file2 in itertools.product(
-        tcc_test_data_processed, tcc_test_data_original
-    ):
+    # Compare the dataframes
+    comparison = df_processed_output == df_expected_output
+
+    # This section of code is responsible for comparing the processed output dataframe with the expected output dataframe.
+    # It uses the datatest library to perform the comparison.
+    # If there are any mismatches between the two dataframes, a ValidationError is raised.
+    # The code catches the ValidationError and identifies the locations of the mismatches.
+    # It then stores the details of each failure in a list called file_failures.
+    # The failure details include the reference, row number, column number, expected output, and processed output.
+    # Finally, the list of failures is appended to the failures list.
+    # The failures list will be printed later to display all the failures encountered during the comparison.
+    try:
+        dt.validate(df_processed_output, df_expected_output)
+    except dt.ValidationError:
+        mismatch_locations = np.where(~comparison)
+        file_failures = []  # Store the failures for each file
+        for row, col in zip(*mismatch_locations):
+            if method == "TCC":
+                failure = {
+                    "reference": df_processed_output.loc[row, "reference"],
+                    "row": row + 1,
+                    "col": col + 1,
+                    "expected_output": df_expected_output.iloc[row, col],
+                    "processed_output": df_processed_output.iloc[row, col],
+                }
+            elif method == "TPC":
+                failure = {
+                    "RU": df_processed_output.loc[row, "RU"],
+                    "row": row + 1,
+                    "col": col + 1,
+                    "expected_output": df_expected_output.iloc[row, col],
+                    "processed_output": df_processed_output.iloc[row, col],
+                }
+            file_failures.append(failure)
+
+        # If there are any failures in the file, create a dictionary with the file name and the list of failures
+        if len(file_failures) > 0:
+            file_failure = {"file_name": file1, "failures": file_failures}
+            # Append the file_failure dictionary to the list of failures
+            failures.append(file_failure)
+
+    return failures
+
+
+def test_values(test_data):
+    method, test_data_original_path, test_data_processed_path = test_data
+    test_data_original = os.listdir(test_data_original_path)
+    test_data_processed = os.listdir(test_data_processed_path)
+
+    # Iterate through each combination of file1 and file2 from test_data_processed and test_data_original
+    for file1, file2 in itertools.product(test_data_processed, test_data_original):
         if file2.endswith("output.csv") and file1 == file2:
-            df_processed_output = pd.read_csv("tcc_test_data_processed/" + file1)
-            df_expected_output = pd.read_csv("tcc_test_data_original/" + file2)
+            df_processed_output = pd.read_csv(test_data_processed_path + file1)
+            df_expected_output = pd.read_csv(test_data_original_path + file2)
 
-            # Comparing nan values is problematic when using the datatest library
-            # so we make all the nan values in the processed and expected output 0
-            # so we can easily compare it without being thrown an error when comparing nan values
-            df_processed_output = df_processed_output.fillna(0)
-            df_expected_output = df_expected_output.fillna(0)
+            compare_dataframes(df_processed_output, df_expected_output, method, file1)
 
-            # Round the decimal values in the df_processed_output dataframe to the same number of decimal
-            # places as the df_expected_output dataframe
-            df_processed_output = check_decimal_values(
-                df_processed_output, df_expected_output
-            )
-
-            # Compare the dataframes
-            comparison = df_processed_output == df_expected_output
-
-            # This section of code is responsible for comparing the processed output dataframe with the expected output dataframe.
-            # It uses the datatest library to perform the comparison.
-            # If there are any mismatches between the two dataframes, a ValidationError is raised.
-            # The code catches the ValidationError and identifies the locations of the mismatches.
-            # It then stores the details of each failure in a list called file_failures.
-            # The failure details include the reference, row number, column number, expected output, and processed output.
-            # Finally, the list of failures is appended to the failures list.
-            # The failures list will be printed later to display all the failures encountered during the comparison.
-            try:
-                dt.validate(df_processed_output, df_expected_output)
-            except dt.ValidationError:
-                mismatch_locations = np.where(~comparison)
-                file_failures = []  # Store the failures for each file
-                for row, col in zip(*mismatch_locations):
-                    failure = {
-                        "reference": df_processed_output.loc[row, "reference"],
-                        "row": row + 1,
-                        "col": col + 1,
-                        "expected_output": df_expected_output.iloc[row, col],
-                        "processed_output": df_processed_output.iloc[row, col],
-                    }
-                    file_failures.append(failure)
-
-                # If there are any failures in the file, create a dictionary with the file name and the list of failures
-                if len(file_failures) > 0:
-                    file_failure = {"file_name": file1, "failures": file_failures}
-                    # Append the file_failure dictionary to the list of failures
-                    failures.append(file_failure)
-
-    output_failures(failures, "TCC")
+    output_failures(failures)
 
     assert len(failures) == 0, f"{len(failures)} test(s) failed"
 
 
-# UAT CSV files are used to run with example Pandas code for Totals and Components and Thousand Pounds Correction
-# Output generated is checked against the expected output files
-def test_values_tpc():
-    tpc_test_data_original = os.listdir("tpc_test_data_original/")
-    tpc_test_data_processed = os.listdir("tpc_test_data_processed/")
+# # UAT CSV files are used to run with example Pandas code for Totals and Components and Thousand Pounds Correction
+# # Output generated is checked against the expected output files
+# def test_values_tcc():
+#     test_values("TCC", "tcc_test_data_original/", "tcc_test_data_processed/")
 
-    failures = []  # Store the failures
 
-    # Iterate through each combination of file1 and file2 from tpc_test_data_processed and tpc_test_data_original
-    for file1, file2 in itertools.product(
-        tpc_test_data_processed, tpc_test_data_original
-    ):
-        if file2.endswith("output.csv") and file1 == file2:
-            df_processed_output = pd.read_csv("tpc_test_data_processed/" + file1)
-            df_expected_output = pd.read_csv("tpc_test_data_original/" + file2)
+# # UAT CSV files are used to run with example Pandas code for Totals and Components and Thousand Pounds Correction
+# # Output generated is checked against the expected output files
+# def test_values_tpc():
+#     test_values("TPC", "tpc_test_data_original/", "tpc_test_data_processed/")
 
-            # Comparing nan values is problematic when using the datatest library
-            # so we make all the nan values in the processed and expected output 0
-            # so we can easily compare it without being thrown an error when comparing nan values
-            df_processed_output = df_processed_output.fillna(0)
-            df_expected_output = df_expected_output.fillna(0)
 
-            # Round the decimal values in the df_processed_output dataframe to the same number of decimal
-            # places as the df_expected_output dataframe
-            df_processed_output = check_decimal_values(
-                df_processed_output, df_expected_output
-            )
-
-            # Compare the dataframes
-            comparison = df_processed_output == df_expected_output
-
-            # This section of code is responsible for comparing the processed output dataframe with the expected output dataframe.
-            # It uses the datatest library to perform the comparison.
-            # If there are any mismatches between the two dataframes, a ValidationError is raised.
-            # The code catches the ValidationError and identifies the locations of the mismatches.
-            # It then stores the details of each failure in a list called file_failures.
-            # The failure details include the reference, row number, column number, expected output, and processed output.
-            # Finally, the list of failures is appended to the failures list.
-            # The failures list will be printed later to display all the failures encountered during the comparison.
-            try:
-                dt.validate(df_processed_output, df_expected_output)
-            except dt.ValidationError:
-                mismatch_locations = np.where(~comparison)
-                file_failures = []  # Store the failures for each file
-                for row, col in zip(*mismatch_locations):
-                    failure = {
-                        "RU": df_processed_output.loc[row, "RU"],
-                        "row": row + 1,
-                        "col": col + 1,
-                        "expected_output": df_expected_output.iloc[row, col],
-                        "processed_output": df_processed_output.iloc[row, col],
-                    }
-                    file_failures.append(failure)
-
-                # If there are any failures in the file, create a dictionary with the file name and the list of failures
-                if len(file_failures) > 0:
-                    file_failure = {"file_name": file1, "failures": file_failures}
-                    # Append the file_failure dictionary to the list of failures
-                    failures.append(file_failure)
-
-    output_failures(failures, "TPC")
-
-    assert len(failures) == 0, f"{len(failures)} test(s) failed"
+@pytest.fixture(params=[("TCC", "tcc_test_data_original/", "tcc_test_data_processed/"),
+                        ("TPC", "tpc_test_data_original/", "tpc_test_data_processed/")])
+def test_data(request):
+    return request.param
