@@ -410,9 +410,6 @@ def output_failures(failures):
             print("\n")
 
 
-failures = []  # Store the failures
-
-
 def compare_dataframes(df_processed_output, df_expected_output, method, file1):
     # Comparing nan values is problematic when using the datatest library
     # so we make all the nan values in the processed and expected output 0
@@ -435,6 +432,8 @@ def compare_dataframes(df_processed_output, df_expected_output, method, file1):
     # The failure details include the reference, row number, column number, expected output, and processed output.
     # Finally, the list of failures is appended to the failures list.
     # The failures list will be printed later to display all the failures encountered during the comparison.
+    file_failure = {}
+
     try:
         dt.validate(df_processed_output, df_expected_output)
     except dt.ValidationError:
@@ -462,16 +461,15 @@ def compare_dataframes(df_processed_output, df_expected_output, method, file1):
         # If there are any failures in the file, create a dictionary with the file name and the list of failures
         if len(file_failures) > 0:
             file_failure = {"file_name": file1, "failures": file_failures}
-            # Append the file_failure dictionary to the list of failures
-            failures.append(file_failure)
-
-    return failures
+            return file_failure
 
 
-def test_values(test_data):
-    method, test_data_original_path, test_data_processed_path = test_data
+def test_tcc_values(tcc_test_data):
+    method, test_data_original_path, test_data_processed_path = tcc_test_data
     test_data_original = os.listdir(test_data_original_path)
     test_data_processed = os.listdir(test_data_processed_path)
+
+    failures = []
 
     # Iterate through each combination of file1 and file2 from test_data_processed and test_data_original
     for file1, file2 in itertools.product(test_data_processed, test_data_original):
@@ -479,18 +477,42 @@ def test_values(test_data):
             df_processed_output = pd.read_csv(test_data_processed_path + file1)
             df_expected_output = pd.read_csv(test_data_original_path + file2)
 
-            compare_dataframes(df_processed_output, df_expected_output, method, file1)
+            failure = compare_dataframes(df_processed_output, df_expected_output, method, file1)
+            if failure != None:
+                failures.append(failure)
+                
+    output_failures(failures)
+
+    assert len(failures) == 0, f"{len(failures)} test(s) failed"
+
+
+def test_tpc_values(tpc_test_data):
+    method, test_data_original_path, test_data_processed_path = tpc_test_data
+    test_data_original = os.listdir(test_data_original_path)
+    test_data_processed = os.listdir(test_data_processed_path)
+
+    failures = []
+
+    # Iterate through each combination of file1 and file2 from test_data_processed and test_data_original
+    for file1, file2 in itertools.product(test_data_processed, test_data_original):
+        if file2.endswith("output.csv") and file1 == file2:
+            df_processed_output = pd.read_csv(test_data_processed_path + file1)
+            df_expected_output = pd.read_csv(test_data_original_path + file2)
+
+            failure = compare_dataframes(df_processed_output, df_expected_output, method, file1)
+            if failure != None:
+                failures.append(failure)
 
     output_failures(failures)
 
     assert len(failures) == 0, f"{len(failures)} test(s) failed"
 
 
-@pytest.fixture(
-    params=[
-        ("TCC", "tcc_test_data_original/", "tcc_test_data_processed/"),
-        ("TPC", "tpc_test_data_original/", "tpc_test_data_processed/"),
-    ]
-)
-def test_data(request):
+@pytest.fixture(params=[("TCC", "tcc_test_data_original/", "tcc_test_data_processed/")])
+def tcc_test_data(request):
+    return request.param
+
+
+@pytest.fixture(params=[("TPC", "tpc_test_data_original/", "tpc_test_data_processed/")])
+def tpc_test_data(request):
     return request.param
