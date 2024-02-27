@@ -23,7 +23,7 @@ def run_all_csvs(directory, function):
     for filename in os.listdir(directory):
         if filename.endswith(".csv") and "output" not in filename:
             input_filename = filename
-            filename_without_extension = os.path.splitext(filename)
+            filename_without_extension, file_extension = os.path.splitext(filename)
             output_filename = f"{filename_without_extension}_output.csv"
 
             # Call your function for each CSV file
