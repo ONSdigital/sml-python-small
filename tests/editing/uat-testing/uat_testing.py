@@ -23,7 +23,7 @@ def run_all_csvs(directory, function):
     for filename in os.listdir(directory):
         if filename.endswith(".csv") and "output" not in filename:
             input_filename = filename
-            filename_without_extension, file_extension = os.path.splitext(filename)
+            filename_without_extension = os.path.splitext(filename)
             output_filename = f"{filename_without_extension}_output.csv"
 
             # Call your function for each CSV file
@@ -61,7 +61,7 @@ def expand_list_column(
 ):
     final_data = []
 
-    for index, row in df.iterrows():
+    for _, row in df.iterrows():
         data = row.to_dict()
         list_data = row[list_column_name]
 
@@ -209,6 +209,7 @@ def run_thousand_pounds_with_pandas(path, input_csv, output_csv):
     csv_filename = "tpc_test_data_processed/" + output_csv
     final_df.to_csv(csv_filename, index=False)
 
+
 # Run Totals and Components UAT
 run_all_csvs("tcc_test_data_original/", "totals_and_components")
 
@@ -230,7 +231,7 @@ tcc_original_input_column_names = [
     "predictive",
     "auxiliary",
     "abs_threshold",
-    "perc_threshold"
+    "perc_threshold",
 ]
 
 # Set of column names for the processed output CSV files that we will use to test against
@@ -255,11 +256,13 @@ tcc_processed_output_column_names = [
     "final_component_2",
     "final_component_3",
     "final_component_4",
-    "tcc_marker"
+    "tcc_marker",
 ]
 
 # Set of column names for the original input CSV files that we will use to test against
 # the original input CSV files that is in the tpc_test_data_original directory
+# Target variable column names such as q42 will not be tested as target variables can be named anything,
+# and there can be many different target variables
 tpc_original_input_column_names = [
     "RU",
     "period",
@@ -267,11 +270,13 @@ tpc_original_input_column_names = [
     "predictive_val",
     "aux_val",
     "threshold_upper",
-    "threshold_lower"
+    "threshold_lower",
 ]
 
 # Set of column names for the processed output CSV files that we will use to test against
 # the processed output CSV files that is in the tpc_test_data_processed directory
+# Target variable column names such as q42, q42_final_value will not be tested as target variables can be named anything,
+# and there can be many different target variables
 tpc_processed_output_column_names = [
     "RU",
     "principal_val",
@@ -281,7 +286,7 @@ tpc_processed_output_column_names = [
     "aux_val",
     "principal_final_value",
     "tpc_ratio",
-    "tpc_marker"
+    "tpc_marker",
 ]
 
 
@@ -306,10 +311,11 @@ tpc_processed_output_column_names = [
     ],
 )
 # This function is used to test the column names in a CSV file
-# It takes directory, type_to_test, and column_names as parameters
+# It takes directory, type_to_test, column_names and ignored_column_names as parameters
 # directory is the location of the CSV files we want to test
 # type_of_test specifies if it's the input files or output files we want to test
 # column_names takes in the column_names we want to test against the CSV files
+# ignored_column_names takes in the column names we want to ignore when testing the CSV files
 @pytest.mark.mandatory
 def test_column_names(directory, type_to_test, column_names, ignored_column_names):
     print("\n")
@@ -342,7 +348,7 @@ def test_column_names(directory, type_to_test, column_names, ignored_column_name
 # This function is used to round the decimal places of any decimal value found in the
 # processed output CSV file that is in the tcc_test_data_processed directory
 # It takes in the processed output CSV file and the expected output CSV file as parameters
-# It checks if the value is a float and if it is, it checks if it has a decimal place
+# It checks if the processed output value is a float and if it is, it checks if it has a decimal place
 # If it does, it will round the value to the same number of decimal places as the expected value
 # This is to ensure that the values match when comparing the processed output CSV file
 # against the expected output CSV file
@@ -367,6 +373,11 @@ def check_decimal_values(df_processed_output, df_expected_output):
     return df_processed_output
 
 
+# The output_failures function is responsible for printing the details of failures that
+# occurred during the comparison of expected output and processed output. It takes a list of failures
+# as input and iterates over each failure. For each failure, it prints the filename with the error,
+# the reference (if available), the row and column where the value mismatch occurred, the expected output value,
+# and the processed output value.
 def output_failures(failures):
     # Print all the failures
     for failure in failures:
@@ -409,17 +420,28 @@ def compare_dataframes(df_processed_output, df_expected_output, method, file1):
     # The code catches the ValidationError and identifies the locations of the mismatches.
     # It then stores the details of each failure in a list called file_failures.
     # The failure details include the reference, row number, column number, expected output, and processed output.
-    # Finally, the list of failures is appended to the failures list.
     # The failures list will be printed later to display all the failures encountered during the comparison.
     file_failure = {}
 
     try:
         dt.validate(df_processed_output, df_expected_output)
     except dt.ValidationError:
+        # Using the NumPy library to find the locations where the comparison variable is false.
+        # The resulting indices are stored in the mismatch_locations variable.
+        # The tilde (~) is a unary operator in Python that performs a bitwise negation.
+        # In this case, it is used to negate the comparison variable.
+        # This means that the condition inside np.where() will be true for elements where comparison is false.
         mismatch_locations = np.where(~comparison)
         file_failures = []  # Store the failures for each file
+
+        # This for loop iterates over each pair of row and column indices in the mismatch_locations variable.
+        # The mismatch_locations variable contains the indices where the comparison between the processed output
+        # and expected output dataframes is false.
+        # These indices represent the locations where the values in the two dataframes do not match.
         for row, col in zip(*mismatch_locations):
+            # Check the method type to determine the failure details format
             if method == "TCC":
+                # Create a failure dictionary with the reference, row number, column number, expected output, and processed output
                 failure = {
                     "reference": df_processed_output.loc[row, "reference"],
                     "row": row + 1,
@@ -428,6 +450,7 @@ def compare_dataframes(df_processed_output, df_expected_output, method, file1):
                     "processed_output": df_processed_output.iloc[row, col],
                 }
             elif method == "TPC":
+                # Create a failure dictionary with the RU, row number, column number, expected output, and processed output
                 failure = {
                     "RU": df_processed_output.loc[row, "RU"],
                     "row": row + 1,
@@ -435,6 +458,7 @@ def compare_dataframes(df_processed_output, df_expected_output, method, file1):
                     "expected_output": df_expected_output.iloc[row, col],
                     "processed_output": df_processed_output.iloc[row, col],
                 }
+            # Append the failure dictionary to the file_failures list
             file_failures.append(failure)
 
         # If there are any failures in the file, create a dictionary with the file name and the list of failures
@@ -443,15 +467,21 @@ def compare_dataframes(df_processed_output, df_expected_output, method, file1):
             return file_failure
 
 
+# This test_values function is used to test the values in the processed output CSV files against the expected output CSV files.
+# It uses the parametrize decorator to run the test with different arguments.
+# The test_data parameter is a tuple containing the method ("TCC" or "TPC"), the path to the original test data directory,
+# and the path to the processed test data directory.
 @pytest.mark.parametrize(
     "test_data",
     [
         ("TCC", "tcc_test_data_original/", "tcc_test_data_processed/"),
-        ("TPC", "tpc_test_data_original/", "tpc_test_data_processed/")
-    ]
+        ("TPC", "tpc_test_data_original/", "tpc_test_data_processed/"),
+    ],
 )
 def test_values(test_data):
     method, test_data_original_path, test_data_processed_path = test_data
+
+    # Get the list of files in the original test data directory and the processed test data directory
     test_data_original = os.listdir(test_data_original_path)
     test_data_processed = os.listdir(test_data_processed_path)
 
@@ -459,16 +489,21 @@ def test_values(test_data):
 
     # Iterate through each combination of file1 and file2 from test_data_processed and test_data_original
     for file1, file2 in itertools.product(test_data_processed, test_data_original):
+        # Check if file2 is an output file and if file1 and file2 have the same name
         if file2.endswith("output.csv") and file1 == file2:
+            # Read the processed output CSV file and the expected output CSV file
             df_processed_output = pd.read_csv(test_data_processed_path + file1)
             df_expected_output = pd.read_csv(test_data_original_path + file2)
 
+            # Compare the dataframes and get the failure (if any)
             failure = compare_dataframes(
                 df_processed_output, df_expected_output, method, file1
             )
             if failure is not None:
                 failures.append(failure)
 
+    # Print the details of the failures
     output_failures(failures)
 
+    # Assert that there are no failures
     assert len(failures) == 0, f"{len(failures)} test(s) failed"
