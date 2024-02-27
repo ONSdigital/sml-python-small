@@ -209,23 +209,8 @@ def run_thousand_pounds_with_pandas(path, input_csv, output_csv):
     csv_filename = "tpc_test_data_processed/" + output_csv
     final_df.to_csv(csv_filename, index=False)
 
-
-# Run example data for Totals and Components
-# run_totals_components_with_pandas(
-#     "../../tests/editing/totals_and_components/example_data/",
-#     "example_test_data.csv",
-#     "example_test_data_pandas_output.csv",
-# )
-
 # Run Totals and Components UAT
 run_all_csvs("tcc_test_data_original/", "totals_and_components")
-
-# # Run example data for Thousands Pounds
-# run_thousand_pounds_with_pandas(
-#     "../../tests/editing/thousand_pounds/example_data/",
-#     "example_test_data.csv",
-#     "example_test_data_pandas_output.csv",
-# )
 
 # Run Thousand Pounds UAT
 run_all_csvs("tpc_test_data_original/", "thousand_pounds")
@@ -245,7 +230,7 @@ tcc_original_input_column_names = [
     "predictive",
     "auxiliary",
     "abs_threshold",
-    "perc_threshold",
+    "perc_threshold"
 ]
 
 # Set of column names for the processed output CSV files that we will use to test against
@@ -270,7 +255,7 @@ tcc_processed_output_column_names = [
     "final_component_2",
     "final_component_3",
     "final_component_4",
-    "tcc_marker",
+    "tcc_marker"
 ]
 
 # Set of column names for the original input CSV files that we will use to test against
@@ -279,12 +264,10 @@ tpc_original_input_column_names = [
     "RU",
     "period",
     "principal_val",
-    # "q42",
-    # "q43",
     "predictive_val",
     "aux_val",
     "threshold_upper",
-    "threshold_lower",
+    "threshold_lower"
 ]
 
 # Set of column names for the processed output CSV files that we will use to test against
@@ -292,17 +275,13 @@ tpc_original_input_column_names = [
 tpc_processed_output_column_names = [
     "RU",
     "principal_val",
-    # "q42",
-    # "q43",
     "threshold_upper",
     "threshold_lower",
     "predictive_val",
     "aux_val",
     "principal_final_value",
     "tpc_ratio",
-    # "q42_final_value",
-    # "q43_final_value",
-    "tpc_marker",
+    "tpc_marker"
 ]
 
 
@@ -464,8 +443,15 @@ def compare_dataframes(df_processed_output, df_expected_output, method, file1):
             return file_failure
 
 
-def test_tcc_values(tcc_test_data):
-    method, test_data_original_path, test_data_processed_path = tcc_test_data
+@pytest.mark.parametrize(
+    "test_data",
+    [
+        ("TCC", "tcc_test_data_original/", "tcc_test_data_processed/"),
+        ("TPC", "tpc_test_data_original/", "tpc_test_data_processed/")
+    ]
+)
+def test_values(test_data):
+    method, test_data_original_path, test_data_processed_path = test_data
     test_data_original = os.listdir(test_data_original_path)
     test_data_processed = os.listdir(test_data_processed_path)
 
@@ -486,37 +472,3 @@ def test_tcc_values(tcc_test_data):
     output_failures(failures)
 
     assert len(failures) == 0, f"{len(failures)} test(s) failed"
-
-
-def test_tpc_values(tpc_test_data):
-    method, test_data_original_path, test_data_processed_path = tpc_test_data
-    test_data_original = os.listdir(test_data_original_path)
-    test_data_processed = os.listdir(test_data_processed_path)
-
-    failures = []
-
-    # Iterate through each combination of file1 and file2 from test_data_processed and test_data_original
-    for file1, file2 in itertools.product(test_data_processed, test_data_original):
-        if file2.endswith("output.csv") and file1 == file2:
-            df_processed_output = pd.read_csv(test_data_processed_path + file1)
-            df_expected_output = pd.read_csv(test_data_original_path + file2)
-
-            failure = compare_dataframes(
-                df_processed_output, df_expected_output, method, file1
-            )
-            if failure is not None:
-                failures.append(failure)
-
-    output_failures(failures)
-
-    assert len(failures) == 0, f"{len(failures)} test(s) failed"
-
-
-@pytest.fixture(params=[("TCC", "tcc_test_data_original/", "tcc_test_data_processed/")])
-def tcc_test_data(request):
-    return request.param
-
-
-@pytest.fixture(params=[("TPC", "tpc_test_data_original/", "tpc_test_data_processed/")])
-def tpc_test_data(request):
-    return request.param
