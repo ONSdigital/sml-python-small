@@ -477,10 +477,12 @@ def test_tcc_values(tcc_test_data):
             df_processed_output = pd.read_csv(test_data_processed_path + file1)
             df_expected_output = pd.read_csv(test_data_original_path + file2)
 
-            failure = compare_dataframes(df_processed_output, df_expected_output, method, file1)
-            if failure != None:
+            failure = compare_dataframes(
+                df_processed_output, df_expected_output, method, file1
+            )
+            if failure is not None:
                 failures.append(failure)
-                
+
     output_failures(failures)
 
     assert len(failures) == 0, f"{len(failures)} test(s) failed"
@@ -499,8 +501,10 @@ def test_tpc_values(tpc_test_data):
             df_processed_output = pd.read_csv(test_data_processed_path + file1)
             df_expected_output = pd.read_csv(test_data_original_path + file2)
 
-            failure = compare_dataframes(df_processed_output, df_expected_output, method, file1)
-            if failure != None:
+            failure = compare_dataframes(
+                df_processed_output, df_expected_output, method, file1
+            )
+            if failure is not None:
                 failures.append(failure)
 
     output_failures(failures)
