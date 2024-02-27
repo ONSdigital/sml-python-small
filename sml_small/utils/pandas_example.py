@@ -215,7 +215,7 @@ run_totals_components_with_pandas(
 
 # Run Totals and Components UAT
 run_all_csvs(
-    "../../tests/editing/totals_and_components/example_data/uat/",
+    "../../tests/editing/totals_and_components/example_data/csvs/",
     "totals_and_components",
 )
 
@@ -227,4 +227,6 @@ run_thousand_pounds_with_pandas(
 )
 
 # Run Thousand Pounds UAT
-run_all_csvs("../../tests/editing/thousand_pounds/example_data/uat/", "thousand_pounds")
+run_all_csvs(
+    "../../tests/editing/thousand_pounds/example_data/csvs/", "thousand_pounds"
+)

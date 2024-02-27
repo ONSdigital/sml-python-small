@@ -11,8 +11,8 @@ dist/
 /tests/*output.csv
 /tests/editing/thousand_pounds/example_data/*output.csv
 /tests/editing/totals_and_components/example_data/*output.csv
-/tests/editing/thousand_pounds/example_data/uat/*output.csv
-/tests/editing/totals_and_components/example_data/uat/*output.csv
+/tests/editing/thousand_pounds/example_data/csvs/*output.csv
+/tests/editing/totals_and_components/example_data/csvs/*output.csv
 /tests/editing/uat-testing/tcc_test_data_processed
 /tests/editing/uat-testing/tpc_test_data_processed
 .venv/
