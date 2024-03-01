@@ -76,16 +76,15 @@ output = thousand_pounds(
 
 ```python
 ThousandPoundsOutput(
-    principal_identifier='12340000001-201409-q100',
-    principal_adjusted_value="50000.0",
+    unique_identifier='12340000001-201409-q100',
+    principal_final_value="50000.0",
     target_variables=[
         TargetVariable(identifier='101', original_value="500", adjusted_value="0.5"),
         TargetVariable(identifier='102', original_value="1000", adjusted_value="1.0"),
         TargetVariable(identifier='103', original_value="1500", adjusted_value="1.5"),
         TargetVariable(identifier='104', original_value=None, adjusted_value=None)],
     tpc_ratio="833.3",
-    tpc_marker='C',
-    error_description=''
+    tpc_marker='C'
 )
 ```
 
