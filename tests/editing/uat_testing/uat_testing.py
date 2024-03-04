@@ -467,7 +467,7 @@ def compare_dataframes(df_processed_output, df_expected_output, method, file1):
             return file_failure
 
 
-# This test_values function is used to test the values in the processed output CSV files against the expected output CSV files.
+# This compare_values function is used to test the values in the processed output CSV files against the expected output CSV files.
 # It uses the parametrize decorator to run the test with different arguments.
 # The test_data parameter is a tuple containing the method ("TCC" or "TPC"), the path to the original test data directory,
 # and the path to the processed test data directory.
@@ -478,7 +478,7 @@ def compare_dataframes(df_processed_output, df_expected_output, method, file1):
         ("TPC", "tpc_test_data_original/", "tpc_test_data_processed/"),
     ],
 )
-def test_values(test_data):
+def compare_values(test_data):
     method, test_data_original_path, test_data_processed_path = test_data
 
     # Get the list of files in the original test data directory and the processed test data directory
