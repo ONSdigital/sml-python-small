@@ -210,11 +210,12 @@ def run_thousand_pounds_with_pandas(path, input_csv, output_csv):
     final_df.to_csv(csv_filename, index=False)
 
 
-# Run Totals and Components UAT
-run_all_csvs("tcc_test_data_original/", "totals_and_components")
+if __name__ == "__main__":
+    # Run Totals and Components UAT
+    run_all_csvs("tcc_test_data_original/", "totals_and_components")
 
-# Run Thousand Pounds UAT
-run_all_csvs("tpc_test_data_original/", "thousand_pounds")
+    # Run Thousand Pounds UAT
+    run_all_csvs("tpc_test_data_original/", "thousand_pounds")
 
 
 # Set of column names for the original input CSV files that we will use to test against
@@ -404,8 +405,8 @@ def compare_dataframes(df_processed_output, df_expected_output, method, file1):
     # Comparing nan values is problematic when using the datatest library
     # so we make all the nan values in the processed and expected output 0
     # so we can easily compare it without being thrown an error when comparing nan values
-    df_processed_output = df_processed_output.fillna(0)
-    df_expected_output = df_expected_output.fillna(0)
+    df_processed_output = df_processed_output.fillna(-1)
+    df_expected_output = df_expected_output.fillna(-1)
 
     # Round the decimal values in the df_processed_output dataframe to the same number of decimal
     # places as the df_expected_output dataframe
@@ -467,7 +468,7 @@ def compare_dataframes(df_processed_output, df_expected_output, method, file1):
             return file_failure
 
 
-# This compare_values function is used to test the values in the processed output CSV files against the expected output CSV files.
+# This test_values function is used to test the values in the processed output CSV files against the expected output CSV files.
 # It uses the parametrize decorator to run the test with different arguments.
 # The test_data parameter is a tuple containing the method ("TCC" or "TPC"), the path to the original test data directory,
 # and the path to the processed test data directory.
@@ -478,7 +479,7 @@ def compare_dataframes(df_processed_output, df_expected_output, method, file1):
         ("TPC", "tpc_test_data_original/", "tpc_test_data_processed/"),
     ],
 )
-def compare_values(test_data):
+def test_values(test_data):
     method, test_data_original_path, test_data_processed_path = test_data
 
     # Get the list of files in the original test data directory and the processed test data directory
