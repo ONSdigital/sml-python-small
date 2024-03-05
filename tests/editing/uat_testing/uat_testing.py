@@ -15,6 +15,7 @@ import pytest
 
 # We import the wrapper function from the pandas_wrapper
 from sml_small.utils.pandas_wrapper import wrapper
+import os
 
 
 # Function to take a directory and run the provided method against
@@ -144,6 +145,10 @@ def run_totals_components_with_pandas(path, input_csv, output_csv):
     # Create a new DataFrame with the columns in the desired order
     final_df = final_df[column_order]
 
+    # Create the tcc_test_data_processed folder if it doesn't exist
+    if not os.path.exists("tcc_test_data_processed"):
+        os.makedirs("tcc_test_data_processed")
+
     # Write the DataFrame to a CSV, excluding the index column
     csv_filename = "tcc_test_data_processed/" + output_csv
     final_df.to_csv(csv_filename, index=False)
@@ -205,17 +210,20 @@ def run_thousand_pounds_with_pandas(path, input_csv, output_csv):
     # Update the DataFrame with the columns in the desired order
     final_df = final_df[column_order]
 
+    # Create the tcc_test_data_processed folder if it doesn't exist
+    if not os.path.exists("tpc_test_data_processed"):
+        os.makedirs("tpc_test_data_processed")
+
     # Write the DataFrame to a CSV, excluding the index column
     csv_filename = "tpc_test_data_processed/" + output_csv
     final_df.to_csv(csv_filename, index=False)
 
 
-if __name__ == "__main__":
-    # Run Totals and Components UAT
-    run_all_csvs("tcc_test_data_original/", "totals_and_components")
+# Run Totals and Components UAT
+run_all_csvs("tcc_test_data_original/", "totals_and_components")
 
-    # Run Thousand Pounds UAT
-    run_all_csvs("tpc_test_data_original/", "thousand_pounds")
+# Run Thousand Pounds UAT
+run_all_csvs("tpc_test_data_original/", "thousand_pounds")
 
 
 # Set of column names for the original input CSV files that we will use to test against
