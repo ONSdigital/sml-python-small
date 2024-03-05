@@ -430,7 +430,7 @@ def check_zero_errors(
         auxiliary is None or auxiliary == 0
     ):
         tpc_marker = TpcMarker.STOP
-        logger.warning(f"TPCMarker = STOP at line:{sys._getframe().f_back.f_lineno}")
+        logger.warning(f"TPCMarker = STOP at line: {sys._getframe().f_back.f_lineno}")
 
         checked_target_variables = []
 

@@ -49,7 +49,7 @@ def log_table(table_name: str, **kwargs):
     logger.info("Variable Name                   |   Value")
     logger.info("--------------------------------|---------")
     for var_name, var_value in kwargs.items():
-        logger.info(f"{var_name:<{table_padding}}|   {var_value}")
+        logger.info(f"{var_name: <{table_padding}}|{var_value}")
 
 
 def validate_number(tag: str, value: str) -> bool:
