@@ -15,7 +15,6 @@ import pytest
 
 # We import the wrapper function from the pandas_wrapper
 from sml_small.utils.pandas_wrapper import wrapper
-import os
 
 
 # Function to take a directory and run the provided method against
