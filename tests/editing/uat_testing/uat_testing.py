@@ -403,8 +403,13 @@ def output_failures(failures):
 
 def compare_dataframes(df_processed_output, df_expected_output, method, file1):
     # Comparing nan values is problematic when using the datatest library
-    # so we make all the nan values in the processed and expected output 0
+    # so we make all the nan values in the processed and expected output -1
     # so we can easily compare it without being thrown an error when comparing nan values
+
+    # We use -1 to replace nan values because if the expected value is 0 and the processed value is NaN,
+    # using fillna(0) would mask this discrepancy, as both values would become 0 after the operation
+    # Setting NaN values to -1 (or any other value that you're sure won't appear in your data) is one way to
+    # to handle this, as it would allow us to distinguish between actual 0 values and values that were originally NaN
     df_processed_output = df_processed_output.fillna(-1)
     df_expected_output = df_expected_output.fillna(-1)
 
