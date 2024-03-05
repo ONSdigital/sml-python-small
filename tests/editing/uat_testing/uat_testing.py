@@ -208,7 +208,7 @@ def run_thousand_pounds_with_pandas(path, input_csv, output_csv):
     # Update the DataFrame with the columns in the desired order
     final_df = final_df[column_order]
 
-    # Create the tcc_test_data_processed folder if it doesn't exist
+    # Create the tpc_test_data_processed folder if it doesn't exist
     os.makedirs("tpc_test_data_processed", exist_ok=True)
 
     # Write the DataFrame to a CSV, excluding the index column
