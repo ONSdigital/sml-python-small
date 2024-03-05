@@ -1,0 +1,4 @@
+reference,total,comp_1,comp_2,comp_3,comp_4,amend_total,predictive,auxiliary,abs_threshold,perc_threshold,abs_diff,perc_low,perc_high,final_total,final_component_1,final_component_2,final_component_3,final_component_4,tcc_marker
+4001,1689,632,732,101,165,True,1689,,0,0,59,1630,1630,1689,632,732,101,165,M
+4002,10384,9200,866,632,112,True,10384,,0,0,426,10810,10810,10384,9200,866,632,112,M
+4003,306,240,0,30,10,True,306,,0,0,26,280,280,306,240,0,30,10,M
