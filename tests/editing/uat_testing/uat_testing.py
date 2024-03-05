@@ -145,8 +145,7 @@ def run_totals_components_with_pandas(path, input_csv, output_csv):
     final_df = final_df[column_order]
 
     # Create the tcc_test_data_processed folder if it doesn't exist
-    if not os.path.exists("tcc_test_data_processed"):
-        os.makedirs("tcc_test_data_processed")
+    os.makedirs("tcc_test_data_processed", exist_ok=True)
 
     # Write the DataFrame to a CSV, excluding the index column
     csv_filename = "tcc_test_data_processed/" + output_csv
@@ -210,19 +209,26 @@ def run_thousand_pounds_with_pandas(path, input_csv, output_csv):
     final_df = final_df[column_order]
 
     # Create the tcc_test_data_processed folder if it doesn't exist
-    if not os.path.exists("tpc_test_data_processed"):
-        os.makedirs("tpc_test_data_processed")
+    os.makedirs("tpc_test_data_processed", exist_ok=True)
 
     # Write the DataFrame to a CSV, excluding the index column
     csv_filename = "tpc_test_data_processed/" + output_csv
     final_df.to_csv(csv_filename, index=False)
 
 
-# Run Totals and Components UAT
-run_all_csvs("tcc_test_data_original/", "totals_and_components")
-
-# Run Thousand Pounds UAT
-run_all_csvs("tpc_test_data_original/", "thousand_pounds")
+# This fixture is used to set up the environment before running the tests
+# It is automatically used by all test functions in the session scope
+@pytest.fixture(scope="session", autouse=True)
+def setup_before_tests():
+    # Code to run before tests
+    print("Running the TCC & TPC input CSV files through the pandas wrapper...")
+    # Run Totals and Components UAT
+    run_all_csvs("tcc_test_data_original/", "totals_and_components")
+    # Run Thousand Pounds UAT
+    run_all_csvs("tpc_test_data_original/", "thousand_pounds")
+    yield
+    # Code to run after tests
+    print("Testing has finished")
 
 
 # Set of column names for the original input CSV files that we will use to test against
