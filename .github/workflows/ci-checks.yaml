@@ -56,6 +56,10 @@ jobs:
       - name: Upload Test report
         uses: dorny/test-reporter@v1
         if: success() || failure()
+        permissions:
+          id-token: write
+          contents: read
+          checks: write
         with:
           name: test-results
           path: tests/junit.xml
