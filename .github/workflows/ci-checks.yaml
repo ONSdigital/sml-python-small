@@ -30,6 +30,10 @@ jobs:
         run: poetry build
   test:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+      checks: write
     strategy:
       max-parallel: 5
       matrix:
