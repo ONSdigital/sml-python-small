@@ -113,7 +113,7 @@ def date_adjustment(
             * E08: A required trading weight for calculating weight n has a negative value.
             * E09: Contributors return does not cover any of expected period.
             * E10: The sum of trading day weights over contributors returned period is zero.
-            * E11: The sum of trading day weights over contributors returned period is zero.
+            * E11: The sum of trading day weights over actual returned period is zero.
             * E12: A required record for calculating midpoint date is missing from the
                     trading weights table.
             * E13: A required record for setting APS and APE by midpoint is missing from or
