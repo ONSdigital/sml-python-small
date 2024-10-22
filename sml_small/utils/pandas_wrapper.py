@@ -78,7 +78,7 @@ def run_totals_and_components(
         "auxiliary": auxiliary_column,
         "absolute_difference_threshold": absolute_threshold_column,
         "percentage_difference_threshold": percentage_threshold_column,
-        "precision": precision
+        "precision": precision,
     }
     final_inputs = {}
     for key, value in input_dict.items():

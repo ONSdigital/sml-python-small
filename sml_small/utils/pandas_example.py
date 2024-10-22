@@ -114,7 +114,7 @@ def run_totals_components_with_pandas(path, input_csv, output_csv):
         auxiliary_column="auxiliary",
         absolute_threshold_column="abs_threshold",
         percentage_threshold_column="perc_threshold",
-        precision="precision"
+        precision="precision",
     )
 
     # Loop through columns that have list and extract as separate columns
