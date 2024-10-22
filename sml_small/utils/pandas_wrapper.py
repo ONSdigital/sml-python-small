@@ -27,6 +27,7 @@ def run_totals_and_components(
     auxiliary_column: Optional[str] = None,
     absolute_threshold_column: Optional[str] = None,
     percentage_threshold_column: Optional[str] = None,
+    precision: Optional[int] = None,
 ) -> pd.DataFrame:
     """
     Runs the Totals & Components method against the input row of data. All inputs except row and index_number
@@ -53,6 +54,8 @@ def run_totals_and_components(
     :type absolute_threshold_column: str
     :param percentage_threshold_column: Column containing the percentage threshold value
     :type percentage_threshold_column: str
+    :param precision: Level of precision to apply to values in the method
+    :type precision: int
 
     :return: totals_and_components_output, the  output of the totals_and_components method
     formatted into a pandas dataframe
@@ -75,6 +78,7 @@ def run_totals_and_components(
         "auxiliary": auxiliary_column,
         "absolute_difference_threshold": absolute_threshold_column,
         "percentage_difference_threshold": percentage_threshold_column,
+        "precision": precision
     }
     final_inputs = {}
     for key, value in input_dict.items():
