@@ -5,7 +5,7 @@ currently this includes Totals and Components, and Thousand Pounds Correction
 For Copyright information, please see LICENCE.
 """
 import os
-import re
+import regex as re
 
 import pandas as pd
 
