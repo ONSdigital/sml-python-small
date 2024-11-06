@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "sml_small"
-version = "1.2.1"
+version = "1.2.2"
 description = "SML Small (Python Pandas methods)"
 authors = []
 readme= "README.md"
