@@ -619,9 +619,9 @@ def primary_wrangler_subfunction(
             ).days + 1
 
             if row[equal_weighted_col] == "Y":
-                row[
-                    "sum_of_trading_day_weights_over_contributors_returned_period"
-                ] = row["number_of_days_in_contributors_returned_period"]
+                row["sum_of_trading_day_weights_over_contributors_returned_period"] = (
+                    row["number_of_days_in_contributors_returned_period"]
+                )
 
             else:
                 flagged = 0
@@ -1081,9 +1081,9 @@ def secondary_wrangler_subfunction(
                 )
 
             else:
-                row[
-                    "sum_of_trading_day_weights_over_actual_returned_period"
-                ] = filtered_weights[trading_weights_col].sum()
+                row["sum_of_trading_day_weights_over_actual_returned_period"] = (
+                    filtered_weights[trading_weights_col].sum()
+                )
         return row
 
     working_dataframe_4 = _run_apply(
@@ -1380,9 +1380,11 @@ def _run_apply(
 
     error_code_list = _generate_error_code_list()
     output_df = input_df.apply(
-        lambda row: function_to_apply(row)
-        if row[da_error_flag_col] not in error_code_list
-        else row,
+        lambda row: (
+            function_to_apply(row)
+            if row[da_error_flag_col] not in error_code_list
+            else row
+        ),
         axis=1,
     )
     return output_df

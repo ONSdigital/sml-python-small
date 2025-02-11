@@ -64,9 +64,11 @@ def invoke(config_csv: str, linked_question_csv: str):
 
     return thousand_pounds(
         unique_identifier=config["unique_identifier"],
-        principal_variable=None
-        if not config["principal_variable"]
-        else float(config["principal_variable"]),
+        principal_variable=(
+            None
+            if not config["principal_variable"]
+            else float(config["principal_variable"])
+        ),
         predictive=None if not config["predictive"] else float(config["predictive"]),
         auxiliary=None if not config["auxiliary"] else float(config["auxiliary"]),
         upper_limit=float(config["upper_limit"]),
@@ -164,12 +166,12 @@ def invoke_process_with_inmemory_single_csv_example():
             output = thousand_pounds(
                 unique_identifier=config["unique_identifier"],
                 principal_variable=config["principal_variable"],
-                predictive=None
-                if not config["predictive"]
-                else float(config["predictive"]),
-                auxiliary=None
-                if not config["auxiliary"]
-                else float(config["auxiliary"]),
+                predictive=(
+                    None if not config["predictive"] else float(config["predictive"])
+                ),
+                auxiliary=(
+                    None if not config["auxiliary"] else float(config["auxiliary"])
+                ),
                 upper_limit=config["upper_limit"],
                 lower_limit=config["lower_limit"],
                 target_variables=config["target_variables"],

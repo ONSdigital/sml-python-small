@@ -129,19 +129,19 @@ class TotalsAndComponentsOutput:
     identifier: Optional[str] = ""  # unique identifier
     absolute_difference: Optional[str]  # this is the absolute value showing the
     # difference between the components input and the predictive total
-    low_percent_threshold: Optional[
-        str
-    ] = None  # the sum of the input components minus the absolute percentage difference
-    high_percent_threshold: Optional[
-        str
-    ] = None  # the sum of the input components plus the absolute percentage difference
-    final_total: Optional[
-        str
-    ] = None  # the output total which may have been corrected based on user input amend_
+    low_percent_threshold: Optional[str] = (
+        None  # the sum of the input components minus the absolute percentage difference
+    )
+    high_percent_threshold: Optional[str] = (
+        None  # the sum of the input components plus the absolute percentage difference
+    )
+    final_total: Optional[str] = (
+        None  # the output total which may have been corrected based on user input amend_
+    )
     # total variable
-    final_components: Optional[
-        List[str]
-    ] = None  # the output components which may have been corrected to match the received
+    final_components: Optional[List[str]] = (
+        None  # the output components which may have been corrected to match the received
+    )
     # predictive value. If corrected the components are scaled proportionally
     # based on the input values
     tcc_marker: Optional[str]  # Indicates what correction (if any) was necessary.
@@ -164,6 +164,7 @@ class TotalsAndComponentsOutput:
 # ---- Custom Exceptions ----
 class TACException(Exception):
     "Totals and Components error"
+
     pass
 
 
@@ -475,9 +476,11 @@ def clean_component_list(components: List[Decimal]):
             components[i] = float("nan")
 
     cleaned_components = [
-        str(component)
-        if component is not None and not math.isnan(component)
-        else component
+        (
+            str(component)
+            if component is not None and not math.isnan(component)
+            else component
+        )
         for component in components
     ]
 

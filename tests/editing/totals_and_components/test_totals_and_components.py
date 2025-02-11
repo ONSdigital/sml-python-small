@@ -1623,7 +1623,7 @@ class TestTotalsAndComponents:
                     ],
                     "C",
                 ),
-                "Test 58 - Test component for fine tune up and for NaN as last component"
+                "Test 58 - Test component for fine tune up and for NaN as last component",
                 # This test is to check that the fine tune down for a component works.
                 # Also as the last componnet is NaN it should correct the one but last component
             ),
@@ -1651,7 +1651,7 @@ class TestTotalsAndComponents:
                     ],
                     "C",
                 ),
-                "Test 59 - Test component with no fine tune down needed and for 0 as last component"
+                "Test 59 - Test component with no fine tune down needed and for 0 as last component",
                 # This test is to check that the fine is not applied if not needed.
                 # Also as the last component is 0 it should correct the one but last component
             ),
@@ -1684,7 +1684,7 @@ class TestTotalsAndComponents:
                     ],
                     "C",
                 ),
-                "Test 60 - Test component with fine tune down"
+                "Test 60 - Test component with fine tune down",
                 # This test is to check that the fine tune down works as expected on the last component
             ),
         ],
@@ -4830,7 +4830,7 @@ class TestTotalsAndComponentsUAT:
                     ["632", "732", "101", "165"],
                     "T",
                 ),
-                "Test 100 - If absolute difference > 25, percentage difference < 10 and amend total = TRUE but the predictive total is different to the current period total then we correct the total"  # noqa: E501
+                "Test 100 - If absolute difference > 25, percentage difference < 10 and amend total = TRUE but the predictive total is different to the current period total then we correct the total",  # noqa: E501
                 # Sheet TCC_test_data_case_c9 reference 9001
                 # If absolute difference > absolute difference threshold,
                 # percentage difference < 10 and amend total = TRUE
@@ -4863,7 +4863,7 @@ class TestTotalsAndComponentsUAT:
                     ["9200", "866", "632", "112"],
                     "T",
                 ),
-                "Test 101 - If absolute difference > 25, percentage difference < 10 and amend total = TRUE but the predictive total is different to the current period total then we correct the total"  # noqa: E501
+                "Test 101 - If absolute difference > 25, percentage difference < 10 and amend total = TRUE but the predictive total is different to the current period total then we correct the total",  # noqa: E501
                 # Sheet TCC_test_data_case_c9 reference 9002
                 # If absolute difference > absolute difference threshold,
                 # percentage difference < 10 and amend total = TRUE
@@ -4896,7 +4896,7 @@ class TestTotalsAndComponentsUAT:
                     ["240", "0", "30", "10"],
                     "T",
                 ),
-                "Test 102 - If absolute difference > 25, percentage difference < 10 and amend total = TRUE but the predictive total is different to the current period total then we correct the total"  # noqa: E501
+                "Test 102 - If absolute difference > 25, percentage difference < 10 and amend total = TRUE but the predictive total is different to the current period total then we correct the total",  # noqa: E501
                 # Sheet TCC_test_data_case_c9 reference 9003
                 # If absolute difference > absolute difference threshold,
                 # percentage difference < 10 and amend total = TRUE
@@ -5062,7 +5062,7 @@ class TestTotalsAndComponentsSingleTest:
                     ],
                     "C",
                 ),
-                "Test 60 - Test component with fine tune down"
+                "Test 60 - Test component with fine tune down",
                 # This test is to check that the fine tune down works as expected on the last component
             ),
         ],
@@ -6167,7 +6167,7 @@ class TestSetPredictiveValue:
                 None,
                 50,
                 (Decimal("50"), TccMarker.METHOD_PROCEED),
-                "Test 2: Auxiliary Only"
+                "Test 2: Auxiliary Only",
                 # Test for when a predictive value is not provided,
                 # we would expect the auxiliary value to be used in
                 # place of the predictive value
@@ -6184,7 +6184,7 @@ class TestSetPredictiveValue:
                 150,
                 50,
                 (Decimal("150"), TccMarker.METHOD_PROCEED),
-                "Test 4: All Inputs"
+                "Test 4: All Inputs",
                 # Test for when a all values is are provided,
                 # we would expect the predictive is not changed
             ),
