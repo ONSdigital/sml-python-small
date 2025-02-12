@@ -19,7 +19,7 @@ numpy = "^1.26.1"
 [tool.poetry.group.dev.dependencies]
 flake8 = "^5.0.4"
 isort = "^5.11.5"
-pytest = "^7.4.0"
+pytest = ">=7.4,<9.0"
 coverage = "^7.0"
 pytest-cov = "^4.1.0"
 pytest-dependency = ">=0.5.1,<0.7.0"
