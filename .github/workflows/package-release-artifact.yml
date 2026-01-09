@@ -41,7 +41,7 @@ jobs:
       - name: Archive dist
         uses: actions/upload-artifact@v4
         with:
-          name: dist
+          name: dist-${{ matrix.python-version }}
           path: dist
           retention-days: 1
       - name: Archive version
@@ -58,7 +58,7 @@ jobs:
     strategy:
       max-parallel: 4
       matrix:
-        python-version: [ 3.11 ]
+        python-version: [3.10, 3.11, 3.12, 3.13]
       fail-fast: false
     steps:
       - name: Download all workflow run artifacts
