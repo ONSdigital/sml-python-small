@@ -13,7 +13,7 @@ exclude = [
 [tool.poetry.dependencies]
 python = ">=3.10, < 3.14"
 pandas = "^2.2.3"
-regex = "^2024.4.16"
+regex = ">=2024.4.16,<2026.0.0"
 numpy = "^1.26.1"
 
 [tool.poetry.group.dev.dependencies]
