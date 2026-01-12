@@ -41,7 +41,7 @@ jobs:
       - name: Archive dist
         uses: actions/upload-artifact@v4
         with:
-          name: dist-${{ matrix.python-version }}
+          name: dist
           path: dist
           retention-days: 1
       - name: Archive version
