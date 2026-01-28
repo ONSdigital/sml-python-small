@@ -146,16 +146,16 @@ def convert_input_to_decimal(
 
         # Using zip to iterate through the keys and arguments simultaneously
         for key, arg in zip(keys, args):
-            if type(arg) == Decimal:
+            if type(arg) is Decimal:
                 decimal_values[key] = arg
 
-            elif type(arg) == list:
+            elif type(arg) is list:
                 if arg == []:
                     decimal_values[key] = arg
 
                 else:
                     for i in range(len(arg)):
-                        if type(arg[i]) == Decimal:
+                        if type(arg[i]) is Decimal:
                             decimal_values[key] = arg
 
                         elif arg[i] is None or arg[i] == nan:
@@ -164,12 +164,12 @@ def convert_input_to_decimal(
                         else:
                             arg[i] = Decimal(str(arg[i]))
                             decimal_values[key] = arg
-            elif type(arg) == dict:
+            elif type(arg) is dict:
                 if arg == {}:
                     decimal_values[key] = arg
                 else:
                     for dict_keys, dict_values in arg.items():
-                        if type(dict_values) == Decimal:
+                        if type(dict_values) is Decimal:
                             decimal_values[key] = arg
                         elif dict_values is None or dict_values == nan:
                             decimal_values[key] = arg
