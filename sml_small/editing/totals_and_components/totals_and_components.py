@@ -330,7 +330,7 @@ def totals_and_components(
 
         #  Set the predictive as either the current value, total or auxiliary
         # depending on what values exist from the data input.
-        (predictive, output_list["tcc_marker"]) = set_predictive_value(
+        predictive, output_list["tcc_marker"] = set_predictive_value(
             input_parameters[InputParameters.PREDICTIVE.value],
             input_parameters[InputParameters.AUXILIARY.value],
         )
